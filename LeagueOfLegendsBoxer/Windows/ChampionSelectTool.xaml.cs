@@ -23,7 +23,7 @@ namespace LeagueOfLegendsBoxer.Windows
 
         private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Close();
+            Hide();
         }
     }
 }
