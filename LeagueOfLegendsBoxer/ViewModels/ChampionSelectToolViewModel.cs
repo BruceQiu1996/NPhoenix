@@ -36,6 +36,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
 
         private readonly RunePage _runePage;
+
         public ChampionSelectToolViewModel(HeroData heroData, Teammate teammate, RunePage runePage)
         {
             _runePage = runePage;

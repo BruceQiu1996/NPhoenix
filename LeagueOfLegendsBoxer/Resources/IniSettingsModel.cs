@@ -16,7 +16,6 @@ namespace LeagueOfLegendsBoxer.Resources
         private readonly IApplicationService _applicationService;
         private readonly IConfiguration _configuration;
 
-        public CancellationTokenSource AutoLockHeroInAramModeCancellationTokenSource { get; set; }
         public bool AutoAcceptGame { get; set; }
         public bool AutoLockHero { get; set; }
         public bool AutoDisableHero { get; set; }
@@ -33,6 +32,7 @@ namespace LeagueOfLegendsBoxer.Resources
             _applicationService = applicationService;
             _settingsService = settingsService;
             _configuration = configuration;
+            LockHerosInAram = new List<int>();
         }
 
         public async Task Initialize()
@@ -82,8 +82,6 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.AutoLockHeroInAram, value.ToString());
             AutoLockHeroInAram = value;
-            if (!value)
-                AutoLockHeroInAramModeCancellationTokenSource?.Cancel();
         }
 
         public async Task WriteLockHerosInAramAsync(List<int> values)

@@ -5,6 +5,8 @@ using LeagueOfLegendsBoxer.Application.Request;
 using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
+using LeagueOfLegendsBoxer.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
@@ -86,6 +88,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             AramRunes = new ObservableCollection<RuneDetail>(module.Aram);
             CommonRunes = new ObservableCollection<RuneDetail>(module.Common);
             DisplayRunes = isAram ? AramRunes : CommonRunes;
+            IsAramPage = isAram;
+            App.ServiceProvider.GetRequiredService<ChampionSelectTool>().Show();
+            (App.ServiceProvider.GetRequiredService<ChampionSelectTool>().DataContext as ChampionSelectToolViewModel).ShowRunePage();
         }
 
         private async Task SetRuneAsync(RuneDetail runeDetail)

@@ -226,37 +226,42 @@
                         <TextBox Width="300" Text="{Binding RankSetting}" FontSize="14"></TextBox>
                         <Button Content="修改段位" Cursor="Hand" FontSize="15" Height="35" Command="{Binding ModifyRankLevelCommandAsync}" Margin="5 0 0 0" Width="85"/>
                     </StackPanel>
-                    <TextBox Text="* 段位:
+                    <TextBox Text="rank模式
                              
-                                * value='IRON'>坚韧黑铁
-                                * value='BRONZE'>英勇黄铜
-                                * value='SILVER'>不屈白银
-                                * value='GOLD'>荣耀黄金
-                                * value='PLATINUM'>华贵铂金
-                                * value='DIAMOND'>璀璨钻石
-                                * value='MASTER'>超凡大师
-                                * value='GRANDMASTER'>傲世宗师
-                                * value='CHALLENGER'>最强王者
-                                * value='UNRANKED'>没有段位
-                                * 段位级别
+                                单排/双排 = RANKED_SOLO_5x5
+                                灵活组排5v5 = RANKED_FLEX_SR
+                                灵活组排3v3 = RANKED_FLEX_TT
+                                云顶之弈 = RANKED_TFT
+                              
+                                段位 :
                              
-                                * value='IV'
                              
-                                * value='III'
+                                坚韧黑铁=IRON
                              
-                                * value='II'
+                                英勇黄铜=BRONZE
                              
-                                * value='I'
+                                不屈白银=SILVER
                              
-                                * rank模式
+                                荣耀黄金=GOLD
                              
-                                * value='RANKED_SOLO_5x5'>单排/双排
-                                * value='RANKED_FLEX_SR'>灵活组排 5v5
-                                * value='RANKED_FLEX_TT'>灵活组排 3v3
-                                * value='RANKED_TFT'>云顶之弈
+                                华贵铂金=PLATINUM
+                             
+                                璀璨钻石=DIAMOND
+                             
+                                超凡大师=MASTER
+                             
+                                傲世宗师=GRANDMASTER
+                             
+                                最强王者=CHALLENGER
+                             
+                                没有段位=UNRANKED
+                             
+                                段位级别 : IV, III, II, I
+                             
+                                
                                 如设置单双排钻石四:
                                 RANKED_SOLO_5x5,DIAMOND,IV"
-                             TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" FontSize="17"/>
+                             TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" FontSize="16"/>
 
                     <TextBlock Text="设置生涯背景" Margin="0 10 0 0" FontSize="14"></TextBlock>
                     <StackPanel Orientation="Horizontal">

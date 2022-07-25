@@ -22,7 +22,7 @@
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/settings.jpg)
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/setting1.jpg)
 ## 国服英雄排名系列
-![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/herodata.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/herodata.png)
 ## 战绩查询
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/record.jpg)
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/record1.jpg)

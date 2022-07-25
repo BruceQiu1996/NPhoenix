@@ -64,6 +64,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
 
         private bool _isLoop = false;
+        private int _champId = 0;
         private readonly IApplicationService _applicationService;
         private readonly IRequestService _requestService;
         private readonly IGameService _gameService;
@@ -182,7 +183,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
             else 
             {
-                _iniSettingsModel.AutoLockHeroInAramModeCancellationTokenSource?.Cancel();
                 _eventService.Unsubscribe(Constant.ChampSelect);
             }
             switch (data)
@@ -248,8 +248,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
                 {
-                    _championSelectTool.Show();
-                    (_championSelectTool.DataContext as ChampionSelectToolViewModel).ShowRunePage();
                     await _runeViewModel.LoadChampInfoAsync(me.ChampionId, true);
                 });
 
@@ -296,8 +294,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                         {
                                             await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
                                             {
-                                                _championSelectTool.Show();
-                                                (_championSelectTool.DataContext as ChampionSelectToolViewModel).ShowRunePage();
                                                 await _runeViewModel.LoadChampInfoAsync(champ, false);
                                             });
                                         }
