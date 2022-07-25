@@ -44,7 +44,7 @@ namespace LeagueOfLegendsBoxer.Pages
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            string url = "https://github.com/BruceQiu1996/RuneFiles";
+            string url = "https://github.com/BruceQiu1996/NPhoenix/tree/master/Runes";
             using (Process p = new Process())
             {
                 p.StartInfo.FileName = "cmd.exe";
