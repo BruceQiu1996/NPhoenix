@@ -39,8 +39,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="7.1.2" />
-		<PackageReference Include="Emgu.CV" Version="4.5.5.4823" />
-		<PackageReference Include="Emgu.CV.runtime.windows" Version="4.5.5.4823" />
 		<PackageReference Include="HandyControl" Version="3.3.0" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
