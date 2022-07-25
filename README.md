@@ -12,22 +12,22 @@
 💡  大乱斗秒选自己喜欢的英雄|大乱斗符文推荐
 
 ## 主页面
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/main.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/main.jpg)
 ## 修改段位
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/rankmodify.jpg)
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/rankmodify1.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/rankmodify.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/rankmodify1.jpg)
 ## 修改生涯背景
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/back.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/back.jpg)
 ## 设置页面
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/settings.jpg)
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/setting1.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/settings.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/setting1.jpg)
 ## 国服英雄排名系列
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/herodata.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/herodata.jpg)
 ## 战绩查询
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/record.jpg)
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/record1.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/record.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/record1.jpg)
 ## 符文配置
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/rune.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/rune.jpg)
 ## 上等马
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/horse.jpg)
-![image](https://github.com/BruceQiu1996/NPhoenix/tree/master/Screenshots/horse1.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/horse.jpg)
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/horse1.jpg)
