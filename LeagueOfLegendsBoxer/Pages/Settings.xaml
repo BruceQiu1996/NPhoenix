@@ -1,0 +1,337 @@
+﻿<Page x:Class="LeagueOfLegendsBoxer.Pages.Settings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:herlpers="clr-namespace:LeagueOfLegendsBoxer.Helpers"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Settings">
+
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
+    <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="5">
+        <StackPanel Orientation="Vertical">
+            <GroupBox Margin="20 5" Header="游戏设置" FontSize="18">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Content="自动接受对局" FontSize="18" IsChecked="{Binding AutoAcceptGame,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="Checked">
+                                <behaviors:InvokeCommandAction Command="{Binding CheckedAutoAcceptCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                            <behaviors:EventTrigger EventName="Unchecked">
+                                <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoAcceptCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </CheckBox>
+
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Content="秒选英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding CheckedAutoLockHeroCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                                <behaviors:EventTrigger EventName="Unchecked">
+                                    <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoLockHeroCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </CheckBox>
+
+                        <ComboBox hc:TitleElement.Title="秒锁英雄" 
+                                  IsEnabled="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                  IsEditable="True"
+                                  Width="250"
+                                  IsReadOnly="False"
+                                  IsTextSearchEnabled="False"
+                                  IsDropDownOpen="{Binding LockHerosOpen,UpdateSourceTrigger=PropertyChanged}"
+                                  FontSize="16"
+                                  Margin="10 10 0 0"
+                                  DisplayMemberPath="Label"
+                                  PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                  Foreground="Black"
+                                  ItemsSource="{Binding LockHeros,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding LockHero,UpdateSourceTrigger=PropertyChanged}"
+                                  Text="{Binding SearchLockText,UpdateSourceTrigger=PropertyChanged}"
+                              >
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="KeyUp">
+                                    <behaviors:InvokeCommandAction Command="{Binding SearchLockHeroCommand}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <!--<StackPanel Orientation="Horizontal">
+                        <CheckBox Content="秒禁英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding CheckedAutoDisableHeroCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                                <behaviors:EventTrigger EventName="Unchecked">
+                                    <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoDisableHeroCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </CheckBox>
+
+                        <ComboBox hc:TitleElement.Title="秒禁英雄" 
+                              Width="250"
+                              FontSize="16"
+                              IsReadOnly="False"
+                              IsTextSearchEnabled="False"
+                              IsDropDownOpen="{Binding DisableHerosOpen,UpdateSourceTrigger=PropertyChanged}"
+                              Margin="10 10 0 0"
+                              IsEnabled="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}"
+                              IsEditable="True"
+                              DisplayMemberPath="Label"
+                              Foreground="Black"
+                              PreviewKeyUp="ComboBox_PreviewKeyUp"
+                              ItemsSource="{Binding DisableHeros,UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding DisableHero,UpdateSourceTrigger=PropertyChanged}"
+                              Text="{Binding SearchDisableText,UpdateSourceTrigger=PropertyChanged}"
+                              >
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="KeyUp">
+                                    <behaviors:InvokeCommandAction Command="{Binding SearchDisableHeroCommand}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </ComboBox>
+                    </StackPanel>-->
+                    <CheckBox Content="开启大乱斗秒抢英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="Checked">
+                                <behaviors:InvokeCommandAction Command="{Binding CheckedAutoLockHeroInAramCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                            <behaviors:EventTrigger EventName="Unchecked">
+                                <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoLockHeroInAramCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </CheckBox>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="100"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <ListBox Grid.Column="0" 
+                                 Height="450"
+                                 SelectionMode="Multiple"
+                                 IsEnabled="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0 10 0 0"
+                                 Background="Transparent" BorderThickness="1" 
+                                 herlpers:CustomeSelectionItems.SelectedItems="{Binding SubQuickChooseHeros,UpdateSourceTrigger=PropertyChanged}"
+                                 ItemsSource="{Binding QuickChooseHeros,UpdateSourceTrigger=PropertyChanged}" >
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"></StackPanel>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                    <Setter Property="Height" Value="30" />
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                <Border Margin="3"
+                                                        BorderBrush="#dddddd"
+                                                        Cursor="Hand"
+                                                        Background="{TemplateBinding Background}">
+                                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" FontSize="16" ToolTip="{Binding Name}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                        <StackPanel Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
+                            <Label IsEnabled="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}" Width="60" Margin="0 0 0 20" Cursor="Hand">
+                                <behaviors:Interaction.Triggers>
+                                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                        <behaviors:InvokeCommandAction Command="{Binding SelectHerosLockCommandAsync}"></behaviors:InvokeCommandAction>
+                                    </behaviors:EventTrigger>
+                                </behaviors:Interaction.Triggers>
+                                <Path Data="{StaticResource toright}" Stretch="Uniform" ToolTip="选定秒锁" Fill="{StaticResource PrimaryBrush}"/>
+                            </Label>
+                            <Label IsEnabled="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}" Width="60" Margin="0 0 0 20" Cursor="Hand">
+                                <behaviors:Interaction.Triggers>
+                                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                        <behaviors:InvokeCommandAction Command="{Binding UnSelectHerosLockCommandAsync}"></behaviors:InvokeCommandAction>
+                                    </behaviors:EventTrigger>
+                                </behaviors:Interaction.Triggers>
+                                <Path Data="{StaticResource toleft}" Stretch="Uniform"  ToolTip="取消秒锁" Fill="{StaticResource PrimaryBrush}"/>
+                            </Label>
+                        </StackPanel>
+                        <ListBox Grid.Column="2" 
+                                 SelectionMode="Multiple"
+                                 Height="450"
+                                 herlpers:CustomeSelectionItems.SelectedItems="{Binding SubSelectedQuickChooseHeros,UpdateSourceTrigger=PropertyChanged}"
+                                 IsEnabled="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0 10 0 0"
+                                 Background="Transparent" BorderThickness="1" 
+                                 ItemsSource="{Binding SelectedQuickChooseHeros,UpdateSourceTrigger=PropertyChanged}" >
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"></StackPanel>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                    <Setter Property="Height" Value="30" />
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                <Border Margin="3"
+                                                        BorderBrush="#dddddd"
+                                                        Cursor="Hand"
+                                                        Background="{TemplateBinding Background}">
+                                                    <TextBlock Text="{Binding Name}" ToolTip="{Binding Name}" FontSize="16" HorizontalAlignment="Center" />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                        </Trigger>
+                                        <Trigger Property="IsSelected" Value="True">
+                                            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </Grid>
+                    <StackPanel Orientation="Horizontal" Margin="0 10">
+                        <TextBox Width="300" Text="{Binding RankSetting}" FontSize="14"></TextBox>
+                        <Button Content="修改段位" Cursor="Hand" FontSize="15" Height="35" Command="{Binding ModifyRankLevelCommandAsync}" Margin="5 0 0 0" Width="85"/>
+                    </StackPanel>
+                    <TextBox Text="* 段位:
+                             
+                                * value='IRON'>坚韧黑铁
+                                * value='BRONZE'>英勇黄铜
+                                * value='SILVER'>不屈白银
+                                * value='GOLD'>荣耀黄金
+                                * value='PLATINUM'>华贵铂金
+                                * value='DIAMOND'>璀璨钻石
+                                * value='MASTER'>超凡大师
+                                * value='GRANDMASTER'>傲世宗师
+                                * value='CHALLENGER'>最强王者
+                                * value='UNRANKED'>没有段位
+                                * 段位级别
+                             
+                                * value='IV'
+                             
+                                * value='III'
+                             
+                                * value='II'
+                             
+                                * value='I'
+                             
+                                * rank模式
+                             
+                                * value='RANKED_SOLO_5x5'>单排/双排
+                                * value='RANKED_FLEX_SR'>灵活组排 5v5
+                                * value='RANKED_FLEX_TT'>灵活组排 3v3
+                                * value='RANKED_TFT'>云顶之弈
+                                如设置单双排钻石四:
+                                RANKED_SOLO_5x5,DIAMOND,IV"
+                             TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" FontSize="17"/>
+
+                    <TextBlock Text="设置生涯背景" Margin="0 10 0 0" FontSize="14"></TextBlock>
+                    <StackPanel Orientation="Horizontal">
+                        <ComboBox hc:TitleElement.Title="选择" 
+                                  IsEditable="True"
+                                  Width="250"
+                                  IsReadOnly="False"
+                                  IsTextSearchEnabled="False"
+                                  IsDropDownOpen="{Binding ChooseHeroForSkinsOpen,UpdateSourceTrigger=PropertyChanged}"
+                                  FontSize="16"
+                                  Margin="0 2 0 0"
+                                  DisplayMemberPath="Label"
+                                  PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                  Foreground="Black"
+                                  ItemsSource="{Binding ChooseHeroForSkins,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding ChooseHeroForSkin,UpdateSourceTrigger=PropertyChanged}"
+                                  Text="{Binding SearchChooseHeroForSkinText,UpdateSourceTrigger=PropertyChanged}"
+                              >
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="KeyUp">
+                                    <behaviors:InvokeCommandAction Command="{Binding SearchHeroForSkinCommand}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </ComboBox>
+                        <Button Content="查询皮肤"
+                                Command="{Binding SearchSkinsForHeroCommandAsync}"
+                                Width="120" Margin="10 0 0 0" Height="35" Cursor="Hand"></Button>
+                    </StackPanel>
+
+                    <Button Content="获取符文" Margin="0 20 0 5" Width="380" FontSize="15" Height="35"
+                            Cursor="Hand"
+                            Click="Button_Click_1"
+                            HorizontalAlignment="Left" Style="{StaticResource ButtonWarning}"></Button>
+                    <Button Content="免费开源软件.点个赞" 
+                            Cursor="Hand"
+                            Click="Button_Click"
+                            Style="{StaticResource ButtonDanger}"
+                            Margin="0 5" Width="380" FontSize="15" Height="35" 
+                            HorizontalAlignment="Left"></Button>
+                </StackPanel>
+            </GroupBox>
+            <GroupBox Margin="20 5" Header="软件设置" FontSize="18">
+                <StackPanel Orientation="Vertical">
+                    <!--<CheckBox Content="游戏内推荐NPhoenix" FontSize="18" IsChecked="{Binding ,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="Checked">
+                                <behaviors:InvokeCommandAction Command="{Binding CheckedAutoAcceptCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                            <behaviors:EventTrigger EventName="Unchecked">
+                                <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoAcceptCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </CheckBox>-->
+
+                    <hc:TextBox IsReadOnly="True" 
+                                FontSize="16"
+                                ToolTip="{Binding GameStartupLocation,UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding GameStartupLocation,UpdateSourceTrigger=PropertyChanged}"
+                                hc:TitleElement.Title="游戏目录" hc:TitleElement.TitlePlacement="Left" Margin="0 5 0 0"></hc:TextBox>
+                    <Button Content="获取游戏启动目录" HorizontalAlignment="Right" 
+                            Margin="0 5 1 0"
+                            Cursor="Hand"
+                            FontSize="15"
+                            Command="{Binding GetGameFolderCommandAsync}"></Button>
+                </StackPanel>
+            </GroupBox>
+
+            <Button Content="退出游戏" 
+                    Margin="0 20 0 0"
+                    Cursor="Hand"
+                    Command="{Binding ExitGameCommandAsync}"
+                    Style="{StaticResource ButtonDanger}"
+                    Height="40"
+                    VerticalAlignment="Bottom" Width="380" FontSize="18">
+            </Button>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

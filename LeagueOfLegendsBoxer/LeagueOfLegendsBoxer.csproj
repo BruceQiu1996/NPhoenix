@@ -1,0 +1,78 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>disable</Nullable>
+		<UseWPF>true</UseWPF>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="appsettings.json" />
+		<None Remove="Resources\happy.ttf" />
+		<None Remove="Resources\logo.ico" />
+		<None Remove="Resources\Positions\bot.svg" />
+		<None Remove="Resources\Positions\jug.svg" />
+		<None Remove="Resources\Positions\mid.svg" />
+		<None Remove="Resources\Positions\sup.svg" />
+		<None Remove="Resources\Positions\t0.svg" />
+		<None Remove="Resources\Positions\t1.svg" />
+		<None Remove="Resources\Positions\t2.svg" />
+		<None Remove="Resources\Positions\t3.svg" />
+		<None Remove="Resources\Positions\t4.svg" />
+		<None Remove="Resources\Positions\top.svg" />
+		<None Remove="Resources\settings.ini" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\logo.ico">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Resources\settings.ini">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="7.1.2" />
+		<PackageReference Include="Emgu.CV" Version="4.5.5.4823" />
+		<PackageReference Include="Emgu.CV.runtime.windows" Version="4.5.5.4823" />
+		<PackageReference Include="HandyControl" Version="3.3.0" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.11.43" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+		<PackageReference Include="Serilog" Version="2.10.0" />
+		<PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+		<PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+		<PackageReference Include="Serilog.Settings.Configuration" Version="3.3.0" />
+		<PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+		<PackageReference Include="Serilog.Sinks.Console" Version="4.0.0" />
+		<PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+		<PackageReference Include="SharpVectors" Version="1.8.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LeagueOfLegendsBoxer.Application\LeagueOfLegendsBoxer.Application.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Resource Include="Resources\happy.ttf">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</Resource>
+		<Resource Include="Resources\Positions\bot.svg" />
+		<Resource Include="Resources\Positions\jug.svg" />
+		<Resource Include="Resources\Positions\mid.svg" />
+		<Resource Include="Resources\Positions\sup.svg" />
+		<Resource Include="Resources\Positions\t0.svg" />
+		<Resource Include="Resources\Positions\t1.svg" />
+		<Resource Include="Resources\Positions\t2.svg" />
+		<Resource Include="Resources\Positions\t3.svg" />
+		<Resource Include="Resources\Positions\t4.svg" />
+		<Resource Include="Resources\Positions\top.svg" />
+	</ItemGroup>
+</Project>

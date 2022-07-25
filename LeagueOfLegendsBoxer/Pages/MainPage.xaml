@@ -1,0 +1,194 @@
+﻿<Page x:Class="LeagueOfLegendsBoxer.Pages.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:LeagueOfLegendsBoxer.Pages"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:model="clr-namespace:LeagueOfLegendsBoxer.Models"
+      xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+      xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
+      FontFamily="/LeagueOfLegendsBoxer;component/Resources/#HappyZcool-2016"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="MainPage">
+    <Page.Resources>
+        <convert:WinColorBrushConverter x:Key="WinColorBrushConverter"></convert:WinColorBrushConverter>
+        <convert:WinTextConverter x:Key="WinTextConverter"></convert:WinTextConverter>
+    </Page.Resources>
+    
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
+    <StackPanel Orientation="Vertical">
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10">
+            <!--Card 的内容部分-->
+            <Border CornerRadius="4,4,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="10"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="10"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="0.8*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <hc:Gravatar Style="{StaticResource GravatarCircleImg}" 
+                                 Grid.Row="1"
+                                 Grid.Column="0" 
+                                 Grid.RowSpan="3"
+                                 VerticalAlignment="Center">
+                        <Image Source="{Binding Account.Avatar}" 
+                               />
+                    </hc:Gravatar>
+                    <TextBlock TextWrapping="Wrap"
+                               FontSize="20"
+                               Grid.Row="1"
+                               Grid.ColumnSpan="2"
+                               Margin="0 5 0 0"
+                               Grid.Column="1"
+                               Text="{Binding Account.DisplayName}"/>
+
+                    <hc:Shield Subject="Level" 
+                               Grid.Row="2"
+                               Grid.Column="1"
+                               Status="{Binding Account.SummonerLevel}" Color="#4eb899"/>
+
+                    <ProgressBar Value="{Binding Account.XpSinceLastLevel}" 
+                                 Grid.Row="2"
+                                 Grid.Column="2"
+                                 Width="150"
+                                 ToolTip="{Binding Account.XpTip}"
+                                 Margin="-40 0  0 0"
+                                 Maximum="{Binding Account.XpUntilNextLevel}"></ProgressBar>
+                </Grid>
+            </Border>
+        </hc:Card>
+
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10">
+            <StackPanel Orientation="Vertical">
+                <StackPanel.Resources>
+                    <Style TargetType="Border">
+                        <Setter Property="CornerRadius" Value="4,4,0,0"></Setter>
+                        <Setter Property="Height" Value="40"></Setter>
+                    </Style>
+                </StackPanel.Resources>
+                <Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="单双排" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                        <hc:Shield Subject="{Binding Account.Rank.RANKED_SOLO_5x5.CnTier}" 
+                                   Grid.Column="1" FontSize="12"
+                                   Status="{Binding Account.Rank.RANKED_SOLO_5x5.Division}" Color="#4eb899"/>
+                        <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_SOLO_5x5.Desc}" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                    </Grid>
+                </Border>
+                <Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="灵活组排" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                        <hc:Shield Subject="{Binding Account.Rank.RANKED_FLEX_SR.CnTier}" 
+                                   Grid.Column="1" FontSize="12"
+                                   Status="{Binding Account.Rank.RANKED_FLEX_SR.Division}" Color="#4eb899"/>
+                        <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_FLEX_SR.Desc}" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                    </Grid>
+                </Border>
+                <Border>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="云顶之奕" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                        <hc:Shield Subject="{Binding Account.Rank.RANKED_TFT.CnTier}" 
+                                   Grid.Column="1" FontSize="12"
+                                   Status="{Binding Account.Rank.RANKED_TFT.Division}" Color="#4eb899"/>
+                        <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_TFT.Desc}" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </hc:Card>
+
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10" Height="320">
+            <GroupBox Header="最近20场对局" BorderThickness="0" FontSize="15">
+                <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Height" Value="80" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border>
+                                            <Grid Margin="0 5 5 5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="1.1*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="0.9*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="0.7*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                </Grid.RowDefinitions>
+                                                <hc:Gravatar Grid.RowSpan="2" Source="{Binding Participants[0].ChampionImage}" />
+                                                <TextBlock Text="{Binding Participants[0].ChampionName}" 
+                                                           FontSize="16" Grid.Column="1" Margin="0 5 0 0"></TextBlock>
+                                                <StackPanel HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                                    <hc:Tag ShowCloseButton="False" 
+                                                            HorizontalAlignment="Left" Margin="-5 0 0 0"
+                                                            Content="{Binding Participants[0].Timeline.CnLane}"/>
+                                                    <hc:Tag ShowCloseButton="False" Margin="2 0 0 0"
+                                                            HorizontalAlignment="Left"
+                                                            Content="{Binding CnQueue}"/>
+                                                </StackPanel>
+                                                
+                                                <TextBlock Text="{Binding Participants[0].Stats.KDA}" 
+                                                           VerticalAlignment="Center" FontSize="16"
+                                                           Grid.Column="2" ></TextBlock>
+                                                <TextBlock Text="{Binding GameCreationString}" 
+                                                           VerticalAlignment="Center" FontSize="12" Grid.Row="1"
+                                                           Grid.Column="2" ></TextBlock>
+
+                                                <TextBlock Text="{Binding Participants[0].Stats.Win,Converter={StaticResource WinTextConverter}}"
+                                                           Grid.Column="3" Grid.RowSpan="2" VerticalAlignment="Center"
+                                                           FontSize="20" HorizontalAlignment="Center"
+                                                           Foreground="{Binding Participants[0].Stats.Win,Converter={StaticResource WinColorBrushConverter}}"></TextBlock>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </GroupBox>
+        </hc:Card>
+    </StackPanel>
+</Page>

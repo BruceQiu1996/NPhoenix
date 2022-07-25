@@ -1,0 +1,180 @@
+﻿<Window x:Class="LeagueOfLegendsBoxer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        FontFamily="/LeagueOfLegendsBoxer;component/Resources/#HappyZcool-2016"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        mc:Ignorable="d"
+        ResizeMode="CanMinimize"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
+        WindowStyle="None"
+        Title="MainWindow" Height="700" Width="460">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="3"/>
+    </WindowChrome.WindowChrome>
+    
+    <Window.Resources>
+        <convert:ConnectedColorBrushConverter x:Key="ConnectedColorBrushConverter"></convert:ConnectedColorBrushConverter>
+        <convert:ConnectedTextConverter x:Key="ConnectedTextConverter"></convert:ConnectedTextConverter>
+        <ContextMenu x:Key="iconMenu">
+            <MenuItem Header="打开助手工具" Command="{Binding OpenChampionSelectToolCommand}"></MenuItem>
+            <MenuItem Header="退出软件" Command="{Binding ExitCommand}"></MenuItem>
+        </ContextMenu>
+    </Window.Resources>
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
+    <Grid>
+        <Border Margin="10" Background="White" CornerRadius="10">
+            <Border.Effect>
+                <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
+                                  Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
+            </Border.Effect>
+        </Border>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid MouseMove="Border_MouseMove" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                    <ColumnDefinition Width="40"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="NPhoenix" 
+                           Foreground="{StaticResource PrimaryBrush}"
+                           Grid.Column="0"
+                           ToolTip="NPhoenix"
+                           Margin="20 25 0 0" 
+                           Cursor="Hand"
+                           Width="110"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Left"
+                           FontSize="25">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                <behaviors:InvokeCommandAction Command="{Binding ShiftMainPageCommand}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                </TextBlock>
+
+                <Label BorderThickness="0"
+                       Cursor="Hand"
+                       ToolTip="设置"
+                       Margin="0 20 0 0"
+                       Background="Transparent"
+                       Grid.Column="2">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                            <behaviors:InvokeCommandAction Command="{Binding ShiftSettingsPageCommand}"></behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                    <Path Data="{StaticResource setting}" 
+                          SnapsToDevicePixels="True"
+                          Height="20"
+                          Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                          Fill="{StaticResource PrimaryBrush}"/>
+                </Label>
+                <Label BorderThickness="0"
+                       Cursor="Hand"
+                       ToolTip="信息"
+                       Margin="0 20 0 0"
+                       Background="Transparent"
+                       Grid.Column="3">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                            <behaviors:InvokeCommandAction Command="{Binding CurrentUserInfoCommand}"></behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                    <Path Data="{StaticResource info}" 
+                          SnapsToDevicePixels="True"
+                          Height="20"
+                          Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                          Fill="{StaticResource PrimaryBrush}"/>
+                </Label>
+                <Label BorderThickness="0"
+                       Cursor="Hand"
+                       ToolTip="最小化"
+                       Margin="0 20 0 0"
+                       Background="Transparent"
+                       Grid.Column="4" MouseLeftButtonDown="Label_MouseLeftButtonDown">
+                    <Path Data="{StaticResource WindowMinGeometry}" 
+                          SnapsToDevicePixels="True"
+                          Height="20"
+                          Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                          Fill="{StaticResource PrimaryBrush}"/>
+                </Label>
+                <Label BorderThickness="0"
+                       Cursor="Hand"
+                       ToolTip="关闭到托盘"
+                       Margin="0 20 0 0"
+                       Background="Transparent"
+                       Grid.Column="5" MouseLeftButtonDown="Label_MouseLeftButtonDown_1">
+                    <Path Data="{StaticResource CloseGeometry}" 
+                          SnapsToDevicePixels="True"
+                          Height="20"
+                          Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                          Fill="{StaticResource PrimaryBrush}"/>
+                </Label>
+            </Grid>
+
+            <Frame Content="{Binding CurrentPage,UpdateSourceTrigger=PropertyChanged}" 
+                   NavigationUIVisibility="Hidden"
+                   BorderThickness="0"
+                   Margin="5 0 5 5"
+                   Grid.Row="1">
+            </Frame>
+
+            <Border CornerRadius="0 0 5 5" Grid.Row="2">
+                <Canvas>
+                    <Ellipse Height="10" 
+                             Width="10" 
+                             Fill="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedColorBrushConverter}}" 
+                             Canvas.Top="20" Canvas.Left="20"
+                             SnapsToDevicePixels="True">
+                    </Ellipse>
+
+                    <TextBlock Text="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedTextConverter}}" 
+                               FontSize="15" 
+                               Canvas.Top="16" Canvas.Left="35"></TextBlock>
+
+                    <TextBlock Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" 
+                               FontSize="15" 
+                               Canvas.Top="16" Canvas.Left="85"></TextBlock>
+
+                    <Label Width="40" BorderThickness="0" MouseLeftButtonDown="Label_MouseLeftButtonDown_2" Cursor="Hand" Canvas.Top="5" Canvas.Left="205" ToolTip="免费软件帮忙点个赞">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                <behaviors:InvokeCommandAction Command="{Binding OpenGitAddressCommand}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                        <Path Data="{StaticResource gitIcon}" Fill="Black" Stretch="Uniform"/>
+                    </Label>
+                </Canvas>
+            </Border>
+        </Grid>
+
+        <hc:NotifyIcon Text="NPhoenix英雄联盟盒子" IsBlink="False" 
+                       ToolTip="NPhoenix英雄联盟盒子"
+                       Click="NotifyIcon_Click"
+                       MouseDoubleClick="NotifyIcon_Click"
+                       ContextMenu="{StaticResource iconMenu}"
+                       Visibility="Visible" Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"/>
+    </Grid>
+</Window>

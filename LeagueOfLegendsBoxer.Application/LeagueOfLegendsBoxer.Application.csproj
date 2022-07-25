@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Websocket.Client" Version="4.4.43" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LeagueOfLegendsBoxer.Core\LeagueOfLegendsBoxer.Core.csproj" />
+	</ItemGroup>
+</Project>
