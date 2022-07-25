@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Net;
-using System.Net.WebSockets;
 using System.Reactive.Linq;
-using Websocket.Client;
+using System.Security.Authentication;
+using WebSocketSharp;
 
 namespace LeagueOfLegendsBoxer.Application.Event
 {
@@ -10,7 +10,7 @@ namespace LeagueOfLegendsBoxer.Application.Event
     {
         private const int ClientEventData = 2;
         private const int ClientEventNumber = 8;
-        private WebsocketClient _webSocket;
+        private WebSocket _webSocket;
         private readonly IDictionary<string, List<EventHandler<EventArgument>>> _subscribers = new Dictionary<string, List<EventHandler<EventArgument>>>();
 
         public EventHandler<EventArgument> MessageReceived { get; set; }
@@ -18,53 +18,42 @@ namespace LeagueOfLegendsBoxer.Application.Event
 
         public Task Initialize(int port, string token)
         {
-            _webSocket = new WebsocketClient(new Uri($"wss://127.0.0.1:{port}/"), () =>
-            {
-                var socket = new ClientWebSocket
-                {
-                    Options =
-                    {
-                        Credentials = new NetworkCredential("riot", token),
-                        RemoteCertificateValidationCallback =
-                            (sender, cert, chain, sslPolicyErrors) => true,
-                    }
-                };
+            _webSocket = new WebSocket($"wss://127.0.0.1:{port}/", "wamp");
+            _webSocket.SetCredentials("riot", token, true);
+            _webSocket.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls12;
+            _webSocket.SslConfiguration.ServerCertificateValidationCallback = (response, cert, chain, errors) => true;
 
-                socket.Options.AddSubProtocol("wamp");
-                return socket;
-            });
-
-            _webSocket
-                .MessageReceived
-                .Where(msg => msg.Text != null)
-                .Where(msg => msg.Text.StartsWith('['))
-                .Subscribe(msg =>
-                {
-                    // Check if the message is json received from the client
-                    var eventArray = JArray.Parse(msg.Text);
-                    var eventNumber = eventArray?[0].ToObject<int>();
-                    if (eventNumber != ClientEventNumber)
-                    {
-                        return;
-                    }
-
-                    var leagueEvent = eventArray[ClientEventData].ToObject<EventArgument>();
-                    MessageReceived?.Invoke(this, leagueEvent);
-                    if (!_subscribers.TryGetValue(leagueEvent.Uri, out List<EventHandler<EventArgument>> eventHandlers))
-                    {
-                        return;
-                    }
-
-                    eventHandlers.ForEach(eventHandler => eventHandler?.Invoke(this, leagueEvent));
-                });
+            _webSocket.OnMessage += WssOnOnMessage;
 
             return Task.CompletedTask;
         }
 
-        public async Task ConnectAsync()
+        private void WssOnOnMessage(object sender, MessageEventArgs e)
         {
-            await _webSocket?.Start();
-            await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+            if (!e.IsText) return;
+
+            var eventArray = JArray.Parse(e.Data);
+            var eventNumber = eventArray[0].ToObject<int>();
+            if (eventNumber != ClientEventNumber) return;
+            var leagueEvent = eventArray[ClientEventData].ToObject<EventArgument>();
+            if (string.IsNullOrWhiteSpace(leagueEvent?.Uri))
+                return;
+
+            MessageReceived?.Invoke(this, leagueEvent);
+            if (!_subscribers.TryGetValue(leagueEvent.Uri, out List<EventHandler<EventArgument>> eventHandlers))
+            {
+                return;
+            }
+
+            eventHandlers.ForEach(eventHandler => eventHandler?.Invoke(this, leagueEvent));
+        }
+
+        public Task ConnectAsync()
+        {
+            _webSocket?.Connect();
+            _webSocket?.Send("[5, \"OnJsonApiEvent\"]");
+
+            return Task.CompletedTask;
         }
 
         public Task<bool> DisconnectAsync()

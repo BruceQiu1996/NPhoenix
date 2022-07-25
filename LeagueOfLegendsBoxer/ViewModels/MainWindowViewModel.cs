@@ -120,6 +120,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             await ConnnectAsync();
             await LoadConfig();
             _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
+            _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
             Connected = true;
             if (CurrentPage == _mainPage) 
             {
@@ -177,14 +178,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             if (string.IsNullOrEmpty(data))
                 return;
 
-            if (data == "ChampSelect")
-            {
-                _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
-            }
-            else 
-            {
-                _eventService.Unsubscribe(Constant.ChampSelect);
-            }
             switch (data)
             {
                 case "ReadyCheck":
@@ -235,67 +228,70 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private async void ChampSelect(object obj, EventArgument @event)
         {
-            var gInfo = await _gameService.GetCurrentGameInfoAsync();
-            var mode = JToken.Parse(gInfo)["gameData"]["queue"]["gameMode"].ToString();
-            var myData = JObject.Parse(@event.Data.ToString());
-            int playerCellId = int.Parse(@event.Data["localPlayerCellId"].ToString());
-            IEnumerable<Team> teams = JsonConvert.DeserializeObject<IEnumerable<Team>>(@event.Data["myTeam"].ToString());
-            var me = teams.FirstOrDefault(x => x.CellId == playerCellId);
-            if (me == null)
-                return;
-
-            if (mode == "ARAM")
+            try
             {
-                await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
-                {
-                    await _runeViewModel.LoadChampInfoAsync(me.ChampionId, true);
-                });
+                var gInfo = await _gameService.GetCurrentGameInfoAsync();
+                var mode = JToken.Parse(gInfo)["gameData"]["queue"]["gameMode"].ToString();
+                var myData = JObject.Parse(@event.Data.ToString());
+                int playerCellId = int.Parse(@event.Data["localPlayerCellId"].ToString());
+                IEnumerable<Team> teams = JsonConvert.DeserializeObject<IEnumerable<Team>>(@event.Data["myTeam"].ToString());
+                var me = teams.FirstOrDefault(x => x.CellId == playerCellId);
+                if (me == null)
+                    return;
 
-                if (_iniSettingsModel.AutoLockHeroInAram)
+                if (mode == "ARAM")
                 {
-                    int[] champs = JsonConvert.DeserializeObject<int[]>(@event.Data["benchChampionIds"].ToString());
-                    var loc = _iniSettingsModel.LockHerosInAram.IndexOf(me.ChampionId);
-                    loc = loc == -1 ? _iniSettingsModel.LockHerosInAram.Count : loc;
-                    if (loc != 0)
+                    await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
                     {
-                        var heros = _iniSettingsModel.LockHerosInAram.Take(loc);
-                        var swapHeros = new List<int>();
-                        foreach (var item in heros)
-                        {
-                            if (champs.Contains(item))
-                            {
-                                swapHeros.Add(item);
-                            }
-                        }
+                        await _runeViewModel.LoadChampInfoAsync(me.ChampionId, true);
+                    });
 
-                        for (var index = swapHeros.Count - 1; index >= 0; index--)
+                    if (_iniSettingsModel.AutoLockHeroInAram)
+                    {
+                        int[] champs = JsonConvert.DeserializeObject<int[]>(@event.Data["benchChampionIds"].ToString());
+                        var loc = _iniSettingsModel.LockHerosInAram.IndexOf(me.ChampionId);
+                        loc = loc == -1 ? _iniSettingsModel.LockHerosInAram.Count : loc;
+                        if (loc != 0)
                         {
-                            await _gameService.BenchSwapChampionsAsync(swapHeros[index]);
+                            var heros = _iniSettingsModel.LockHerosInAram.Take(loc);
+                            var swapHeros = new List<int>();
+                            foreach (var item in heros)
+                            {
+                                if (champs.Contains(item))
+                                {
+                                    swapHeros.Add(item);
+                                }
+                            }
+
+                            for (var index = swapHeros.Count - 1; index >= 0; index--)
+                            {
+                                await _gameService.BenchSwapChampionsAsync(swapHeros[index]);
+                            }
                         }
                     }
                 }
-            }
-            else
-            {
-                foreach (var action in @event.Data["actions"])
+                else
                 {
-                    foreach (var actionItem in action)
+                    foreach (var action in @event.Data["actions"])
                     {
-                        if (int.Parse(actionItem["actorCellId"].ToString()) == playerCellId)
+                        foreach (var actionItem in action)
                         {
-                            if (actionItem["type"] == "pick")
+                            if (int.Parse(actionItem["actorCellId"].ToString()) == playerCellId)
                             {
-                                foreach (var teamPlayer in myData["myTeam"])
+                                if (actionItem["type"] == "pick")
                                 {
-                                    if (teamPlayer["cellId"] == playerCellId)
+                                    foreach (var teamPlayer in myData["myTeam"])
                                     {
-                                        int champ = teamPlayer["championId"];
-                                        if (int.Parse((string)actionItem["championId"]) != 0 && champ != 0)
+                                        if (teamPlayer["cellId"] == playerCellId)
                                         {
-                                            await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
+                                            int champ = teamPlayer["championId"];
+                                            if (int.Parse((string)actionItem["championId"]) != 0 && champ != 0)
                                             {
-                                                await _runeViewModel.LoadChampInfoAsync(champ, false);
-                                            });
+                                                await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
+                                                {
+                                                    await _runeViewModel.LoadChampInfoAsync(champ, false);
+                                                });
+                                            }
                                         }
                                     }
                                 }
@@ -303,6 +299,9 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         }
                     }
                 }
+            }
+            catch (Exception ex) 
+            {
             }
         }
 
