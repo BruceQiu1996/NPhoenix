@@ -11,14 +11,20 @@
 
 💡  大乱斗秒选自己喜欢的英雄|大乱斗符文推荐
 
- 2022.07.25 -2022.07.31待完成
-    [] 战绩查询从历史20条到200条数量
-    [] 符文下载一键完成
+## Todo
+   # 2022.07.25 -2022.07.31 待完成
+    -[] 战绩查询从历史20条到200条数量
+    -[] 符文下载一键完成
+
+## 视频地址
+https://www.bilibili.com/video/BV1uG411H75g/
 
 ## 下载地址
 # v1.0
 腾讯微云 https://share.weiyun.com/wInZlnL2
+
 百度网盘 https://pan.baidu.com/s/1pTrOG-b2dd_HxQpocZKqbQ 提取码：deci
+
 文叔叔下载 打开https://www.wenshushu.cn/k/8w0zu2uwn2k 或 文叔叔APP，钥匙串取文件 wss:2CSjXKHWLa049oAr9toc2sw4bkZ
 
 ## 主页面
