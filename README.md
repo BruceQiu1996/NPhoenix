@@ -11,10 +11,10 @@
 
 💡  大乱斗秒选自己喜欢的英雄|大乱斗符文推荐
 
-## Todo
-   ## 2022.07.25 -2022.07.31 已完成
-    -[✔] 战绩查询从历史20条到100条数量
-    -[✔] 符文下载一键完成
+## 使用方法
+先启动英雄联盟客户端或者后启动都可以。
+解压软件，找到一个LeagueOfLegendsBoxer.exe文件，双击即可使用。
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/file.jpg)
 
 ## 视频地址
 https://www.bilibili.com/video/BV1uG411H75g/
