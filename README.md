@@ -13,21 +13,21 @@
 
 ## Todo
    ## 2022.07.25 -2022.07.31 已完成
-    -[✔] 战绩查询从历史20条到200条数量
+    -[✔] 战绩查询从历史20条到100条数量
     -[✔] 符文下载一键完成
 
 ## 视频地址
 https://www.bilibili.com/video/BV1uG411H75g/
 
 ## 下载地址
-# v1.0
+## v1.0
 腾讯微云 https://share.weiyun.com/wInZlnL2
 
 百度网盘 https://pan.baidu.com/s/1pTrOG-b2dd_HxQpocZKqbQ 提取码：deci
 
 文叔叔下载 打开https://www.wenshushu.cn/k/8w0zu2uwn2k 或 文叔叔APP，钥匙串取文件 wss:2CSjXKHWLa049oAr9toc2sw4bkZ
 
-# v1.1 2022.07.26（战绩查询扩大到最近100局,支持在线更新符文）
+## v1.1 2022.07.26（战绩查询扩大到最近100局,支持在线更新符文）
 腾讯微云 https://share.weiyun.com/xBEoV8aH
 
 百度网盘 https://pan.baidu.com/s/1GFmM13WYHnmiAoiiqkg6Zg 提取码：6avo
