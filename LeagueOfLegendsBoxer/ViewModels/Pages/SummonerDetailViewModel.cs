@@ -1,12 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HandyControl.Controls;
+using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Models;
-using LeagueOfLegendsBoxer.Windows;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
@@ -61,9 +60,17 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _champs, value);
         }
 
+        public int _pageIndex;
+        public int PageIndex
+        {
+            get => _pageIndex;
+            set => SetProperty(ref _pageIndex, value);
+        }
+
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public AsyncRelayCommand GameSelectionChangedCommandAsync { get; set; }
         public AsyncRelayCommand<long> FetchPlayerDetailCommandAsync { get; set; }
+        public AsyncRelayCommand<FunctionEventArgs<int>> SelectPageCommandAsync { get; set; }
 
         private readonly IGameService _gameService;
         public SummonerDetailViewModel(IGameService gameService)
@@ -72,8 +79,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             FetchPlayerDetailCommandAsync = new AsyncRelayCommand<long>(FetchPlayerDetailAsync);
             GameSelectionChangedCommandAsync = new AsyncRelayCommand(GameSelectionChangedAsync);
+            SelectPageCommandAsync = new AsyncRelayCommand<FunctionEventArgs<int>>(SelectPageAsync);
             LeftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
             RightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
+        }
+
+        private async Task SelectPageAsync(FunctionEventArgs<int> e)
+        {
+            var records = await _gameService.GetRecordsByPage((e.Info - 1) * 20, e.Info * 20, Account.Puuid);
+            var recordsData = JToken.Parse(records);
+            var recordObjs = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<ObservableCollection<Record>>().Reverse());
+            Record = recordObjs.FirstOrDefault();
+            Account.Records = recordObjs;
         }
 
         public async Task LoadAsync()
@@ -89,11 +106,17 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 }
                 Champs = list;
                 Record = Account.Records.FirstOrDefault();
+                PageIndex = 1;
                 _loaded = true;
             }
             catch (Exception ex) 
             {
-                
+                Growl.InfoGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "拉取战绩失败!" + ex.Message,
+                    ShowDateTime = false
+                });
             }
         }
 

@@ -25,5 +25,6 @@
         Task<string> GetSkinsByHeroId(int id);
         Task<byte[]> GetSkinByUrl(string url);
         Task<string> SetSkinAsync(dynamic body);
+        Task<string> GetRecordsByPage(int pageStart, int pageEnd, string id);
     }
 }

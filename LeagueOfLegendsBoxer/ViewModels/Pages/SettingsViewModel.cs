@@ -442,6 +442,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             await _iniSettingsModel.WriteRankSettingAsync(RankSetting);
         }
+
         private async Task SearchSkinsForHeroAsync()
         {
             if (ChooseHeroForSkin == null)
@@ -451,6 +452,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await (_skinsWindow.DataContext as SkinsWindowViewModel).LoadSkinsAsync(ChooseHeroForSkin);
             _skinsWindow.ShowDialog();
         }
+
         private async Task FetchRunesAsync()
         {
             using (var client = new HttpClient())
@@ -472,10 +474,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                                 readLength += length;
                                 fileStream.Write(buffer, 0, length);
                             }
-
-                            ZipFile.ExtractToDirectory(fileLoc, AppDomain.CurrentDomain.BaseDirectory, true);
                         }
 
+                        ZipFile.ExtractToDirectory(fileLoc, AppDomain.CurrentDomain.BaseDirectory, true);
                         Growl.SuccessGlobal(new GrowlInfo()
                         {
                             WaitTime = 2,

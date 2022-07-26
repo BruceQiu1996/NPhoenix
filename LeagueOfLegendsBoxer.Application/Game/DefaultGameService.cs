@@ -22,6 +22,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
         private const string _rune = "lol-perks/v1/pages";
         private const string _getskins = "lol-game-data/assets/v1/champions/{0}.json";
         private const string _setSkinBackground = "lol-summoner/v1/current-summoner/summoner-profile";
+        private const string _getRecordsByPage = "lol-match-history/v1/products/lol/{0}/matches";
         private readonly IRequestService _requestService;
 
         public DefaultGameService(IRequestService requestService)
@@ -124,6 +125,15 @@ namespace LeagueOfLegendsBoxer.Application.Game
         public async Task<string> GetPickableChampionsAsync()
         {
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _pickableChampion);
+        }
+
+        public async Task<string> GetRecordsByPage(int pageStart, int pageEnd, string id)
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_getRecordsByPage, id), new List<string>()
+            {
+                $"begIndex={pageStart}",
+                $"endIndex={pageEnd}",
+            });
         }
 
         public async Task<byte[]> GetSkinByUrl(string url)

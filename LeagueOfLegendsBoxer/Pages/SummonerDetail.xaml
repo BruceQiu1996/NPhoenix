@@ -43,68 +43,89 @@
             </StackPanel>
         </hc:Card>
         <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="0" Margin="5">
-            <GroupBox Header="最近20场对局" BorderThickness="0" FontSize="15">
-                <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
-                         SelectedItem="{Binding Record,UpdateSourceTrigger=PropertyChanged}">
-                    <behaviors:Interaction.Triggers>
-                        <behaviors:EventTrigger EventName="SelectionChanged">
-                            <behaviors:InvokeCommandAction Command="{Binding GameSelectionChangedCommandAsync}"></behaviors:InvokeCommandAction>
-                        </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"></StackPanel>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
+            <GroupBox Header="最近100场对局" BorderThickness="0" FontSize="15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="40"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
+                             Grid.Row="0"
+                             SelectedItem="{Binding Record,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="SelectionChanged">
+                                <behaviors:InvokeCommandAction Command="{Binding GameSelectionChangedCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"></StackPanel>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
 
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="OverridesDefaultStyle" Value="True" />
-                            <Setter Property="SnapsToDevicePixels" Value="True" />
-                            <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Height" Value="80" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <Border Background="Transparent" Cursor="Hand">
-                                            <Grid Margin="0 5 5 5">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="1.3*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="0.9*"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="*"></RowDefinition>
-                                                    <RowDefinition Height="*"></RowDefinition>
-                                                </Grid.RowDefinitions>
-                                                <hc:Gravatar Grid.RowSpan="2" Width="50" Height="50" Source="{Binding Participants[0].ChampionImage}" />
-                                                <TextBlock Text="{Binding Participants[0].ChampionName}" VerticalAlignment="Center"
-                                                           FontSize="15" Grid.Column="1" Margin="0 5 0 0"></TextBlock>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="OverridesDefaultStyle" Value="True" />
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="Height" Value="80" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <Border Background="Transparent" Cursor="Hand">
+                                                <Grid Margin="0 5 5 5">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="1.3*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="0.9*"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*"></RowDefinition>
+                                                        <RowDefinition Height="*"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <hc:Gravatar Grid.RowSpan="2" Width="50" Height="50" Source="{Binding Participants[0].ChampionImage}" />
+                                                    <TextBlock Text="{Binding Participants[0].ChampionName}" VerticalAlignment="Center"
+                                                               FontSize="15" Grid.Column="1" Margin="0 5 0 0"></TextBlock>
 
-                                                <TextBlock Text="{Binding Participants[0].Stats.KDA}" 
+                                                    <hc:Tag Content="{Binding CnQueue}" ShowCloseButton="False" VerticalAlignment="Center"
+                                                            FontSize="12" Grid.Column="2" Margin="0 5 0 0"></hc:Tag>
+
+                                                    <TextBlock Text="{Binding Participants[0].Stats.KDA}" 
                                                            VerticalAlignment="Center" FontSize="15" Grid.Row="1"
                                                            Grid.Column="1" ></TextBlock>
 
-                                                <TextBlock Text="{Binding Participants[0].Stats.Win,Converter={StaticResource WinTextConverter}}"
-                                                           Grid.Column="3" Grid.RowSpan="2" VerticalAlignment="Center"
-                                                           FontSize="20" HorizontalAlignment="Center"
-                                                           Foreground="{Binding Participants[0].Stats.Win,Converter={StaticResource WinColorBrushConverter}}"></TextBlock>
-                                            </Grid>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsSelected" Value="True">
-                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
-                                </Trigger>
-                                <Trigger Property="IsSelected" Value="False">
-                                    <Setter Property="Foreground" Value="Black"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
+                                                    <TextBlock Text="{Binding Participants[0].Stats.Win,Converter={StaticResource WinTextConverter}}"
+                                                               Grid.Column="3" VerticalAlignment="Center" Grid.Row="1"
+                                                               FontSize="18" HorizontalAlignment="Center"
+                                                               Foreground="{Binding Participants[0].Stats.Win,Converter={StaticResource WinColorBrushConverter}}"></TextBlock>
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Foreground" Value="Black"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                    <hc:Pagination Foreground="{StaticResource PrimaryBrush}" 
+                                   MaxPageCount="5"
+                                   Grid.Row="1" 
+                                   PageIndex="{Binding PageIndex,UpdateSourceTrigger=PropertyChanged}" 
+                                   HorizontalAlignment="Center" Margin="0,10,0,0" Height="30" VerticalAlignment="Top">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="PageUpdated">
+                                <behaviors:InvokeCommandAction Command="{Binding SelectPageCommandAsync}" PassEventArgsToCommand="True"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </hc:Pagination>
+                </Grid>
             </GroupBox>
         </hc:Card>
 
@@ -157,7 +178,7 @@
                         <TextBlock Text="/" HorizontalAlignment="Center" FontSize="15" Foreground="#aaaaaa"/>
                         <TextBlock Text="{Binding DetailRecord.Team2Kills}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource PrimaryBrush}"/>
                     </StackPanel>
-                    
+
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding DetailRecord.GameMinutes,StringFormat={}{0}分钟}" Grid.Column="1" Grid.Row="1" FontSize="15" />
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="2"  Grid.Row="1">
                         <TextBlock Text="{Binding DetailRecord.Team1GoldEarnedString}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource DangerBrush}"/>
@@ -234,7 +255,7 @@
                                                                 <behaviors:InvokeCommandAction Command="{Binding DataContext.FetchPlayerDetailCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                CommandParameter="{Binding Item1.Player.SummonerId}"></behaviors:InvokeCommandAction>
                                                             </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>   
+                                                        </behaviors:Interaction.Triggers>
                                                     </TextBlock>
                                                 </StackPanel>
 

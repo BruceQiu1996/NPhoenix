@@ -88,8 +88,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             foreach (var account in Accounts)
             {
                 sb.Append($"我方 {account.Horse} [{account.DisplayName}] \n 评分：{account.Records?.Average(x => x.GetScore()).ToString("0.0")} " +
-                    $"单双排：{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division} {account.Rank.RANKED_SOLO_5x5.Desc}" +
-                    $"灵活组排：{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division} {account.Rank.RANKED_FLEX_SR.Desc} 最近五场KDA:");
+                    $"单双排：{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division} {account.Rank.RANKED_SOLO_5x5.ShortDesc}" +
+                    $"灵活组排：{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division} {account.Rank.RANKED_FLEX_SR.ShortDesc} 最近五场KDA:");
 
                 int a = 0;
                 foreach (var record in account.Records) 

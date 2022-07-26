@@ -1,6 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Net;
-using System.Reactive.Linq;
 using System.Security.Authentication;
 using WebSocketSharp;
 
