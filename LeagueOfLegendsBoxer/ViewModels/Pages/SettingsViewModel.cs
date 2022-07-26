@@ -7,12 +7,15 @@ using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
@@ -173,7 +176,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             get => _chooseHeroForSkinsOpen;
             set => SetProperty(ref _chooseHeroForSkinsOpen, value);
         }
-        
+
         private string _gameStartupLocation;
         public string GameStartupLocation
         {
@@ -205,6 +208,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand SearchHeroForSkinCommand { get; set; }
         public AsyncRelayCommand ModifyRankLevelCommandAsync { get; set; }
         public AsyncRelayCommand SearchSkinsForHeroCommandAsync { get; set; }
+        public AsyncRelayCommand FetchRunesCommandAsync { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -229,6 +233,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ExitGameCommandAsync = new AsyncRelayCommand(ExitGameAsync);
             ModifyRankLevelCommandAsync = new AsyncRelayCommand(ModifyRankLevelAsync);
             SearchHeroForSkinCommand = new RelayCommand(SearchHeroForSkin);
+            FetchRunesCommandAsync = new AsyncRelayCommand(FetchRunesAsync);
             SearchSkinsForHeroCommandAsync = new AsyncRelayCommand(SearchSkinsForHeroAsync);
         }
 
@@ -377,7 +382,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             else
                 DisableHeros = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(SearchDisableText) || x.Title.Contains(SearchDisableText)));
         }
-
         private void SearchHeroForSkin()
         {
             ChooseHeroForSkinsOpen = true;
@@ -438,7 +442,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             await _iniSettingsModel.WriteRankSettingAsync(RankSetting);
         }
-        private async Task SearchSkinsForHeroAsync() 
+        private async Task SearchSkinsForHeroAsync()
         {
             if (ChooseHeroForSkin == null)
                 return;
@@ -446,6 +450,55 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             var _skinsWindow = App.ServiceProvider.GetRequiredService<SkinsWindow>();
             await (_skinsWindow.DataContext as SkinsWindowViewModel).LoadSkinsAsync(ChooseHeroForSkin);
             _skinsWindow.ShowDialog();
+        }
+        private async Task FetchRunesAsync()
+        {
+            using (var client = new HttpClient())
+            {
+                string extension = "zip";
+                var temp = Path.GetTempPath();
+                var fileLoc = Path.Combine(temp, $"{Guid.NewGuid()}.{extension}");
+                using (var stream = await client.GetStreamAsync("http://lol-rune.test.upcdn.net/runes.zip"))
+                {
+                    try
+                    {
+                        using (FileStream fileStream = new FileStream(fileLoc, FileMode.CreateNew))
+                        {
+                            byte[] buffer = new byte[1024 * 1024 * 2];
+                            int readLength = 0;
+                            int length;
+                            while ((length = await stream.ReadAsync(buffer, 0, buffer.Length)) != 0)
+                            {
+                                readLength += length;
+                                fileStream.Write(buffer, 0, length);
+                            }
+
+                            ZipFile.ExtractToDirectory(fileLoc, AppDomain.CurrentDomain.BaseDirectory, true);
+                        }
+
+                        Growl.SuccessGlobal(new GrowlInfo()
+                        {
+                            WaitTime = 2,
+                            Message = "符文更新成功!",
+                            ShowDateTime = false
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Growl.InfoGlobal(new GrowlInfo()
+                        {
+                            WaitTime = 2,
+                            Message = "符文更新失败!" + ex.Message,
+                            ShowDateTime = false
+                        });
+                    }
+                    finally
+                    {
+                        if (File.Exists(fileLoc))
+                            File.Delete(fileLoc);
+                    }
+                }
+            }
         }
     }
 }

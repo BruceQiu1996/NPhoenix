@@ -293,7 +293,7 @@
 
                     <Button Content="获取符文" Margin="0 20 0 5" Width="380" FontSize="15" Height="35"
                             Cursor="Hand"
-                            Click="Button_Click_1"
+                            Command="{Binding FetchRunesCommandAsync}"
                             HorizontalAlignment="Left" Style="{StaticResource ButtonWarning}"></Button>
                     <Button Content="免费开源软件.点个赞" 
                             Cursor="Hand"
