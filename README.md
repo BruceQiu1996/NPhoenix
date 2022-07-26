@@ -17,7 +17,7 @@
     -[✔] 符文下载一键完成
 
 ## 视频地址
-https://www.bilibili.com/video/BV1uG411H75g/
+https://www.bilibili.com/video/BV1x94y1D7jr
 
 ## 下载地址
 ## v1.0
