@@ -16,6 +16,10 @@
 解压软件，找到一个LeagueOfLegendsBoxer.exe文件，双击即可使用。
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/file.jpg)
 
+## 已知Bug
+目前存在先启动软件后启动客户端的几率性bug,导致部分功能失效,大致原因是socket绑定失败。(2022/07/27发现 未解决)
+    解决方案（1）重启软件（2）一般情况下先启动游戏客户端再启动软件。
+
 ## 视频地址
 https://www.bilibili.com/video/BV1x94y1D7jr
 
