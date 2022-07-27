@@ -12,7 +12,7 @@ namespace LeagueOfLegendsBoxer.Converts
             if (temp)
                 return "已连接";
             else
-                return "未连接";
+                return "未连接,请启动游戏";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -14,11 +14,12 @@
 ## 使用方法
 先启动英雄联盟客户端或者后启动都可以。
 解压软件，找到一个LeagueOfLegendsBoxer.exe文件，双击即可使用。
+大多问题重启软件都可以解决。
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/file.jpg)
 
 ## 已知Bug
-目前存在先启动软件后启动客户端的几率性bug,导致部分功能失效,大致原因是socket绑定失败。(2022/07/27发现 未解决)
-    解决方案（1）重启软件（2）一般情况下先启动游戏客户端再启动软件。
+目前存在先启动软件后启动客户端的几率性bug,导致部分功能失效,大致原因是socket绑定失败。(2022/07/27发现 已解决,待观察)   
+解决方案（1）重启软件（2）一般情况下先启动游戏客户端再启动软件。   
 
 ## 视频地址
 https://www.bilibili.com/video/BV1x94y1D7jr
@@ -37,6 +38,13 @@ https://www.bilibili.com/video/BV1x94y1D7jr
 百度网盘 https://pan.baidu.com/s/1GFmM13WYHnmiAoiiqkg6Zg 提取码：6avo
 
 文叔叔下载 打开 https://www.wenshushu.cn/k/8w5qd86hz9o 或 APP，钥匙串取文件 wss:2CU21KODwckWNuZJBXCnMvQBbBd
+
+## v1.2 2022.07.27（解决闪退问题,解决部分功能不能使用的问题）
+腾讯微云 https://share.weiyun.com/SLgDy9CD
+
+百度网盘 链接：https://pan.baidu.com/s/1V83Y00NCJDt6YlnpR65RyQ 提取码：dtf0
+
+文叔叔下载 打开文叔叔网站 https://www.wenshushu.cn/k/8wghk3opyr1 或 APP，钥匙串取文件 wss:2CWzKOvDTXkrPyb4YKTCkvt32vb
 
 ## 主页面
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/main.jpg)

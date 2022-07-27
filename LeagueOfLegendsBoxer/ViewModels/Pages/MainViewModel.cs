@@ -4,12 +4,12 @@ using LeagueOfLegendsBoxer.Application.Account;
 using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Models;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
@@ -48,11 +48,11 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             try
             {
                 var profile = await _accountService.GetUserAccountInformationAsync();
-                Account = JsonSerializer.Deserialize<Account>(profile);
-                var rankData = JToken.Parse(await _accountService.GetUserRankInformationAsync());
-                Account.Rank = rankData["queueMap"].ToObject<Rank>();
+                Account = JsonConvert.DeserializeObject<Account>(profile);
                 var recordsData = JToken.Parse(await _accountService.GetRecordInformationAsync(Account.SummonerId));
                 Account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
+                var rankData = JToken.Parse(await _accountService.GetUserRankInformationAsync());
+                Account.Rank = rankData["queueMap"].ToObject<Rank>();
             }
             catch (Exception ex) 
             {

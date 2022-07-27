@@ -43,6 +43,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         public RelayCommand ShiftMainPageCommand { get; set; }
         public RelayCommand CurrentUserInfoCommand { get; set; }
         public RelayCommand OpenChampionSelectToolCommand { get; set; }
+        public AsyncRelayCommand ResetCommandAsync { get; set; }
         public RelayCommand ExitCommand { get; set; }
 
         private Page _currentPage;
@@ -67,7 +68,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
 
         private bool _isLoop = false;
-        private int _champId = 0;
         private readonly IApplicationService _applicationService;
         private readonly IRequestService _requestService;
         private readonly IGameService _gameService;
@@ -81,7 +81,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly ILogger<MainWindowViewModel> _logger;
         private readonly ImageManager _imageManager;
         private readonly RuneViewModel _runeViewModel;
-        private bool _hasStartedLockAmarTask = false;
         public MainWindowViewModel(IApplicationService applicationService,
                                    IClientService clientService,
                                    IRequestService requestService,
@@ -101,6 +100,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             ShiftMainPageCommand = new RelayCommand(OpenMainPage);
             CurrentUserInfoCommand = new RelayCommand(CurrentUserInfo);
             OpenChampionSelectToolCommand = new RelayCommand(OpenChampionSelectTool);
+            ResetCommandAsync = new AsyncRelayCommand(ResetAsync);
             ExitCommand = new RelayCommand(() => { Environment.Exit(0); });
             _applicationService = applicationService;
             _requestService = requestService;
@@ -134,6 +134,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
             await LoopforClientStatus();
         }
 
+        private async Task ResetAsync() 
+        {
+            await LoadAsync();
+        }
+
         private async Task LoopforClientStatus()
         {
             if (_isLoop)
@@ -146,7 +151,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 try
                 {
                     var data = await _clientService.GetZoomScaleAsync();
-
                     await Task.Delay(1500);
                 }
                 catch
@@ -410,8 +414,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                            _eventService.Initialize(Constant.Port, Constant.Token));
 
                         await _eventService.ConnectAsync();
-                        //启动轮询线程
-
                         break;
                     }
                     else

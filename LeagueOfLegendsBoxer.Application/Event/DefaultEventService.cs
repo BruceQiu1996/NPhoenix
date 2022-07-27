@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Security.Authentication;
-using WebSocketSharp;
+using System.Net;
+using System.Net.WebSockets;
+using System.Reactive.Linq;
+using Websocket.Client;
 
 namespace LeagueOfLegendsBoxer.Application.Event
 {
@@ -8,7 +10,7 @@ namespace LeagueOfLegendsBoxer.Application.Event
     {
         private const int ClientEventData = 2;
         private const int ClientEventNumber = 8;
-        private WebSocket _webSocket;
+        private WebsocketClient _webSocket;
         private readonly IDictionary<string, List<EventHandler<EventArgument>>> _subscribers = new Dictionary<string, List<EventHandler<EventArgument>>>();
 
         public EventHandler<EventArgument> MessageReceived { get; set; }
@@ -16,42 +18,60 @@ namespace LeagueOfLegendsBoxer.Application.Event
 
         public Task Initialize(int port, string token)
         {
-            _webSocket = new WebSocket($"wss://127.0.0.1:{port}/", "wamp");
-            _webSocket.SetCredentials("riot", token, true);
-            _webSocket.SslConfiguration.EnabledSslProtocols = SslProtocols.Tls12;
-            _webSocket.SslConfiguration.ServerCertificateValidationCallback = (response, cert, chain, errors) => true;
-
-            _webSocket.OnMessage += WssOnOnMessage;
-
-            return Task.CompletedTask;
-        }
-
-        private void WssOnOnMessage(object sender, MessageEventArgs e)
-        {
-            if (!e.IsText) return;
-
-            var eventArray = JArray.Parse(e.Data);
-            var eventNumber = eventArray[0].ToObject<int>();
-            if (eventNumber != ClientEventNumber) return;
-            var leagueEvent = eventArray[ClientEventData].ToObject<EventArgument>();
-            if (string.IsNullOrWhiteSpace(leagueEvent?.Uri))
-                return;
-
-            MessageReceived?.Invoke(this, leagueEvent);
-            if (!_subscribers.TryGetValue(leagueEvent.Uri, out List<EventHandler<EventArgument>> eventHandlers))
+            _webSocket = new WebsocketClient(new Uri($"wss://127.0.0.1:{port}/"), () =>
             {
-                return;
-            }
+                var socket = new ClientWebSocket
+                {
+                    Options =
+                    {
+                        Credentials = new NetworkCredential("riot", token),
+                        RemoteCertificateValidationCallback =
+                            (sender, cert, chain, sslPolicyErrors) => true,
+                    }
+                };
 
-            eventHandlers.ForEach(eventHandler => eventHandler?.Invoke(this, leagueEvent));
-        }
+                socket.Options.AddSubProtocol("wamp");
+                return socket;
+            });
 
-        public Task ConnectAsync()
-        {
-            _webSocket?.Connect();
-            _webSocket?.Send("[5, \"OnJsonApiEvent\"]");
+            _webSocket.DisconnectionHappened.Subscribe(async type =>
+            {
+
+                await _webSocket?.Start();
+                await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+
+            });
+
+            _webSocket
+                .MessageReceived
+                .Where(msg => msg.Text != null)
+                .Where(msg => msg.Text.StartsWith('['))
+                .Subscribe(msg =>
+                {
+                    var eventArray = JArray.Parse(msg.Text);
+                    var eventNumber = eventArray?[0].ToObject<int>();
+                    if (eventNumber != ClientEventNumber)
+                    {
+                        return;
+                    }
+
+                    var leagueEvent = eventArray[ClientEventData].ToObject<EventArgument>();
+                    MessageReceived?.Invoke(this, leagueEvent);
+                    if (!_subscribers.TryGetValue(leagueEvent.Uri, out List<EventHandler<EventArgument>> eventHandlers))
+                    {
+                        return;
+                    }
+
+                    eventHandlers.ForEach(eventHandler => eventHandler?.Invoke(this, leagueEvent));
+                });
 
             return Task.CompletedTask;
+        }
+
+        public async Task ConnectAsync()
+        {
+            await _webSocket?.Start();
+            await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
         }
 
         public Task<bool> DisconnectAsync()

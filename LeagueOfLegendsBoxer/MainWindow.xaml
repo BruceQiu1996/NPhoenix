@@ -74,6 +74,24 @@
                         </behaviors:Interaction.Triggers>
                 </TextBlock>
 
+                <!--<Label BorderThickness="0"
+                       Cursor="Hand"
+                       ToolTip="重置"
+                       Margin="0 20 0 0"
+                       Background="Transparent"
+                       Grid.Column="1">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                            <behaviors:InvokeCommandAction Command="{Binding ResetCommandAsync}"></behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                    <Path Data="{StaticResource reset}" 
+                          SnapsToDevicePixels="True"
+                          Height="20"
+                          Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                          Fill="{StaticResource PrimaryBrush}"/>
+                </Label>-->
+                
                 <Label BorderThickness="0"
                        Cursor="Hand"
                        ToolTip="设置"
@@ -156,7 +174,7 @@
 
                     <TextBlock Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" 
                                FontSize="15" 
-                               Canvas.Top="16" Canvas.Left="85"></TextBlock>
+                               Canvas.Top="16" Canvas.Left="290"></TextBlock>
 
                     <Label Width="40" BorderThickness="0" MouseLeftButtonDown="Label_MouseLeftButtonDown_2" Cursor="Hand" Canvas.Top="5" Canvas.Left="205" ToolTip="免费软件帮忙点个赞">
                         <behaviors:Interaction.Triggers>
