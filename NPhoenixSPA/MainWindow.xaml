@@ -1,0 +1,96 @@
+﻿<Window x:Class="NPhoenixSPA.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NPhoenixSPA"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        FontFamily="Consolas"
+        mc:Ignorable="d"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Icon="/NPhoenixSPA;component/Resources/logo.ico"
+        WindowStyle="None"
+        Title="MainWindow" Height="750" Width="1100">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="2"/>
+    </WindowChrome.WindowChrome>
+
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
+    <Grid>
+        <Border Margin="2" Background="White" Opacity="0.9" CornerRadius="3">
+            <Border.Effect>
+                <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
+                                  Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
+            </Border.Effect>
+        </Border>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <hc:Card BorderThickness="0" Grid.Column="0" Grid.Row="1" Margin="5" Background="White">
+                <ListBox ItemsSource="{Binding Menus,UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Left"
+                         BorderThickness="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="Height" Value="60" />
+                            <Setter Property="Width" Value="150" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            Background="{TemplateBinding Background}"
+                                            >
+                                            <StackPanel Orientation="Horizontal" Margin="10 0 0 0" 
+                                                    Cursor="Hand"
+                                                    Background="Transparent">
+                                                <Path Data="{Binding Icon}" Stretch="UniformToFill" 
+                                                  Fill="#aaaaaa"
+                                                  Width="20" Height="20"/>
+                                                <TextBlock Margin="10 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"></TextBlock>
+                                            </StackPanel>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                    <Setter Property="BorderThickness" Value="5 0 0 0"></Setter>
+                                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"></Setter>
+                                    <Setter Property="FontSize" Value="14"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </hc:Card>
+        </Grid>
+    </Grid>
+</Window>
