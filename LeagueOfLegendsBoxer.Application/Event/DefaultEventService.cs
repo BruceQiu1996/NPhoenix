@@ -39,7 +39,6 @@ namespace LeagueOfLegendsBoxer.Application.Event
 
                 await _webSocket?.Start();
                 await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
-
             });
 
             _webSocket

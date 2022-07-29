@@ -6,17 +6,21 @@
         xmlns:local="clr-namespace:NPhoenixSPA"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        FontFamily="Consolas"
+        xmlns:convert="clr-namespace:NPhoenixSPA.Converts"
+        FontFamily="微软雅黑"
         mc:Ignorable="d"
         Background="Transparent"
         AllowsTransparency="True"
         Icon="/NPhoenixSPA;component/Resources/logo.ico"
         WindowStyle="None"
-        Title="MainWindow" Height="750" Width="1100">
+        Title="MainWindow" Height="720" Width="1100">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="2"/>
     </WindowChrome.WindowChrome>
-
+    <Window.Resources>
+        <convert:ConnectedColorBrushConverter x:Key="ConnectedColorBrushConverter"></convert:ConnectedColorBrushConverter>
+        <convert:ConnectedTextConverter x:Key="ConnectedTextConverter"></convert:ConnectedTextConverter>
+    </Window.Resources>
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
@@ -24,9 +28,9 @@
     </behaviors:Interaction.Triggers>
 
     <Grid>
-        <Border Margin="2" Background="White" Opacity="0.9" CornerRadius="3">
+        <Border Margin="2" Background="#dddddd" Opacity="0.98" CornerRadius="3">
             <Border.Effect>
-                <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
+                <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="3" 
                                   Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
             </Border.Effect>
         </Border>
@@ -34,16 +38,24 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150"></ColumnDefinition>
+                <ColumnDefinition Width="200"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <hc:Card BorderThickness="0" Grid.Column="0" Grid.Row="1" Margin="5" Background="White">
+            <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{StaticResource PrimaryBrush}" Margin="2" CornerRadius="3 3 0 0" MouseMove="Grid_MouseMove">
+                <Canvas>
+                    <TextBlock Text="NPhoenix" FontSize="25" Margin="10 3 3 3" Foreground="White" ToolTip="NPhoenix"/>
+                </Canvas>
+            </Border>
+            <hc:Card BorderThickness="0" Grid.Column="0" Grid.RowSpan="2" Grid.Row="1" Margin="5 2 5 5" Background="White">
                 <ListBox ItemsSource="{Binding Menus,UpdateSourceTrigger=PropertyChanged}"
+                         SelectedItem="{Binding Menu,UpdateSourceTrigger=PropertyChanged}"
                          HorizontalAlignment="Left"
+                         Background="Transparent"
                          BorderThickness="0">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -57,20 +69,22 @@
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="Height" Value="60" />
                             <Setter Property="Width" Value="150" />
+                            <Setter Property="Margin" Value="0 20 0 0" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                         <Border BorderThickness="{TemplateBinding BorderThickness}"
-                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                            Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                Background="{TemplateBinding Background}"
                                             >
                                             <StackPanel Orientation="Horizontal" Margin="10 0 0 0" 
-                                                    Cursor="Hand"
-                                                    Background="Transparent">
-                                                <Path Data="{Binding Icon}" Stretch="UniformToFill" 
-                                                  Fill="#aaaaaa"
-                                                  Width="20" Height="20"/>
-                                                <TextBlock Margin="10 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"></TextBlock>
+                                                        Cursor="Hand"
+                                                        ToolTip="{Binding Name}"
+                                                        Background="Transparent">
+                                                <Path Data="{Binding Icon}" Stretch="Fill" 
+                                                      Fill="{Binding ElementName=txt,Path=Foreground}"
+                                                      Width="30" Height="30"/>
+                                                <TextBlock Name="txt" Margin="10 0 0 0" Text="{Binding Name}"  VerticalAlignment="Center"></TextBlock>
                                             </StackPanel>
                                         </Border>
                                     </ControlTemplate>
@@ -84,13 +98,47 @@
                                     <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
                                     <Setter Property="BorderThickness" Value="5 0 0 0"></Setter>
                                     <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"></Setter>
-                                    <Setter Property="FontSize" Value="14"></Setter>
+                                    <Setter Property="FontSize" Value="20"></Setter>
+                                    <Setter Property="FontWeight" Value="Heavy"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="False">
+                                    <Setter Property="FontSize" Value="18"></Setter>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>
             </hc:Card>
+
+            <hc:Card Grid.Row="3" Grid.Column="1" Margin="0 0 5 5">
+                <Canvas>
+                    <Ellipse Height="10" 
+                             Width="10" 
+                             Fill="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedColorBrushConverter}}" 
+                             Canvas.Top="18" Canvas.Left="20"
+                             SnapsToDevicePixels="True">
+                    </Ellipse>
+
+                    <TextBlock Text="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedTextConverter}}" 
+                               FontSize="15" 
+                               Canvas.Top="13" Canvas.Left="35"></TextBlock>
+
+                    <TextBlock Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" 
+                               FontSize="15" 
+                               Canvas.Top="13" Canvas.Left="200"></TextBlock>
+                    
+                    <Button Content="启动游戏" 
+                            HorizontalAlignment="Right" 
+                            Canvas.Right="20"
+                            Height="35"
+                            FontSize="16" 
+                            Canvas.Top="5"
+                            Cursor='Hand'></Button>
+                </Canvas>
+            </hc:Card>
+
+            <Frame Grid.Column="1" Grid.Row="1" Margin="0 2 5 5" NavigationUIVisibility="Hidden" 
+                   BorderThickness="0" Content="{Binding CurrentPage,UpdateSourceTrigger=PropertyChanged}"></Frame>
         </Grid>
     </Grid>
 </Window>

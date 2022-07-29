@@ -2,6 +2,9 @@
 {
     public interface IAccountService
     {
+        Task<string> GetFriendsAsync();
+        Task<string> GetLoginInfoAsync();
+        Task<string> GetLoginTimeAsync();
         Task<string> GetUserAccountInformationAsync();
         Task<string> GetUserRankInformationAsync();
         Task<string> GetUserHeroInformationAsync(long summonerId);
