@@ -18,10 +18,10 @@
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/file.jpg)
 
 ## 2022.7.31晚功能发布预告（1，3必需）  
-1.支持游戏内一键发送下等马，预设信息等。
-2.尝试解决部分账号战绩不能拉取问题。
-3.下等马信息模板设置。
-4.接入通告api，前提是搞得到服务器。
+1.支持游戏内一键发送下等马，预设信息等。  
+2.尝试解决部分账号战绩不能拉取问题。  
+3.下等马信息模板设置。  
+4.接入通告api，前提是搞得到服务器。  
 
 ## 视频地址
 https://www.bilibili.com/video/BV1x94y1D7jr
