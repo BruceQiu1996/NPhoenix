@@ -12,6 +12,7 @@ namespace LeagueOfLegendsBoxer.Application.Account
         private const string _hero = "/lol-collections/v1/inventories/{0}/champion-mastery";
         private const string _record = "/lol-match-history/v3/matchlist/account/{0}";
         private const string _summonerProfile = "lol-summoner/v1/summoners/{0}";
+        private const string _summonerProfileByName = "lol-summoner/v1/summoners?name={0}";
         private const string _summonerRank = "/lol-ranked/v1/ranked-stats/{0}";
         private const string _matchList = "/lol-acs/v2/matchlists";
 
@@ -75,6 +76,11 @@ namespace LeagueOfLegendsBoxer.Application.Account
         public async Task<string> GetFriendsAsync()
         {
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _friendsList);
+        }
+
+        public async Task<string> GetSummonerInformationAsync(string summonerName)
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_summonerProfileByName,summonerName));
         }
     }
 }

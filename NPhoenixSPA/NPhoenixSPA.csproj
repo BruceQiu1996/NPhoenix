@@ -61,6 +61,14 @@
 		<Page Update="Resources\WindowStyle.xaml">
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 		</Page>
+		<Page Update="Windows\ChampionSelectTool.xaml">
+		  <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		  <SubType>Designer</SubType>
+		</Page>
+		<Page Update="Windows\SkinsWindow.xaml">
+		  <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		  <SubType>Designer</SubType>
+		</Page>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -82,6 +90,15 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\LeagueOfLegendsBoxer.Application\LeagueOfLegendsBoxer.Application.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Windows\ChampionSelectTool.xaml.cs">
+	    <SubType>Code</SubType>
+	  </Compile>
+	  <Compile Update="Windows\SkinsWindow.xaml.cs">
+	    <SubType>Code</SubType>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

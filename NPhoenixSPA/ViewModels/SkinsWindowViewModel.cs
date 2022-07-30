@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LeagueOfLegendsBoxer.Application.Game;
-using LeagueOfLegendsBoxer.Models;
 using Newtonsoft.Json.Linq;
+using NPhoenixSPA.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,7 +10,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 
-namespace LeagueOfLegendsBoxer.ViewModels
+namespace NPhoenixSPA.ViewModels
 {
     public class SkinsWindowViewModel : ObservableObject
     {

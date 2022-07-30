@@ -211,6 +211,9 @@ namespace NPhoenixSPA.Models
             0 => "https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol/assis/images/resources/items/0.png",
             _ => $"https://game.gtimg.cn/images/lol/act/img/item/{Item0}.png"
         };
+        public string Item0Desc => Constant.Items.FirstOrDefault(x => x.Id == Item0)?.Description;
+        public int? Item0Price => Constant.Items.FirstOrDefault(x => x.Id == Item0)?.Price;
+        public string Item0Name => Constant.Items.FirstOrDefault(x => x.Id == Item0)?.Name;
         public int Item1 { get; set; }
         public string Item1Image => Item1 switch
         {
@@ -218,6 +221,9 @@ namespace NPhoenixSPA.Models
             0 => "https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol/assis/images/resources/items/0.png",
             _ => $"https://game.gtimg.cn/images/lol/act/img/item/{Item1}.png"
         };
+        public string Item1Desc => Constant.Items.FirstOrDefault(x => x.Id == Item1)?.Description;
+        public int? Item1Price => Constant.Items.FirstOrDefault(x => x.Id == Item1)?.Price;
+        public string Item1Name => Constant.Items.FirstOrDefault(x => x.Id == Item1)?.Name;
         [JsonPropertyName("item2")]
         public int Item2 { get; set; }
         public string Item2Image => Item2 switch
@@ -226,6 +232,9 @@ namespace NPhoenixSPA.Models
             0 => "https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol/assis/images/resources/items/0.png",
             _ => $"https://game.gtimg.cn/images/lol/act/img/item/{Item2}.png"
         };
+        public string Item2Desc => Constant.Items.FirstOrDefault(x => x.Id == Item2)?.Description;
+        public int? Item2Price => Constant.Items.FirstOrDefault(x => x.Id == Item2)?.Price;
+        public string Item2Name => Constant.Items.FirstOrDefault(x => x.Id == Item2)?.Name;
         [JsonPropertyName("item3")]
         public int Item3 { get; set; }
         public string Item3Image => Item3 switch
@@ -234,6 +243,9 @@ namespace NPhoenixSPA.Models
             0 => "https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol/assis/images/resources/items/0.png",
             _ => $"https://game.gtimg.cn/images/lol/act/img/item/{Item3}.png"
         };
+        public string Item3Desc => Constant.Items.FirstOrDefault(x => x.Id == Item3)?.Description;
+        public int? Item3Price => Constant.Items.FirstOrDefault(x => x.Id == Item3)?.Price;
+        public string Item3Name => Constant.Items.FirstOrDefault(x => x.Id == Item3)?.Name;
         [JsonPropertyName("item4")]
         public int Item4 { get; set; }
         public string Item4Image => Item4 switch
@@ -242,6 +254,9 @@ namespace NPhoenixSPA.Models
             0 => "https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol/assis/images/resources/items/0.png",
             _ => $"https://game.gtimg.cn/images/lol/act/img/item/{Item4}.png"
         };
+        public string Item4Desc => Constant.Items.FirstOrDefault(x => x.Id == Item4)?.Description;
+        public int? Item4Price => Constant.Items.FirstOrDefault(x => x.Id == Item4)?.Price;
+        public string Item4Name => Constant.Items.FirstOrDefault(x => x.Id == Item4)?.Name;
         [JsonPropertyName("item5")]
         public int Item5 { get; set; }
         public string Item5Image => Item5 switch
@@ -250,6 +265,9 @@ namespace NPhoenixSPA.Models
             0 => "https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol/assis/images/resources/items/0.png",
             _ => $"https://game.gtimg.cn/images/lol/act/img/item/{Item5}.png"
         };
+        public string Item5Desc => Constant.Items.FirstOrDefault(x => x.Id == Item5)?.Description;
+        public int? Item5Price => Constant.Items.FirstOrDefault(x => x.Id == Item5)?.Price;
+        public string Item5Name => Constant.Items.FirstOrDefault(x => x.Id == Item5)?.Name;
         [JsonPropertyName("item6")]
         public int Item6 { get; set; }
         public string Item6Image => Item6 switch
@@ -258,6 +276,9 @@ namespace NPhoenixSPA.Models
             0 => "https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol/assis/images/resources/items/0.png",
             _ => $"https://game.gtimg.cn/images/lol/act/img/item/{Item6}.png"
         };
+        public string Item6Desc => Constant.Items.FirstOrDefault(x => x.Id == Item6)?.Description;
+        public int? Item6Price => Constant.Items.FirstOrDefault(x => x.Id == Item6)?.Price;
+        public string Item6Name => Constant.Items.FirstOrDefault(x => x.Id == Item6)?.Name;
     }
 
     public class Timeline

@@ -11,6 +11,7 @@
         Task<string> GetRecordInformationAsync(long summonerId);
         Task<string> GetRecordInformationAsync1(long summonerId);
         Task<string> GetSummonerInformationAsync(long summonerId);
+        Task<string> GetSummonerInformationAsync(string summonerName);
         Task<string> GetSummonerRankInformationAsync(string puuid);
     }
 }

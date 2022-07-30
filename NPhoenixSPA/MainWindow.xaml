@@ -11,9 +11,10 @@
         mc:Ignorable="d"
         Background="Transparent"
         AllowsTransparency="True"
+        ResizeMode="CanResize"
         Icon="/NPhoenixSPA;component/Resources/logo.ico"
         WindowStyle="None"
-        Title="MainWindow" Height="720" Width="1100">
+        Title="MainWindow" Height="720" Width="1250">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="2"/>
     </WindowChrome.WindowChrome>
@@ -42,7 +43,7 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"></ColumnDefinition>
+                <ColumnDefinition Width="160"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
@@ -99,7 +100,6 @@
                                     <Setter Property="BorderThickness" Value="5 0 0 0"></Setter>
                                     <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"></Setter>
                                     <Setter Property="FontSize" Value="20"></Setter>
-                                    <Setter Property="FontWeight" Value="Heavy"></Setter>
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="False">
                                     <Setter Property="FontSize" Value="18"></Setter>

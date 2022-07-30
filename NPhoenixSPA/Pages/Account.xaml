@@ -227,11 +227,20 @@
                                                 <Grid Margin="0 5 5 5">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*"></ColumnDefinition>
-                                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="0.5*"></ColumnDefinition>
                                                     </Grid.ColumnDefinitions>
-                                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center"></TextBlock>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <hc:Gravatar Style="{StaticResource GravatarCircleImg}" 
+                                                                     Width="30" Height="30"
+                                                                     Margin="5 0 0 0"
+                                                                     VerticalAlignment="Center">
+                                                            <Image Source="{Binding Avatar}" />
+                                                        </hc:Gravatar>
+                                                        <TextBlock Text="{Binding Name}" Margin="15 0 0 0" VerticalAlignment="Center"></TextBlock>
+                                                    </StackPanel>
                                                     <TextBlock Text="{Binding AvailabilityDesc}" Grid.Column="1" VerticalAlignment="Center">
                                                         <TextBlock.Style>
                                                             <Style TargetType="TextBlock">
@@ -246,8 +255,9 @@
                                                             </Style>
                                                         </TextBlock.Style>
                                                     </TextBlock>
-                                                    <TextBlock Text="{Binding LastLoginTimeDesc}" Grid.Column="2" VerticalAlignment="Center"></TextBlock>
-                                                    <CheckBox Grid.Column="3" 
+                                                    <TextBlock Text="{Binding LOL.GameStatusDesc}" Grid.Column="2" VerticalAlignment="Center"></TextBlock>
+                                                    <TextBlock Text="{Binding LOL.CnQueue}" Grid.Column="3" VerticalAlignment="Center"></TextBlock>
+                                                    <CheckBox Grid.Column="4" 
                                                               Content="动态订阅" 
                                                               IsChecked="{Binding IsSubscribe}"
                                                               FontSize="15">

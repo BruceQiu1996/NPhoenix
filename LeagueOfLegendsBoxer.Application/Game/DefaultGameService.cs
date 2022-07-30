@@ -21,7 +21,10 @@ namespace LeagueOfLegendsBoxer.Application.Game
         private const string _champRestraintData = "https://lol.qq.com/act/lbp/common/guides/champDetail/champDetail_{0}.js?ts=2760378";
         private const string _rune = "lol-perks/v1/pages";
         private const string _getskins = "lol-game-data/assets/v1/champions/{0}.json";
+        private const string _getIcons = "lol-game-data/assets/v1/profile-icons.json";
+        private const string _getItems = "lol-game-data/assets/v1/items.json";
         private const string _setSkinBackground = "lol-summoner/v1/current-summoner/summoner-profile";
+        private const string _setIcon = "lol-summoner/v1/current-summoner/icon";
         private const string _getRecordsByPage = "lol-match-history/v1/products/lol/{0}/matches";
         private readonly IRequestService _requestService;
 
@@ -122,6 +125,16 @@ namespace LeagueOfLegendsBoxer.Application.Game
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _gameSessionUrl);
         }
 
+        public async Task<string> GetIcons()
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _getIcons);
+        }
+
+        public async Task<string> GetItems()
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _getItems);
+        }
+
         public async Task<string> GetPickableChampionsAsync()
         {
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _pickableChampion);
@@ -136,7 +149,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
             });
         }
 
-        public async Task<byte[]> GetSkinByUrl(string url)
+        public async Task<byte[]> GetResourceByUrl(string url)
         {
             return await _requestService.GetByteArrayResponseAsync(HttpMethod.Get, url);
         }
@@ -165,6 +178,11 @@ namespace LeagueOfLegendsBoxer.Application.Game
             };
 
             await _requestService.GetJsonResponseAsync(HttpMethod.Post, string.Format(_SendMessage, chatId), null, body);
+        }
+
+        public async Task<string> SetIconAsync(dynamic body)
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Put, _setIcon, null, body);
         }
 
         public async Task<string> SetSkinAsync(dynamic body)

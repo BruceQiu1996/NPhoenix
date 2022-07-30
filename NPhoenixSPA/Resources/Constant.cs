@@ -10,6 +10,8 @@ namespace NPhoenixSPA.Resources
         public static int Pid = 0;
         public static IEnumerable<Hero> Heroes = new List<Hero>();
         public static IEnumerable<Rune> Runes = new List<Rune>();
+        public static IEnumerable<Item> Items = new List<Item>();
+        public static IEnumerable<Icon> Icons = new List<Icon>();
         public static IEnumerable<ServerArea> ServerAreas = new List<ServerArea>();
         //ini settings sections
         public const string GameName = "LeagueClient";

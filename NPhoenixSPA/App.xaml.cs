@@ -1,11 +1,10 @@
-﻿using HandyControl.Controls;
-using HandyControl.Data;
-using LeagueOfLegendsBoxerApplication.Extensions;
+﻿using LeagueOfLegendsBoxerApplication.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NPhoenixSPA.Pages;
 using NPhoenixSPA.Resources;
 using NPhoenixSPA.ViewModels;
+using NPhoenixSPA.Windows;
 using Serilog;
 using System;
 using System.Security.Principal;
@@ -45,9 +44,15 @@ namespace NPhoenixSPA
                 services.AddSingleton<MainWindow>();
                 services.AddSingleton<MainWindowViewModel>();
                 services.AddSingleton<IniSettingsModel>();
+                services.AddTransient<SkinsWindow>();
+                services.AddTransient<SkinsWindowViewModel>();
                 //pages
                 services.AddSingleton<Account>();
                 services.AddSingleton<AccountViewModel>();
+                services.AddSingleton<Record>();
+                services.AddSingleton<RecordViewModel>();
+                services.AddSingleton<Setting>();
+                services.AddSingleton<SettingViewModel>();
             });
 
             return hostBuilder;

@@ -20,7 +20,10 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using Account = NPhoenixSPA.Pages.Account;
+using Record = NPhoenixSPA.Pages.Record;
 using Menu = NPhoenixSPA.Models.Menu;
+using Newtonsoft.Json;
+using NPhoenixSPA.Pages;
 
 namespace NPhoenixSPA.ViewModels
 {
@@ -40,7 +43,12 @@ namespace NPhoenixSPA.ViewModels
         public Menu Menu
         {
             get { return _menu; }
-            set { SetProperty(ref _menu, value); }
+            set
+            {
+                if (value != _menu)
+                    value.Action?.Invoke();
+                SetProperty(ref _menu, value);
+            }
         }
 
         private Page _currentPage;
@@ -79,6 +87,7 @@ namespace NPhoenixSPA.ViewModels
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IConfiguration _configuration;
         private readonly Account _account;
+        private readonly Record _record;
 
         public MainWindowViewModel(IApplicationService applicationService,
                                    IClientService clientService,
@@ -88,6 +97,8 @@ namespace NPhoenixSPA.ViewModels
                                    IConfiguration configuration,
                                    IniSettingsModel iniSettingsModel,
                                    Account account,
+                                   Record record,
+                                   Setting setting,
                                    ILogger<MainWindowViewModel> logger)
         {
             Menus = new ObservableCollection<Menu>()
@@ -97,6 +108,12 @@ namespace NPhoenixSPA.ViewModels
                     Name = "账号信息",
                     Icon = System.Windows.Application.Current.FindResource("account"),
                     Action=()=>CurrentPage = _account
+                },
+                new Menu()
+                {
+                    Name = "战绩查询",
+                    Icon = System.Windows.Application.Current.FindResource("record"),
+                    Action=()=>CurrentPage = _record
                 },
                 new Menu()
                 {
@@ -112,7 +129,8 @@ namespace NPhoenixSPA.ViewModels
                 new Menu()
                 {
                     Name = "设置",
-                    Icon = System.Windows.Application.Current.FindResource("setting")
+                    Icon = System.Windows.Application.Current.FindResource("setting"),
+                    Action=()=>CurrentPage = setting
                 },
             };
 
@@ -125,6 +143,7 @@ namespace NPhoenixSPA.ViewModels
             _logger = logger;
             _iniSettingsModel = iniSettingsModel;
             _account = account;
+            _record = record;
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             GameStatus = "获取客户端状态中";
         }
@@ -244,6 +263,9 @@ namespace NPhoenixSPA.ViewModels
             Constant.Runes = runeDic.Select(x => x.Value).ToList();
             var heros = await _requestService.GetJsonResponseAsync(HttpMethod.Get, "https://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js");
             Constant.Heroes = JToken.Parse(heros)["hero"].ToObject<IEnumerable<Hero>>();
+            Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(await _gameService.GetItems());
+            Constant.Icons = JsonConvert.DeserializeObject<IEnumerable<Icon>>(await _gameService.GetIcons()).Reverse();
+
             await _iniSettingsModel.Initialize();
         }
 

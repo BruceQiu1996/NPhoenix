@@ -23,8 +23,11 @@
         Task DeleteRunePage(long id);
         Task AddRunePage(dynamic body);
         Task<string> GetSkinsByHeroId(int id);
-        Task<byte[]> GetSkinByUrl(string url);
+        Task<byte[]> GetResourceByUrl(string url);
         Task<string> SetSkinAsync(dynamic body);
+        Task<string> SetIconAsync(dynamic body);
+        Task<string> GetItems();
+        Task<string> GetIcons();
         Task<string> GetRecordsByPage(int pageStart, int pageEnd, string id);
     }
 }
