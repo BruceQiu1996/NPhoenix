@@ -130,7 +130,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         }
 
         private async Task LoadAsync()
-        {
+        {       
             await _iniSettingsModel.Initialize();
             LevelOptions = new ObservableCollection<Tuple<string, int>>()
             {

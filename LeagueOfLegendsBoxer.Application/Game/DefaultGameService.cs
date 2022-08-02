@@ -9,11 +9,12 @@ namespace LeagueOfLegendsBoxer.Application.Game
         private const string _gameActionUrl = "lol-champ-select/v1/session/actions/{0}";
         private const string _conversationChat = "lol-chat/v1/conversations";
         private const string _conversationChatMessages = "/lol-chat/v1/conversations/{0}/messages";
+        private const string _sendGameChat = "lol-simple-dialog-messages/v1/messages";
         private const string _SendMessage = "lol-chat/v1/conversations/{0}/messages";
         private const string _gameDetails = "lol-match-history/v1/games/{0}";
         private const string _summonerSuperChamp = "lol-collections/v1/inventories/{0}/champion-mastery";
         private const string _champDataUrl = "https://x1-6833.native.qq.com/x1/6833/1061021&3af49f";
-        private const string _test = " lol-ranked/v1/ranked-overview/{0}";
+        private const string _test = "/data-store/v1/install-settings/gameflow-patcher-lock";
         private const string _gameSessionData = "lol-gameflow/v1/session";
         private const string _currentChampion = "/lol-champ-select/v1/current-champion";
         private const string _pickableChampion = "/lol-champ-select/v1/pickable-champions";
@@ -62,14 +63,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
 
         public async Task BenchSwapChampionsAsync(int champID)
         {
-            //try
-            //{
             await _requestService.GetJsonResponseAsync(HttpMethod.Post, string.Format(_benchSwapChampion, champID));
-            //}
-            //catch (Exception ex) 
-            //{
-
-            //}
         }
 
         public async Task DeleteRunePage(long id)
@@ -169,6 +163,11 @@ namespace LeagueOfLegendsBoxer.Application.Game
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_summonerSuperChamp, summonerId));
         }
 
+        public async Task<string> SendGameChatMessageAsync(string message)
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, "lol-game-client-chat/v1/buddies");
+        }
+
         public async Task SendMessageAsync(string chatId, string message)
         {
             var body = new
@@ -190,9 +189,9 @@ namespace LeagueOfLegendsBoxer.Application.Game
             return await _requestService.GetJsonResponseAsync(HttpMethod.Post, _setSkinBackground, null, body);
         }
 
-        public async Task<string> test(long summonerId)
+        public async Task<string> test(long id)
         {
-            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_test, summonerId));
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_test, id));
         }
     }
 }

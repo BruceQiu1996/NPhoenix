@@ -12,7 +12,8 @@ namespace LeagueOfLegendsBoxer.Models
         public long GameId { get; set; }
         [JsonPropertyName("gameCreation")]
         public long GameCreation { get; set; }
-        public string GameCreationString => TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("d");
+        public string GameCreationString => TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).Year==DateTime.Now.Year?
+                                            TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("MM-dd"): TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("d");
         public string GameCreationTimeString => TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("t");
         [JsonPropertyName("gameDuration")]
         public int GameDuration { get; set; }

@@ -64,6 +64,21 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _autoLockHeroInAram, value);
         }
 
+        private bool _isCloseRecommmand;
+        public bool IsCloseRecommmand
+        {
+            get => _isCloseRecommmand;
+            set => SetProperty(ref _isCloseRecommmand, value);
+        }
+
+        private bool _closeSendOtherWhenBegin;
+        public bool CloseSendOtherWhenBegin
+        {
+            get => _closeSendOtherWhenBegin;
+            set => SetProperty(ref _closeSendOtherWhenBegin, value);
+        }
+        
+
         private ObservableCollection<Hero> _lockHeros;
         public ObservableCollection<Hero> LockHeros
         {
@@ -99,35 +114,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 _iniSettingsModel.WriteAutoDisableHeroIdAsync(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
             }
         }
-
-        private ObservableCollection<Hero> _quickChooseHeros;
-        public ObservableCollection<Hero> QuickChooseHeros
-        {
-            get => _quickChooseHeros;
-            set => SetProperty(ref _quickChooseHeros, value);
-        }
-
-        private ObservableCollection<Hero> _subQuickChooseHeros;
-        public ObservableCollection<Hero> SubQuickChooseHeros
-        {
-            get => _subQuickChooseHeros;
-            set => SetProperty(ref _subQuickChooseHeros, value);
-        }
-
-        private ObservableCollection<Hero> _selectedQuickChooseHeros;
-        public ObservableCollection<Hero> SelectedQuickChooseHeros
-        {
-            get => _selectedQuickChooseHeros;
-            set => SetProperty(ref _selectedQuickChooseHeros, value);
-        }
-
-        private ObservableCollection<Hero> _subSelectedQuickChooseHeros;
-        public ObservableCollection<Hero> SubSelectedQuickChooseHeros
-        {
-            get => _subSelectedQuickChooseHeros;
-            set => SetProperty(ref _subSelectedQuickChooseHeros, value);
-        }
-
 
         private string _preSearchDisableText;
         private string _searchDisableText;
@@ -190,6 +176,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             get => _rankSetting;
             set => SetProperty(ref _rankSetting, value);
         }
+
+        private string _horseTemplate;
+        public string HorseTemplate
+        {
+            get => _horseTemplate;
+            set => SetProperty(ref _horseTemplate, value);
+        }
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroCommandAsync { get; set; }
@@ -198,8 +191,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand UncheckedAutoDisableHeroCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroInAramCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoLockHeroInAramCommandAsync { get; set; }
-        public AsyncRelayCommand SelectHerosLockCommandAsync { get; set; }
-        public AsyncRelayCommand UnSelectHerosLockCommandAsync { get; set; }
         public AsyncRelayCommand GetGameFolderCommandAsync { get; set; }
         public AsyncRelayCommand ExitGameCommandAsync { get; set; }
         public AsyncRelayCommand LoadCommandAsync { get; set; }
@@ -209,6 +200,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand ModifyRankLevelCommandAsync { get; set; }
         public AsyncRelayCommand SearchSkinsForHeroCommandAsync { get; set; }
         public AsyncRelayCommand FetchRunesCommandAsync { get; set; }
+        public RelayCommand OpenAramChooseCommand { get; set; }
+        public RelayCommand StartGameCommand { get; set; }
+        public AsyncRelayCommand CheckedCloseRecommmandCommandAsync { get; set; }
+        public AsyncRelayCommand UnCheckedCloseRecommmandCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
+        public AsyncRelayCommand UnCheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
+        public AsyncRelayCommand SaveHorseTemplateCommandAsync { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -227,14 +225,19 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             SearchLockHeroCommand = new RelayCommand(SearchLockHero);
             SearchDisableHeroCommand = new RelayCommand(SearchDisableHero);
-            SelectHerosLockCommandAsync = new AsyncRelayCommand(SelectHerosLockAsync);
-            UnSelectHerosLockCommandAsync = new AsyncRelayCommand(UnSelectHerosLockAsync);
             GetGameFolderCommandAsync = new AsyncRelayCommand(GetGameFolderAsync);
             ExitGameCommandAsync = new AsyncRelayCommand(ExitGameAsync);
             ModifyRankLevelCommandAsync = new AsyncRelayCommand(ModifyRankLevelAsync);
             SearchHeroForSkinCommand = new RelayCommand(SearchHeroForSkin);
             FetchRunesCommandAsync = new AsyncRelayCommand(FetchRunesAsync);
             SearchSkinsForHeroCommandAsync = new AsyncRelayCommand(SearchSkinsForHeroAsync);
+            OpenAramChooseCommand = new RelayCommand(OpenAramChoose);
+            StartGameCommand = new RelayCommand(StartGame);
+            CheckedCloseRecommmandCommandAsync = new AsyncRelayCommand(CheckedCloseRecommmandAsync);
+            UnCheckedCloseRecommmandCommandAsync = new AsyncRelayCommand(UnCheckedCloseRecommmandAsync);
+            CheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(CheckedCloseSendOtherWhenBeginAsync);
+            UnCheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(UnCheckedCloseSendOtherWhenBeginAsync);
+            SaveHorseTemplateCommandAsync = new AsyncRelayCommand(SaveHorseTemplateAsync);
         }
 
         private async Task LoadAsync()
@@ -242,19 +245,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             LockHeros = new ObservableCollection<Hero>(Constant.Heroes);
             DisableHeros = new ObservableCollection<Hero>(Constant.Heroes);
             ChooseHeroForSkins = new ObservableCollection<Hero>(Constant.Heroes);
-            QuickChooseHeros = new ObservableCollection<Hero>(Constant.Heroes.Where(x => !_iniSettingsModel.LockHerosInAram.Contains(x.ChampId)).OrderBy(x => x.Name));
-            SubQuickChooseHeros = new ObservableCollection<Hero>();
-            SubSelectedQuickChooseHeros = new ObservableCollection<Hero>();
-            var list = new List<Hero>();
-            foreach (var item in _iniSettingsModel.LockHerosInAram)
-            {
-                var h = Constant.Heroes.FirstOrDefault(x => x.ChampId == item);
-                if (h != null)
-                {
-                    list.Add(h);
-                }
-            }
-            SelectedQuickChooseHeros = new ObservableCollection<Hero>(list);
             AutoAcceptGame = _iniSettingsModel.AutoAcceptGame;
             AutoDisableHero = _iniSettingsModel.AutoDisableHero;
             AutoLockHero = _iniSettingsModel.AutoLockHero;
@@ -262,6 +252,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             DisableHero = DisableHeros.FirstOrDefault(x => x.ChampId == _iniSettingsModel.AutoDisableChampId);
             LockHero = LockHeros.FirstOrDefault(x => x.ChampId == _iniSettingsModel.AutoLockHeroChampId);
             GameStartupLocation = _iniSettingsModel.GameExeLocation;
+            IsCloseRecommmand = _iniSettingsModel.IsCloseRecommand;
+            CloseSendOtherWhenBegin = _iniSettingsModel.CloseSendOtherWhenBegin;
+            HorseTemplate = _iniSettingsModel.HorseTemplate;
         }
 
         #region checkbox
@@ -305,59 +298,39 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteAutoLockHeroInAramAsync(false);
             AutoLockHeroInAram = false;
         }
+        private async Task CheckedCloseRecommmandAsync() 
+        {
+            await _iniSettingsModel.WriteIsCloseRecommandAsync(true);
+            IsCloseRecommmand = true;
+        }
+        private async Task UnCheckedCloseRecommmandAsync()
+        {
+            await _iniSettingsModel.WriteIsCloseRecommandAsync(false);
+            IsCloseRecommmand = false;
+        }
+        private async Task CheckedCloseSendOtherWhenBeginAsync() 
+        {
+            await _iniSettingsModel.WriteCloseSendOtherWhenBeginAsync(true);
+            CloseSendOtherWhenBegin = true;
+        }
+        private async Task UnCheckedCloseSendOtherWhenBeginAsync()
+        {
+            await _iniSettingsModel.WriteCloseSendOtherWhenBeginAsync(false);
+            CloseSendOtherWhenBegin = false;
+        }
+        private async Task SaveHorseTemplateAsync() 
+        {
+            await _iniSettingsModel.WriteHorseTemplateAsync(HorseTemplate);
+
+            Growl.SuccessGlobal(new GrowlInfo()
+            {
+                WaitTime = 2,
+                Message = "设置模板成功",
+                ShowDateTime = false
+            });
+        }
         #endregion
 
-        private async Task SelectHerosLockAsync()
-        {
-            if (SubQuickChooseHeros.Count <= 0)
-                return;
-
-            if (SubQuickChooseHeros.Count + SelectedQuickChooseHeros.Count > 20)
-            {
-                Growl.InfoGlobal(new GrowlInfo()
-                {
-                    WaitTime = 2,
-                    Message = "乱斗模式秒选最多设置20位英雄",
-                    ShowDateTime = false
-                });
-
-                return;
-            }
-            var temp = new List<Hero>();
-            foreach (var item in SubQuickChooseHeros)
-            {
-                temp.Add(item);
-            }
-
-            foreach (var item in temp)
-            {
-                QuickChooseHeros.Remove(item);
-                SelectedQuickChooseHeros.Add(item);
-            }
-
-            await _iniSettingsModel.WriteLockHerosInAramAsync(SelectedQuickChooseHeros.Select(x => x.ChampId).ToList());
-            SubQuickChooseHeros.Clear();
-        }
-        private async Task UnSelectHerosLockAsync()
-        {
-            if (SubSelectedQuickChooseHeros.Count <= 0)
-                return;
-
-            var temp = new List<Hero>();
-            foreach (var item in SubSelectedQuickChooseHeros)
-            {
-                temp.Add(item);
-            }
-
-            foreach (var item in temp)
-            {
-                QuickChooseHeros.Add(item);
-                SelectedQuickChooseHeros.Remove(item);
-            }
-            QuickChooseHeros = new ObservableCollection<Hero>(QuickChooseHeros.OrderBy(x => x.Name));
-            await _iniSettingsModel.WriteLockHerosInAramAsync(SelectedQuickChooseHeros.Select(x => x.ChampId).ToList());
-            SubSelectedQuickChooseHeros.Clear();
-        }
         private void SearchLockHero()
         {
             LockHerosOpen = true;
@@ -370,6 +343,36 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             else
                 LockHeros = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(SearchLockText) || x.Title.Contains(SearchLockText)));
         }
+
+        private void StartGame() 
+        {
+            var loc = _iniSettingsModel.GameExeLocation;
+            if (string.IsNullOrEmpty(loc) || !File.Exists(loc))
+            {
+                Growl.InfoGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "无法获取客户端位置,请确保已经获取游戏路径",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
+
+            using (Process p = new Process())
+            {
+                p.StartInfo.FileName = loc;
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.RedirectStandardError = true;
+                p.StartInfo.CreateNoWindow = true; 
+                p.Start();
+                p.StandardInput.AutoFlush = true;
+                p.Close();
+            }
+        }
+
         private void SearchDisableHero()
         {
             DisableHerosOpen = true;
@@ -397,7 +400,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private async Task GetGameFolderAsync()
         {
 
-            var location = (await _applicationService.GetInstallLocation()).Replace("\"", string.Empty);
+            var location = (await _applicationService.GetInstallLocation())?.Replace("\"", string.Empty);
+            if (string.IsNullOrEmpty(location)) 
+            {
+                Growl.InfoGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "无法获取客户端位置,确保游戏已经打开",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
             var parent = Directory.GetParent(location);
             var files = parent.GetFiles("client.exe", SearchOption.AllDirectories);
             FileInfo fileinfo = null;
@@ -451,6 +465,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             var _skinsWindow = App.ServiceProvider.GetRequiredService<SkinsWindow>();
             await (_skinsWindow.DataContext as SkinsWindowViewModel).LoadSkinsAsync(ChooseHeroForSkin);
             _skinsWindow.ShowDialog();
+        }
+
+        private void OpenAramChoose() 
+        {
+            var _window = App.ServiceProvider.GetRequiredService<AramQuickChoose>();
+            _window.ShowDialog();
         }
 
         private async Task FetchRunesAsync()

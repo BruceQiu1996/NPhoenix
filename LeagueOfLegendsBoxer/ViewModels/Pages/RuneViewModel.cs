@@ -20,6 +20,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
     {
         private readonly RuneHelper _runeHelper;
         private readonly IGameService _gameService;
+        private readonly IniSettingsModel _iniSettingsModel;
         private int priviouschampId;
         private int currentchampId;
 
@@ -59,13 +60,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand SwitchRuneToCommonCommand { get; set; }
         public RelayCommand SwitchRuneToAramCommand { get; set; }
         public AsyncRelayCommand<RuneDetail> SetRuneCommandAsync { get; set; }
-        public RuneViewModel(RuneHelper runeHelper, IGameService gameService)
+        public RuneViewModel(RuneHelper runeHelper, IGameService gameService, IniSettingsModel iniSettingsModel)
         {
             _runeHelper = runeHelper;
             _gameService = gameService;
             SwitchRuneToCommonCommand = new RelayCommand(SwitchRuneToCommon);
             SwitchRuneToAramCommand = new RelayCommand(SwitchRuneToAram);
             SetRuneCommandAsync = new AsyncRelayCommand<RuneDetail>(SetRuneAsync);
+            _iniSettingsModel = iniSettingsModel;
         }
 
         private bool _isAramPage;
@@ -112,14 +114,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _gameService.AddRunePage(creation);
             var conversations = await _gameService.GetChatConversation();
             var token = JArray.Parse(conversations).FirstOrDefault(x => x.Value<string>("type") == "championSelect");
-            if (token != null)
+            if (token != null && !_iniSettingsModel.IsCloseRecommand)
             {
                 string chatID = token.Value<string>("id");
                 await _gameService.SendMessageAsync(chatID, $"{Hero.Name}一键符文配置成功,来自NPhoenix助手");
             }
         }
 
-        private void SwitchRuneToCommon() 
+        private void SwitchRuneToCommon()
         {
             if (!IsAramPage)
                 return;

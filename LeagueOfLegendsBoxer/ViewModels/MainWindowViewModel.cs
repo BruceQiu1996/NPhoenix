@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HandyControl.Controls;
-using HandyControl.Data;
+using Gma.System.MouseKeyHook;
 using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Application.Client;
 using LeagueOfLegendsBoxer.Application.Event;
 using LeagueOfLegendsBoxer.Application.Game;
+using LeagueOfLegendsBoxer.Application.LiveGame;
 using LeagueOfLegendsBoxer.Application.Request;
 using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
@@ -22,15 +22,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Forms;
+using Teammate = LeagueOfLegendsBoxer.Models.Teammate;
 
 namespace LeagueOfLegendsBoxer.ViewModels
 {
@@ -41,7 +41,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public RelayCommand ShiftSettingsPageCommand { get; set; }
         public RelayCommand ShiftMainPageCommand { get; set; }
-        public RelayCommand CurrentUserInfoCommand { get; set; }
         public RelayCommand OpenChampionSelectToolCommand { get; set; }
         public AsyncRelayCommand ResetCommandAsync { get; set; }
         public RelayCommand ExitCommand { get; set; }
@@ -68,6 +67,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
 
         private bool _isLoop = false;
+        private IKeyboardMouseEvents _keyboardMouseEvent;
+        private Task _loopForGameEvent;
+        private ManualResetEvent _resetEvent = new ManualResetEvent(true); //控制轮询实时游戏事件的暂停和复原
+        public List<Account> Team2Accounts { get; set; } = new List<Account>();//对面所有人的账号信息
         private readonly IApplicationService _applicationService;
         private readonly IRequestService _requestService;
         private readonly IGameService _gameService;
@@ -81,6 +84,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly ILogger<MainWindowViewModel> _logger;
         private readonly ImageManager _imageManager;
         private readonly RuneViewModel _runeViewModel;
+        private readonly ILiveGameService _livegameservice;
+        private readonly TeammateViewModel _teammateViewModel;
+        private readonly Team1V2Window _team1V2Window;
+
         public MainWindowViewModel(IApplicationService applicationService,
                                    IClientService clientService,
                                    IRequestService requestService,
@@ -93,12 +100,14 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                    ImageManager imageManager,
                                    RuneViewModel runeViewModel,
                                    ChampionSelectTool championSelectTool,
-                                   ILogger<MainWindowViewModel> logger)
+                                   ILogger<MainWindowViewModel> logger,
+                                   ILiveGameService livegameservice,
+                                   TeammateViewModel teammateViewModel,
+                                   Team1V2Window team1V2Window)
         {
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             ShiftSettingsPageCommand = new RelayCommand(OpenSettingsPage);
             ShiftMainPageCommand = new RelayCommand(OpenMainPage);
-            CurrentUserInfoCommand = new RelayCommand(CurrentUserInfo);
             OpenChampionSelectToolCommand = new RelayCommand(OpenChampionSelectTool);
             ResetCommandAsync = new AsyncRelayCommand(ResetAsync);
             ExitCommand = new RelayCommand(() => { Environment.Exit(0); });
@@ -116,16 +125,57 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _runeViewModel = runeViewModel;
             _imageManager = imageManager;
             GameStatus = "获取状态中";
+            _livegameservice = livegameservice;
+            _teammateViewModel = teammateViewModel;
+            _team1V2Window=team1V2Window;
+            _keyboardMouseEvent = Hook.GlobalEvents();
+            _keyboardMouseEvent.KeyDown += OnKeyDown;
+            _keyboardMouseEvent.KeyUp += OnKeyUp;
+        }
+
+        public static Keys StringToKeys(string keyStr)
+        {
+            if (String.IsNullOrWhiteSpace(keyStr))
+                throw new ArgumentException("Cannot be null or whitespaces.", nameof(keyStr));
+            Combination combination = Combination.FromString(keyStr);
+            Keys result = combination.TriggerKey;
+            foreach (var chord in combination.Chord)
+            {
+                result |= chord;
+            }
+            return result;
+        }
+
+        private async void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == StringToKeys("Alt+Q")) //&& Team2Accounts.Item2 != null)
+            {
+                _team1V2Window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+                _team1V2Window.Show();
+                _team1V2Window.Topmost = true;
+            }
+        }
+
+        private async void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == StringToKeys("Q+Alt") || e.KeyData == StringToKeys("Alt+Q") || e.KeyData == StringToKeys("Alt")) //&& Team2Accounts.Item2 != null)
+            {
+                _team1V2Window.Hide();
+            }
         }
 
         private async Task LoadAsync()
         {
-            await ConnnectAsync();
             await LoadConfig();
-            _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
+            await ConnnectAsync();
+            var _httpClientHandler = new HttpClientHandler
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual
+            };
             _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
+            _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
             Connected = true;
-            if (CurrentPage == _mainPage) 
+            if (CurrentPage == _mainPage)
             {
                 await (_mainPage.DataContext as MainViewModel).LoadAsync();
             }
@@ -134,7 +184,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             await LoopforClientStatus();
         }
 
-        private async Task ResetAsync() 
+        private async Task ResetAsync()
         {
             await LoadAsync();
         }
@@ -188,6 +238,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             switch (data)
             {
                 case "ReadyCheck":
+                    _resetEvent.Reset();
                     GameStatus = "找到对局";
                     if (_iniSettingsModel.AutoAcceptGame)
                     {
@@ -195,6 +246,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     }
                     break;
                 case "ChampSelect":
+                    _resetEvent.Reset();
                     GameStatus = "英雄选择中";
                     await ChampSelectAsync();
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
@@ -219,6 +271,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     break;
                 case "InProgress":
                     GameStatus = "游戏中";
+                    Team2Accounts = new List<Account>();
+                    await ActionWhenGameBegin();
+                    break;
+                case "GameStart":
+                    GameStatus = "游戏中";
+
                     break;
                 case "WaitingForStats":
                     GameStatus = "等待结算界面";
@@ -232,7 +290,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     break;
             }
         }
-
         private async void ChampSelect(object obj, EventArgument @event)
         {
             try
@@ -307,26 +364,52 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     }
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
             }
+        }
+
+        private async void LoopLiveGameEventAsync()
+        {
+            //int count = 0;
+            //while (true)
+            //{
+            //    _resetEvent.WaitOne();
+            //    var events = await _livegameservice.GetGameEventAsync();
+            //    if (string.IsNullOrEmpty(events))
+            //    {
+            //        await Task.Delay(2000);
+            //        continue;
+            //    }
+
+            //    var eventss = JToken.Parse(events)["Events"].ToObject<IEnumerable<GameLiveEvent>>();
+            //    if (eventss.FirstOrDefault(x => x.EventID == 0) != null
+            //        && !Team2Accounts.Item1
+            //        && Team2Accounts.Item2.Count>0)
+            //    {
+
+            //        Team2Accounts = (true, Team2Accounts.Item2);
+            //        _keyboardMouseEvent.KeyDown -= OnKeyDown;
+            //        foreach (var item in Team2Accounts.Item2)
+            //        {
+            //            var desc = _teammateViewModel.GetHorseInformation(item);
+            //            if (!string.IsNullOrEmpty(desc))
+            //            {
+            //                keybd_event(vbKeyReturn, 0x1C, 0, 0);
+            //                SendKeys.SendWait(desc);
+            //                keybd_event(vbKeyReturn, 0x1C, 0, 0);
+            //            }
+            //        }
+            //        _keyboardMouseEvent.KeyDown += OnKeyDown;
+            //    }
+
+            //    await Task.Delay(2000);
+            //}
         }
 
         private async Task AutoAcceptAsync()
         {
             await _gameService.AutoAcceptGameAsync();
-        }
-
-        private void CurrentUserInfo()
-        {
-            if ((_mainPage?.DataContext as MainViewModel)?.Account == null)
-                return;
-
-            var summonerAnalyse = App.ServiceProvider.GetRequiredService<SummonerAnalyse>();
-            var summonerAnalyseViewModel = App.ServiceProvider.GetRequiredService<SummonerAnalyseViewModel>();
-            summonerAnalyseViewModel.Account = (_mainPage?.DataContext as MainViewModel)?.Account;
-            summonerAnalyse.DataContext = summonerAnalyseViewModel;
-            summonerAnalyse.Show();
         }
 
         private async Task ChampSelectAsync()
@@ -366,6 +449,48 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     await Task.Delay(500);
                 }
             });
+        }
+
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
+
+        public const byte vbKeyReturn = 0xD;// ENTER 键
+        private async Task ActionWhenGameBegin()
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() => _championSelectTool?.Hide());
+            try
+            {
+                var gameInformation = await _gameService.GetCurrentGameInfoAsync();
+                var token = JToken.Parse(gameInformation)["gameData"];
+                var t1 = token["teamOne"].ToObject<IEnumerable<Teammate>>();
+                var t2 = token["teamTwo"].ToObject<IEnumerable<Teammate>>();
+
+                if (t1.Any(x => x.SummonerId == default) || t2.Any(x => x.SummonerId == default))
+                {
+                    return;
+                }
+
+                var others = t1;
+                if (t1.FirstOrDefault(x => x.Puuid == Constant.Account.Puuid) != null)
+                    others = t2;
+
+                if (!others.Any(x => string.IsNullOrEmpty(x.Puuid?.Trim())) && others.Count() == 5)
+                {
+                    var teamvm = App.ServiceProvider.GetRequiredService<TeammateViewModel>();
+                    foreach (var id in others)
+                    {
+                        var account = await teamvm.GetAccountAsync(id.SummonerId);
+                        if (account != null)
+                        {
+                            Team2Accounts.Add(account);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+            }
         }
         #endregion
 
@@ -439,7 +564,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             Constant.Runes = runeDic.Select(x => x.Value).ToList();
             var heros = await _requestService.GetJsonResponseAsync(HttpMethod.Get, "https://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js");
             Constant.Heroes = JToken.Parse(heros)["hero"].ToObject<IEnumerable<Hero>>();
-            Constant.ServerAreas = _configuration.GetSection("ServerAreas").Get<IEnumerable<ServerArea>>();
             await _iniSettingsModel.Initialize();
         }
 

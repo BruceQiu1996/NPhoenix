@@ -141,6 +141,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 RightParticipants.Add(new Tuple<ParticipantIdentity, Participant>(ridentity, DetailRecord.Participants[index + 5]));
             }
         }
+
         public async Task FetchPlayerDetailAsync(long id) 
         {
             await SummonerAnalyseViewModel.LoadPageAsync(id);

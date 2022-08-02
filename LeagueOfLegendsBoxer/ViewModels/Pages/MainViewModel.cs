@@ -1,8 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HandyControl.Controls;
+using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.Account;
 using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Models;
+using LeagueOfLegendsBoxer.Resources;
+using LeagueOfLegendsBoxer.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -30,6 +35,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _records, value);
         }
         public AsyncRelayCommand LoadCommandAsync { get; set; }
+        public RelayCommand CurrentUserInfoCommand { get; set; }
         private readonly IAccountService _accountService;
         private readonly IGameService _gameService;
         private readonly ILogger<MainViewModel> _logger;
@@ -39,6 +45,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _accountService = accountService;
             _gameService = gameService;
             _logger = logger;
+            CurrentUserInfoCommand = new RelayCommand(CurrentUserInfo);
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
         }
 
@@ -47,6 +54,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             try
             {
+                Constant.Account = Account;
                 var profile = await _accountService.GetUserAccountInformationAsync();
                 Account = JsonConvert.DeserializeObject<Account>(profile);
                 var recordsData = JToken.Parse(await _accountService.GetRecordInformationAsync(Account.SummonerId));
@@ -56,8 +64,26 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
             catch (Exception ex) 
             {
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "拉取登录信息失败,可以点击刷新重试",
+                    ShowDateTime = false
+                });
                 _logger.LogError(ex.ToString());
             }
+        }
+
+        private void CurrentUserInfo()
+        {
+            if (Account == null)
+                return;
+
+            var summonerAnalyse = App.ServiceProvider.GetRequiredService<SummonerAnalyse>();
+            var summonerAnalyseViewModel = App.ServiceProvider.GetRequiredService<SummonerAnalyseViewModel>();
+            summonerAnalyseViewModel.Account = Account;
+            summonerAnalyse.DataContext = summonerAnalyseViewModel;
+            summonerAnalyse.Show();
         }
     }
 }

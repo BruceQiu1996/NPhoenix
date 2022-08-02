@@ -13,7 +13,7 @@
         Task SendMessageAsync(string chatId,string message);
         Task<string> QueryGameDetailAsync(long gameId);
         Task<string> QuerySummonerSuperChampDataAsync(long summonerId);
-        Task<string> test(long summonerId);
+        Task<string> test(long id);
         Task<string> GetCurrentGameInfoAsync();
         Task<string> GetCurrentChampionInfoAsync();
         Task<string> GetPickableChampionsAsync();
@@ -26,6 +26,7 @@
         Task<byte[]> GetResourceByUrl(string url);
         Task<string> SetSkinAsync(dynamic body);
         Task<string> SetIconAsync(dynamic body);
+        Task<string> SendGameChatMessageAsync(string message);
         Task<string> GetItems();
         Task<string> GetIcons();
         Task<string> GetRecordsByPage(int pageStart, int pageEnd, string id);

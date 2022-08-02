@@ -3,7 +3,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        FontFamily="/LeagueOfLegendsBoxer;component/Resources/#HappyZcool-2016"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
         xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -13,7 +12,7 @@
         AllowsTransparency="True"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         WindowStyle="None"
-        Title="MainWindow" Height="700" Width="460">
+        Title="MainWindow" Height="700" Width="420">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="3"/>
@@ -49,7 +48,7 @@
             </Grid.RowDefinitions>
             <Grid MouseMove="Border_MouseMove" Background="Transparent">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250"></ColumnDefinition>
+                    <ColumnDefinition Width="210"></ColumnDefinition>
                     <ColumnDefinition Width="40"></ColumnDefinition>
                     <ColumnDefinition Width="40"></ColumnDefinition>
                     <ColumnDefinition Width="40"></ColumnDefinition>
@@ -63,7 +62,7 @@
                            ToolTip="NPhoenix"
                            Margin="20 25 0 0" 
                            Cursor="Hand"
-                           Width="110"
+                           Width="130"
                            FontWeight="Bold"
                            HorizontalAlignment="Left"
                            FontSize="25">
@@ -164,19 +163,19 @@
                     <Ellipse Height="10" 
                              Width="10" 
                              Fill="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedColorBrushConverter}}" 
-                             Canvas.Top="20" Canvas.Left="20"
+                             Canvas.Top="15" Canvas.Left="20"
                              SnapsToDevicePixels="True">
                     </Ellipse>
 
                     <TextBlock Text="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedTextConverter}}" 
                                FontSize="15" 
-                               Canvas.Top="16" Canvas.Left="35"></TextBlock>
+                               Canvas.Top="11" Canvas.Left="35"></TextBlock>
 
                     <TextBlock Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" 
                                FontSize="15" 
-                               Canvas.Top="16" Canvas.Left="290"></TextBlock>
+                               Canvas.Top="11" Canvas.Left="250"></TextBlock>
 
-                    <Label Width="40" BorderThickness="0" MouseLeftButtonDown="Label_MouseLeftButtonDown_2" Cursor="Hand" Canvas.Top="5" Canvas.Left="205" ToolTip="免费软件帮忙点个赞">
+                    <Label Width="40" BorderThickness="0" MouseLeftButtonDown="Label_MouseLeftButtonDown_2" Cursor="Hand" Canvas.Top="5" Canvas.Left="195" ToolTip="免费软件帮忙点个赞">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="MouseLeftButtonDown">
                                 <behaviors:InvokeCommandAction Command="{Binding OpenGitAddressCommand}"></behaviors:InvokeCommandAction>

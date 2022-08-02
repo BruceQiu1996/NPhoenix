@@ -35,7 +35,7 @@ namespace LeagueOfLegendsBoxer.Application.Request
                 response.EnsureSuccessStatusCode();
                 return await GetResponseContentAsync(response);
             }
-            catch
+            catch(Exception ex)
             {
                 return null;
             }

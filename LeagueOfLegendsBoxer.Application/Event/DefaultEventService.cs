@@ -36,9 +36,12 @@ namespace LeagueOfLegendsBoxer.Application.Event
 
             _webSocket.DisconnectionHappened.Subscribe(async type =>
             {
-
-                await _webSocket?.Start();
-                await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+                try
+                {
+                    await _webSocket?.Start();
+                    await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+                }
+                catch { }
             });
 
             _webSocket

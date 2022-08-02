@@ -8,7 +8,7 @@
       xmlns:model="clr-namespace:LeagueOfLegendsBoxer.Models"
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
-      FontFamily="/LeagueOfLegendsBoxer;component/Resources/#HappyZcool-2016"
+      FontFamily="微软雅黑"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
@@ -55,7 +55,14 @@
                                Grid.ColumnSpan="2"
                                Margin="0 5 0 0"
                                Grid.Column="1"
-                               Text="{Binding Account.DisplayName}"/>
+                               Cursor="Hand"
+                               Text="{Binding Account.DisplayName}">
+                        <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                            <behaviors:InvokeCommandAction Command="{Binding CurrentUserInfoCommand}"></behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                    </TextBlock>
 
                     <hc:Shield Subject="Level" 
                                Grid.Row="2"
@@ -128,7 +135,7 @@
         </hc:Card>
 
         <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10" Height="320">
-            <GroupBox Header="最近20场对局" BorderThickness="0" FontSize="15">
+            <GroupBox Header="最近20场对局" BorderThickness="0" FontSize="18">
                 <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>

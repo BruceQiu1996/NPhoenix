@@ -45,9 +45,12 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<ChampionSelectToolViewModel>();
                 services.AddTransient<SkinsWindow>();
                 services.AddTransient<SkinsWindowViewModel>();
+                services.AddTransient<AramQuickChoose>();
+                services.AddTransient<AramQuickChooseViewModel>();
                 services.AddSingleton<IniSettingsModel>();
                 services.AddSingleton<ImageManager>();
                 services.AddSingleton<RuneHelper>();
+                services.AddSingleton<Team1V2Window>();
                 //pages
                 services.AddSingleton<MainPage>();
                 services.AddSingleton<MainViewModel>();

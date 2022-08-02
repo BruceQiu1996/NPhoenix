@@ -28,7 +28,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250"></ColumnDefinition>
+            <ColumnDefinition Width="230"></ColumnDefinition>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="200"></ColumnDefinition>
         </Grid.ColumnDefinitions>
@@ -83,12 +83,15 @@
                                                         <RowDefinition Height="*"></RowDefinition>
                                                         <RowDefinition Height="*"></RowDefinition>
                                                     </Grid.RowDefinitions>
-                                                    <hc:Gravatar Grid.RowSpan="2" Width="50" Height="50" Source="{Binding Participants[0].ChampionImage}" />
-                                                    <TextBlock Text="{Binding Participants[0].ChampionName}" VerticalAlignment="Center"
-                                                               FontSize="15" Grid.Column="1" Margin="0 5 0 0"></TextBlock>
+                                                    <hc:Gravatar Grid.RowSpan="2" Width="50" Height="50" 
+                                                                 ToolTip="{Binding Participants[0].ChampionName}"
+                                                                 Source="{Binding Participants[0].ChampionImage}" />
+                                                    <TextBlock Text="{Binding GameCreationString}" VerticalAlignment="Center"
+                                                               FontSize="15" Grid.Column="2" Margin="0 5 0 0"></TextBlock>
 
                                                     <hc:Tag Content="{Binding CnQueue}" ShowCloseButton="False" VerticalAlignment="Center"
-                                                            FontSize="12" Grid.Column="2" Margin="0 5 0 0"></hc:Tag>
+                                                            HorizontalAlignment="Left"
+                                                            FontSize="13" Grid.Column="1" Margin="0 5 0 0"></hc:Tag>
 
                                                     <TextBlock Text="{Binding Participants[0].Stats.KDA}" 
                                                            VerticalAlignment="Center" FontSize="15" Grid.Row="1"
@@ -96,7 +99,7 @@
 
                                                     <TextBlock Text="{Binding Participants[0].Stats.Win,Converter={StaticResource WinTextConverter}}"
                                                                Grid.Column="3" VerticalAlignment="Center" Grid.Row="1"
-                                                               FontSize="18" HorizontalAlignment="Center"
+                                                               FontSize="18" HorizontalAlignment="Left"
                                                                Foreground="{Binding Participants[0].Stats.Win,Converter={StaticResource WinColorBrushConverter}}"></TextBlock>
                                                 </Grid>
                                             </Border>

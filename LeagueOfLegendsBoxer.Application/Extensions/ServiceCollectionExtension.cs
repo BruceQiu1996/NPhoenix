@@ -3,6 +3,7 @@ using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Application.Client;
 using LeagueOfLegendsBoxer.Application.Event;
 using LeagueOfLegendsBoxer.Application.Game;
+using LeagueOfLegendsBoxer.Application.LiveGame;
 using LeagueOfLegendsBoxer.Application.Request;
 using LeagueOfLegendsBoxer.Application.Settings;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,7 @@ namespace LeagueOfLegendsBoxerApplication.Extensions
             serviceDescriptors.AddSingleton<IEventService, DefaultEventService>();
             serviceDescriptors.AddSingleton<IGameService, DefaultGameService>();
             serviceDescriptors.AddSingleton<IAccountService, DefaultAccountService>();
+            serviceDescriptors.AddSingleton<ILiveGameService, DefaultLiveGameService>();
         }
     }
 }

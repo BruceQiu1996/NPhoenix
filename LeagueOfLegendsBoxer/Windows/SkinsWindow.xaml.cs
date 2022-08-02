@@ -24,7 +24,7 @@ namespace LeagueOfLegendsBoxer.Windows
 
         private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Hide();
+            Close();
         }
 
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

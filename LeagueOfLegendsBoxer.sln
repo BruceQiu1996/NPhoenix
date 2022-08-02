@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeagueOfLegendsBoxer.Core",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LeagueOfLegendsBoxer.Application", "LeagueOfLegendsBoxer.Application\LeagueOfLegendsBoxer.Application.csproj", "{EEC239D9-31E1-4A49-9D3D-10143B210DE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NPhoenixSPA", "NPhoenixSPA\NPhoenixSPA.csproj", "{C3EC4EE9-ADEE-491E-B313-1B59F730EAFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NPhoenixSPA", "NPhoenixSPA\NPhoenixSPA.csproj", "{C3EC4EE9-ADEE-491E-B313-1B59F730EAFB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

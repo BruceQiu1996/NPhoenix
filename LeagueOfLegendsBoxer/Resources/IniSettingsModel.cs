@@ -25,6 +25,9 @@ namespace LeagueOfLegendsBoxer.Resources
         public int AutoLockHeroChampId { get; set; }
         public string GameExeLocation { get; set; }
         public string RankSetting { get; set; }
+        public bool IsCloseRecommand { get; set; }
+        public bool CloseSendOtherWhenBegin { get; set; }
+        public string HorseTemplate { get; set; }
         public IniSettingsModel(ISettingsService settingsService,
                                 IApplicationService applicationService,
                                 IConfiguration configuration)
@@ -58,6 +61,9 @@ namespace LeagueOfLegendsBoxer.Resources
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoDisableHeroId), out var tempAutoDisableHeroId) ? tempAutoDisableHeroId : 0;
             GameExeLocation = await _settingsService.ReadAsync(Constant.Game, Constant.GameLocation);
             RankSetting = await _settingsService.ReadAsync(Constant.Game, Constant.RankSetting);
+            IsCloseRecommand = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsCloseRecommand), out var tempRecommand) ? tempRecommand : false;
+            CloseSendOtherWhenBegin = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.CloseSendOtherWhenBegin), out var tempCloseSendOtherWhenBegin) ? tempCloseSendOtherWhenBegin : false;
+            HorseTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.HorseTemplate);
         }
 
         public async Task WriteAutoAcceptAsync(bool value)
@@ -113,6 +119,23 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.RankSetting, setting);
             RankSetting = setting;
+        }
+
+        public async Task WriteIsCloseRecommandAsync(bool isCloseRecommand)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.IsCloseRecommand, isCloseRecommand.ToString());
+            IsCloseRecommand = isCloseRecommand;
+        }
+
+        public async Task WriteCloseSendOtherWhenBeginAsync(bool closeSendOtherWhenBegin)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.CloseSendOtherWhenBegin, closeSendOtherWhenBegin.ToString());
+            CloseSendOtherWhenBegin = closeSendOtherWhenBegin;
+        }
+        public async Task WriteHorseTemplateAsync(string horseTemplate)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.HorseTemplate, horseTemplate);
+            HorseTemplate = horseTemplate;
         }
     }
 }

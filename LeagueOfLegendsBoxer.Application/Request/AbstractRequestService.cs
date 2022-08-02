@@ -27,9 +27,9 @@ namespace LeagueOfLegendsBoxer.Application.Request
         }
 
         protected HttpRequestMessage PrepareRequest(HttpMethod httpMethod, 
-                                                              string relativeUrl,
-                                                              IEnumerable<string> queryParameters, 
-                                                              dynamic body)
+                                                    string relativeUrl,
+                                                    IEnumerable<string> queryParameters, 
+                                                    dynamic body)
         {
             var url = queryParameters == null ? relativeUrl : relativeUrl + BuildQueryParameterString(queryParameters);
             var request = new HttpRequestMessage(httpMethod, url);
