@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using LeagueOfLegendsBoxer.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace LeagueOfLegendsBoxer.Windows
 {
@@ -19,9 +8,10 @@ namespace LeagueOfLegendsBoxer.Windows
     /// </summary>
     public partial class Team1V2Window : Window
     {
-        public Team1V2Window()
+        public Team1V2Window(Team1V2WindowViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
     }
 }

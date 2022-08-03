@@ -39,6 +39,7 @@ namespace LeagueOfLegendsBoxer.Models
             set => SetProperty(ref _records, value);
         }
 
+        public int TeamID { get; set; }
         public string Horse => GetHorse();
         private string GetHorse()
         {

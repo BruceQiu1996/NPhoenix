@@ -30,6 +30,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using System.Windows.Interop;
+using System.Windows.Media;
 using Teammate = LeagueOfLegendsBoxer.Models.Teammate;
 
 namespace LeagueOfLegendsBoxer.ViewModels
@@ -70,7 +72,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private IKeyboardMouseEvents _keyboardMouseEvent;
         private Task _loopForGameEvent;
         private ManualResetEvent _resetEvent = new ManualResetEvent(true); //控制轮询实时游戏事件的暂停和复原
-        public List<Account> Team2Accounts { get; set; } = new List<Account>();//对面所有人的账号信息
+        public List<Account> Team1Accounts { get; set; } = new List<Account>();
+        public List<Account> Team2Accounts { get; set; } = new List<Account>();
         private readonly IApplicationService _applicationService;
         private readonly IRequestService _requestService;
         private readonly IGameService _gameService;
@@ -127,7 +130,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             GameStatus = "获取状态中";
             _livegameservice = livegameservice;
             _teammateViewModel = teammateViewModel;
-            _team1V2Window=team1V2Window;
+            _team1V2Window = team1V2Window;
             _keyboardMouseEvent = Hook.GlobalEvents();
             _keyboardMouseEvent.KeyDown += OnKeyDown;
             _keyboardMouseEvent.KeyUp += OnKeyUp;
@@ -135,7 +138,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         public static Keys StringToKeys(string keyStr)
         {
-            if (String.IsNullOrWhiteSpace(keyStr))
+            if (string.IsNullOrWhiteSpace(keyStr))
                 throw new ArgumentException("Cannot be null or whitespaces.", nameof(keyStr));
             Combination combination = Combination.FromString(keyStr);
             Keys result = combination.TriggerKey;
@@ -146,24 +149,28 @@ namespace LeagueOfLegendsBoxer.ViewModels
             return result;
         }
 
-        private async void OnKeyDown(object sender, KeyEventArgs e)
+        #region 热键
+        private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == StringToKeys("Alt+Q")) //&& Team2Accounts.Item2 != null)
+            if (e.KeyData == StringToKeys("Alt+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
             {
-                _team1V2Window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-                _team1V2Window.Show();
-                _team1V2Window.Topmost = true;
+                _team1V2Window.Opacity = 1;
+                e.Handled = true;
             }
         }
 
-        private async void OnKeyUp(object sender, KeyEventArgs e)
+        private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == StringToKeys("Q+Alt") || e.KeyData == StringToKeys("Alt+Q") || e.KeyData == StringToKeys("Alt")) //&& Team2Accounts.Item2 != null)
+            if (e.KeyData == StringToKeys("Q+Alt")
+                || e.KeyData == StringToKeys("Alt+Q")
+                || e.KeyData == StringToKeys("Alt"))
             {
-                _team1V2Window.Hide();
+                _team1V2Window.Opacity = 0;
+                e.Handled = true;
             }
         }
 
+        #endregion 
         private async Task LoadAsync()
         {
             await LoadConfig();
@@ -235,6 +242,16 @@ namespace LeagueOfLegendsBoxer.ViewModels
             if (string.IsNullOrEmpty(data))
                 return;
 
+            if (data != "InProgress" && data != "GameStart")
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Team1Accounts.Clear();
+                    Team2Accounts.Clear();
+                    _team1V2Window.Hide();
+                    _team1V2Window.Topmost = false;
+                });
+            }
             switch (data)
             {
                 case "ReadyCheck":
@@ -271,12 +288,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     break;
                 case "InProgress":
                     GameStatus = "游戏中";
+                    Team1Accounts = new List<Account>();
                     Team2Accounts = new List<Account>();
                     await ActionWhenGameBegin();
                     break;
                 case "GameStart":
                     GameStatus = "游戏中";
-
                     break;
                 case "WaitingForStats":
                     GameStatus = "等待结算界面";
@@ -455,6 +472,9 @@ namespace LeagueOfLegendsBoxer.ViewModels
         public static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
 
         public const byte vbKeyReturn = 0xD;// ENTER 键
+
+        [DllImport("user32.dll", EntryPoint = "FindWindow")]
+        private extern static IntPtr FindWindow(string lpClassName, string lpWindowName);
         private async Task ActionWhenGameBegin()
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() => _championSelectTool?.Hide());
@@ -465,19 +485,28 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 var t1 = token["teamOne"].ToObject<IEnumerable<Teammate>>();
                 var t2 = token["teamTwo"].ToObject<IEnumerable<Teammate>>();
 
-                if (t1.Any(x => x.SummonerId == default) || t2.Any(x => x.SummonerId == default))
+                if (t1.All(x => x.SummonerId == default) && t2.All(x => x.SummonerId == default))
                 {
                     return;
                 }
 
-                var others = t1;
-                if (t1.FirstOrDefault(x => x.Puuid == Constant.Account.Puuid) != null)
-                    others = t2;
-
-                if (!others.Any(x => string.IsNullOrEmpty(x.Puuid?.Trim())) && others.Count() == 5)
+                if (!t1.All(x => string.IsNullOrEmpty(x.Puuid?.Trim())))
                 {
                     var teamvm = App.ServiceProvider.GetRequiredService<TeammateViewModel>();
-                    foreach (var id in others)
+                    foreach (var id in t1)
+                    {
+                        var account = await teamvm.GetAccountAsync(id.SummonerId);
+                        if (account != null)
+                        {
+                            Team1Accounts.Add(account);
+                        }
+                    }
+                }
+
+                if (!t2.All(x => string.IsNullOrEmpty(x.Puuid?.Trim())))
+                {
+                    var teamvm = App.ServiceProvider.GetRequiredService<TeammateViewModel>();
+                    foreach (var id in t2)
                     {
                         var account = await teamvm.GetAccountAsync(id.SummonerId);
                         if (account != null)
@@ -486,6 +515,15 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         }
                     }
                 }
+
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    (_team1V2Window.DataContext as Team1V2WindowViewModel).LoadData(Team1Accounts, Team2Accounts);
+                    _team1V2Window.Show();
+                    _team1V2Window.Topmost = true;
+                    _team1V2Window.Activate();
+                    _team1V2Window.Opacity = 0;
+                });
             }
             catch (Exception ex)
             {

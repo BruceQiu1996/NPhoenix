@@ -57,7 +57,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 Constant.Account = Account;
                 var profile = await _accountService.GetUserAccountInformationAsync();
                 Account = JsonConvert.DeserializeObject<Account>(profile);
-                var recordsData = JToken.Parse(await _accountService.GetRecordInformationAsync(Account.SummonerId));
+                var records = await _accountService.GetRecordInformationAsync(Account.SummonerId);
+                var recordsData = JToken.Parse(records);
                 Account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
                 var rankData = JToken.Parse(await _accountService.GetUserRankInformationAsync());
                 Account.Rank = rankData["queueMap"].ToObject<Rank>();

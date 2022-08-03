@@ -51,6 +51,7 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<ImageManager>();
                 services.AddSingleton<RuneHelper>();
                 services.AddSingleton<Team1V2Window>();
+                services.AddSingleton<Team1V2WindowViewModel>();
                 //pages
                 services.AddSingleton<MainPage>();
                 services.AddSingleton<MainViewModel>();

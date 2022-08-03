@@ -142,6 +142,8 @@ namespace LeagueOfLegendsBoxer.Models
         public Timeline Timeline { get; set; }
         [JsonPropertyName("spell1Id")]
         public int Spell1Id { get; set; }
+        [JsonPropertyName("teamId")]
+        public int TeamId { get; set; }
         public string Spell1Image => Spell1Id switch
         {
             4 => "https://game.gtimg.cn/images/lol/act/img/spell/Summoner_flash.png",
