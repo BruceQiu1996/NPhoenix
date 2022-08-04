@@ -66,5 +66,20 @@ namespace LeagueOfLegendsBoxer.Models
 
             return "未知的马";
         }
+
+        //live
+        private Hero _champion;
+        public Hero Champion
+        {
+            get => _champion;
+            set => SetProperty(ref _champion, value);
+        }
+
+        private ObservableCollection<Rune> runes;
+        public ObservableCollection<Rune> Runes 
+        {
+            get => runes;
+            set => SetProperty(ref runes, value);
+        }
     }
 }

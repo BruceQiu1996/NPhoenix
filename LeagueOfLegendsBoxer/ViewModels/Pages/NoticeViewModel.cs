@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using HandyControl.Controls;
 using HandyControl.Data;
 using LeagueOfLegendsBoxer.Models;
+using LeagueOfLegendsBoxer.Resources;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -11,6 +13,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
@@ -30,22 +33,34 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public Notice Notice
         {
             get { return notice; }
-            set { SetProperty(ref notice, value); }
+            set
+            {
+                if (value != null)
+                {
+                    //设置该id的通知为已读
+                    SetReadedAsync(value).ConfigureAwait(false);
+                }
+                SetProperty(ref notice, value);
+            }
         }
 
         public AsyncRelayCommand LoadCommandAsync { get; set; }
 
         private readonly IConfiguration _configuration;
+        private readonly IniSettingsModel _iniSettingsModel;
         private readonly ILogger<NoticeViewModel> _logger;
-        public NoticeViewModel(IConfiguration configuration, ILogger<NoticeViewModel> logger)
+        public NoticeViewModel(IConfiguration configuration, ILogger<NoticeViewModel> logger, IniSettingsModel iniSettingsModel)
         {
+            Notices = new ObservableCollection<Notice>();
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             _configuration = configuration;
             _logger = logger;
+            _iniSettingsModel = iniSettingsModel;
         }
 
-        private async Task LoadAsync()
+        public async Task LoadAsync()
         {
+            Notice = null;
             if (_isLoaded)
                 return;
 
@@ -61,17 +76,28 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
                 return;
             }
+
             using (var client = new HttpClient())
             {
                 try
                 {
-                    var data = await client.GetStringAsync(notice);
-                    if (string.IsNullOrEmpty(data)) 
+                    var data = await client.GetByteArrayAsync(notice);
+                    if (data == null || data.Count() <= 0)
                     {
                         return;
                     }
-                    var notices = JsonConvert.DeserializeObject<IEnumerable<Notice>>(data);
+                    var dataStr = Encoding.UTF8.GetString(data);
+                    var notices = JsonConvert.DeserializeObject<IEnumerable<Notice>>(dataStr);
+                    foreach(var item in notices) 
+                    {
+                        if (_iniSettingsModel.ReadedNotices.Contains(item.Id)) 
+                        {
+                            item.IsReaded = true;
+                        }
+                    }
                     Notices = new ObservableCollection<Notice>(notices.OrderBy(x => x.Priority).ThenByDescending(x => x.Time));
+                    WeakReferenceMessenger.Default.Send(Notices.Where(x => !x.IsReaded));
+                    _isLoaded = true;
                 }
                 catch (Exception ex)
                 {
@@ -84,6 +110,16 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     });
                 }
             }
+        }
+        private async Task SetReadedAsync(Notice notice)
+        {
+            if (!_iniSettingsModel.ReadedNotices.Contains(notice.Id))
+            {
+                await _iniSettingsModel.WriteReadedNoticesAsync(notice.Id);
+            }
+
+            notice.IsReaded = true;
+            WeakReferenceMessenger.Default.Send(Notices.Where(x => !x.IsReaded));
         }
     }
 }

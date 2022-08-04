@@ -108,23 +108,36 @@
                           Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
                           Fill="{StaticResource PrimaryBrush}"/>
                 </Label>
-                <Label BorderThickness="0"
-                       Cursor="Hand"
-                       ToolTip="通知"
-                       Margin="0 20 0 0"
-                       Background="Transparent"
-                       Grid.Column="3">
-                    <behaviors:Interaction.Triggers>
-                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                            <behaviors:InvokeCommandAction Command="{Binding ShiftNoticePageCommand}"></behaviors:InvokeCommandAction>
-                        </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
-                    <Path Data="{StaticResource info}" 
+                <hc:Badge Grid.Column="3"
+                          BadgeMargin="0 20 -5 0" BorderThickness="0"
+                          Value="{Binding UnReadNotices}">
+                    <hc:Badge.Resources>
+                        <Style BasedOn="{StaticResource BadgeDanger}" TargetType="hc:Badge">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding UnReadNotices}" Value="0">
+                                    <Setter Property="ShowBadge" Value="False"></Setter>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </hc:Badge.Resources>
+                    <Label BorderThickness="0"
+                           Cursor="Hand"
+                           ToolTip="通知"
+                           Margin="0 20 0 0"
+                           Background="Transparent"
+                           >
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                <behaviors:InvokeCommandAction Command="{Binding ShiftNoticePageCommand}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                        <Path Data="{StaticResource info}" 
                           SnapsToDevicePixels="True"
                           Height="20"
                           Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
                           Fill="{StaticResource PrimaryBrush}"/>
-                </Label>
+                    </Label>
+                </hc:Badge>
                 <Label BorderThickness="0"
                        Cursor="Hand"
                        ToolTip="最小化"

@@ -27,6 +27,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string IsCloseRecommand = nameof(IsCloseRecommand);
         public const string CloseSendOtherWhenBegin = nameof(CloseSendOtherWhenBegin);
         public const string HorseTemplate = nameof(HorseTemplate);
+        public const string ReadedNotice = nameof(ReadedNotice);
         public static string _chatId = null;
         //event uri
         public const string GameFlow = @"/lol-gameflow/v1/gameflow-phase";

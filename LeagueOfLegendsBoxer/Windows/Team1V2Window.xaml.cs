@@ -1,5 +1,6 @@
 ﻿using LeagueOfLegendsBoxer.ViewModels;
 using System.Windows;
+using System.Windows.Input;
 
 namespace LeagueOfLegendsBoxer.Windows
 {
@@ -12,6 +13,17 @@ namespace LeagueOfLegendsBoxer.Windows
         {
             InitializeComponent();
             DataContext = viewModel;
+        }
+
+        private void Border_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
+        }
+
+        private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Opacity = 0;
         }
     }
 }

@@ -5,7 +5,8 @@ namespace LeagueOfLegendsBoxer.Application.LiveGame
     public class DefaultLiveGameService : ILiveGameService
     {
         private HttpClient _httpClient;
-        private const string _gameEvent = "https://127.0.0.1:2999/liveclientdata/eventdata?eventID=0";
+        private const string _gameEvent = "liveclientdata/eventdata?eventID=0";
+        private const string _teamData = "liveclientdata/playerlist?teamID={0}";
 
         public DefaultLiveGameService()
         {
@@ -13,8 +14,10 @@ namespace LeagueOfLegendsBoxer.Application.LiveGame
             {
                 ClientCertificateOptions = ClientCertificateOption.Manual
             };
+            
             _httpClientHandler.ServerCertificateCustomValidationCallback = (response, cert, chain, errors) => true;
             _httpClient = new HttpClient(_httpClientHandler);
+            _httpClient.BaseAddress = new Uri("https://127.0.0.1:2999");
             _httpClient.Timeout = TimeSpan.FromSeconds(10);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -23,6 +26,18 @@ namespace LeagueOfLegendsBoxer.Application.LiveGame
             try
             {
                 return await _httpClient.GetStringAsync(_gameEvent);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> GetPlayersAsync(int teamId)
+        {
+            try
+            {
+                return await _httpClient.GetStringAsync(string.Format(_teamData, teamId));
             }
             catch
             {

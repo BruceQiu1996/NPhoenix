@@ -21,6 +21,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public bool AutoDisableHero { get; set; }
         public bool AutoLockHeroInAram { get; set; }
         public List<int> LockHerosInAram { get; set; }
+        public List<int> ReadedNotices { get; set; }
         public int AutoDisableChampId { get; set; }
         public int AutoLockHeroChampId { get; set; }
         public string GameExeLocation { get; set; }
@@ -64,6 +65,8 @@ namespace LeagueOfLegendsBoxer.Resources
             IsCloseRecommand = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsCloseRecommand), out var tempRecommand) ? tempRecommand : false;
             CloseSendOtherWhenBegin = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.CloseSendOtherWhenBegin), out var tempCloseSendOtherWhenBegin) ? tempCloseSendOtherWhenBegin : false;
             HorseTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.HorseTemplate);
+            var readedNotices = await _settingsService.ReadAsync(Constant.Game, Constant.ReadedNotice);
+            ReadedNotices = string.IsNullOrEmpty(readedNotices) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(readedNotices);
         }
 
         public async Task WriteAutoAcceptAsync(bool value)
@@ -136,6 +139,12 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.HorseTemplate, horseTemplate);
             HorseTemplate = horseTemplate;
+        }
+        public async Task WriteReadedNoticesAsync(int value)
+        {
+            ReadedNotices.Add(value);
+            var data = JsonSerializer.Serialize(ReadedNotices);
+            await _settingsService.WriteAsync(Constant.Game, Constant.ReadedNotice, data);
         }
     }
 }
