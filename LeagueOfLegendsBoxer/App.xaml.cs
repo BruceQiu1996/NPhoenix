@@ -65,6 +65,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<TeammateViewModel>();
                 services.AddTransient<SummonerDetail>();
                 services.AddTransient<SummonerDetailViewModel>();
+                services.AddSingleton<Notice>();
+                services.AddSingleton<NoticeViewModel>();
             });
 
             return hostBuilder;

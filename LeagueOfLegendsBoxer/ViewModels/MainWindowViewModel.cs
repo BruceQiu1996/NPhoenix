@@ -43,6 +43,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public RelayCommand ShiftSettingsPageCommand { get; set; }
         public RelayCommand ShiftMainPageCommand { get; set; }
+        public RelayCommand ShiftNoticePageCommand { get; set; }
         public RelayCommand OpenChampionSelectToolCommand { get; set; }
         public AsyncRelayCommand ResetCommandAsync { get; set; }
         public RelayCommand ExitCommand { get; set; }
@@ -83,6 +84,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly IConfiguration _configuration;
         private readonly Settings _settingsPage;
         private readonly MainPage _mainPage;
+        private readonly LeagueOfLegendsBoxer.Pages.Notice _notice;
         private readonly ChampionSelectTool _championSelectTool;
         private readonly ILogger<MainWindowViewModel> _logger;
         private readonly ImageManager _imageManager;
@@ -106,6 +108,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                    ILogger<MainWindowViewModel> logger,
                                    ILiveGameService livegameservice,
                                    TeammateViewModel teammateViewModel,
+                                   LeagueOfLegendsBoxer.Pages.Notice notice,
                                    Team1V2Window team1V2Window)
         {
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
@@ -113,6 +116,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             ShiftMainPageCommand = new RelayCommand(OpenMainPage);
             OpenChampionSelectToolCommand = new RelayCommand(OpenChampionSelectTool);
             ResetCommandAsync = new AsyncRelayCommand(ResetAsync);
+            ShiftNoticePageCommand = new RelayCommand(OpenNoticePage);
             ExitCommand = new RelayCommand(() => { Environment.Exit(0); });
             _applicationService = applicationService;
             _requestService = requestService;
@@ -120,6 +124,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _iniSettingsModel = iniSettingsModel;
             _configuration = configuration;
             _settingsPage = settingsPage;
+            _notice = notice;
             _championSelectTool = championSelectTool;
             _mainPage = mainPage;
             _eventService = eventService;
@@ -232,6 +237,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private void OpenMainPage()
         {
             CurrentPage = _mainPage;
+        }
+        private void OpenNoticePage() 
+        {
+            CurrentPage = _notice;
         }
         #endregion
 

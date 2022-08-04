@@ -110,13 +110,13 @@
                 </Label>
                 <Label BorderThickness="0"
                        Cursor="Hand"
-                       ToolTip="信息"
+                       ToolTip="通知"
                        Margin="0 20 0 0"
                        Background="Transparent"
                        Grid.Column="3">
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                            <behaviors:InvokeCommandAction Command="{Binding CurrentUserInfoCommand}"></behaviors:InvokeCommandAction>
+                            <behaviors:InvokeCommandAction Command="{Binding ShiftNoticePageCommand}"></behaviors:InvokeCommandAction>
                         </behaviors:EventTrigger>
                     </behaviors:Interaction.Triggers>
                     <Path Data="{StaticResource info}" 
