@@ -6,6 +6,7 @@ using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections;
@@ -199,7 +200,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand SearchHeroForSkinCommand { get; set; }
         public AsyncRelayCommand ModifyRankLevelCommandAsync { get; set; }
         public AsyncRelayCommand SearchSkinsForHeroCommandAsync { get; set; }
-        public AsyncRelayCommand FetchRunesCommandAsync { get; set; }
+        public AsyncRelayCommand FetchRunesAndItemsCommandAsync { get; set; }
         public RelayCommand OpenAramChooseCommand { get; set; }
         public RelayCommand StartGameCommand { get; set; }
         public AsyncRelayCommand CheckedCloseRecommmandCommandAsync { get; set; }
@@ -210,10 +211,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
-        public SettingsViewModel(IniSettingsModel iniSettingsModel, IApplicationService applicationService)
+        private readonly IConfiguration _iconfiguration;
+        public SettingsViewModel(IniSettingsModel iniSettingsModel, IApplicationService applicationService, IConfiguration iconfiguration)
         {
             _iniSettingsModel = iniSettingsModel;
             _applicationService = applicationService;
+            _iconfiguration = iconfiguration;
             CheckedAutoAcceptCommandAsync = new AsyncRelayCommand(CheckedAutoAcceptAsync);
             UncheckedAutoAcceptCommandAsync = new AsyncRelayCommand(UncheckedAutoAcceptAsync);
             CheckedAutoLockHeroCommandAsync = new AsyncRelayCommand(CheckedAutoLockHeroAsync);
@@ -229,7 +232,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ExitGameCommandAsync = new AsyncRelayCommand(ExitGameAsync);
             ModifyRankLevelCommandAsync = new AsyncRelayCommand(ModifyRankLevelAsync);
             SearchHeroForSkinCommand = new RelayCommand(SearchHeroForSkin);
-            FetchRunesCommandAsync = new AsyncRelayCommand(FetchRunesAsync);
+            FetchRunesAndItemsCommandAsync = new AsyncRelayCommand(FetchRunesAndItemsAsync);
             SearchSkinsForHeroCommandAsync = new AsyncRelayCommand(SearchSkinsForHeroAsync);
             OpenAramChooseCommand = new RelayCommand(OpenAramChoose);
             StartGameCommand = new RelayCommand(StartGame);
@@ -473,14 +476,26 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _window.ShowDialog();
         }
 
-        private async Task FetchRunesAsync()
+        private async Task FetchRunesAndItemsAsync()
         {
             using (var client = new HttpClient())
             {
                 string extension = "zip";
                 var temp = Path.GetTempPath();
                 var fileLoc = Path.Combine(temp, $"{Guid.NewGuid()}.{extension}");
-                using (var stream = await client.GetStreamAsync("http://lol-rune.test.upcdn.net/runes.zip"))
+                var loc = _iconfiguration.GetSection("HeroDatas").Value;
+                if (string.IsNullOrEmpty(loc)) 
+                {
+                    Growl.InfoGlobal(new GrowlInfo()
+                    {
+                        WaitTime = 2,
+                        Message = "符文与装备拉取地址为空",
+                        ShowDateTime = false
+                    });
+
+                    return;
+                }
+                using (var stream = await client.GetStreamAsync(loc))
                 {
                     try
                     {
@@ -500,7 +515,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         Growl.SuccessGlobal(new GrowlInfo()
                         {
                             WaitTime = 2,
-                            Message = "符文更新成功!",
+                            Message = "符文装备更新成功!",
                             ShowDateTime = false
                         });
                     }
@@ -509,7 +524,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         Growl.InfoGlobal(new GrowlInfo()
                         {
                             WaitTime = 2,
-                            Message = "符文更新失败!" + ex.Message,
+                            Message = "符文装备更新失败!" + ex.Message,
                             ShowDateTime = false
                         });
                     }

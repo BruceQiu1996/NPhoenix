@@ -186,10 +186,10 @@
                                 Width="115" Margin="5 0 0 0" Height="35" Cursor="Hand"></Button>
                     </StackPanel>
 
-                    <Button Content="获取最新符文" Width="350" FontSize="15" Height="35"
+                    <Button Content="获取最新符文装备推荐" Width="350" FontSize="15" Height="35"
                             Cursor="Hand"
                             Margin="0 20 0 0"
-                            Command="{Binding FetchRunesCommandAsync}"
+                            Command="{Binding FetchRunesAndItemsCommandAsync}"
                             HorizontalAlignment="Center"></Button>
                 </StackPanel>
             </GroupBox>

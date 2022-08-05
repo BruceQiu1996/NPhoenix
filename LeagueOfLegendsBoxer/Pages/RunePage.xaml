@@ -5,7 +5,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:LeagueOfLegendsBoxer.Pages"
       mc:Ignorable="d" 
-      FontFamily="/LeagueOfLegendsBoxer;component/Resources/#HappyZcool-2016"
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
       xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -42,12 +41,182 @@
                              Height="55" Width="55"
                              Source="{Binding Hero.Avatar,UpdateSourceTrigger=PropertyChanged}"/>
 
-                <TextBlock Text="{Binding Hero.Name}" FontSize="15" Margin="20 0 0 0" VerticalAlignment="Center" 
-                           Grid.Column="1">
-                </TextBlock>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Hero.Name}" FontSize="15" Margin="20 0 0 0" VerticalAlignment="Center" 
+                               Grid.Column="1">
+                    </TextBlock>
+                    <Button Content="切换到装备推荐" FontSize="15" Margin="0 5 0 0" Cursor="Hand"/>
+                </StackPanel>
             </Grid>
         </hc:Card>
 
+        <hc:Card BorderThickness="1" 
+                 Grid.Row="1"
+                 Margin="15 5 15 15"
+                 Visibility="Hidden"
+                 Background="White" Effect="{DynamicResource EffectShadow2}" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Label Content="峡谷5V5" 
+                       Grid.Row="0" 
+                       Grid.Column="0" 
+                       BorderThickness="0" 
+                       FontSize="15" 
+                       Cursor="Hand"
+                       Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushReConverter}}"
+                       Width="150">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                            <behaviors:InvokeCommandAction Command="{Binding SwitchRuneToCommonCommand}"></behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </Label>
+                <Label Content="大乱斗" 
+                       Grid.Row="0" 
+                       Grid.Column="1" 
+                       BorderThickness="0" 
+                       FontSize="15"
+                       Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                       Cursor="Hand" 
+                       Width="150">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                            <behaviors:InvokeCommandAction Command="{Binding SwitchRuneToAramCommand}"></behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </Label>
+
+                <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid>
+                        <ListBox ItemsSource="{Binding DisplayRunes,UpdateSourceTrigger=PropertyChanged}" 
+                                 ScrollViewer.CanContentScroll="True"
+                                 ScrollViewer.IsDeferredScrollingEnabled="True"
+                                 PreviewMouseWheel="ListView_PreviewMouseWheel"
+                                 BorderThickness="0" Background="Transparent">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"></StackPanel>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                    <Setter Property="Height" Value="160" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                <Border BorderThickness="0 0.4 0 0" 
+                                                    BorderBrush="#eeeeee"
+                                                    Margin="1"
+                                                    Background="{TemplateBinding Background}">
+                                                    <Grid Background="Transparent">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="*"></RowDefinition>
+                                                        </Grid.RowDefinitions>
+                                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center">
+                                                            <StackPanel Orientation="Vertical">
+                                                                <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                     Grid.Row="0" Grid.Column="0"
+                                                                     Height="30" Width="30"
+                                                                     ToolTip="{Binding Main1Rune.Name}"
+                                                                     Margin="5 5 5 0"
+                                                                     Source="{Binding Main1Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                     Grid.Row="0" Grid.Column="0"
+                                                                     Height="30" Width="30"
+                                                                     ToolTip="{Binding Main2Rune.Name}"
+                                                                     Margin="5 5 5 0"
+                                                                     Source="{Binding Main2Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                     Grid.Row="0" Grid.Column="0"
+                                                                     Height="30" Width="30"
+                                                                     ToolTip="{Binding Main3Rune.Name}"
+                                                                     Margin="5 5 5 0"
+                                                                     Source="{Binding Main3Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                     Grid.Row="0" Grid.Column="0"
+                                                                     Height="30" Width="30"
+                                                                     ToolTip="{Binding Main4Rune.Name}"
+                                                                     Margin="5 5 5 0"
+                                                                     Source="{Binding Main4Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                            </StackPanel>
+                                                            <StackPanel Orientation="Vertical">
+                                                                <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                     Grid.Row="0" Grid.Column="0"
+                                                                     Height="30" Width="30"
+                                                                     ToolTip="{Binding Dputy1Rune.Name}"
+                                                                     Margin="5 5 5 0"
+                                                                     Source="{Binding Dputy1Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                     Grid.Row="0" Grid.Column="0"
+                                                                     Height="30" Width="30"
+                                                                     ToolTip="{Binding Dputy2Rune.Name}"
+                                                                     Margin="5 5 5 0"
+                                                                     Source="{Binding Dputy2Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                         Grid.Row="0" Grid.Column="0"
+                                                                         Height="20" Width="20"
+                                                                         ToolTip="{Binding Extra1Rune.Name}"
+                                                                         Margin="5 5 5 0"
+                                                                         Source="{Binding Extra1Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                         Grid.Row="0" Grid.Column="0"
+                                                                         Height="20" Width="20"
+                                                                         ToolTip="{Binding Extra2Rune.Name}"
+                                                                         Margin="5 5 5 0"
+                                                                         Source="{Binding Extra2Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                         Grid.Row="0" Grid.Column="0"
+                                                                         Height="20" Width="20"
+                                                                         ToolTip="{Binding Extra3Rune.Name}"
+                                                                         Margin="5 5 5 0"
+                                                                         Source="{Binding Extra3Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                            </StackPanel>
+                                                        </StackPanel>
+
+                                                        <StackPanel Grid.Column="1">
+                                                            <hc:Shield Subject="声望" Status="{Binding PopularTxt}" HorizontalAlignment="Center" 
+                                                                   FontSize="15"
+                                                                   Margin="0 50 0 0" Color="{StaticResource PrimaryBrush}"/>
+                                                            <hc:Shield Subject="胜率" 
+                                                                   FontSize="15"
+                                                                   Status="{Binding WinRateTxt}" HorizontalAlignment="Center" Margin="0 10 0 0" Color="{StaticResource DangerBrush}"/>
+                                                            <Button Content="应用" Cursor="Hand"
+                                                                Command="{Binding DataContext.SetRuneCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                CommandParameter="{Binding}"
+                                                                Width="100" FontSize="14" Margin="0 20 0 0" VerticalAlignment="Bottom"></Button>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#eeeeee"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </hc:Card>
+        
         <hc:Card BorderThickness="1" 
                  Grid.Row="1"
                  Margin="15 5 15 15"

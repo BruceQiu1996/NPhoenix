@@ -175,6 +175,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             if (e.KeyData == StringToKeys("Alt+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
             {
                 _team1V2Window.Opacity = 1;
+                _team1V2Window.Topmost = true;
                 e.Handled = true;
             }
         }
@@ -196,10 +197,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             await LoadConfig();
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
             await ConnnectAsync();
-            var _httpClientHandler = new HttpClientHandler
-            {
-                ClientCertificateOptions = ClientCertificateOption.Manual
-            };
+            Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(await _gameService.GetItems());
             _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
             _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
             Connected = true;
@@ -524,32 +522,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
                 if (!t1.All(x => string.IsNullOrEmpty(x.Puuid?.Trim())))
                 {
-                    var teamvm = App.ServiceProvider.GetRequiredService<TeammateViewModel>();
-                    foreach (var id in t1)
-                    {
-                        var account = await teamvm.GetAccountAsync(id.SummonerId);
-                        if (!string.IsNullOrEmpty(id.GameCustomization?.Perks))
-                        {
-                            account.Runes = new ObservableCollection<Rune>(JToken.Parse(id.GameCustomization?.Perks)["perkIds"].ToObject<IEnumerable<int>>()?.Select(x => Constant.Runes.FirstOrDefault(y => y.Id == x))?.ToList());
-                        }
-                        if (account != null)
-                        {
-                            Team1Accounts.Add(account);
-                        }
-                    }
+                    Team1Accounts = await TeamToAccountsAsync(t1);
                 }
 
                 if (!t2.All(x => string.IsNullOrEmpty(x.Puuid?.Trim())))
                 {
-                    var teamvm = App.ServiceProvider.GetRequiredService<TeammateViewModel>();
-                    foreach (var id in t2)
-                    {
-                        var account = await teamvm.GetAccountAsync(id.SummonerId);
-                        if (account != null)
-                        {
-                            Team2Accounts.Add(account);
-                        }
-                    }
+                    Team2Accounts = await TeamToAccountsAsync(t2);
                 }
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -565,6 +543,46 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 _logger.LogError(ex.ToString());
             }
+        }
+
+        public async Task<List<Account>> TeamToAccountsAsync(IEnumerable<Teammate> teammates)
+        {
+            var accounts = new List<Account>();
+            var teamvm = App.ServiceProvider.GetRequiredService<TeammateViewModel>();
+            int teamId = 1;
+            List<(int, int)> teams = new List<(int, int)>();
+            foreach (var id in teammates)
+            {
+                var account = await teamvm.GetAccountAsync(id.SummonerId);
+                if (id.TeamParticipantId == null)
+                {
+                    account.TeamID = teamId++;
+                }
+                else
+                {
+                    var team = teams.FirstOrDefault(x => x.Item2 == id.TeamParticipantId);
+                    if (team == default)
+                    {
+                        account.TeamID = teamId++;
+                        teams.Add((account.TeamID, id.TeamParticipantId.Value));
+                    }
+                    else
+                    {
+                        account.TeamID = team.Item1;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(id.GameCustomization?.Perks))
+                {
+                    account.Runes = new ObservableCollection<Rune>(JToken.Parse(id.GameCustomization?.Perks)["perkIds"].ToObject<IEnumerable<int>>()?.Select(x => Constant.Runes.FirstOrDefault(y => y.Id == x))?.ToList());
+                }
+                if (account != null)
+                {
+                    accounts.Add(account);
+                }
+            }
+
+            return accounts;
         }
         #endregion
 
@@ -638,6 +656,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             Constant.Runes = runeDic.Select(x => x.Value).ToList();
             var heros = await _requestService.GetJsonResponseAsync(HttpMethod.Get, "https://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js");
             Constant.Heroes = JToken.Parse(heros)["hero"].ToObject<IEnumerable<Hero>>();
+
             await _iniSettingsModel.Initialize();
         }
 
