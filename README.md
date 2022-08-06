@@ -28,9 +28,15 @@
 - [x] 8.拉黑功能
 
 ## 视频地址
-https://www.bilibili.com/video/BV1x94y1D7jr
+v2 : https://www.bilibili.com/video/BV1DG4y1v7Vv
+v1 : https://www.bilibili.com/video/BV1x94y1D7jr
 
 ## 下载地址
+## v2.1 (新增功能，见上面2022.8.7功能发布预告)
+腾讯微云 https://share.weiyun.com/MsG3kgsE
+
+百度网盘 链接：https://pan.baidu.com/s/1SR2jCOKnz6blUmIfM5u1eQ 提取码：17vg
+
 ## v1.0
 腾讯微云 https://share.weiyun.com/wInZlnL2
 
