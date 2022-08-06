@@ -118,7 +118,6 @@
                                 FontSize="15" VerticalAlignment="Center" Margin="15 10 0 0"></Button>
                     </StackPanel>
                     <Button Content="黑名单" Width="120" Height="35"
-                            IsEnabled="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}"
                             HorizontalAlignment="Right"
                             Command="{Binding OpenBlackRecordCommand}"
                             FontSize="15" VerticalAlignment="Center" Margin="0 10 8 0"></Button>

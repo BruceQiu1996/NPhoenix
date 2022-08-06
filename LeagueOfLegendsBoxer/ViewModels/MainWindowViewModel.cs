@@ -459,6 +459,17 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                             account.Champion = Constant.Heroes.FirstOrDefault(x => x.Label == championName);
                                         });
                                     }
+
+                                    foreach (var item in token2)
+                                    {
+                                        var name = item["summonerName"].ToObject<string>();
+                                        var account = (Team1Accounts.Concat(Team2Accounts)).FirstOrDefault(x => x.DisplayName == name);
+                                        var championName = item["championName"].ToObject<string>();
+                                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                                        {
+                                            account.Champion = Constant.Heroes.FirstOrDefault(x => x.Label == championName);
+                                        });
+                                    }
                                 }
 
                                 await Task.Delay(5000);
