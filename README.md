@@ -11,6 +11,8 @@
 
 💡  大乱斗秒选自己喜欢的英雄|大乱斗符文推荐
 
+[toc]
+
 ## 使用方法
 先启动英雄联盟客户端或者后启动都可以。
 解压软件，找到一个LeagueOfLegendsBoxer.exe文件，双击即可使用。
@@ -78,3 +80,5 @@ v1 : https://www.bilibili.com/video/BV1x94y1D7jr
 ## 上等马
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/horse.jpg)
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/horse1.jpg)
+## 双方召唤师开黑检测,符文查看,上等马信息,段位检测
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/bothsideinfo.png)
