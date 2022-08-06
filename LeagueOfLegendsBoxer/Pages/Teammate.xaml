@@ -5,7 +5,6 @@
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:hc="https://handyorg.github.io/handycontrol"
-      FontFamily="/LeagueOfLegendsBoxer;component/Resources/#HappyZcool-2016"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Teammate">

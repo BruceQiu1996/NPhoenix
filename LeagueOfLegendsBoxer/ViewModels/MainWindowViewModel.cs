@@ -99,10 +99,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly ChampionSelectTool _championSelectTool;
         private readonly ILogger<MainWindowViewModel> _logger;
         private readonly ImageManager _imageManager;
-        private readonly RuneViewModel _runeViewModel;
+        private readonly RuneAndItemViewModel _runeViewModel;
         private readonly ILiveGameService _livegameservice;
         private readonly TeammateViewModel _teammateViewModel;
         private readonly Team1V2Window _team1V2Window;
+        private readonly BlackList _blackList;
 
         public MainWindowViewModel(IApplicationService applicationService,
                                    IClientService clientService,
@@ -114,11 +115,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                    Settings settingsPage,
                                    MainPage mainPage,
                                    ImageManager imageManager,
-                                   RuneViewModel runeViewModel,
+                                   RuneAndItemViewModel runeViewModel,
                                    ChampionSelectTool championSelectTool,
                                    ILogger<MainWindowViewModel> logger,
                                    ILiveGameService livegameservice,
                                    TeammateViewModel teammateViewModel,
+                                   BlackList blackList,
                                    LeagueOfLegendsBoxer.Pages.Notice notice,
                                    Team1V2Window team1V2Window)
         {
@@ -141,6 +143,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _eventService = eventService;
             _gameService = gameService;
             _logger = logger;
+            _blackList = blackList;
             _runeViewModel = runeViewModel;
             _imageManager = imageManager;
             GameStatus = "获取状态中";
@@ -197,7 +200,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
             await LoadConfig();
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
             await ConnnectAsync();
-            Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(await _gameService.GetItems());
+            var items = await _gameService.GetItems();
+            Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(items);
             _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
             _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
             Connected = true;
@@ -228,6 +232,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 try
                 {
                     var data = await _clientService.GetZoomScaleAsync();
+                    _team1V2Window.Topmost = true;
                     await Task.Delay(1500);
                 }
                 catch
@@ -253,7 +258,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         {
             CurrentPage = _mainPage;
         }
-        private void OpenNoticePage() 
+        private void OpenNoticePage()
         {
             CurrentPage = _notice;
         }
@@ -266,7 +271,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
             if (string.IsNullOrEmpty(data))
                 return;
 
-            if (data != "InProgress" && data != "GameStart")
+            if (data == "ReadyCheck" ||
+                data == "ChampSelect" ||
+                data == "Lobby" ||
+                data == "Matchmaking" ||
+                data == "None")
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -311,7 +320,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     GameStatus = "匹配中";
                     break;
                 case "InProgress":
-                    GameStatus = "游戏中"; 
+                    GameStatus = "游戏中";
                     break;
                 case "GameStart":
                     GameStatus = "游戏开始了";
@@ -325,6 +334,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 case "PreEndOfGame":
                 case "EndOfGame":
                     GameStatus = "对局结束";
+                    ActionWhenGameEnd();
                     break;
                 default:
                     GameStatus = "未知状态" + data;
@@ -421,38 +431,51 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 while (true)
                 {
-                    var gInfo = await _gameService.GetCurrentGameInfoAsync();
-                    if (JToken.Parse(gInfo)["phase"].ToString() == "InProgress")
+                    try
                     {
-                        if (Team1Accounts.Count <= 0 && Team2Accounts.Count <= 0)
+                        var gInfo = await _gameService.GetCurrentGameInfoAsync();
+                        if (JToken.Parse(gInfo)["phase"].ToString() == "InProgress")
                         {
-                            await ActionWhenGameBegin();
-                        }
-                        else if (Team1Accounts.All(x => x.Champion == null) && Team2Accounts.All(x => x.Champion == null))
-                        {
-                            var teams1 = await _livegameservice.GetPlayersAsync(100);
-                            var teams2 = await _livegameservice.GetPlayersAsync(200);
-                            if (!string.IsNullOrEmpty(teams1) && !string.IsNullOrEmpty(teams2))
+                            if (Team1Accounts.Count <= 0 && Team2Accounts.Count <= 0)
                             {
-                                var token1 = JArray.Parse(teams1);
-                                var token2 = JArray.Parse(teams2);
-
-                                foreach (var item in token1)
+                                await ActionWhenGameBegin();
+                            }
+                            else if (Team1Accounts.All(x => x.Champion == null) && Team2Accounts.All(x => x.Champion == null))
+                            {
+                                var teams1 = await _livegameservice.GetPlayersAsync(100);
+                                var teams2 = await _livegameservice.GetPlayersAsync(200);
+                                if (!string.IsNullOrEmpty(teams1) && !string.IsNullOrEmpty(teams2))
                                 {
-                                    var name = item["summonerName"].ToObject<string>();
-                                    var account = (Team1Accounts.Concat(Team2Accounts)).FirstOrDefault(x => x.DisplayName == name);
-                                    var championName = item["championName"].ToObject<string>();
-                                    account.Champion =  Constant.Heroes.FirstOrDefault(x => x.Label == championName);
+                                    var token1 = JArray.Parse(teams1);
+                                    var token2 = JArray.Parse(teams2);
+
+                                    foreach (var item in token1)
+                                    {
+                                        var name = item["summonerName"].ToObject<string>();
+                                        var account = (Team1Accounts.Concat(Team2Accounts)).FirstOrDefault(x => x.DisplayName == name);
+                                        var championName = item["championName"].ToObject<string>();
+                                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                                        {
+                                            account.Champion = Constant.Heroes.FirstOrDefault(x => x.Label == championName);
+                                        });
+                                    }
                                 }
+
+                                await Task.Delay(5000);
+                            }
+                            else
+                            {
+                                await Task.Delay(30000);
                             }
                         }
                         else
                         {
-                            await Task.Delay(30000);
+                            await Task.Delay(5000);
                         }
                     }
-                    else 
+                    catch (Exception ex) 
                     {
+                        _logger.LogError(ex.ToString());
                         await Task.Delay(5000);
                     }
                 }
@@ -543,6 +566,23 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 _logger.LogError(ex.ToString());
             }
+        }
+
+        private void ActionWhenGameEnd()
+        {
+            if (Team1Accounts.Count <= 0 && Team2Accounts.Count <= 0)
+                return;
+
+            var myTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team2Accounts : Team1Accounts;
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                (_blackList.DataContext as BlackListViewModel).LoadAccount(myTeam);
+                _blackList.Show();
+                _blackList.WindowStartupLocation = WindowStartupLocation.Manual;
+                _blackList.Top = (SystemParameters.PrimaryScreenHeight - _blackList.ActualHeight) - 50;
+                _blackList.Left = SystemParameters.PrimaryScreenWidth - _blackList.ActualWidth - 10;
+                _blackList.Topmost = true;
+            });
         }
 
         public async Task<List<Account>> TeamToAccountsAsync(IEnumerable<Teammate> teammates)
@@ -667,14 +707,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _championSelectTool.Top = (SystemParameters.PrimaryScreenHeight - _championSelectTool.ActualHeight) / 2;
             _championSelectTool.Left = SystemParameters.PrimaryScreenWidth - _championSelectTool.ActualWidth - 10;
             _championSelectTool.Topmost = true;
-            var _ = Task.Run(async () =>
-            {
-                await Task.Delay(1000);
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                {
-                    _championSelectTool.Topmost = false;
-                });
-            });
         }
     }
 }

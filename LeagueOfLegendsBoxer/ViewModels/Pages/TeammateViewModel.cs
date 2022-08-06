@@ -68,6 +68,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 var ids = JArray.Parse(messages).Select(x => x.Value<long>("fromSummonerId")).ToHashSet();
                 if (ids != null && ids.Count > 0)
                 {
+                    var blacks =  _iniSettingsModel.BlackAccounts.Where(x => ids.Contains(x.Id));
+                    if (blacks != null && blacks.Count() > 0) 
+                    {
+                        var _window = App.ServiceProvider.GetRequiredService<BlackRecord>();
+                        (_window.DataContext as BlackRecordViewModel).Load(blacks.Select(x=>x.Id).ToList());
+                        _window.Show();
+                    }
                     foreach (var id in ids)
                     {
                         try
@@ -178,9 +185,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             if (Account == null)
                 return;
 
+            ShowRecord(Account);
+        }
+
+        public void ShowRecord(Account account) 
+        {
             var summonerAnalyse = App.ServiceProvider.GetRequiredService<SummonerAnalyse>();
             var summonerAnalyseViewModel = App.ServiceProvider.GetRequiredService<SummonerAnalyseViewModel>();
-            summonerAnalyseViewModel.Account = Account;
+            summonerAnalyseViewModel.Account = account;
             summonerAnalyse.DataContext = summonerAnalyseViewModel;
             summonerAnalyse.Show();
         }

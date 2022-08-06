@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LeagueOfLegendsBoxer.Application.Game;
-using LeagueOfLegendsBoxer.Application.Request;
 using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
@@ -16,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
-    public class RuneViewModel : ObservableObject
+    public class RuneAndItemViewModel : ObservableObject
     {
         private readonly RuneHelper _runeHelper;
         private readonly IGameService _gameService;
@@ -53,20 +52,46 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get { return _displayRunes; }
             set { SetProperty(ref _displayRunes, value); }
+        }
 
+        private ItemsDetail _aramItems;
+        public ItemsDetail AramItems
+        {
+            get { return _aramItems; }
+            set { SetProperty(ref _aramItems, value); }
+
+        }
+
+        private ItemsDetail _commonItems;
+        public ItemsDetail CommonItems
+        {
+            get { return _commonItems; }
+            set { SetProperty(ref _commonItems, value); }
+
+        }
+
+        private ItemsDetail _displayItems;
+        public ItemsDetail DisplayItems
+        {
+            get { return _displayItems; }
+            set { SetProperty(ref _displayItems, value); }
         }
 
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public RelayCommand SwitchRuneToCommonCommand { get; set; }
         public RelayCommand SwitchRuneToAramCommand { get; set; }
+        public RelayCommand SwitchItemPageCommand { get; set; }
+        public RelayCommand SwitchRunePageCommand { get; set; }
         public AsyncRelayCommand<RuneDetail> SetRuneCommandAsync { get; set; }
-        public RuneViewModel(RuneHelper runeHelper, IGameService gameService, IniSettingsModel iniSettingsModel)
+        public RuneAndItemViewModel(RuneHelper runeHelper, IGameService gameService, IniSettingsModel iniSettingsModel)
         {
             _runeHelper = runeHelper;
             _gameService = gameService;
             SwitchRuneToCommonCommand = new RelayCommand(SwitchRuneToCommon);
             SwitchRuneToAramCommand = new RelayCommand(SwitchRuneToAram);
             SetRuneCommandAsync = new AsyncRelayCommand<RuneDetail>(SetRuneAsync);
+            SwitchItemPageCommand = new RelayCommand(() => IsRunePage = false);
+            SwitchRunePageCommand = new RelayCommand(() => IsRunePage = true);
             _iniSettingsModel = iniSettingsModel;
         }
 
@@ -75,6 +100,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get { return _isAramPage; }
             set { SetProperty(ref _isAramPage, value); }
+
+        }
+
+        private bool _isRunePage;
+        public bool IsRunePage
+        {
+            get { return _isRunePage; }
+            set { SetProperty(ref _isRunePage, value); }
 
         }
 
@@ -87,10 +120,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             var module = await _runeHelper.GetRuneAsync(champId);
             Hero = Constant.Heroes?.FirstOrDefault(x => x.ChampId == champId);
-            AramRunes = new ObservableCollection<RuneDetail>(module.Aram);
-            CommonRunes = new ObservableCollection<RuneDetail>(module.Common);
+            AramRunes = new ObservableCollection<RuneDetail>(module.Rune.Aram);
+            CommonRunes = new ObservableCollection<RuneDetail>(module.Rune.Common);
             DisplayRunes = isAram ? AramRunes : CommonRunes;
+            AramItems = module.Item.Aram;
+            CommonItems = module.Item.Common;
+            DisplayItems = isAram ? AramItems : CommonItems;
             IsAramPage = isAram;
+            IsRunePage = true;
             App.ServiceProvider.GetRequiredService<ChampionSelectTool>().Show();
             (App.ServiceProvider.GetRequiredService<ChampionSelectTool>().DataContext as ChampionSelectToolViewModel).ShowRunePage();
         }
@@ -128,6 +165,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             IsAramPage = false;
             DisplayRunes = CommonRunes;
+            DisplayItems = CommonItems;
         }
 
         private void SwitchRuneToAram()
@@ -137,6 +175,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             IsAramPage = true;
             DisplayRunes = AramRunes;
+            DisplayItems = AramItems;
         }
     }
 }

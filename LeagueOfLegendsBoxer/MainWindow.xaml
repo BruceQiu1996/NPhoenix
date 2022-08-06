@@ -12,7 +12,7 @@
         AllowsTransparency="True"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         WindowStyle="None"
-        Title="MainWindow" Height="700" Width="420">
+        Title="MainWindow" Height="700" Width="380">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="3"/>
@@ -49,7 +49,6 @@
             <Grid MouseMove="Border_MouseMove" Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="210"></ColumnDefinition>
-                    <ColumnDefinition Width="40"></ColumnDefinition>
                     <ColumnDefinition Width="40"></ColumnDefinition>
                     <ColumnDefinition Width="40"></ColumnDefinition>
                     <ColumnDefinition Width="40"></ColumnDefinition>
@@ -96,7 +95,7 @@
                        ToolTip="设置"
                        Margin="0 20 0 0"
                        Background="Transparent"
-                       Grid.Column="2">
+                       Grid.Column="1">
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger EventName="MouseLeftButtonDown">
                             <behaviors:InvokeCommandAction Command="{Binding ShiftSettingsPageCommand}"></behaviors:InvokeCommandAction>
@@ -108,7 +107,7 @@
                           Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
                           Fill="{StaticResource PrimaryBrush}"/>
                 </Label>
-                <hc:Badge Grid.Column="3"
+                <hc:Badge Grid.Column="2"
                           BadgeMargin="0 20 -5 0" BorderThickness="0"
                           Value="{Binding UnReadNotices}">
                     <hc:Badge.Resources>
@@ -143,7 +142,7 @@
                        ToolTip="最小化"
                        Margin="0 20 0 0"
                        Background="Transparent"
-                       Grid.Column="4" MouseLeftButtonDown="Label_MouseLeftButtonDown">
+                       Grid.Column="3" MouseLeftButtonDown="Label_MouseLeftButtonDown">
                     <Path Data="{StaticResource WindowMinGeometry}" 
                           SnapsToDevicePixels="True"
                           Height="20"
@@ -155,7 +154,7 @@
                        ToolTip="关闭到托盘"
                        Margin="0 20 0 0"
                        Background="Transparent"
-                       Grid.Column="5" MouseLeftButtonDown="Label_MouseLeftButtonDown_1">
+                       Grid.Column="4" MouseLeftButtonDown="Label_MouseLeftButtonDown_1">
                     <Path Data="{StaticResource CloseGeometry}" 
                           SnapsToDevicePixels="True"
                           Height="20"
@@ -186,9 +185,9 @@
 
                     <TextBlock Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" 
                                FontSize="15" 
-                               Canvas.Top="11" Canvas.Left="250"></TextBlock>
+                               Canvas.Top="11" Canvas.Left="220"></TextBlock>
 
-                    <Label Width="40" BorderThickness="0" MouseLeftButtonDown="Label_MouseLeftButtonDown_2" Cursor="Hand" Canvas.Top="5" Canvas.Left="195" ToolTip="免费软件帮忙点个赞">
+                    <Label Width="40" BorderThickness="0" MouseLeftButtonDown="Label_MouseLeftButtonDown_2" Cursor="Hand" Canvas.Top="5" Canvas.Left="175" ToolTip="免费软件帮忙点个赞">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="MouseLeftButtonDown">
                                 <behaviors:InvokeCommandAction Command="{Binding OpenGitAddressCommand}"></behaviors:InvokeCommandAction>

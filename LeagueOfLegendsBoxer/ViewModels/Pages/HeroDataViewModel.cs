@@ -121,17 +121,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _gameService = gameService;
             _iniSettingsModel = iniSettingsModel;
             _configuration = configuration;
-            LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
-            LevelOptionSelectionChangedCommandAsync = new AsyncRelayCommand(LevelOptionSelectionChangedAsync);
-            PositionSelectionChangedCommandAsync = new AsyncRelayCommand(PositionSelectionChangedAsync);
-            ViewChampDetailCommandAsync = new AsyncRelayCommand(ViewChampDetailAsync) ;
-            BackChampRankDataPageCommand = new RelayCommand(Back);
-            ChampRanks = new ObservableCollection<ChampRank>();
-        }
-
-        private async Task LoadAsync()
-        {       
-            await _iniSettingsModel.Initialize();
             LevelOptions = new ObservableCollection<Tuple<string, int>>()
             {
                 new Tuple<string, int>("王者",0),
@@ -162,9 +151,22 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 new Tuple<string, string>("射手","bottom"),
                 new Tuple<string, string>("辅助","support"),
             };
-
-            LevelOption = LevelOptions.FirstOrDefault(x => x.Item2 == 200);
             Position = Positions.FirstOrDefault();
+            LevelOption = LevelOptions.FirstOrDefault(x => x.Item2 == 200);
+            SortRole = SortRoles.FirstOrDefault();
+            LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
+            LevelOptionSelectionChangedCommandAsync = new AsyncRelayCommand(LevelOptionSelectionChangedAsync);
+            PositionSelectionChangedCommandAsync = new AsyncRelayCommand(PositionSelectionChangedAsync);
+            ViewChampDetailCommandAsync = new AsyncRelayCommand(ViewChampDetailAsync) ;
+            BackChampRankDataPageCommand = new RelayCommand(Back);
+            ChampRanks = new ObservableCollection<ChampRank>();
+        }
+
+        private async Task LoadAsync()
+        {       
+            await _iniSettingsModel.Initialize();
+            Position = Positions.FirstOrDefault();
+            LevelOption = LevelOptions.FirstOrDefault(x => x.Item2 == 200);
             SortRole = SortRoles.FirstOrDefault();
             await FetchChampRankDataAsync();
         }

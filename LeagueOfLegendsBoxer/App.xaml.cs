@@ -52,13 +52,17 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<RuneHelper>();
                 services.AddSingleton<Team1V2Window>();
                 services.AddSingleton<Team1V2WindowViewModel>();
+                services.AddSingleton<BlackList>();
+                services.AddSingleton<BlackListViewModel>();
+                services.AddSingleton<BlackRecord>();
+                services.AddSingleton<BlackRecordViewModel>();
                 //pages
                 services.AddSingleton<MainPage>();
                 services.AddSingleton<MainViewModel>();
                 services.AddSingleton<Settings>();
                 services.AddSingleton<SettingsViewModel>();
-                services.AddSingleton<RunePage>();
-                services.AddSingleton<RuneViewModel>();
+                services.AddSingleton<RuneAndItemPage>();
+                services.AddSingleton<RuneAndItemViewModel>();
                 services.AddSingleton<HeroData>();
                 services.AddSingleton<HeroDataViewModel>();
                 services.AddSingleton<Teammate>();

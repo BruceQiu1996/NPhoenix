@@ -4,6 +4,12 @@ using System.Linq;
 
 namespace LeagueOfLegendsBoxer.Models
 {
+    public class HeroRecommandModule 
+    {
+        public RuneModule Rune { get; set; }
+        public ItemModule Item { get; set; }
+    }
+
     public class RuneModule
     {
         public int ChampId { get; set; }
@@ -44,5 +50,28 @@ namespace LeagueOfLegendsBoxer.Models
         public double WinRate { get; set; }
         public string PopularTxt => $"{(Popular * 100.0).ToString("0.0")}%";
         public string WinRateTxt => $"{(WinRate * 100.0).ToString("0.0")}%";
+    }
+    public class ItemModule
+    {
+        public int ChampId { get; set; }
+        public ItemsDetail Common { get; set; }
+        public ItemsDetail Aram { get; set; }
+    }
+
+    public class ItemsDetail
+    {
+        public List<ItemDetail> StartItems { get; set; } = new List<ItemDetail>();
+        public List<ItemDetail> CoreItems { get; set; } = new List<ItemDetail>();
+        public List<ItemDetail> ShoeItems { get; set; } = new List<ItemDetail>();
+    }
+
+    public class ItemDetail
+    {
+        public List<int> ItemIds { get; set; } = new List<int>();
+        public double Popular { get; set; }
+        public double WinRate { get; set; }
+        public string PopularTxt => $"{(Popular * 100.0).ToString("0.0")}%";
+        public string WinRateTxt => $"{(WinRate * 100.0).ToString("0.0")}%";
+        public IEnumerable<Item> Items => Constant.Items.Where(x => ItemIds.Contains(x.Id));
     }
 }

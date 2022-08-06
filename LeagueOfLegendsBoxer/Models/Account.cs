@@ -81,5 +81,19 @@ namespace LeagueOfLegendsBoxer.Models
             get => runes;
             set => SetProperty(ref runes, value);
         }
+        //blacklist
+        private bool _isOpenBlack;
+        public bool IsOpenBlack
+        {
+            get => _isOpenBlack;
+            set => SetProperty(ref _isOpenBlack, value);
+        }
+
+        public string _reason;
+        public string Reason
+        {
+            get { return _reason; }
+            set { SetProperty(ref _reason, value); }
+        }
     }
 }

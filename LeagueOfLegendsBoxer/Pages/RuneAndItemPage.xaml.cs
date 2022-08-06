@@ -8,15 +8,15 @@ namespace LeagueOfLegendsBoxer.Pages
     /// <summary>
     /// Interaction logic for RunePage.xaml
     /// </summary>
-    public partial class RunePage : Page
+    public partial class RuneAndItemPage : Page
     {
-        public RunePage(RuneViewModel runeViewModel)
+        public RuneAndItemPage(RuneAndItemViewModel runeViewModel)
         {
             InitializeComponent();
             this.DataContext = runeViewModel;
         }
 
-        private void ListView_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
+        private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (!e.Handled)
             {

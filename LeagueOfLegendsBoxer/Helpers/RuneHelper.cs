@@ -9,19 +9,19 @@ namespace LeagueOfLegendsBoxer.Helpers
 {
     public class RuneHelper
     {
-        private readonly string _folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runes");
-        public async Task<RuneModule> GetRuneAsync(int champId)
+        private readonly string _folder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "heroDatas");
+        public async Task<HeroRecommandModule> GetRuneAsync(int champId)
         {
             if (!Directory.Exists(_folder))
                 return null;
 
             DirectoryInfo directoryInfo = new DirectoryInfo(_folder);
-            var file = directoryInfo.GetFiles().FirstOrDefault(x => x.Name == $"{champId}_rune.json");
+            var file = directoryInfo.GetFiles().FirstOrDefault(x => x.Name == $"{champId}_data.json");
             if (file == null)
                 return null;
 
             var content = await File.ReadAllTextAsync(file.FullName);
-            return JsonConvert.DeserializeObject<RuneModule>(content);
+            return JsonConvert.DeserializeObject<HeroRecommandModule>(content);
         }
     }
 }

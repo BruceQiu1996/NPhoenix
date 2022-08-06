@@ -17,6 +17,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
@@ -184,6 +185,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             get => _horseTemplate;
             set => SetProperty(ref _horseTemplate, value);
         }
+
+        private string _version;
+        public string Version
+        {
+            get => _version;
+            set => SetProperty(ref _version, value);
+        }
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroCommandAsync { get; set; }
@@ -208,6 +216,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand CheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
         public AsyncRelayCommand UnCheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
         public AsyncRelayCommand SaveHorseTemplateCommandAsync { get; set; }
+        public RelayCommand OpenBlackRecordCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -241,6 +250,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             CheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(CheckedCloseSendOtherWhenBeginAsync);
             UnCheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(UnCheckedCloseSendOtherWhenBeginAsync);
             SaveHorseTemplateCommandAsync = new AsyncRelayCommand(SaveHorseTemplateAsync);
+            OpenBlackRecordCommand = new RelayCommand(OpenBlackRecord);
         }
 
         private async Task LoadAsync()
@@ -258,6 +268,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             IsCloseRecommmand = _iniSettingsModel.IsCloseRecommand;
             CloseSendOtherWhenBegin = _iniSettingsModel.CloseSendOtherWhenBegin;
             HorseTemplate = _iniSettingsModel.HorseTemplate;
+            Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
         }
 
         #region checkbox
@@ -473,6 +484,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private void OpenAramChoose() 
         {
             var _window = App.ServiceProvider.GetRequiredService<AramQuickChoose>();
+            _window.ShowDialog();
+        }
+
+        private void OpenBlackRecord() 
+        {
+            var _window = App.ServiceProvider.GetRequiredService<BlackRecord>();
+            (_window.DataContext as BlackRecordViewModel).Load();
             _window.ShowDialog();
         }
 

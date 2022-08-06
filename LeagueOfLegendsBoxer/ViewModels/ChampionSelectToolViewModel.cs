@@ -35,9 +35,9 @@ namespace LeagueOfLegendsBoxer.ViewModels
             set => SetProperty(ref _currentPage, value);
         }
 
-        private readonly RunePage _runePage;
+        private readonly RuneAndItemPage _runePage;
 
-        public ChampionSelectToolViewModel(HeroData heroData, Teammate teammate, RunePage runePage)
+        public ChampionSelectToolViewModel(HeroData heroData, Teammate teammate, RuneAndItemPage runePage)
         {
             _runePage = runePage;
             Menus = new ObservableCollection<Menu>()

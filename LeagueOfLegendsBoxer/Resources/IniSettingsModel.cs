@@ -1,11 +1,11 @@
 ﻿using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Application.Settings;
+using LeagueOfLegendsBoxer.Models;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.Resources
@@ -15,7 +15,9 @@ namespace LeagueOfLegendsBoxer.Resources
         private readonly ISettingsService _settingsService;
         private readonly IApplicationService _applicationService;
         private readonly IConfiguration _configuration;
+        private readonly string _blackListLoc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/blackList.json");
 
+        public List<BlackAccount> BlackAccounts { get; set; }
         public bool AutoAcceptGame { get; set; }
         public bool AutoLockHero { get; set; }
         public bool AutoDisableHero { get; set; }
@@ -67,6 +69,19 @@ namespace LeagueOfLegendsBoxer.Resources
             HorseTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.HorseTemplate);
             var readedNotices = await _settingsService.ReadAsync(Constant.Game, Constant.ReadedNotice);
             ReadedNotices = string.IsNullOrEmpty(readedNotices) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(readedNotices);
+            if (!File.Exists(_blackListLoc)) 
+            {
+                File.Create(_blackListLoc);
+            }
+            var blackAccounts = await File.ReadAllTextAsync(_blackListLoc);
+            if (string.IsNullOrEmpty(blackAccounts))
+            {
+                BlackAccounts = new List<BlackAccount>();
+            }
+            else 
+            {
+                BlackAccounts = JsonSerializer.Deserialize<List<BlackAccount>>(blackAccounts);
+            }
         }
 
         public async Task WriteAutoAcceptAsync(bool value)
@@ -145,6 +160,32 @@ namespace LeagueOfLegendsBoxer.Resources
             ReadedNotices.Add(value);
             var data = JsonSerializer.Serialize(ReadedNotices);
             await _settingsService.WriteAsync(Constant.Game, Constant.ReadedNotice, data);
+        }
+        public async Task WriteBlackAccountAsync(BlackAccount account)
+        {
+            BlackAccounts.Add(account);
+            var data = JsonSerializer.Serialize(BlackAccounts);
+            if (!File.Exists(_blackListLoc))
+            {
+                File.Create(_blackListLoc);
+            }
+            await File.WriteAllTextAsync(_blackListLoc, data);
+        }
+
+        public async Task RemoveBlackAccountAsync(long id)
+        {
+            for (var i = BlackAccounts.Count - 1; i >= 0; i--)
+            {
+                if (BlackAccounts[i].Id == id)
+                    BlackAccounts.RemoveAt(i);
+            }
+
+            var data = JsonSerializer.Serialize(BlackAccounts);
+            if (!File.Exists(_blackListLoc))
+            {
+                File.Create(_blackListLoc);
+            }
+            await File.WriteAllTextAsync(_blackListLoc, data);
         }
     }
 }
