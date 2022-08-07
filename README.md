@@ -32,6 +32,7 @@
   - [符文配置](#符文配置)
   - [上等马](#上等马)
   - [双方召唤师开黑检测,符文查看,上等马信息,段位检测](#双方召唤师开黑检测符文查看上等马信息段位检测)
+  - [拉黑](#拉黑)
 
 ## QQ交流群 : 516851758
 
@@ -106,3 +107,5 @@ v1 : https://www.bilibili.com/video/BV1x94y1D7jr
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/horse1.jpg)
 ## 双方召唤师开黑检测,符文查看,上等马信息,段位检测
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/bothsideinfo.png)
+## 拉黑
+![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/blacklist.jpg)
