@@ -54,7 +54,7 @@
 - [x] 8.拉黑功能
 
 # 视频地址
-v2 : https://www.bilibili.com/video/BV1DG4y1v7Vv  
+v2 : https://www.bilibili.com/video/BV1ar4y157Vb  
 v1 : https://www.bilibili.com/video/BV1x94y1D7jr
 
 # 下载地址
