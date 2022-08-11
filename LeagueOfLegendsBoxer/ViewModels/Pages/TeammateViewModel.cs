@@ -107,7 +107,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 var sb = new StringBuilder();
                 if (string.IsNullOrEmpty(_iniSettingsModel.HorseTemplate.Trim()))
                 {
-                    sb.Append($"我方 {account.Horse} {account.DisplayName} \n 评分：{account.Records?.Average(x => x.GetScore()).ToString("0.0")} " +
+                    sb.Append($"我方 {account.Horse} {account.DisplayName} 评分：{account.Records?.Average(x => x.GetScore()).ToString("0.0")} " +
                         $"单双排：{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division} {account.Rank.RANKED_SOLO_5x5.ShortDesc}" +
                         $"灵活组排：{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division} {account.Rank.RANKED_FLEX_SR.ShortDesc} 最近五场KDA:");
 
@@ -148,11 +148,41 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     sb.Append(data);
                 }
 
-                sb.Append(_iniSettingsModel.IsCloseRecommand ? string.Empty : "-来自NPhoenix助手");
+                sb.Append(_iniSettingsModel.IsCloseRecommand ? string.Empty : "——NPhoenix");
 
                 return sb.ToString();
             }
             catch (Exception ex) 
+            {
+                _logger.LogError(ex.ToString());
+                return null;
+            }
+        }
+
+        public string GetGameInHorseInformation(Account account)
+        {
+            try
+            {
+                var sb = new StringBuilder();
+                if (string.IsNullOrEmpty(_iniSettingsModel.HorseTemplate.Trim()))
+                {
+                    sb.Append($"我方{account.Horse} {account.DisplayName} 评分:{account.Records?.Average(x => x.GetScore()).ToString("0.0")}" + "最近KDA:");
+
+                    int a = 0;
+                    foreach (var record in account.Records)
+                    {
+                        sb.Append($"{record?.Participants?.FirstOrDefault()?.Stats?.KDA} ");
+                        a++;
+                        if (a >= 5)
+                            break;
+                    }
+                }
+
+                sb.Append(_iniSettingsModel.IsCloseRecommand ? string.Empty : "——NPhoenix");
+
+                return sb.ToString();
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
                 return null;

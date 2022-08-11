@@ -73,7 +73,7 @@
                                                                  VerticalAlignment="Center" HorizontalAlignment="Left">
                                                         <Image Source="{Binding Champion.Avatar}"/>
                                                     </hc:Gravatar>
-                                                    <TextBlock VerticalAlignment="Center" Margin="90 0 0 0" FontSize="16" Text="{Binding DisplayName}">
+                                                    <TextBlock VerticalAlignment="Center" Margin="70 0 0 0" FontSize="16" Text="{Binding DisplayName}">
                                                         <behaviors:Interaction.Triggers>
                                                             <behaviors:EventTrigger EventName="MouseLeftButtonDown">
                                                                 <behaviors:InvokeCommandAction Command="{Binding  DataContext.SearchRecordCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"

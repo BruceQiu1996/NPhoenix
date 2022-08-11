@@ -27,14 +27,18 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Interop;
-using System.Windows.Media;
+
+using WindowsInput;
+using WindowsInput.Events;
+using WindowsInput.EventSources;
 using Notice = LeagueOfLegendsBoxer.Models.Notice;
+using Rune = LeagueOfLegendsBoxer.Models.Rune;
 using Teammate = LeagueOfLegendsBoxer.Models.Teammate;
 
 namespace LeagueOfLegendsBoxer.ViewModels
@@ -83,6 +87,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private bool _isLoopLive = false;
         private IKeyboardMouseEvents _keyboardMouseEvent;
         private Task _loopForGameEvent;
+        private readonly IKeyboardEventSource _keyboard = Capture.Global.KeyboardAsync();
         private ManualResetEvent _resetEvent = new ManualResetEvent(true); //控制轮询实时游戏事件的暂停和复原
         public List<Account> Team1Accounts { get; set; } = new List<Account>();
         public List<Account> Team2Accounts { get; set; } = new List<Account>();
@@ -150,6 +155,21 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _livegameservice = livegameservice;
             _teammateViewModel = teammateViewModel;
             _team1V2Window = team1V2Window;
+            var Listener = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.Control, KeyCode.Alt, KeyCode.M));
+            Listener.Triggered += (x, y) => ListenerSendMyTeamInfoInnerGame_Triggered(_keyboard, x, y);
+            Listener.Reset_On_Parent_EnabledChanged = false;
+            Listener.Enabled = true;
+
+            var Listener_1 = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.Control, KeyCode.Alt, KeyCode.N));
+            Listener_1.Triggered += (x, y) => ListenerSendOtherTeamInfoInnerGame_Triggered(_keyboard, x, y);
+            Listener_1.Reset_On_Parent_EnabledChanged = false;
+            Listener_1.Enabled = true;
+
+            var Listener_2 = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.Control, KeyCode.Alt, KeyCode.B));
+            Listener_2.Triggered += (x, y) => ListenerTeamBuildInfo_Triggered(_keyboard, x, y);
+            Listener_2.Reset_On_Parent_EnabledChanged = false;
+            Listener_2.Enabled = true;
+
             _keyboardMouseEvent = Hook.GlobalEvents();
             _keyboardMouseEvent.KeyDown += OnKeyDown;
             _keyboardMouseEvent.KeyUp += OnKeyUp;
@@ -157,6 +177,82 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 UnReadNotices = y.Count();
             });
+        }
+
+        ~MainWindowViewModel() 
+        {
+            _keyboard.Dispose();
+        }
+
+        /// <summary>
+        /// send my team record
+        /// </summary>
+        /// <param name="Keyboard"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ListenerSendMyTeamInfoInnerGame_Triggered(IKeyboardEventSource Keyboard, object sender, KeyChordEventArgs e)
+        {
+            var myTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team2Accounts : Team1Accounts;
+            foreach (var item in myTeam)
+            {
+                await Task.Delay(300);
+                var message = _teammateViewModel.GetGameInHorseInformation(item);
+                await InGameSendMessage(message);
+            }
+        }
+
+        /// <summary>
+        /// send other team record
+        /// </summary>
+        /// <param name="Keyboard"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ListenerSendOtherTeamInfoInnerGame_Triggered(IKeyboardEventSource Keyboard, object sender, KeyChordEventArgs e)
+        {
+            var otherTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team1Accounts : Team2Accounts;
+            foreach (var item in otherTeam)
+            {
+                await Task.Delay(300);
+                var message = _teammateViewModel.GetGameInHorseInformation(item);
+                await InGameSendMessage(message);
+            }
+        }
+
+        /// <summary>
+        /// send 开黑信息
+        /// </summary>
+        /// <param name="Keyboard"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void ListenerTeamBuildInfo_Triggered(IKeyboardEventSource Keyboard, object sender, KeyChordEventArgs e)
+        {
+            var myTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team2Accounts : Team1Accounts;
+            var otherTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team1Accounts : Team2Accounts;
+            foreach (var item in myTeam.GroupBy(x=>x.TeamID))
+            {
+                if (item.Count() >= 2) 
+                {
+                    var sb = new StringBuilder();
+                    sb.Append("我方开黑大神:[");
+                    sb.Append(string.Join(",",item.Select(x => x.Champion?.Label)));
+                    sb.Append("]");
+                    await Task.Delay(300);
+                    await InGameSendMessage(sb.ToString());
+                }
+            }
+
+            foreach (var item in otherTeam.GroupBy(x => x.TeamID))
+            {
+                if (item.Count() >= 2)
+                {
+                    var sb = new StringBuilder();
+                    sb.Append("敌方开黑冤种:[");
+                    sb.Append(string.Join(",", item.Select(x => x.Champion?.Label)));
+                    sb.Append("]");
+                    await Task.Delay(300);
+                    await InGameSendMessage(sb.ToString());
+                }
+            }
         }
 
         public static Keys StringToKeys(string keyStr)
@@ -183,7 +279,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
         }
 
-        private void OnKeyUp(object sender, KeyEventArgs e)
+        private async void OnKeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyData == StringToKeys("Q+Alt")
                 || e.KeyData == StringToKeys("Alt+Q")
@@ -453,6 +549,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                     {
                                         var name = item["summonerName"].ToObject<string>();
                                         var account = (Team1Accounts.Concat(Team2Accounts)).FirstOrDefault(x => x.DisplayName == name);
+                                        if (account == null)
+                                            continue;
                                         var championName = item["championName"].ToObject<string>();
                                         System.Windows.Application.Current.Dispatcher.Invoke(() =>
                                         {
@@ -464,6 +562,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                     {
                                         var name = item["summonerName"].ToObject<string>();
                                         var account = (Team1Accounts.Concat(Team2Accounts)).FirstOrDefault(x => x.DisplayName == name);
+                                        if (account == null)
+                                            continue;
                                         var championName = item["championName"].ToObject<string>();
                                         System.Windows.Application.Current.Dispatcher.Invoke(() =>
                                         {
@@ -709,6 +809,15 @@ namespace LeagueOfLegendsBoxer.ViewModels
             Constant.Heroes = JToken.Parse(heros)["hero"].ToObject<IEnumerable<Hero>>();
 
             await _iniSettingsModel.Initialize();
+        }
+
+        private async Task<bool> InGameSendMessage(string message) 
+        {
+            return await Simulate.Events()
+                .Click(KeyCode.Enter).Wait(75)
+                .Click(message).Wait(75)
+                .Click(KeyCode.Enter)
+                .Invoke();
         }
 
         private void OpenChampionSelectTool()
