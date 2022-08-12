@@ -8,6 +8,7 @@ using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -79,7 +80,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             get => _closeSendOtherWhenBegin;
             set => SetProperty(ref _closeSendOtherWhenBegin, value);
         }
-        
+
 
         private ObservableCollection<Hero> _lockHeros;
         public ObservableCollection<Hero> LockHeros
@@ -186,12 +187,51 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _horseTemplate, value);
         }
 
+        private string _above120ScoreTxt;
+        public string Above120ScoreTxt
+        {
+            get => _above120ScoreTxt;
+            set => SetProperty(ref _above120ScoreTxt, value);
+        }
+
+        private string _above110ScoreTxt;
+        public string Above110ScoreTxt
+        {
+            get => _above110ScoreTxt;
+            set => SetProperty(ref _above110ScoreTxt, value);
+        }
+
+        private string _above100ScoreTxt;
+        public string Above100ScoreTxt
+        {
+            get => _above100ScoreTxt;
+            set => SetProperty(ref _above100ScoreTxt, value);
+        }
+
+        private string _below100ScoreTxt;
+        public string Below100ScoreTxt
+        {
+            get => _below100ScoreTxt;
+            set => SetProperty(ref _below100ScoreTxt, value);
+        }
+
         private string _version;
         public string Version
         {
             get => _version;
             set => SetProperty(ref _version, value);
         }
+
+        /// <summary>
+        /// 自动接收游戏延迟
+        /// </summary>
+        private int _autoAcceptGameDelay;
+        public int AutoAcceptGameDelay
+        {
+            get => _autoAcceptGameDelay;
+            set => SetProperty(ref _autoAcceptGameDelay, value);
+        }
+
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroCommandAsync { get; set; }
@@ -217,15 +257,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand UnCheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
         public AsyncRelayCommand SaveHorseTemplateCommandAsync { get; set; }
         public RelayCommand OpenBlackRecordCommand { get; set; }
+        public AsyncRelayCommand AutoAcceptGameDelayChangedCommandAsync { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
         private readonly IConfiguration _iconfiguration;
-        public SettingsViewModel(IniSettingsModel iniSettingsModel, IApplicationService applicationService, IConfiguration iconfiguration)
+        private readonly ILogger<SettingsViewModel> _logger;
+        public SettingsViewModel(IniSettingsModel iniSettingsModel, IApplicationService applicationService, IConfiguration iconfiguration, ILogger<SettingsViewModel> logger)
         {
             _iniSettingsModel = iniSettingsModel;
             _applicationService = applicationService;
             _iconfiguration = iconfiguration;
+            _logger = logger;
             CheckedAutoAcceptCommandAsync = new AsyncRelayCommand(CheckedAutoAcceptAsync);
             UncheckedAutoAcceptCommandAsync = new AsyncRelayCommand(UncheckedAutoAcceptAsync);
             CheckedAutoLockHeroCommandAsync = new AsyncRelayCommand(CheckedAutoLockHeroAsync);
@@ -251,6 +294,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             UnCheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(UnCheckedCloseSendOtherWhenBeginAsync);
             SaveHorseTemplateCommandAsync = new AsyncRelayCommand(SaveHorseTemplateAsync);
             OpenBlackRecordCommand = new RelayCommand(OpenBlackRecord);
+            AutoAcceptGameDelayChangedCommandAsync = new AsyncRelayCommand(AutoAcceptGameDelayChangedAsync);
         }
 
         private async Task LoadAsync()
@@ -269,6 +313,11 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             CloseSendOtherWhenBegin = _iniSettingsModel.CloseSendOtherWhenBegin;
             HorseTemplate = _iniSettingsModel.HorseTemplate;
             Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            AutoAcceptGameDelay = _iniSettingsModel.AutoAcceptGameDelay;
+            Above120ScoreTxt = _iniSettingsModel.Above120ScoreTxt;
+            Above110ScoreTxt = _iniSettingsModel.Above110ScoreTxt;
+            Above100ScoreTxt = _iniSettingsModel.Above100ScoreTxt;
+            Below100ScoreTxt = _iniSettingsModel.Below100ScoreTxt;
         }
 
         #region checkbox
@@ -312,7 +361,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteAutoLockHeroInAramAsync(false);
             AutoLockHeroInAram = false;
         }
-        private async Task CheckedCloseRecommmandAsync() 
+        private async Task CheckedCloseRecommmandAsync()
         {
             await _iniSettingsModel.WriteIsCloseRecommandAsync(true);
             IsCloseRecommmand = true;
@@ -322,7 +371,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteIsCloseRecommandAsync(false);
             IsCloseRecommmand = false;
         }
-        private async Task CheckedCloseSendOtherWhenBeginAsync() 
+        private async Task CheckedCloseSendOtherWhenBeginAsync()
         {
             await _iniSettingsModel.WriteCloseSendOtherWhenBeginAsync(true);
             CloseSendOtherWhenBegin = true;
@@ -332,16 +381,62 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteCloseSendOtherWhenBeginAsync(false);
             CloseSendOtherWhenBegin = false;
         }
-        private async Task SaveHorseTemplateAsync() 
+        private async Task SaveHorseTemplateAsync()
         {
-            await _iniSettingsModel.WriteHorseTemplateAsync(HorseTemplate);
-
-            Growl.SuccessGlobal(new GrowlInfo()
+            try
             {
-                WaitTime = 2,
-                Message = "设置模板成功",
-                ShowDateTime = false
-            });
+                if (string.IsNullOrEmpty(Above120ScoreTxt) || string.IsNullOrEmpty(Above110ScoreTxt) || string.IsNullOrEmpty(Above100ScoreTxt) || string.IsNullOrEmpty(Below100ScoreTxt))
+                {
+                    Growl.WarningGlobal(new GrowlInfo()
+                    {
+                        WaitTime = 2,
+                        Message = "马匹名不能为空",
+                        ShowDateTime = false
+                    });
+
+                    return;
+                }
+
+                if (Above120ScoreTxt.Length > 5 || Above110ScoreTxt.Length > 5 || Above100ScoreTxt.Length > 5 || Below100ScoreTxt.Length > 5)
+                {
+                    Growl.WarningGlobal(new GrowlInfo()
+                    {
+                        WaitTime = 2,
+                        Message = "马匹名不能超过5个字符",
+                        ShowDateTime = false
+                    });
+
+                    return;
+                }
+
+                await _iniSettingsModel.WriteHorseTemplateAsync(HorseTemplate);
+                await _iniSettingsModel.WriteAbove120ScoreTxtAsync(Above120ScoreTxt);
+                await _iniSettingsModel.WriteAbove110ScoreTxtAsync(Above110ScoreTxt);
+                await _iniSettingsModel.WriteAbove100ScoreTxtAsync(Above100ScoreTxt);
+                await _iniSettingsModel.WriteBelow100ScoreTxtAsync(Below100ScoreTxt);
+
+                Growl.SuccessGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "设置成功",
+                    ShowDateTime = false
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "设置异常",
+                    ShowDateTime = false
+                });
+            }
+        }
+
+        private async Task AutoAcceptGameDelayChangedAsync()
+        {
+            await _iniSettingsModel.WriteAutoAcceptGameDelay(AutoAcceptGameDelay);
         }
         #endregion
 
@@ -358,7 +453,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 LockHeros = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(SearchLockText) || x.Title.Contains(SearchLockText)));
         }
 
-        private void StartGame() 
+        private void StartGame()
         {
             var loc = _iniSettingsModel.GameExeLocation;
             if (string.IsNullOrEmpty(loc) || !File.Exists(loc))
@@ -380,7 +475,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 p.StartInfo.RedirectStandardInput = true;
                 p.StartInfo.RedirectStandardOutput = true;
                 p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.CreateNoWindow = true; 
+                p.StartInfo.CreateNoWindow = true;
                 p.Start();
                 p.StandardInput.AutoFlush = true;
                 p.Close();
@@ -415,7 +510,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
 
             var location = (await _applicationService.GetInstallLocation())?.Replace("\"", string.Empty);
-            if (string.IsNullOrEmpty(location)) 
+            if (string.IsNullOrEmpty(location))
             {
                 Growl.InfoGlobal(new GrowlInfo()
                 {
@@ -481,13 +576,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _skinsWindow.ShowDialog();
         }
 
-        private void OpenAramChoose() 
+        private void OpenAramChoose()
         {
             var _window = App.ServiceProvider.GetRequiredService<AramQuickChoose>();
             _window.ShowDialog();
         }
 
-        private void OpenBlackRecord() 
+        private void OpenBlackRecord()
         {
             var _window = App.ServiceProvider.GetRequiredService<BlackRecord>();
             (_window.DataContext as BlackRecordViewModel).Load();
@@ -502,7 +597,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 var temp = Path.GetTempPath();
                 var fileLoc = Path.Combine(temp, $"{Guid.NewGuid()}.{extension}");
                 var loc = _iconfiguration.GetSection("HeroDatas").Value;
-                if (string.IsNullOrEmpty(loc)) 
+                if (string.IsNullOrEmpty(loc))
                 {
                     Growl.InfoGlobal(new GrowlInfo()
                     {

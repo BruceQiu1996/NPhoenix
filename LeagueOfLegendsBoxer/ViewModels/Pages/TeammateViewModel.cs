@@ -97,6 +97,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             {
                 var desc = GetHorseInformation(account);
                 await _gameService.SendMessageAsync(_currentChatID, desc);
+                await Task.Delay(300);
             }
         }
 

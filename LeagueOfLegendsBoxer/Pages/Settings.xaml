@@ -19,16 +19,32 @@
         <StackPanel Orientation="Vertical">
             <GroupBox Margin="20 5" Header="游戏设置" FontSize="18">
                 <StackPanel Orientation="Vertical">
-                    <CheckBox Content="自动接受对局" FontSize="18" IsChecked="{Binding AutoAcceptGame,UpdateSourceTrigger=PropertyChanged}">
-                        <behaviors:Interaction.Triggers>
-                            <behaviors:EventTrigger EventName="Checked">
-                                <behaviors:InvokeCommandAction Command="{Binding CheckedAutoAcceptCommandAsync}"></behaviors:InvokeCommandAction>
-                            </behaviors:EventTrigger>
-                            <behaviors:EventTrigger EventName="Unchecked">
-                                <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoAcceptCommandAsync}"></behaviors:InvokeCommandAction>
-                            </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
-                    </CheckBox>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Content="自动接受对局" FontSize="18" IsChecked="{Binding AutoAcceptGame,UpdateSourceTrigger=PropertyChanged}">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding CheckedAutoAcceptCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                                <behaviors:EventTrigger EventName="Unchecked">
+                                    <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoAcceptCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </CheckBox>
+                        <hc:NumericUpDown Maximum="8" 
+                                          Margin="20 0 0 0"
+                                          Width="155"
+                                          Minimum="0"
+                                          ToolTip="最大8s"
+                                          Value="{Binding AutoAcceptGameDelay,UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource NumericUpDownExtend}" 
+                                          hc:TitleElement.Title="延迟(s)" hc:TitleElement.TitlePlacement="Left">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="ValueChanged">
+                                    <behaviors:InvokeCommandAction Command="{Binding AutoAcceptGameDelayChangedCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </hc:NumericUpDown>
+                    </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Content="秒选英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}">
@@ -224,7 +240,8 @@
                              
                              
                              我方上等马浦东Faker,评分120,单双排黄金一,灵活组排白银二,最近五场战绩10/1/1 , 10/1/1 , 10/1/1 , 10/1/1 , 10/1/1
-                                    =
+                                    
+                             =
                              
                               
                              我方{horse}{name},评分{score},单双排{solorank},灵活组排{flexrank},最近五场战绩{kda}
@@ -244,7 +261,25 @@
                              Height="150"
                              />
 
+                    <TextBox Style="{StaticResource TextBoxExtend}" 
+                             hc:InfoElement.Placeholder="最多5个字"
+                             Text="{Binding Above120ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
+                             hc:TitleElement.Title=">120分：" 
+                             hc:TitleElement.TitlePlacement="Left" Margin="2"></TextBox>
+                    <TextBox Style="{StaticResource TextBoxExtend}" 
+                             hc:InfoElement.Placeholder="最多5个字"
+                             Text="{Binding Above110ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
+                             hc:TitleElement.Title=">110分：" hc:TitleElement.TitlePlacement="Left" Margin="2"></TextBox>
+                    <TextBox Style="{StaticResource TextBoxExtend}" 
+                             hc:InfoElement.Placeholder="最多5个字"
+                             Text="{Binding Above100ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
+                             hc:TitleElement.Title=">100分：" hc:TitleElement.TitlePlacement="Left" Margin="2"></TextBox>
+                    <TextBox Style="{StaticResource TextBoxExtend}" 
+                             hc:InfoElement.Placeholder="最多5个字"
+                             Text="{Binding Below100ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
+                             hc:TitleElement.Title="&lt;100分：" hc:TitleElement.TitlePlacement="Left" Margin="2"></TextBox>
                     <Button Content="保存" HorizontalAlignment="Right" 
+                            Margin="0 5 0 0"
                             Cursor="Hand"
                             FontSize="15"
                             Height="35"

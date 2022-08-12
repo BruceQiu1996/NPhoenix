@@ -29,6 +29,11 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string CloseSendOtherWhenBegin = nameof(CloseSendOtherWhenBegin);
         public const string HorseTemplate = nameof(HorseTemplate);
         public const string ReadedNotice = nameof(ReadedNotice);
+        public const string AutoAcceptGameDelay = nameof(AutoAcceptGameDelay);
+        public const string Above120ScoreTxt = nameof(Above120ScoreTxt);
+        public const string Above110ScoreTxt = nameof(Above110ScoreTxt);
+        public const string Above100ScoreTxt = nameof(Above100ScoreTxt);
+        public const string Below100ScoreTxt = nameof(Below100ScoreTxt);
         public static string _chatId = null;
         //event uri
         public const string GameFlow = @"/lol-gameflow/v1/gameflow-phase";

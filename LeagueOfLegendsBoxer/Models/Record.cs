@@ -203,8 +203,30 @@ namespace LeagueOfLegendsBoxer.Models
         [JsonPropertyName("pentaKills")]
         public int PentaKills { get; set; }
         public string KDA => $"{Kills}/{Deaths}/{Assists}";
+        [JsonPropertyName("totalMinionsKilled")]
+        public int TotalMinionsKilled { get; set; }
         [JsonPropertyName("goldEarned")]
         public int GoldEarned { get; set; }
+        [JsonPropertyName("totalDamageDealt")]
+        public int TotalDamageDealt { get; set; }
+        [JsonPropertyName("largestKillingSpree")]
+        public int LargestKillingSpree { get; set; }
+        [JsonPropertyName("largestMultiKill")]
+        public int LargestMultiKill { get; set; }
+        [JsonPropertyName("turretKills")]
+        public int TurretKills { get; set; }
+        [JsonPropertyName("wardsKilled")]
+        public int WardsKilled { get; set; }
+        [JsonPropertyName("totalHeal")]
+        public int TotalHeal { get; set; }
+        [JsonPropertyName("totalDamageTaken")]
+        public int TotalDamageTaken { get; set; }
+        [JsonPropertyName("totalDamageDealtToChampions")]
+        public int TotalDamageDealtToChampions { get; set; }
+        [JsonPropertyName("physicalDamageDealtToChampions")]
+        public int PhysicalDamageDealtToChampions { get; set; }
+        [JsonPropertyName("magicDamageDealtToChampions")]
+        public int MagicDamageDealtToChampions { get; set; }
         [JsonPropertyName("item0")]
         public int Item0 { get; set; }
         [JsonPropertyName("item1")]
@@ -261,6 +283,13 @@ namespace LeagueOfLegendsBoxer.Models
             0 => "https://wegame.gtimg.com/g.26-r.c2d3c/helper/lol/assis/images/resources/items/0.png",
             _ => $"https://game.gtimg.cn/images/lol/act/img/item/{Item6}.png"
         };
+        public Item Item0Model => Constant.Items.FirstOrDefault(x => x.Id == Item0);
+        public Item Item1Model => Constant.Items.FirstOrDefault(x => x.Id == Item1);
+        public Item Item2Model => Constant.Items.FirstOrDefault(x => x.Id == Item2);
+        public Item Item3Model => Constant.Items.FirstOrDefault(x => x.Id == Item3);
+        public Item Item4Model => Constant.Items.FirstOrDefault(x => x.Id == Item4);
+        public Item Item5Model => Constant.Items.FirstOrDefault(x => x.Id == Item5);
+        public Item Item6Model => Constant.Items.FirstOrDefault(x => x.Id == Item6);
     }
 
     public class Timeline

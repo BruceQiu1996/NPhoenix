@@ -31,6 +31,12 @@ namespace LeagueOfLegendsBoxer.Resources
         public bool IsCloseRecommand { get; set; }
         public bool CloseSendOtherWhenBegin { get; set; }
         public string HorseTemplate { get; set; }
+        public string Above120ScoreTxt { get; set; }
+        public string Above110ScoreTxt { get; set; }
+        public string Above100ScoreTxt { get; set; }
+        public string Below100ScoreTxt { get; set; }
+        public int AutoAcceptGameDelay { get; set; }
+
         public IniSettingsModel(ISettingsService settingsService,
                                 IApplicationService applicationService,
                                 IConfiguration configuration)
@@ -67,6 +73,19 @@ namespace LeagueOfLegendsBoxer.Resources
             IsCloseRecommand = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsCloseRecommand), out var tempRecommand) ? tempRecommand : false;
             CloseSendOtherWhenBegin = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.CloseSendOtherWhenBegin), out var tempCloseSendOtherWhenBegin) ? tempCloseSendOtherWhenBegin : false;
             HorseTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.HorseTemplate);
+            Above120ScoreTxt = await _settingsService.ReadAsync(Constant.Game, Constant.Above120ScoreTxt);
+            Above120ScoreTxt = string.IsNullOrEmpty(Above120ScoreTxt) ? "上等马" : Above120ScoreTxt;
+
+            Above110ScoreTxt = await _settingsService.ReadAsync(Constant.Game, Constant.Above110ScoreTxt);
+            Above110ScoreTxt = string.IsNullOrEmpty(Above110ScoreTxt) ? "中等马" : Above110ScoreTxt;
+
+            Above100ScoreTxt = await _settingsService.ReadAsync(Constant.Game, Constant.Above100ScoreTxt);
+            Above100ScoreTxt = string.IsNullOrEmpty(Above100ScoreTxt) ? "下等马" : Above100ScoreTxt;
+
+            Below100ScoreTxt = await _settingsService.ReadAsync(Constant.Game, Constant.Below100ScoreTxt);
+            Below100ScoreTxt = string.IsNullOrEmpty(Below100ScoreTxt) ? "牛马" : Below100ScoreTxt;
+            AutoAcceptGameDelay = int.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.AutoAcceptGameDelay), out var tempAutoAcceptGameDelay) ? tempAutoAcceptGameDelay : 0;
             var readedNotices = await _settingsService.ReadAsync(Constant.Game, Constant.ReadedNotice);
             ReadedNotices = string.IsNullOrEmpty(readedNotices) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(readedNotices);
             if (!File.Exists(_blackListLoc)) 
@@ -155,11 +174,36 @@ namespace LeagueOfLegendsBoxer.Resources
             await _settingsService.WriteAsync(Constant.Game, Constant.HorseTemplate, horseTemplate);
             HorseTemplate = horseTemplate;
         }
+        public async Task WriteAbove120ScoreTxtAsync(string above120ScoreTxt)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.Above120ScoreTxt, above120ScoreTxt);
+            Above120ScoreTxt = above120ScoreTxt;
+        }
+        public async Task WriteAbove110ScoreTxtAsync(string above110ScoreTxt)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.Above110ScoreTxt, above110ScoreTxt);
+            Above110ScoreTxt = above110ScoreTxt;
+        }
+        public async Task WriteAbove100ScoreTxtAsync(string above100ScoreTxt)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.Above100ScoreTxt, above100ScoreTxt);
+            Above100ScoreTxt = above100ScoreTxt;
+        }
+        public async Task WriteBelow100ScoreTxtAsync(string below100ScoreTxt)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.Below100ScoreTxt, below100ScoreTxt);
+            Below100ScoreTxt = below100ScoreTxt;
+        }
         public async Task WriteReadedNoticesAsync(int value)
         {
             ReadedNotices.Add(value);
             var data = JsonSerializer.Serialize(ReadedNotices);
             await _settingsService.WriteAsync(Constant.Game, Constant.ReadedNotice, data);
+        }
+        public async Task WriteAutoAcceptGameDelay(int autoAcceptGameDelay)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.AutoAcceptGameDelay, autoAcceptGameDelay.ToString());
+            AutoAcceptGameDelay = autoAcceptGameDelay;
         }
         public async Task WriteBlackAccountAsync(BlackAccount account)
         {

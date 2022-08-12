@@ -11,6 +11,7 @@
         ResizeMode="NoResize"
         WindowStyle="None"
         WindowStartupLocation="CenterScreen"
+        xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
         xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         Title="对局详情" Height="600" Width="800">
@@ -18,6 +19,10 @@
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="2"/>
     </WindowChrome.WindowChrome>
 
+    <Window.Resources>
+        <convert:BoolColorBrushConverter x:Key="BoolColorBrushConverter"></convert:BoolColorBrushConverter>
+    </Window.Resources>
+    
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding LoadCommand}"></behaviors:InvokeCommandAction>
@@ -105,12 +110,21 @@
                                                 </hc:Badge>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
                                                     <TextBlock TextWrapping="Wrap"
-                                                       FontSize="15"
-                                                       Grid.Row="1"
-                                                       VerticalAlignment="Top"
-                                                       Grid.ColumnSpan="2"
-                                                       Grid.Column="1"
-                                                       Text="{Binding DisplayName}"/>
+                                                               FontSize="15"
+                                                               Grid.Row="1"
+                                                               VerticalAlignment="Top"
+                                                               Grid.ColumnSpan="2"
+                                                               Grid.Column="1"
+                                                               Cursor="Hand"
+                                                               Foreground="{Binding IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                               Text="{Binding DisplayName}">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.SearchAccountRecordCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                    </TextBlock>
 
                                                     <hc:Shield Subject="等级" 
                                                            Grid.Row="1"
@@ -266,12 +280,21 @@
                                                 </hc:Badge>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
                                                     <TextBlock TextWrapping="Wrap"
-                                                       FontSize="15"
-                                                       Grid.Row="1"
-                                                       VerticalAlignment="Top"
-                                                       Grid.ColumnSpan="2"
-                                                       Grid.Column="1"
-                                                       Text="{Binding DisplayName}"/>
+                                                               Foreground="{Binding IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                               FontSize="15"
+                                                               Grid.Row="1"
+                                                               VerticalAlignment="Top"
+                                                               Grid.ColumnSpan="2"
+                                                               Grid.Column="1"
+                                                               Cursor="Hand"
+                                                               Text="{Binding DisplayName}">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.SearchAccountRecordCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                    </TextBlock>
 
                                                     <hc:Shield Subject="等级" 
                                                            Grid.Row="1"

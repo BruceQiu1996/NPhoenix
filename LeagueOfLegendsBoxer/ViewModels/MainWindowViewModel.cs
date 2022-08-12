@@ -595,6 +595,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private async Task AutoAcceptAsync()
         {
+            if (_iniSettingsModel.AutoAcceptGameDelay > 0) 
+            {
+                await Task.Delay(_iniSettingsModel.AutoAcceptGameDelay * 1000);
+            }
             await _gameService.AutoAcceptGameAsync();
         }
 

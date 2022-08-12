@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LeagueOfLegendsBoxer.Resources;
+using Microsoft.Extensions.DependencyInjection;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -49,19 +50,19 @@ namespace LeagueOfLegendsBoxer.Models
             var score = Records.Average(x => x.GetScore());
             if (score >= 120)
             {
-                return "上等马";
+                return App.ServiceProvider.GetRequiredService<IniSettingsModel>().Above120ScoreTxt;
             }
             else if (score >= 110)
             {
-                return "中等马";
+                return App.ServiceProvider.GetRequiredService<IniSettingsModel>().Above110ScoreTxt;
             }
             else if (score >= 100)
             {
-                return "下等马";
+                return App.ServiceProvider.GetRequiredService<IniSettingsModel>().Above100ScoreTxt;
             }
             else if (score < 100)
             {
-                return "牛马";
+                return App.ServiceProvider.GetRequiredService<IniSettingsModel>().Below100ScoreTxt;
             }
 
             return "未知的马";
@@ -95,5 +96,7 @@ namespace LeagueOfLegendsBoxer.Models
             get { return _reason; }
             set { SetProperty(ref _reason, value); }
         }
+
+        public bool IsCurrentUser => Constant.Account.SummonerId == SummonerId;
     }
 }

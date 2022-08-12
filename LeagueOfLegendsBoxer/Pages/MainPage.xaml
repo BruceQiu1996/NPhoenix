@@ -91,12 +91,12 @@
                 <Border>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.1*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="4*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Text="单双排" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                        <TextBlock Text="单双" FontSize="15" Margin="10 10 0 0"></TextBlock>
                         <hc:Shield Subject="{Binding Account.Rank.RANKED_SOLO_5x5.CnTier}" 
                                    Grid.Column="1" FontSize="12"
                                    Status="{Binding Account.Rank.RANKED_SOLO_5x5.Division}" Color="#4eb899"/>
@@ -106,11 +106,11 @@
                 <Border>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.1*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="4*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="灵活组排" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                        <TextBlock Text="灵活" FontSize="15" Margin="10 10 0 0"></TextBlock>
                         <hc:Shield Subject="{Binding Account.Rank.RANKED_FLEX_SR.CnTier}" 
                                    Grid.Column="1" FontSize="12"
                                    Status="{Binding Account.Rank.RANKED_FLEX_SR.Division}" Color="#4eb899"/>
@@ -120,11 +120,11 @@
                 <Border>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="1.1*"></ColumnDefinition>
                             <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="3*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="4*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="云顶之奕" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                        <TextBlock Text="云顶" FontSize="15" Margin="10 10 0 0"></TextBlock>
                         <hc:Shield Subject="{Binding Account.Rank.RANKED_TFT.CnTier}" 
                                    Grid.Column="1" FontSize="12"
                                    Status="{Binding Account.Rank.RANKED_TFT.Division}" Color="#4eb899"/>
