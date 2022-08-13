@@ -28,7 +28,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -84,11 +83,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
 
         private bool _isLoop = false;
+        private bool _isLoopChampionSelect = false;
         private bool _isLoopLive = false;
         private IKeyboardMouseEvents _keyboardMouseEvent;
         private Task _loopForGameEvent;
         private readonly IKeyboardEventSource _keyboard = Capture.Global.KeyboardAsync();
-        private ManualResetEvent _resetEvent = new ManualResetEvent(true); //控制轮询实时游戏事件的暂停和复原
         public List<Account> Team1Accounts { get; set; } = new List<Account>();
         public List<Account> Team2Accounts { get; set; } = new List<Account>();
         private readonly IApplicationService _applicationService;
@@ -271,7 +270,13 @@ namespace LeagueOfLegendsBoxer.ViewModels
         #region 热键
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == StringToKeys("Alt+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
+            if (_iniSettingsModel.IsAltQOpenVsDetail && e.KeyData == StringToKeys("Alt+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
+            {
+                _team1V2Window.Opacity = 1;
+                _team1V2Window.Topmost = true;
+                e.Handled = true;
+            }
+            else if (!_iniSettingsModel.IsAltQOpenVsDetail && e.KeyData == StringToKeys("Control+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
             {
                 _team1V2Window.Opacity = 1;
                 _team1V2Window.Topmost = true;
@@ -279,11 +284,14 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
         }
 
-        private async void OnKeyUp(object sender, KeyEventArgs e)
+        private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyData == StringToKeys("Q+Alt")
-                || e.KeyData == StringToKeys("Alt+Q")
-                || e.KeyData == StringToKeys("Alt"))
+            if (_iniSettingsModel.IsAltQOpenVsDetail && (e.KeyData == StringToKeys("Q+Alt") || e.KeyData == StringToKeys("Alt+Q")))
+            {
+                _team1V2Window.Opacity = 0;
+                e.Handled = true;
+            }
+            else if (!_iniSettingsModel.IsAltQOpenVsDetail && (e.KeyData == StringToKeys("Q+Control") || e.KeyData == StringToKeys("Control+Q")))
             {
                 _team1V2Window.Opacity = 0;
                 e.Handled = true;
@@ -384,7 +392,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             switch (data)
             {
                 case "ReadyCheck":
-                    _resetEvent.Reset();
                     GameStatus = "找到对局";
                     if (_iniSettingsModel.AutoAcceptGame)
                     {
@@ -392,7 +399,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     }
                     break;
                 case "ChampSelect":
-                    _resetEvent.Reset();
                     GameStatus = "英雄选择中";
                     await ChampSelectAsync();
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
@@ -604,39 +610,56 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private async Task ChampSelectAsync()
         {
+            if (_isLoopChampionSelect)
+                return;
+
             await Task.Yield();
+            _isLoopChampionSelect = true;
             var _ = Task.Run(async () =>
             {
                 while (true)
                 {
-                    var session = await _gameService.GetGameSessionAsync();
-                    var token = JToken.Parse(session);
-                    if (token.Value<int>("httpStatus") != 404)
+                    try
                     {
-                        var localPlayerCellId = token.Value<int>("localPlayerCellId");
-                        var actions = token.Value<IEnumerable<IEnumerable<JToken>>>("actions");
-                        int userActionID;
-                        foreach (var action in actions)
+                        var session = await _gameService.GetGameSessionAsync();
+                        var token = JToken.Parse(session);
+                        if (token.Value<int>("httpStatus") != 404)
                         {
-                            foreach (var actionElement in action)
+                            var localPlayerCellId = token.Value<int>("localPlayerCellId");
+                            var actions = token.Value<IEnumerable<IEnumerable<JToken>>>("actions");
+                            int userActionID;
+                            foreach (var action in actions)
                             {
-                                if (actionElement.Value<int>("actorCellId") == localPlayerCellId && actionElement.Value<bool>("isInProgress"))
+                                foreach (var actionElement in action)
                                 {
-                                    userActionID = actionElement.Value<int>("id");
-                                    if (actionElement.Value<string>("type") == "pick"
-                                        && !actionElement.Value<bool>("completed")
-                                        && _iniSettingsModel.AutoLockHero
-                                        && _iniSettingsModel.AutoLockHeroChampId != default)
+                                    if (actionElement.Value<int>("actorCellId") == localPlayerCellId && actionElement.Value<bool>("isInProgress"))
                                     {
-                                        await _gameService.AutoLockHeroAsync(userActionID, _iniSettingsModel.AutoLockHeroChampId);
-                                        break;
+                                        userActionID = actionElement.Value<int>("id");
+                                        if (actionElement.Value<string>("type") == "pick"
+                                            && !actionElement.Value<bool>("completed")
+                                            && _iniSettingsModel.AutoLockHero
+                                            && _iniSettingsModel.AutoLockHeroChampId != default)
+                                        {
+                                            await _gameService.AutoLockHeroAsync(userActionID, _iniSettingsModel.AutoLockHeroChampId, "pick");
+                                        }
+                                        else if (actionElement.Value<string>("type") == "ban"
+                                         && !actionElement.Value<bool>("completed")
+                                         && _iniSettingsModel.AutoDisableHero
+                                         && _iniSettingsModel.AutoDisableChampId != default)
+                                        {
+                                            await _gameService.AutoLockHeroAsync(userActionID, _iniSettingsModel.AutoDisableChampId, "ban");
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    await Task.Delay(500);
+                        await Task.Delay(500);
+                    }
+                    catch (Exception ex) 
+                    {
+                        await Task.Delay(1500);
+                    }
                 }
             });
         }

@@ -18,11 +18,12 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
-
         <hc:Card BorderThickness="0"
+                 Grid.Row="0"
                  Effect="{DynamicResource EffectShadow2}" 
                  Margin="20 0">
             <ListBox Grid.Row="1" 
+                     Margin="0 5 0 0"
                      Background="Transparent" BorderThickness="0" 
                      SelectedItem="{Binding Account,UpdateSourceTrigger=PropertyChanged}"
                      ItemsSource="{Binding Accounts,UpdateSourceTrigger=PropertyChanged}" 
@@ -125,5 +126,8 @@
         <Button Content="发送分析信息" FontSize="15" 
                 Command="{Binding SendTeamMateDataCommandAsync}"
                 Grid.Row="1" Margin="0 5 0 0" Cursor="Hand" VerticalAlignment="Top"></Button>
+        <Button Content="刷新" FontSize="15" HorizontalAlignment="Right"
+                Command="{Binding LoadCommandAsync}" Style="{StaticResource ButtonPrimary}"
+                Grid.Row="1" Margin="0 5 20 0" Cursor="Hand" VerticalAlignment="Top"></Button>
     </Grid>
 </Page>

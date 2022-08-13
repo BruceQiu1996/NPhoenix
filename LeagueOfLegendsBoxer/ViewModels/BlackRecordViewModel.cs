@@ -23,6 +23,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
             set { SetProperty(ref _blackAccounts, value); }
         }
 
+        public string _desc;
+        public string Desc
+        {
+            get { return _desc; }
+            set { SetProperty(ref _desc, value); }
+        }
         public AsyncRelayCommand<BlackAccount> SearchRecordCommandAsync { get; set; }
         public AsyncRelayCommand<BlackAccount> RemoveBlackListCommanmdAsync { get; set; }
 
@@ -43,11 +49,14 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 BlackAccounts = new ObservableCollection<BlackAccount>(
                     _iniSettingsModel.BlackAccounts.OrderByDescending(x => x.CreateTime));
+
+                Desc = $"一共拉黑{BlackAccounts.GroupBy(x=>x.Id).Count()}人,拉黑记录{BlackAccounts.Count}条";
             }
             else 
             {
                 BlackAccounts = new ObservableCollection<BlackAccount>(
                     _iniSettingsModel.BlackAccounts.OrderByDescending(x => x.CreateTime).Where(x => ids.Contains(x.Id)));
+                Desc = null;
             }
         }
 

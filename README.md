@@ -2,7 +2,7 @@
 ## 项目介绍
 > NPhoenix是一款基于.net6 + vs2022 开发的一款桌面应用程序,主要功能如下所示:
 
-💡 	|秒选英雄|自动接受对局|国服数据排行榜
+💡 	|秒选英雄|自动接受对局|国服数据排行榜|游戏内发送马种信息开黑信息|对局详情|自动禁用英雄
 
 💡	查看英雄对位压制|查看英雄优势对线|5v5符文配置|修改段位|修改生涯背景
 
@@ -43,6 +43,12 @@
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/file.jpg)
 
 # 功能预览
+## 2022.8.13晚功能发布预告  
+- [x] 1.游戏内发送双方马种信息
+- [x] 2.游戏内发送双方开黑信息
+- [x] 3.英雄禁用
+- [x] 4.细节修复,功能增加
+
 ## 2022.8.7晚功能发布预告  
 - [x] 1.大乱斗设置秒选界面优化。  
 - [x] 2.可以输入召唤师id查询战绩。  
@@ -54,10 +60,14 @@
 - [x] 8.拉黑功能
 
 # 视频地址
+v2.2 : https://www.bilibili.com/video/BV1Ka411Z778/
 v2 : https://www.bilibili.com/video/BV1ar4y157Vb  
 v1 : https://www.bilibili.com/video/BV1x94y1D7jr
 
 # 下载地址
+## v2.2 (新增功能，见上面2022.8.13功能发布预告)
+百度网盘 链接：https://pan.baidu.com/s/1DaSke6f3gByS7wO93mtjOg 提取码：yi8d
+
 ## v2.1 (新增功能，见上面2022.8.7功能发布预告)
 腾讯微云 https://share.weiyun.com/ZpkGCjEr
 

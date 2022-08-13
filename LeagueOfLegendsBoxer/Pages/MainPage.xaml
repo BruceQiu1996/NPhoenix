@@ -49,20 +49,30 @@
                         <Image Source="{Binding Account.Avatar}" 
                                />
                     </hc:Gravatar>
-                    <TextBlock TextWrapping="Wrap"
-                               FontSize="20"
-                               Grid.Row="1"
-                               Grid.ColumnSpan="2"
+                    <StackPanel Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="2" Orientation="Horizontal">
+                        <TextBlock TextWrapping="Wrap"
+                               FontSize="18"
                                Margin="0 5 0 0"
-                               Grid.Column="1"
                                Cursor="Hand"
                                Text="{Binding Account.DisplayName}">
-                        <behaviors:Interaction.Triggers>
-                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                            <behaviors:InvokeCommandAction Command="{Binding CurrentUserInfoCommand}"></behaviors:InvokeCommandAction>
-                        </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
-                    </TextBlock>
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                    <behaviors:InvokeCommandAction Command="{Binding CurrentUserInfoCommand}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </TextBlock>
+
+                        <Label Height="45" Width="45" BorderThickness="0" Margin="20 0 0 0" ToolTip="刷新" Cursor="Hand">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                    <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                            <Path Data="{StaticResource reset}" Stretch="Uniform" Margin="0 0 0 10" Fill="{StaticResource PrimaryBrush}"></Path>
+                        </Label>
+                    </StackPanel>
 
                     <hc:Shield Subject="Level" 
                                Grid.Row="2"

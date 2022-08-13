@@ -232,6 +232,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _autoAcceptGameDelay, value);
         }
 
+        private bool _isAltQOpenVsDetail;
+        public bool IsAltQOpenVsDetail
+        {
+            get => _isAltQOpenVsDetail;
+            set => SetProperty(ref _isAltQOpenVsDetail, value);
+        }
+
+        
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroCommandAsync { get; set; }
@@ -258,6 +266,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand SaveHorseTemplateCommandAsync { get; set; }
         public RelayCommand OpenBlackRecordCommand { get; set; }
         public AsyncRelayCommand AutoAcceptGameDelayChangedCommandAsync { get; set; }
+        public AsyncRelayCommand CheckUseAltQOpenVsDetailCommandAsync { get; set; }
+        public AsyncRelayCommand UnCheckUseAltQOpenVsDetailCommandAsync { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -295,6 +305,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SaveHorseTemplateCommandAsync = new AsyncRelayCommand(SaveHorseTemplateAsync);
             OpenBlackRecordCommand = new RelayCommand(OpenBlackRecord);
             AutoAcceptGameDelayChangedCommandAsync = new AsyncRelayCommand(AutoAcceptGameDelayChangedAsync);
+            CheckUseAltQOpenVsDetailCommandAsync = new AsyncRelayCommand(CheckUseAltQOpenVsDetailAsync);
+            UnCheckUseAltQOpenVsDetailCommandAsync = new AsyncRelayCommand(UnCheckUseAltQOpenVsDetailAsync);
         }
 
         private async Task LoadAsync()
@@ -318,6 +330,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             Above110ScoreTxt = _iniSettingsModel.Above110ScoreTxt;
             Above100ScoreTxt = _iniSettingsModel.Above100ScoreTxt;
             Below100ScoreTxt = _iniSettingsModel.Below100ScoreTxt;
+            IsAltQOpenVsDetail = _iniSettingsModel.IsAltQOpenVsDetail;
         }
 
         #region checkbox
@@ -381,6 +394,17 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteCloseSendOtherWhenBeginAsync(false);
             CloseSendOtherWhenBegin = false;
         }
+
+        private async Task CheckUseAltQOpenVsDetailAsync() 
+        {
+            await _iniSettingsModel.WriteIsAltQOpenVsDetail(true);
+        }
+
+        private async Task UnCheckUseAltQOpenVsDetailAsync()
+        {
+            await _iniSettingsModel.WriteIsAltQOpenVsDetail(false);
+        }
+
         private async Task SaveHorseTemplateAsync()
         {
             try

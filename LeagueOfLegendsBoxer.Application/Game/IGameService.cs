@@ -4,7 +4,7 @@
     {
         Task AutoAcceptGameAsync();
         Task<string> GetGameSessionAsync();
-        Task AutoLockHeroAsync(int actionID, int champID);
+        Task AutoLockHeroAsync(int actionID, int champID, string type);
         Task AutoDisableHeroAsync();
         Task<string> GetChatConversation();
         Task<string> GetChatConversationMessages(string chatId);

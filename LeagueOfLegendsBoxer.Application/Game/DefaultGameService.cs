@@ -49,12 +49,12 @@ namespace LeagueOfLegendsBoxer.Application.Game
             throw new NotImplementedException();
         }
 
-        public async Task AutoLockHeroAsync(int actionID, int champID)
+        public async Task AutoLockHeroAsync(int actionID, int champID, string type)
         {
             var body = new
             {
                 completed = true,
-                type = "pick",
+                type = type,
                 championId = champID
             };
 

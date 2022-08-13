@@ -36,6 +36,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public string Above100ScoreTxt { get; set; }
         public string Below100ScoreTxt { get; set; }
         public int AutoAcceptGameDelay { get; set; }
+        public bool IsAltQOpenVsDetail { get; set; }
 
         public IniSettingsModel(ISettingsService settingsService,
                                 IApplicationService applicationService,
@@ -72,6 +73,7 @@ namespace LeagueOfLegendsBoxer.Resources
             RankSetting = await _settingsService.ReadAsync(Constant.Game, Constant.RankSetting);
             IsCloseRecommand = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsCloseRecommand), out var tempRecommand) ? tempRecommand : false;
             CloseSendOtherWhenBegin = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.CloseSendOtherWhenBegin), out var tempCloseSendOtherWhenBegin) ? tempCloseSendOtherWhenBegin : false;
+            IsAltQOpenVsDetail = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsAltQOpenVsDetail), out var tempIsAltQOpenVsDetail) ? tempIsAltQOpenVsDetail : true;
             HorseTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.HorseTemplate);
             Above120ScoreTxt = await _settingsService.ReadAsync(Constant.Game, Constant.Above120ScoreTxt);
             Above120ScoreTxt = string.IsNullOrEmpty(Above120ScoreTxt) ? "上等马" : Above120ScoreTxt;
@@ -214,6 +216,12 @@ namespace LeagueOfLegendsBoxer.Resources
                 File.Create(_blackListLoc);
             }
             await File.WriteAllTextAsync(_blackListLoc, data);
+        }
+
+        public async Task WriteIsAltQOpenVsDetail(bool value) 
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.IsAltQOpenVsDetail, value.ToString());
+            IsAltQOpenVsDetail = value;
         }
 
         public async Task RemoveBlackAccountAsync(long id)

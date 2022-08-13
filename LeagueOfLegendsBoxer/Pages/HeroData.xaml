@@ -6,7 +6,6 @@
       xmlns:local="clr-namespace:LeagueOfLegendsBoxer.Pages"
       mc:Ignorable="d" 
       xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
-      FontFamily="/LeagueOfLegendsBoxer;component/Resources/#HappyZcool-2016"
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
       xmlns:hc="https://handyorg.github.io/handycontrol"
