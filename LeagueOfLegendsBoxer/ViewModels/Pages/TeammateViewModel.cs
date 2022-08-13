@@ -160,15 +160,15 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
-        public string GetGameInHorseInformation(Account account)
+        public string GetGameInHorseInformation(Account account, bool myTeam = true)
         {
             try
             {
                 var sb = new StringBuilder();
+                var team = myTeam ? "我方" : "敌方";
                 if (string.IsNullOrEmpty(_iniSettingsModel.HorseTemplate.Trim()))
                 {
-                    sb.Append($"我方{account.Horse} {account.DisplayName} 评分:{account.Records?.Average(x => x.GetScore()).ToString("0.0")}" + "最近KDA:");
-
+                    sb.Append($"{team}{account.Horse} {account.Champion.Label} KDA:");
                     int a = 0;
                     foreach (var record in account.Records)
                     {

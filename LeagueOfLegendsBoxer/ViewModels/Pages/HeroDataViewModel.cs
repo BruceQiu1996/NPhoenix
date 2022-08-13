@@ -4,6 +4,7 @@ using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -108,17 +109,20 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private readonly IGameService _gameService;
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<HeroDataViewModel> _logger;
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public AsyncRelayCommand LevelOptionSelectionChangedCommandAsync { get; set; }
         public AsyncRelayCommand PositionSelectionChangedCommandAsync { get; set; }
         public AsyncRelayCommand ViewChampDetailCommandAsync { get; set; }
         public RelayCommand BackChampRankDataPageCommand { get; set; }
         public HeroDataViewModel(IGameService gameService,
+                                 ILogger<HeroDataViewModel> logger,
                                  IniSettingsModel iniSettingsModel,
                                  IConfiguration configuration)
         {
             ChampRankDataVisibility = true;
             _gameService = gameService;
+            _logger = logger;
             _iniSettingsModel = iniSettingsModel;
             _configuration = configuration;
             LevelOptions = new ObservableCollection<Tuple<string, int>>()
@@ -204,7 +208,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
             catch (Exception ex)
             {
-
+                _logger.LogError(ex.ToString());
             }
             finally 
             {

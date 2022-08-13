@@ -178,7 +178,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             });
         }
 
-        ~MainWindowViewModel() 
+        ~MainWindowViewModel()
         {
             _keyboard.Dispose();
         }
@@ -194,7 +194,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             var myTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team2Accounts : Team1Accounts;
             foreach (var item in myTeam)
             {
-                await Task.Delay(300);
+                await Task.Delay(100);
                 var message = _teammateViewModel.GetGameInHorseInformation(item);
                 await InGameSendMessage(message);
             }
@@ -211,8 +211,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
             var otherTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team1Accounts : Team2Accounts;
             foreach (var item in otherTeam)
             {
-                await Task.Delay(300);
-                var message = _teammateViewModel.GetGameInHorseInformation(item);
+                await Task.Delay(100);
+                var message = _teammateViewModel.GetGameInHorseInformation(item, false);
                 await InGameSendMessage(message);
             }
         }
@@ -227,13 +227,13 @@ namespace LeagueOfLegendsBoxer.ViewModels
         {
             var myTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team2Accounts : Team1Accounts;
             var otherTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team1Accounts : Team2Accounts;
-            foreach (var item in myTeam.GroupBy(x=>x.TeamID))
+            foreach (var item in myTeam.GroupBy(x => x.TeamID))
             {
-                if (item.Count() >= 2) 
+                if (item.Count() >= 2)
                 {
                     var sb = new StringBuilder();
-                    sb.Append("我方开黑大神:[");
-                    sb.Append(string.Join(",",item.Select(x => x.Champion?.Label)));
+                    sb.Append("我方开黑:[");
+                    sb.Append(string.Join(",", item.Select(x => x.Champion?.Label)));
                     sb.Append("]");
                     await Task.Delay(300);
                     await InGameSendMessage(sb.ToString());
@@ -245,7 +245,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 if (item.Count() >= 2)
                 {
                     var sb = new StringBuilder();
-                    sb.Append("敌方开黑冤种:[");
+                    sb.Append("敌方开黑:[");
                     sb.Append(string.Join(",", item.Select(x => x.Champion?.Label)));
                     sb.Append("]");
                     await Task.Delay(300);
@@ -590,7 +590,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                             await Task.Delay(5000);
                         }
                     }
-                    catch (Exception ex) 
+                    catch (Exception ex)
                     {
                         _logger.LogError(ex.ToString());
                         await Task.Delay(5000);
@@ -601,7 +601,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private async Task AutoAcceptAsync()
         {
-            if (_iniSettingsModel.AutoAcceptGameDelay > 0) 
+            if (_iniSettingsModel.AutoAcceptGameDelay > 0)
             {
                 await Task.Delay(_iniSettingsModel.AutoAcceptGameDelay * 1000);
             }
@@ -656,7 +656,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
                         await Task.Delay(500);
                     }
-                    catch (Exception ex) 
+                    catch (Exception ex)
                     {
                         await Task.Delay(1500);
                     }
@@ -838,7 +838,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             await _iniSettingsModel.Initialize();
         }
 
-        private async Task<bool> InGameSendMessage(string message) 
+        private async Task<bool> InGameSendMessage(string message)
         {
             return await Simulate.Events()
                 .Click(KeyCode.Enter).Wait(75)

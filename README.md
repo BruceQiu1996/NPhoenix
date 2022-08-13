@@ -66,7 +66,7 @@ v1 : https://www.bilibili.com/video/BV1x94y1D7jr
 
 # 下载地址
 ## v2.2 (新增功能，见上面2022.8.13功能发布预告)
-百度网盘 链接：https://pan.baidu.com/s/1DaSke6f3gByS7wO93mtjOg 提取码：yi8d
+百度网盘 链接：https://pan.baidu.com/s/1Wgt7gHzMYng_PR0HULHnzQ 提取码：r2p1
 
 ## v2.1 (新增功能，见上面2022.8.7功能发布预告)
 腾讯微云 https://share.weiyun.com/ZpkGCjEr
