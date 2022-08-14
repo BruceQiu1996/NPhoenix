@@ -308,15 +308,15 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <TextBlock Text="游戏内发送我方牛马："></TextBlock>
-                        <TextBlock Text="Ctrl+Alt+M"></TextBlock>
+                        <TextBlock Text="F7"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <TextBlock Text="游戏内发送敌方牛马："></TextBlock>
-                        <TextBlock Text="Ctrl+Alt+N"></TextBlock>
+                        <TextBlock Text="F8"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <TextBlock Text="游戏内发送开黑信息："></TextBlock>
-                        <TextBlock Text="Ctrl+Alt+B" FontSize="18"></TextBlock>
+                        <TextBlock Text="F11" FontSize="18"></TextBlock>
                     </StackPanel>
                     <CheckBox Content="关闭游戏内推荐NPhoenix" Margin="0 12" FontSize="18" IsChecked="{Binding IsCloseRecommmand,UpdateSourceTrigger=PropertyChanged}">
                         <behaviors:Interaction.Triggers>
