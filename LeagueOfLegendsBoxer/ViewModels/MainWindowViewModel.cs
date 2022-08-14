@@ -154,20 +154,20 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _livegameservice = livegameservice;
             _teammateViewModel = teammateViewModel;
             _team1V2Window = team1V2Window;
-            var Listener = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.Control, KeyCode.Alt, KeyCode.M));
-            Listener.Triggered += (x, y) => ListenerSendMyTeamInfoInnerGame_Triggered(_keyboard, x, y);
-            Listener.Reset_On_Parent_EnabledChanged = false;
-            Listener.Enabled = true;
+            //var Listener = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.F7));
+            //Listener.Triggered += (x, y) => ListenerSendMyTeamInfoInnerGame_Triggered(_keyboard, x, y);
+            //Listener.Reset_On_Parent_EnabledChanged = false;
+            //Listener.Enabled = true;
 
-            var Listener_1 = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.Control, KeyCode.Alt, KeyCode.N));
-            Listener_1.Triggered += (x, y) => ListenerSendOtherTeamInfoInnerGame_Triggered(_keyboard, x, y);
-            Listener_1.Reset_On_Parent_EnabledChanged = false;
-            Listener_1.Enabled = true;
+            //var Listener_1 = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.F8));
+            //Listener_1.Triggered += (x, y) => ListenerSendOtherTeamInfoInnerGame_Triggered(_keyboard, x, y);
+            //Listener_1.Reset_On_Parent_EnabledChanged = false;
+            //Listener_1.Enabled = true;
 
-            var Listener_2 = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.Control, KeyCode.Alt, KeyCode.B));
-            Listener_2.Triggered += (x, y) => ListenerTeamBuildInfo_Triggered(_keyboard, x, y);
-            Listener_2.Reset_On_Parent_EnabledChanged = false;
-            Listener_2.Enabled = true;
+            //var Listener_2 = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.F11));
+            //Listener_2.Triggered += (x, y) => ListenerTeamBuildInfo_Triggered(_keyboard, x, y);
+            //Listener_2.Reset_On_Parent_EnabledChanged = false;
+            //Listener_2.Enabled = true;
 
             _keyboardMouseEvent = Hook.GlobalEvents();
             _keyboardMouseEvent.KeyDown += OnKeyDown;
@@ -192,12 +192,19 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private async void ListenerSendMyTeamInfoInnerGame_Triggered(IKeyboardEventSource Keyboard, object sender, KeyChordEventArgs e)
         {
             var myTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team2Accounts : Team1Accounts;
+
             foreach (var item in myTeam)
             {
                 await Task.Delay(100);
                 var message = _teammateViewModel.GetGameInHorseInformation(item);
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                  continue;
+                }
+                _logger.LogInformation("发送我方消息:" + message);
                 await InGameSendMessage(message);
             }
+
         }
 
         /// <summary>
@@ -213,6 +220,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 await Task.Delay(100);
                 var message = _teammateViewModel.GetGameInHorseInformation(item, false);
+                if (string.IsNullOrWhiteSpace(message))
+                {
+                  continue;
+                }
+                _logger.LogInformation("发送敌方消息:" + message);
                 await InGameSendMessage(message);
             }
         }
@@ -268,7 +280,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
 
         #region 热键
-        private void OnKeyDown(object sender, KeyEventArgs e)
+        private async void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (_iniSettingsModel.IsAltQOpenVsDetail && e.KeyData == StringToKeys("Alt+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
             {
@@ -295,6 +307,18 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 _team1V2Window.Opacity = 0;
                 e.Handled = true;
+            }
+            else if(e.KeyData == Keys.F7)
+            {
+                ListenerSendMyTeamInfoInnerGame_Triggered(null, null, null);
+            }
+            else if(e.KeyData == Keys.F8)
+            {
+                ListenerSendOtherTeamInfoInnerGame_Triggered(null, null, null);
+            }
+            else if(e.KeyData == Keys.F11)
+            {
+                ListenerTeamBuildInfo_Triggered(null, null, null);
             }
         }
 
@@ -840,11 +864,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private async Task<bool> InGameSendMessage(string message)
         {
-            return await Simulate.Events()
-                .Click(KeyCode.Enter).Wait(75)
-                .Click(message).Wait(75)
-                .Click(KeyCode.Enter)
-                .Invoke();
+          return await Simulate.Events()
+              .Click(KeyCode.Enter).Wait(75)
+              .Click(message).Wait(75)
+              .Click(KeyCode.Enter)
+              .Invoke();
         }
 
         private void OpenChampionSelectTool()
