@@ -47,7 +47,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="秒选英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}">
+                        <CheckBox Content="匹配秒选英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckedAutoLockHeroCommandAsync}"></behaviors:InvokeCommandAction>
@@ -58,10 +58,10 @@
                             </behaviors:Interaction.Triggers>
                         </CheckBox>
 
-                        <ComboBox hc:TitleElement.Title="秒锁英雄" 
+                        <ComboBox hc:TitleElement.Title="匹配秒选英雄" 
                                   IsEnabled="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}"
                                   IsEditable="True"
-                                  Width="200"
+                                  Width="170"
                                   IsReadOnly="False"
                                   IsTextSearchEnabled="False"
                                   IsDropDownOpen="{Binding LockHerosOpen,UpdateSourceTrigger=PropertyChanged}"
@@ -82,8 +82,271 @@
                         </ComboBox>
                     </StackPanel>
 
+                    <StackPanel Orientation="Vertical">
+                        <CheckBox Content="排位秒选英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding CheckedRankAutoLockHeroCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                                <behaviors:EventTrigger EventName="Unchecked">
+                                    <behaviors:InvokeCommandAction Command="{Binding UncheckedRankAutoLockHeroCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </CheckBox>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="上路:" Margin="0 15 20 0" VerticalAlignment="Top"></TextBlock>
+                            <StackPanel Orientation="Vertical">
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                      IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
+                                      Width="200"
+                                      IsReadOnly="False"
+                                      IsTextSearchEnabled="False"
+                                      IsDropDownOpen="{Binding TopLockHerosOpen1,UpdateSourceTrigger=PropertyChanged}"
+                                      FontSize="16"
+                                      Margin="10 10 0 0"
+                                      DisplayMemberPath="Label"
+                                      PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                      Foreground="Black"
+                                      ItemsSource="{Binding TopLockHeros1,UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding TopLockHero1,UpdateSourceTrigger=PropertyChanged}"
+                                      Text="{Binding TopSearchLockText1,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding TopSearchLockHeroCommand1}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                      IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
+                                      Width="200"
+                                      IsReadOnly="False"
+                                      IsTextSearchEnabled="False"
+                                      IsDropDownOpen="{Binding TopLockHerosOpen2,UpdateSourceTrigger=PropertyChanged}"
+                                      FontSize="16"
+                                      Margin="10 10 0 0"
+                                      DisplayMemberPath="Label"
+                                      PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                      Foreground="Black"
+                                      ItemsSource="{Binding TopLockHeros2,UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding TopLockHero2,UpdateSourceTrigger=PropertyChanged}"
+                                      Text="{Binding TopSearchLockText2,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding TopSearchLockHeroCommand2}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="打野:" Margin="0 15 20 0" VerticalAlignment="Top"></TextBlock>
+                            <StackPanel Orientation="Vertical">
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                      IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
+                                      Width="200"
+                                      IsReadOnly="False"
+                                      IsTextSearchEnabled="False"
+                                      IsDropDownOpen="{Binding JungleLockHerosOpen1,UpdateSourceTrigger=PropertyChanged}"
+                                      FontSize="16"
+                                      Margin="10 10 0 0"
+                                      DisplayMemberPath="Label"
+                                      PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                      Foreground="Black"
+                                      ItemsSource="{Binding JungleLockHeros1,UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding JungleLockHero1,UpdateSourceTrigger=PropertyChanged}"
+                                      Text="{Binding JungleSearchLockText1,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding JungleSearchLockHeroCommand1}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                      IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
+                                      Width="200"
+                                      IsReadOnly="False"
+                                      IsTextSearchEnabled="False"
+                                      IsDropDownOpen="{Binding JungleLockHerosOpen2,UpdateSourceTrigger=PropertyChanged}"
+                                      FontSize="16"
+                                      Margin="10 10 0 0"
+                                      DisplayMemberPath="Label"
+                                      PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                      Foreground="Black"
+                                      ItemsSource="{Binding JungleLockHeros2,UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding JungleLockHero2,UpdateSourceTrigger=PropertyChanged}"
+                                      Text="{Binding JungleSearchLockText2,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding JungleSearchLockHeroCommand2}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="中路:" Margin="0 15 20 0" VerticalAlignment="Top"></TextBlock>
+                            <StackPanel Orientation="Vertical">
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                      IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
+                                      Width="200"
+                                      IsReadOnly="False"
+                                      IsTextSearchEnabled="False"
+                                      IsDropDownOpen="{Binding MiddleLockHerosOpen1,UpdateSourceTrigger=PropertyChanged}"
+                                      FontSize="16"
+                                      Margin="10 10 0 0"
+                                      DisplayMemberPath="Label"
+                                      PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                      Foreground="Black"
+                                      ItemsSource="{Binding MiddleLockHeros1,UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding  MiddleLockHero1,UpdateSourceTrigger=PropertyChanged}"
+                                      Text="{Binding MiddleSearchLockText1,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding MiddleSearchLockHeroCommand1}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                      IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
+                                      Width="200"
+                                      IsReadOnly="False"
+                                      IsTextSearchEnabled="False"
+                                      IsDropDownOpen="{Binding MiddleLockHerosOpen2,UpdateSourceTrigger=PropertyChanged}"
+                                      FontSize="16"
+                                      Margin="10 10 0 0"
+                                      DisplayMemberPath="Label"
+                                      PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                      Foreground="Black"
+                                      ItemsSource="{Binding MiddleLockHeros2,UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding MiddleLockHero2,UpdateSourceTrigger=PropertyChanged}"
+                                      Text="{Binding MiddleSearchLockText2,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding MiddleSearchLockHeroCommand2}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="下路:" Margin="0 15 20 0" VerticalAlignment="Top"></TextBlock>
+                            <StackPanel Orientation="Vertical">
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                      IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
+                                      Width="200"
+                                      IsReadOnly="False"
+                                      IsTextSearchEnabled="False"
+                                      IsDropDownOpen="{Binding BottomLockHerosOpen1,UpdateSourceTrigger=PropertyChanged}"
+                                      FontSize="16"
+                                      Margin="10 10 0 0"
+                                      DisplayMemberPath="Label"
+                                      PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                      Foreground="Black"
+                                      ItemsSource="{Binding BottomLockHeros1,UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding BottomLockHero1,UpdateSourceTrigger=PropertyChanged}"
+                                      Text="{Binding BottomSearchLockText1,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding BottomSearchLockHeroCommand1}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                      IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
+                                      Width="200"
+                                      IsReadOnly="False"
+                                      IsTextSearchEnabled="False"
+                                      IsDropDownOpen="{Binding BottomLockHerosOpen2,UpdateSourceTrigger=PropertyChanged}"
+                                      FontSize="16"
+                                      Margin="10 10 0 0"
+                                      DisplayMemberPath="Label"
+                                      PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                      Foreground="Black"
+                                      ItemsSource="{Binding BottomLockHeros2,UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding BottomLockHero2,UpdateSourceTrigger=PropertyChanged}"
+                                      Text="{Binding BottomSearchLockText2,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding BottomSearchLockHeroCommand2}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="辅助:" Margin="0 15 20 0" VerticalAlignment="Top"></TextBlock>
+                            <StackPanel Orientation="Vertical">
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                          IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                          IsEditable="True"
+                                          Width="200"
+                                          IsReadOnly="False"
+                                          IsTextSearchEnabled="False"
+                                          IsDropDownOpen="{Binding UtilityLockHerosOpen1,UpdateSourceTrigger=PropertyChanged}"
+                                          FontSize="16"
+                                          Margin="10 10 0 0"
+                                          DisplayMemberPath="Label"
+                                          PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                          Foreground="Black"
+                                          ItemsSource="{Binding UtilityLockHeros1,UpdateSourceTrigger=PropertyChanged}"
+                                          SelectedItem="{Binding UtilityLockHero1,UpdateSourceTrigger=PropertyChanged}"
+                                          Text="{Binding UtilitySearchLockText1,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding UtilitySearchLockHeroCommand1}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                                <ComboBox hc:TitleElement.Title="英雄1" 
+                                          IsEnabled="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}"
+                                          IsEditable="True"
+                                          Width="200"
+                                          IsReadOnly="False"
+                                          IsTextSearchEnabled="False"
+                                          IsDropDownOpen="{Binding UtilityLockHerosOpen2,UpdateSourceTrigger=PropertyChanged}"
+                                          FontSize="16"
+                                          Margin="10 10 0 0"
+                                          DisplayMemberPath="Label"
+                                          PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                          Foreground="Black"
+                                          ItemsSource="{Binding UtilityLockHeros2,UpdateSourceTrigger=PropertyChanged}"
+                                          SelectedItem="{Binding UtilityLockHero2,UpdateSourceTrigger=PropertyChanged}"
+                                          Text="{Binding UtilitySearchLockText2,UpdateSourceTrigger=PropertyChanged}"
+                                  >
+                                    <behaviors:Interaction.Triggers>
+                                        <behaviors:EventTrigger EventName="KeyUp">
+                                            <behaviors:InvokeCommandAction Command="{Binding UtilitySearchLockHeroCommand2}"></behaviors:InvokeCommandAction>
+                                        </behaviors:EventTrigger>
+                                    </behaviors:Interaction.Triggers>
+                                </ComboBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                    
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="秒禁英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}">
+                        <CheckBox Content="排位秒禁英雄" VerticalAlignment="Top" Margin="0 15 0 0" FontSize="18" IsChecked="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckedAutoDisableHeroCommandAsync}"></behaviors:InvokeCommandAction>
@@ -94,28 +357,31 @@
                             </behaviors:Interaction.Triggers>
                         </CheckBox>
 
-                        <ComboBox hc:TitleElement.Title="秒禁英雄" 
-                              Width="200"
-                              FontSize="16"
-                              IsReadOnly="False"
-                              IsTextSearchEnabled="False"
-                              IsDropDownOpen="{Binding DisableHerosOpen,UpdateSourceTrigger=PropertyChanged}"
-                              Margin="10 10 0 0"
-                              IsEnabled="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}"
-                              IsEditable="True"
-                              DisplayMemberPath="Label"
-                              Foreground="Black"
-                              PreviewKeyUp="ComboBox_PreviewKeyUp"
-                              ItemsSource="{Binding DisableHeros,UpdateSourceTrigger=PropertyChanged}"
-                              SelectedItem="{Binding DisableHero,UpdateSourceTrigger=PropertyChanged}"
-                              Text="{Binding SearchDisableText,UpdateSourceTrigger=PropertyChanged}"
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                            <ComboBox hc:TitleElement.Title="排位秒禁英雄1" 
+                                      Width="170"
+                                      FontSize="16"
+                                      IsReadOnly="False"
+                                      HorizontalAlignment="Left"
+                                      IsTextSearchEnabled="False"
+                                      IsDropDownOpen="{Binding DisableHerosOpen,UpdateSourceTrigger=PropertyChanged}"
+                                      Margin="10 10 0 0"
+                                      IsEnabled="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}"
+                                      IsEditable="True"
+                                      DisplayMemberPath="Label"
+                                      Foreground="Black"
+                                      PreviewKeyUp="ComboBox_PreviewKeyUp"
+                                      ItemsSource="{Binding DisableHeros,UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedItem="{Binding DisableHero,UpdateSourceTrigger=PropertyChanged}"
+                                      Text="{Binding SearchDisableText,UpdateSourceTrigger=PropertyChanged}"
                               >
-                            <behaviors:Interaction.Triggers>
-                                <behaviors:EventTrigger EventName="KeyUp">
-                                    <behaviors:InvokeCommandAction Command="{Binding SearchDisableHeroCommand}"></behaviors:InvokeCommandAction>
-                                </behaviors:EventTrigger>
-                            </behaviors:Interaction.Triggers>
-                        </ComboBox>
+                                <behaviors:Interaction.Triggers>
+                                    <behaviors:EventTrigger EventName="KeyUp">
+                                        <behaviors:InvokeCommandAction Command="{Binding SearchDisableHeroCommand}"></behaviors:InvokeCommandAction>
+                                    </behaviors:EventTrigger>
+                                </behaviors:Interaction.Triggers>
+                            </ComboBox>
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Content="大乱斗秒抢英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}">

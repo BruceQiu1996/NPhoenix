@@ -86,8 +86,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private bool _isLoopChampionSelect = false;
         private bool _isLoopLive = false;
         private IKeyboardMouseEvents _keyboardMouseEvent;
-        private Task _loopForGameEvent;
-        private readonly IKeyboardEventSource _keyboard = Capture.Global.KeyboardAsync();
         public List<Account> Team1Accounts { get; set; } = new List<Account>();
         public List<Account> Team2Accounts { get; set; } = new List<Account>();
         private readonly IApplicationService _applicationService;
@@ -154,21 +152,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _livegameservice = livegameservice;
             _teammateViewModel = teammateViewModel;
             _team1V2Window = team1V2Window;
-            //var Listener = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.F7));
-            //Listener.Triggered += (x, y) => ListenerSendMyTeamInfoInnerGame_Triggered(_keyboard, x, y);
-            //Listener.Reset_On_Parent_EnabledChanged = false;
-            //Listener.Enabled = true;
-
-            //var Listener_1 = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.F8));
-            //Listener_1.Triggered += (x, y) => ListenerSendOtherTeamInfoInnerGame_Triggered(_keyboard, x, y);
-            //Listener_1.Reset_On_Parent_EnabledChanged = false;
-            //Listener_1.Enabled = true;
-
-            //var Listener_2 = new KeyChordEventSource(_keyboard, new ChordClick(KeyCode.F11));
-            //Listener_2.Triggered += (x, y) => ListenerTeamBuildInfo_Triggered(_keyboard, x, y);
-            //Listener_2.Reset_On_Parent_EnabledChanged = false;
-            //Listener_2.Enabled = true;
-
             _keyboardMouseEvent = Hook.GlobalEvents();
             _keyboardMouseEvent.KeyDown += OnKeyDown;
             _keyboardMouseEvent.KeyUp += OnKeyUp;
@@ -176,11 +159,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 UnReadNotices = y.Count();
             });
-        }
-
-        ~MainWindowViewModel()
-        {
-            _keyboard.Dispose();
         }
 
         /// <summary>
@@ -199,7 +177,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 var message = _teammateViewModel.GetGameInHorseInformation(item);
                 if (string.IsNullOrWhiteSpace(message))
                 {
-                  continue;
+                    continue;
                 }
                 _logger.LogInformation("发送我方消息:" + message);
                 await InGameSendMessage(message);
@@ -222,7 +200,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 var message = _teammateViewModel.GetGameInHorseInformation(item, false);
                 if (string.IsNullOrWhiteSpace(message))
                 {
-                  continue;
+                    continue;
                 }
                 _logger.LogInformation("发送敌方消息:" + message);
                 await InGameSendMessage(message);
@@ -241,7 +219,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             var otherTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team1Accounts : Team2Accounts;
             foreach (var item in myTeam.GroupBy(x => x.TeamID))
             {
-                if (item.Count() >= 2)
+                if (item.Count() >= 1)
                 {
                     var sb = new StringBuilder();
                     sb.Append("我方开黑:[");
@@ -254,7 +232,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
             foreach (var item in otherTeam.GroupBy(x => x.TeamID))
             {
-                if (item.Count() >= 2)
+                if (item.Count() >= 1)
                 {
                     var sb = new StringBuilder();
                     sb.Append("敌方开黑:[");
@@ -280,7 +258,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
 
         #region 热键
-        private async void OnKeyDown(object sender, KeyEventArgs e)
+        private void OnKeyDown(object sender, KeyEventArgs e)
         {
             if (_iniSettingsModel.IsAltQOpenVsDetail && e.KeyData == StringToKeys("Alt+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
             {
@@ -308,15 +286,15 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 _team1V2Window.Opacity = 0;
                 e.Handled = true;
             }
-            else if(e.KeyData == Keys.F7)
+            else if (e.KeyData == Keys.F7)
             {
                 ListenerSendMyTeamInfoInnerGame_Triggered(null, null, null);
             }
-            else if(e.KeyData == Keys.F8)
+            else if (e.KeyData == Keys.F8)
             {
                 ListenerSendOtherTeamInfoInnerGame_Triggered(null, null, null);
             }
-            else if(e.KeyData == Keys.F11)
+            else if (e.KeyData == Keys.F11)
             {
                 ListenerTeamBuildInfo_Triggered(null, null, null);
             }
@@ -650,6 +628,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         if (token.Value<int>("httpStatus") != 404)
                         {
                             var localPlayerCellId = token.Value<int>("localPlayerCellId");
+
+                            var me = token["myTeam"].ToObject<IEnumerable<Team>>()?.FirstOrDefault(x => x.CellId == localPlayerCellId);
                             var actions = token.Value<IEnumerable<IEnumerable<JToken>>>("actions");
                             int userActionID;
                             foreach (var action in actions)
@@ -661,10 +641,51 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                         userActionID = actionElement.Value<int>("id");
                                         if (actionElement.Value<string>("type") == "pick"
                                             && !actionElement.Value<bool>("completed")
-                                            && _iniSettingsModel.AutoLockHero
-                                            && _iniSettingsModel.AutoLockHeroChampId != default)
+                                            && (_iniSettingsModel.AutoLockHero || _iniSettingsModel.RankAutoLockHero))
                                         {
-                                            await _gameService.AutoLockHeroAsync(userActionID, _iniSettingsModel.AutoLockHeroChampId, "pick");
+                                            var gInfo = await _gameService.GetCurrentGameInfoAsync();
+                                            var mode = JToken.Parse(gInfo)["gameData"]["queue"]["type"].ToString();
+                                            int champId = 0;
+                                            switch (mode)
+                                            {
+                                                case "RANKED_SOLO_5x5":
+                                                case "RANKED_FLEX_SR":
+                                                    {
+                                                        if (_iniSettingsModel.RankAutoLockHero)
+                                                        {
+                                                            var lockheros = me?.AssignedPosition.ToLower() switch
+                                                            {
+                                                                "top" => new List<int>() { _iniSettingsModel.TopAutoLockHeroChampId1, _iniSettingsModel.TopAutoLockHeroChampId2 },
+                                                                "jungle" => new List<int>() { _iniSettingsModel.JungleAutoLockHeroChampId1, _iniSettingsModel.JungleAutoLockHeroChampId2 },
+                                                                "middle" => new List<int>() { _iniSettingsModel.MiddleAutoLockHeroChampId1, _iniSettingsModel.MiddleAutoLockHeroChampId2 },
+                                                                "bottom" => new List<int>() { _iniSettingsModel.BottomAutoLockHeroChampId1, _iniSettingsModel.BottomAutoLockHeroChampId2 },
+                                                                "utility" => new List<int>() { _iniSettingsModel.UtilityAutoLockHeroChampId1, _iniSettingsModel.UtilityAutoLockHeroChampId2 },
+                                                                _ => new List<int>()
+                                                            };
+
+                                                            var ids = actions.SelectMany(x => x).ToList()?.Where(x => !x.Value<bool>("isInProgress")
+                                                                                                                                && x.Value<bool>("completed")
+                                                                                                                                && (x.Value<string>("type") == "pick" || x.Value<string>("type") == "ban"))?.Select(x => x.Value<int>("championId"))?.ToList();
+
+                                                            if (ids != null)
+                                                            {
+                                                                champId = lockheros.FirstOrDefault(x => !ids.Contains(x) && x != 0);
+                                                            }
+                                                            else
+                                                            {
+                                                                champId = lockheros.FirstOrDefault(x => x != 0);
+                                                            }
+                                                        }
+                                                    }
+                                                    break;
+                                                default:
+                                                    if (_iniSettingsModel.AutoLockHero)
+                                                        champId = _iniSettingsModel.AutoLockHeroChampId;
+                                                    break;
+                                            }
+
+                                            if (champId != 0)
+                                                await _gameService.AutoLockHeroAsync(userActionID, champId, "pick");
                                         }
                                         else if (actionElement.Value<string>("type") == "ban"
                                          && !actionElement.Value<bool>("completed")
@@ -864,11 +885,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private async Task<bool> InGameSendMessage(string message)
         {
-          return await Simulate.Events()
-              .Click(KeyCode.Enter).Wait(75)
-              .Click(message).Wait(75)
-              .Click(KeyCode.Enter)
-              .Invoke();
+            return await Simulate.Events()
+                .Click(KeyCode.Enter).Wait(75)
+                .Click(message).Wait(75)
+                .Click(KeyCode.Enter)
+                .Invoke();
         }
 
         private void OpenChampionSelectTool()

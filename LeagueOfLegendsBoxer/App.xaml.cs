@@ -7,9 +7,13 @@ using LeagueOfLegendsBoxer.Windows;
 using LeagueOfLegendsBoxerApplication.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 
 namespace LeagueOfLegendsBoxer
 {
@@ -22,6 +26,10 @@ namespace LeagueOfLegendsBoxer
         protected async override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(App_DispatcherUnhandledException);
+            TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
             var hostbuilder = CreateHostBuilder(e.Args);
             var host = await hostbuilder.StartAsync();
             ServiceProvider = host.Services;
@@ -75,5 +83,47 @@ namespace LeagueOfLegendsBoxer
 
             return hostBuilder;
         }
+
+        #region 全局异常处理
+        void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                e.Handled = true; //把 Handled 属性设为true，表示此异常已处理，程序可以继续运行，不会强制退出      
+                ServiceProvider.GetRequiredService<ILogger<App>>()?.LogError(e.ToString());
+            }
+            catch (Exception ex)
+            {
+                ServiceProvider.GetRequiredService<ILogger<App>>()?.LogError(ex.ToString());
+            }
+
+        }
+
+        void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            StringBuilder sbEx = new StringBuilder();
+            if (e.IsTerminating)
+            {
+                sbEx.Append("非UI线程发生致命错误");
+            }
+            sbEx.Append("非UI线程异常：");
+            if (e.ExceptionObject is Exception)
+            {
+                sbEx.Append(((Exception)e.ExceptionObject).Message);
+            }
+            else
+            {
+                sbEx.Append(e.ExceptionObject);
+            }
+
+            ServiceProvider.GetRequiredService<ILogger<App>>()?.LogError(sbEx.ToString());
+        }
+
+        void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+        {
+            ServiceProvider.GetRequiredService<ILogger<App>>()?.LogError(e.Exception.ToString());
+            e.SetObserved();
+        }
+        #endregion
     }
 }
