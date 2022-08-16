@@ -663,7 +663,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                                                 _ => new List<int>()
                                                             };
 
-                                                            var ids = actions.SelectMany(x => x).ToList()?.Where(x => !x.Value<bool>("isInProgress")
+                                                            var ids = actions?.SelectMany(x => x).ToList()?.Where(x => !x.Value<bool>("isInProgress")
                                                                                                                                 && x.Value<bool>("completed")
                                                                                                                                 && (x.Value<string>("type") == "pick" || x.Value<string>("type") == "ban"))?.Select(x => x.Value<int>("championId"))?.ToList();
 

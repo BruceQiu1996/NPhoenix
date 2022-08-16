@@ -247,7 +247,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _lockHero, value);
-                _iniSettingsModel.WriteAutoLockHeroIdAsync(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteAutoLockHeroIdAsync(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -258,7 +259,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _topLockHero1, value);
-                _iniSettingsModel.WriteTopAutoLockHeroChampId1Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteTopAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -269,7 +271,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _topLockHero2, value);
-                _iniSettingsModel.WriteTopAutoLockHeroChampId2Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteTopAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -280,7 +283,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _jungleLockHero1, value);
-                _iniSettingsModel.WriteJungleAutoLockHeroChampId1Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteJungleAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -291,7 +295,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _jungleLockHero2, value);
-                _iniSettingsModel.WriteJungleAutoLockHeroChampId2Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteJungleAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -302,7 +307,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _middleLockHero1, value);
-                _iniSettingsModel.WriteMiddleAutoLockHeroChampId1Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteMiddleAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -313,7 +319,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _middleLockHero2, value);
-                _iniSettingsModel.WriteMiddleAutoLockHeroChampId2Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteMiddleAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -324,7 +331,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _bottomLockHero1, value);
-                _iniSettingsModel.WriteBottomAutoLockHeroChampId1Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteBottomAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -335,7 +343,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _bottomLockHero2, value);
-                _iniSettingsModel.WriteBottomAutoLockHeroChampId2Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteBottomAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -346,7 +355,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _utilityLockHero1, value);
-                _iniSettingsModel.WriteUtilityAutoLockHeroChampId1Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteUtilityAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -357,7 +367,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _utilityLockHero2, value);
-                _iniSettingsModel.WriteUtilityAutoLockHeroChampId2Async(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteUtilityAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -375,7 +386,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _disableHero, value);
-                _iniSettingsModel.WriteAutoDisableHeroIdAsync(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteAutoDisableHeroIdAsync(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
