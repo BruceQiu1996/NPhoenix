@@ -36,7 +36,6 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string LockHerosInAram = nameof(LockHerosInAram);
         public const string GameLocation = nameof(GameLocation);
         public const string RankSetting = nameof(RankSetting);
-        public const string IsCloseRecommand = nameof(IsCloseRecommand);
         public const string CloseSendOtherWhenBegin = nameof(CloseSendOtherWhenBegin);
         public const string HorseTemplate = nameof(HorseTemplate);
         public const string ReadedNotice = nameof(ReadedNotice);

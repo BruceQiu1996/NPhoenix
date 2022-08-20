@@ -34,7 +34,8 @@
   - [双方召唤师开黑检测,符文查看,上等马信息,段位检测](#双方召唤师开黑检测符文查看上等马信息段位检测)
   - [拉黑](#拉黑)
 
-## QQ交流群 : 516851758
+## QQ交流群 : 516851758（满）
+## QQ交流2群 : 108382406
 
 # 使用方法
 先启动英雄联盟客户端或者后启动都可以。
@@ -43,6 +44,12 @@
 ![image](https://github.com/BruceQiu1996/NPhoenix/blob/master/Screenshots/file.jpg)
 
 # 功能预览
+## 2022.8.20 v2.3发布
+- [x] 1.游修复了游戏内发送信息失败和选人阶段发送信息队友看不到的问题,主要是狗腾讯屏蔽了很多关键字
+- [x] 2.增加了排位各个位置自动选择的英雄以及备选英雄,可以放心上厕所了
+- [x] 3.增加了推荐装备导入游戏的功能
+- [x] 4.细拉黑功能强化,输出可视化
+
 ## 2022.8.13晚功能发布预告  
 - [x] 1.游戏内发送双方马种信息
 - [x] 2.游戏内发送双方开黑信息
@@ -60,9 +67,10 @@
 - [x] 8.拉黑功能
 
 # 视频地址
-v2.2 : https://www.bilibili.com/video/BV1Ka411Z778/
-v2 : https://www.bilibili.com/video/BV1ar4y157Vb  
-v1 : https://www.bilibili.com/video/BV1x94y1D7jr
+v2.3 : https://www.bilibili.com/video/BV1cB4y1z7eR    
+v2.2 : https://www.bilibili.com/video/BV1Ka411Z778/  
+v2 : https://www.bilibili.com/video/BV1ar4y157Vb    
+v1 : https://www.bilibili.com/video/BV1x94y1D7jr  
 
 # 下载地址
 ## v2.2 (新增功能，见上面2022.8.13功能发布预告)

@@ -219,7 +219,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             var otherTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team1Accounts : Team2Accounts;
             foreach (var item in myTeam.GroupBy(x => x.TeamID))
             {
-                if (item.Count() >= 1)
+                if (item.Count() >= 2)
                 {
                     var sb = new StringBuilder();
                     sb.Append("我方开黑:[");
@@ -232,7 +232,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
             foreach (var item in otherTeam.GroupBy(x => x.TeamID))
             {
-                if (item.Count() >= 1)
+                if (item.Count() >= 2)
                 {
                     var sb = new StringBuilder();
                     sb.Append("敌方开黑:[");

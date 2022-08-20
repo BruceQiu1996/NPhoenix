@@ -1,15 +1,21 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HandyControl.Controls;
+using HandyControl.Data;
+using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -83,7 +89,15 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand SwitchItemPageCommand { get; set; }
         public RelayCommand SwitchRunePageCommand { get; set; }
         public AsyncRelayCommand<RuneDetail> SetRuneCommandAsync { get; set; }
-        public RuneAndItemViewModel(RuneHelper runeHelper, IGameService gameService, IniSettingsModel iniSettingsModel)
+        public AsyncRelayCommand ApplyItemCommandAsync { get; set; }
+
+        private readonly IApplicationService _applicationService;
+        private readonly ILogger<RuneAndItemViewModel> _logger;
+        public RuneAndItemViewModel(RuneHelper runeHelper, 
+                                    IGameService gameService,
+                                    IApplicationService applicationService,
+                                    ILogger<RuneAndItemViewModel> logger,
+                                    IniSettingsModel iniSettingsModel)
         {
             _runeHelper = runeHelper;
             _gameService = gameService;
@@ -93,6 +107,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SwitchItemPageCommand = new RelayCommand(() => IsRunePage = false);
             SwitchRunePageCommand = new RelayCommand(() => IsRunePage = true);
             _iniSettingsModel = iniSettingsModel;
+            _logger = logger;
+            _applicationService =applicationService;
+            ApplyItemCommandAsync = new AsyncRelayCommand(ApplyItemAsync);
         }
 
         private bool _isAramPage;
@@ -149,12 +166,141 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             };
 
             await _gameService.AddRunePage(creation);
-            var conversations = await _gameService.GetChatConversation();
-            var token = JArray.Parse(conversations).FirstOrDefault(x => x.Value<string>("type") == "championSelect");
-            if (token != null && !_iniSettingsModel.IsCloseRecommand)
+            Growl.SuccessGlobal(new GrowlInfo()
             {
-                string chatID = token.Value<string>("id");
-                await _gameService.SendMessageAsync(chatID, $"{Hero.Name}一键符文配置成功,来自NPhoenix助手");
+                WaitTime = 2,
+                Message = "符文设置成功",
+                ShowDateTime = false
+            });
+        }
+
+        private async Task ApplyItemAsync() 
+        {
+            if (DisplayItems.CoreItem == null && DisplayItems.StartItem == null && DisplayItems.ShoeItem == null)
+            {
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "没有设置任何装备",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
+
+            var location = (await _applicationService.GetInstallLocation())?.Replace("\"", string.Empty);
+            if (string.IsNullOrEmpty(location)) 
+            {
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "获取不到客户端所在位置",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
+
+            var parent = Directory.GetParent(location);
+            var path = Path.Combine(parent.FullName, "Game\\Config\\Global\\Recommended");
+            if (!Directory.Exists(path)) 
+            {
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "无法获取装备推荐设置目录",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
+
+            try
+            {
+                var dirinfo = new DirectoryInfo(path);
+                RecommandItem recommandItem = new RecommandItem();
+                recommandItem.champion = Hero.Alias;
+                var map = IsAramPage ? 12 : 11;
+                recommandItem.associatedMaps = new int[] { map };
+                if (DisplayItems.StartItem != null)
+                {
+                    var block = new Block();
+                    block.type = "起始装备";
+                    foreach (var item in DisplayItems.StartItem.ItemIds)
+                    {
+                        block.items.Add(new RItem()
+                        {
+                            id = item.ToString()
+                        });
+                    }
+
+                    recommandItem.blocks.Add(block);
+                }
+                if (DisplayItems.CoreItem != null)
+                {
+                    var block = new Block();
+                    block.type = "核心装备";
+                    foreach (var item in DisplayItems.CoreItem.ItemIds)
+                    {
+                        block.items.Add(new RItem()
+                        {
+                            id = item.ToString()
+                        });
+                    }
+
+                    recommandItem.blocks.Add(block);
+                }
+                if (DisplayItems.ShoeItem != null)
+                {
+                    var block = new Block();
+                    block.type = "鞋子";
+                    foreach (var item in DisplayItems.ShoeItem.ItemIds)
+                    {
+                        block.items.Add(new RItem()
+                        {
+                            id = item.ToString()
+                        });
+                    }
+
+                    recommandItem.blocks.Add(block);
+                }
+                var mode = IsAramPage ? "大乱斗" : "峡谷5v5";
+                recommandItem.title = $"{Hero.Name}{mode}装备推荐——NPhoenix";
+                var data = JsonConvert.SerializeObject(recommandItem);
+                foreach (var file in dirinfo.GetFiles())
+                {
+                    try
+                    {
+                        File.Delete(file.FullName);
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+
+                DateTime startTime = TimeZone.CurrentTimeZone.ToLocalTime(new System.DateTime(1970, 1, 1));
+                long timeStamp = (long)(DateTime.Now - startTime).TotalSeconds;
+                await File.WriteAllTextAsync(Path.Combine(path, $"{Hero.Alias}{map}-{timeStamp}.json"), data);
+
+                Growl.SuccessGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "推荐装备设置成功",
+                    ShowDateTime = false
+                });
+
+                DisplayItems.CoreItem = null; DisplayItems.StartItem = null; DisplayItems.ShoeItem = null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "发生错误",
+                    ShowDateTime = false
+                });
             }
         }
 

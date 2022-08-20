@@ -47,7 +47,7 @@ namespace LeagueOfLegendsBoxer.Models
             if (Records == null || Records.Count <= 0)
                 return "未知的马";
 
-            var score = Records.Average(x => x.GetScore());
+            var score = Records.Where(x => x.CnQueue != "其他").Average(x => x.GetScore());
             if (score >= 120)
             {
                 return App.ServiceProvider.GetRequiredService<IniSettingsModel>().Above120ScoreTxt;
@@ -98,5 +98,11 @@ namespace LeagueOfLegendsBoxer.Models
         }
 
         public bool IsCurrentUser => Constant.Account.SummonerId == SummonerId;
+        public bool IsInBlackList { get; set; }
+        public string BlackInfo{ get; set; }
+        public Account ShallowCopy() 
+        {
+            return this.MemberwiseClone() as Account;
+        }
     }
 }

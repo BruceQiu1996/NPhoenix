@@ -624,8 +624,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand FetchRunesAndItemsCommandAsync { get; set; }
         public RelayCommand OpenAramChooseCommand { get; set; }
         public RelayCommand StartGameCommand { get; set; }
-        public AsyncRelayCommand CheckedCloseRecommmandCommandAsync { get; set; }
-        public AsyncRelayCommand UnCheckedCloseRecommmandCommandAsync { get; set; }
         public AsyncRelayCommand CheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
         public AsyncRelayCommand UnCheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
         public AsyncRelayCommand SaveHorseTemplateCommandAsync { get; set; }
@@ -677,8 +675,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SearchSkinsForHeroCommandAsync = new AsyncRelayCommand(SearchSkinsForHeroAsync);
             OpenAramChooseCommand = new RelayCommand(OpenAramChoose);
             StartGameCommand = new RelayCommand(StartGame);
-            CheckedCloseRecommmandCommandAsync = new AsyncRelayCommand(CheckedCloseRecommmandAsync);
-            UnCheckedCloseRecommmandCommandAsync = new AsyncRelayCommand(UnCheckedCloseRecommmandAsync);
             CheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(CheckedCloseSendOtherWhenBeginAsync);
             UnCheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(UnCheckedCloseSendOtherWhenBeginAsync);
             SaveHorseTemplateCommandAsync = new AsyncRelayCommand(SaveHorseTemplateAsync);
@@ -773,7 +769,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             UtilityLockHero2 = UtilityLockHeros2.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.UtilityAutoLockHeroChampId2);
 
             GameStartupLocation = _iniSettingsModel.GameExeLocation;
-            IsCloseRecommmand = _iniSettingsModel.IsCloseRecommand;
             CloseSendOtherWhenBegin = _iniSettingsModel.CloseSendOtherWhenBegin;
             HorseTemplate = _iniSettingsModel.HorseTemplate;
             Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
@@ -838,16 +833,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             await _iniSettingsModel.WriteAutoLockHeroInAramAsync(false);
             AutoLockHeroInAram = false;
-        }
-        private async Task CheckedCloseRecommmandAsync()
-        {
-            await _iniSettingsModel.WriteIsCloseRecommandAsync(true);
-            IsCloseRecommmand = true;
-        }
-        private async Task UnCheckedCloseRecommmandAsync()
-        {
-            await _iniSettingsModel.WriteIsCloseRecommandAsync(false);
-            IsCloseRecommmand = false;
         }
         private async Task CheckedCloseSendOtherWhenBeginAsync()
         {

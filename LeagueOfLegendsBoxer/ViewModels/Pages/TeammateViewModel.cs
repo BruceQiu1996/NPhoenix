@@ -149,8 +149,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     sb.Append(data);
                 }
 
-                sb.Append(_iniSettingsModel.IsCloseRecommand ? string.Empty : "——NPhoenix");
-
                 return sb.ToString();
             }
             catch (Exception ex) 
@@ -178,8 +176,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             break;
                     }
                 }
-
-                sb.Append(_iniSettingsModel.IsCloseRecommand ? string.Empty : "——NPhoenix");
 
                 return sb.ToString();
             }

@@ -39,8 +39,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _detailRecord, value);
         }
 
-        private ObservableCollection<Tuple<ParticipantIdentity,Participant>> _leftParticipants;
-        public ObservableCollection<Tuple<ParticipantIdentity,Participant>> LeftParticipants
+        private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _leftParticipants;
+        public ObservableCollection<Tuple<ParticipantIdentity, Participant>> LeftParticipants
         {
             get => _leftParticipants;
             set => SetProperty(ref _leftParticipants, value);
@@ -98,7 +98,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             if (_loaded) return;
             try
             {
-                var list = JsonSerializer.Deserialize<ObservableCollection<Champ>>(await _gameService.QuerySummonerSuperChampDataAsync(Account.SummonerId));
+                var champData = await _gameService.QuerySummonerSuperChampDataAsync(Account.SummonerId);
+                var list = JsonSerializer.Deserialize<ObservableCollection<Champ>>(champData);
                 int rank = 0;
                 foreach (var champ in list)
                 {
@@ -109,7 +110,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 PageIndex = 1;
                 _loaded = true;
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Growl.InfoGlobal(new GrowlInfo()
                 {
@@ -127,7 +128,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             DetailRecord = recordsData.ToObject<Record>();
             LeftParticipants.Clear();
             RightParticipants.Clear();
-            foreach (var index in Enumerable.Range(0, 5)) 
+            foreach (var index in Enumerable.Range(0, 5))
             {
                 DetailRecord.Team1GoldEarned += DetailRecord.Participants[index].Stats.GoldEarned;
                 DetailRecord.Team2GoldEarned += DetailRecord.Participants[index + 5].Stats.GoldEarned;
@@ -140,9 +141,15 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 LeftParticipants.Add(new Tuple<ParticipantIdentity, Participant>(lidentity, DetailRecord.Participants[index]));
                 RightParticipants.Add(new Tuple<ParticipantIdentity, Participant>(ridentity, DetailRecord.Participants[index + 5]));
             }
+
+            var maxdmg = LeftParticipants.Concat(RightParticipants).Max(x => x.Item2.Stats.TotalDamageDealtToChampions);
+            foreach (var item in LeftParticipants.Concat(RightParticipants))
+            {
+                item.Item2.Stats.BarWidth = 350 * (item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / maxdmg);
+            }
         }
 
-        public async Task FetchPlayerDetailAsync(long id) 
+        public async Task FetchPlayerDetailAsync(long id)
         {
             await SummonerAnalyseViewModel.LoadPageAsync(id);
         }

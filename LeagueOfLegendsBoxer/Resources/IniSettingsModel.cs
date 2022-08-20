@@ -39,7 +39,6 @@ namespace LeagueOfLegendsBoxer.Resources
         public int UtilityAutoLockHeroChampId2 { get; set; }
         public string GameExeLocation { get; set; }
         public string RankSetting { get; set; }
-        public bool IsCloseRecommand { get; set; }
         public bool CloseSendOtherWhenBegin { get; set; }
         public string HorseTemplate { get; set; }
         public string Above120ScoreTxt { get; set; }
@@ -106,7 +105,6 @@ namespace LeagueOfLegendsBoxer.Resources
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoDisableHeroId), out var tempAutoDisableHeroId) ? tempAutoDisableHeroId : 0;
             GameExeLocation = await _settingsService.ReadAsync(Constant.Game, Constant.GameLocation);
             RankSetting = await _settingsService.ReadAsync(Constant.Game, Constant.RankSetting);
-            IsCloseRecommand = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsCloseRecommand), out var tempRecommand) ? tempRecommand : false;
             CloseSendOtherWhenBegin = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.CloseSendOtherWhenBegin), out var tempCloseSendOtherWhenBegin) ? tempCloseSendOtherWhenBegin : false;
             IsAltQOpenVsDetail = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsAltQOpenVsDetail), out var tempIsAltQOpenVsDetail) ? tempIsAltQOpenVsDetail : true;
             HorseTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.HorseTemplate);
@@ -260,13 +258,6 @@ namespace LeagueOfLegendsBoxer.Resources
             await _settingsService.WriteAsync(Constant.Game, Constant.RankSetting, setting);
             RankSetting = setting;
         }
-
-        public async Task WriteIsCloseRecommandAsync(bool isCloseRecommand)
-        {
-            await _settingsService.WriteAsync(Constant.Game, Constant.IsCloseRecommand, isCloseRecommand.ToString());
-            IsCloseRecommand = isCloseRecommand;
-        }
-
         public async Task WriteCloseSendOtherWhenBeginAsync(bool closeSendOtherWhenBegin)
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.CloseSendOtherWhenBegin, closeSendOtherWhenBegin.ToString());
