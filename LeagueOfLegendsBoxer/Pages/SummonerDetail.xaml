@@ -7,7 +7,6 @@
       mc:Ignorable="d" 
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:hc="https://handyorg.github.io/handycontrol"
-      xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
       FontFamily="微软雅黑"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -226,120 +225,6 @@
                                                     <Grid>
                                                         <hc:Gravatar Style="{StaticResource GravatarCircle}" Name="headimg"
                                                                      Width="55" Height="55" Source="{Binding Item2.ChampionImage}" />
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=headimg,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=headimg}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid Width="300">
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.9" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <Grid>
-                                                                    <Grid.ColumnDefinitions>
-                                                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                                                    </Grid.ColumnDefinitions>
-                                                                    <Grid.RowDefinitions>
-                                                                        <RowDefinition Height="90"></RowDefinition>
-                                                                        <RowDefinition Height="*"></RowDefinition>
-                                                                    </Grid.RowDefinitions>
-
-                                                                    <hc:Gravatar Margin="0 10 10 10" Grid.Row="0" Grid.Column="0" Width="75" Height="75" Source="{Binding Item2.ChampionImage}" />
-                                                                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-                                                                        <TextBlock Text="{Binding Item1.Player.SummonerName}" FontSize="17" Foreground="Black"></TextBlock>
-                                                                        <TextBlock Text="{Binding Item2.ChampionName}" FontSize="15" Margin="0 5 0 0" Foreground="Black"></TextBlock>
-                                                                    </StackPanel>
-                                                                    <Grid Grid.Row="1" Grid.ColumnSpan="2">
-                                                                        <Grid.RowDefinitions>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                        </Grid.RowDefinitions>
-                                                                        <Grid.ColumnDefinitions>
-                                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                                        </Grid.ColumnDefinitions>
-
-                                                                        <StackPanel Orientation="Horizontal" Margin="20 2 0 2">
-                                                                            <TextBlock Text="杀敌：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.Kills}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="0" Grid.Column="1">
-                                                                            <TextBlock Text="死亡：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.Deaths}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20 2 0 2">
-                                                                            <TextBlock Text="助攻：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.Assists}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="1" Grid.Column="1">
-                                                                            <TextBlock Text="补兵：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalMinionsKilled}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="20 2 0 2">
-                                                                            <TextBlock Text="金钱：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.GoldEarned}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="2" Grid.Column="1">
-                                                                            <TextBlock Text="输出伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalDamageDealt}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="20 2 0 2">
-                                                                            <TextBlock Text="最大连杀：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.LargestKillingSpree}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="3" Grid.Column="1">
-                                                                            <TextBlock Text="最大多杀：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.LargestMultiKill}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="20 2 0 2">
-                                                                            <TextBlock Text="推塔：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TurretKills}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="4" Grid.Column="1">
-                                                                            <TextBlock Text="兵营：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.WardsKilled}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="20 2 0 2">
-                                                                            <TextBlock Text="总治疗：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalHeal}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="5" Grid.Column="1">
-                                                                            <TextBlock Text="承受伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalDamageTaken}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="2" Margin="20 2 0 2">
-                                                                            <TextBlock Text="给敌方英雄造成总伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.ColumnSpan="2" Margin="20 2 0 2">
-                                                                            <TextBlock Text="给敌方英雄的物理伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.PhysicalDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.ColumnSpan="2" Margin="20 2 0 10">
-                                                                            <TextBlock Text="给敌方英雄的魔法伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.MagicDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                 </hc:Badge>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
@@ -352,164 +237,24 @@
                                                     </StackPanel.Resources>
                                                     <Grid Name="item0grid">
                                                         <Image Source="{Binding Item2.Stats.Item0Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item0grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item0grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item0Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item0Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item1grid">
                                                         <Image Source="{Binding Item2.Stats.Item1Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item1grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item1grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item1Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item1Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item2grid">
                                                         <Image Source="{Binding Item2.Stats.Item2Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item2grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item2grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item2Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item2Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item3grid">
                                                         <Image Source="{Binding Item2.Stats.Item3Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item3grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item3grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item3Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item3Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item3Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item4grid">
                                                         <Image Source="{Binding Item2.Stats.Item4Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item4grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item4grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item4Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item4Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item4Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item5grid">
                                                         <Image Source="{Binding Item2.Stats.Item5Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item5grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item5grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item5Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item5Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item5Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item6grid">
                                                         <Image Source="{Binding Item2.Stats.Item6Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item6grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item6grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item6Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item6Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item6Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                 </StackPanel>
                                                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
@@ -598,120 +343,6 @@
                                                     <Grid>
                                                         <hc:Gravatar Style="{StaticResource GravatarCircle}" Name="headimg"
                                                                      Width="55" Height="55" Source="{Binding Item2.ChampionImage}" />
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=headimg,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=headimg}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid Width="300">
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.9" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <Grid>
-                                                                    <Grid.ColumnDefinitions>
-                                                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                                                        <ColumnDefinition Width="*"></ColumnDefinition>
-                                                                    </Grid.ColumnDefinitions>
-                                                                    <Grid.RowDefinitions>
-                                                                        <RowDefinition Height="90"></RowDefinition>
-                                                                        <RowDefinition Height="*"></RowDefinition>
-                                                                    </Grid.RowDefinitions>
-
-                                                                    <hc:Gravatar Margin="0 10 10 10" Grid.Row="0" Grid.Column="0" Width="75" Height="75" Source="{Binding Item2.ChampionImage}" />
-                                                                    <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" VerticalAlignment="Center">
-                                                                        <TextBlock Text="{Binding Item1.Player.SummonerName}" FontSize="17" Foreground="Black"></TextBlock>
-                                                                        <TextBlock Text="{Binding Item2.ChampionName}" FontSize="15" Margin="0 5 0 0" Foreground="Black"></TextBlock>
-                                                                    </StackPanel>
-                                                                    <Grid Grid.Row="1" Grid.ColumnSpan="2">
-                                                                        <Grid.RowDefinitions>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                            <RowDefinition Height="*"></RowDefinition>
-                                                                        </Grid.RowDefinitions>
-                                                                        <Grid.ColumnDefinitions>
-                                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                                        </Grid.ColumnDefinitions>
-
-                                                                        <StackPanel Orientation="Horizontal" Margin="20 2 0 2">
-                                                                            <TextBlock Text="杀敌：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.Kills}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="0" Grid.Column="1">
-                                                                            <TextBlock Text="死亡：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.Deaths}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="20 2 0 2">
-                                                                            <TextBlock Text="助攻：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.Assists}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="1" Grid.Column="1">
-                                                                            <TextBlock Text="补兵：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalMinionsKilled}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="20 2 0 2">
-                                                                            <TextBlock Text="金钱：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.GoldEarned}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="2" Grid.Column="1">
-                                                                            <TextBlock Text="输出伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalDamageDealt}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="20 2 0 2">
-                                                                            <TextBlock Text="最大连杀：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.LargestKillingSpree}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="3" Grid.Column="1">
-                                                                            <TextBlock Text="最大多杀：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.LargestMultiKill}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="20 2 0 2">
-                                                                            <TextBlock Text="推塔：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TurretKills}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="4" Grid.Column="1">
-                                                                            <TextBlock Text="兵营：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.WardsKilled}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="20 2 0 2">
-                                                                            <TextBlock Text="总治疗：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalHeal}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                        <StackPanel Orientation="Horizontal" Margin="10 2 0 2" Grid.Row="5" Grid.Column="1">
-                                                                            <TextBlock Text="承受伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalDamageTaken}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="6" Grid.ColumnSpan="2" Margin="20 2 0 2">
-                                                                            <TextBlock Text="给敌方英雄造成总伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.TotalDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="7" Grid.ColumnSpan="2" Margin="20 2 0 2">
-                                                                            <TextBlock Text="给敌方英雄的物理伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.PhysicalDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.ColumnSpan="2" Margin="20 2 0 10">
-                                                                            <TextBlock Text="给敌方英雄的魔法伤害：" FontSize="15" Foreground="#888888"></TextBlock>
-                                                                            <TextBlock Text="{Binding Item2.Stats.MagicDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
-                                                                        </StackPanel>
-                                                                    </Grid>
-                                                                </Grid>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                 </hc:Badge>
                                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
@@ -724,164 +355,24 @@
                                                     </StackPanel.Resources>
                                                     <Grid Name="item0grid">
                                                         <Image Source="{Binding Item2.Stats.Item0Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item0grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item0grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item0Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item0Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item1grid">
                                                         <Image Source="{Binding Item2.Stats.Item1Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item1grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item1grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item1Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item1Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item2grid">
                                                         <Image Source="{Binding Item2.Stats.Item2Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item2grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item2grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item2Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item2Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item3grid">
                                                         <Image Source="{Binding Item2.Stats.Item3Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item3grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item3grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item3Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item3Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item3Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item4grid">
                                                         <Image Source="{Binding Item2.Stats.Item4Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item4grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item4grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item4Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item4Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item4Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item5grid">
                                                         <Image Source="{Binding Item2.Stats.Item5Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item5grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item5grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item5Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item5Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item5Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                     <Grid Name="item6grid">
                                                         <Image Source="{Binding Item2.Stats.Item6Image}"></Image>
-                                                        <Popup Focusable="False"
-                                                               IsOpen="{Binding ElementName=item6grid,Path=IsMouseOver,Mode=OneWay}"
-                                                               PlacementTarget="{Binding ElementName=item6grid}" 
-                                                               Placement="Top" AllowsTransparency="True">
-                                                            <Grid>
-                                                                <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                    <Rectangle.Effect>
-                                                                        <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                    </Rectangle.Effect>
-                                                                </Rectangle>
-                                                                <StackPanel Margin="5" Orientation="Vertical">
-                                                                    <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item6Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item6Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                    <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                        <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item6Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
-                                                                    </StackPanel>
-                                                                </StackPanel>
-                                                            </Grid>
-                                                        </Popup>
                                                     </Grid>
                                                 </StackPanel>
                                                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="30 0 0 0">
