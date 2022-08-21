@@ -1,4 +1,5 @@
-﻿using LeagueOfLegendsBoxer.Resources;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using LeagueOfLegendsBoxer.Resources;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -58,11 +59,32 @@ namespace LeagueOfLegendsBoxer.Models
         public ItemsDetail Aram { get; set; }
     }
 
-    public class ItemsDetail
+    public class ItemsDetail : ObservableObject
     {
         public List<ItemDetail> StartItems { get; set; } = new List<ItemDetail>();
         public List<ItemDetail> CoreItems { get; set; } = new List<ItemDetail>();
         public List<ItemDetail> ShoeItems { get; set; } = new List<ItemDetail>();
+
+        private ItemDetail _startItem;
+        public ItemDetail StartItem 
+        {
+            get => _startItem;
+            set => SetProperty(ref _startItem, value);
+        }
+
+        private ItemDetail _coreItem;
+        public ItemDetail CoreItem
+        {
+            get => _coreItem;
+            set => SetProperty(ref _coreItem, value);
+        }
+
+        private ItemDetail _shoeItem;
+        public ItemDetail ShoeItem
+        {
+            get => _shoeItem;
+            set => SetProperty(ref _shoeItem, value);
+        }
     }
 
     public class ItemDetail

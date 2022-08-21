@@ -217,6 +217,7 @@
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="2*"></RowDefinition>
                                                     <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="0.5*"></RowDefinition>
                                                 </Grid.RowDefinitions>
                                                 <hc:Badge Grid.RowSpan="2" 
                                                           Grid.Column="0" BadgeMargin="0 -5 -5 0"
@@ -538,6 +539,13 @@
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" FontSize="15" Grid.Row="1"
                                                            Grid.Column="2" ></TextBlock>
+
+                                                <Grid Style="{x:Null}" Grid.Row="2"
+                                                      HorizontalAlignment="Left"
+                                                      Width="{Binding Item2.Stats.BarWidth}"
+                                                      ToolTip="{Binding Item2.Stats.TotalDamageDealtToChampions}"
+                                                      Margin="0 2 0 0"
+                                                      Grid.ColumnSpan="3" Height="10" Background="{StaticResource DangerBrush}"/>
                                             </Grid>
                                         </Border>
                                     </ControlTemplate>
@@ -582,6 +590,7 @@
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="2*"></RowDefinition>
                                                     <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="0.5*"></RowDefinition>
                                                 </Grid.RowDefinitions>
                                                 <hc:Badge Grid.RowSpan="2" BorderThickness="0"
                                                           Grid.Column="2" BadgeMargin="0 -5 -5 0"
@@ -902,6 +911,13 @@
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" FontSize="15" Grid.Row="1"
                                                            Grid.Column="1" ></TextBlock>
+
+                                                <Grid Style="{x:Null}" Grid.Row="2"
+                                                      HorizontalAlignment="Right"
+                                                      ToolTip="{Binding Item2.Stats.TotalDamageDealtToChampions}"
+                                                      Width="{Binding Item2.Stats.BarWidth}"
+                                                      Margin="0 2 0 0"
+                                                      Grid.ColumnSpan="3" Height="10" Background="{StaticResource PrimaryBrush}"/>
                                             </Grid>
                                         </Border>
                                     </ControlTemplate>

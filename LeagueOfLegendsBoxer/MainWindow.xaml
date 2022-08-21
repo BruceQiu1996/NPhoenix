@@ -12,7 +12,7 @@
         AllowsTransparency="True"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         WindowStyle="None"
-        Title="MainWindow" Height="700" Width="380">
+        Title="NPhoenix" Height="700" Width="380">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="3"/>

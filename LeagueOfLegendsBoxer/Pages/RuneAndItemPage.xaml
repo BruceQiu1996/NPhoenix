@@ -236,6 +236,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="40"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <Label Content="峡谷5V5" 
@@ -271,6 +272,7 @@
                     <StackPanel>
                         <GroupBox Header="起始装备" FontSize="16" Margin="5">
                             <ListBox ItemsSource="{Binding DisplayItems.StartItems,UpdateSourceTrigger=PropertyChanged}" 
+                                     SelectedItem="{Binding DisplayItems.StartItem,UpdateSourceTrigger=PropertyChanged}" 
                                      ScrollViewer.CanContentScroll="True"
                                      ScrollViewer.IsDeferredScrollingEnabled="True"
                                      PreviewMouseWheel="ListView_PreviewMouseWheel"
@@ -288,9 +290,9 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                    <Border BorderThickness="0 0.4 0 0" 
-                                                            BorderBrush="#eeeeee"
+                                                    <Border BorderThickness="{TemplateBinding BorderThickness}" 
                                                             Margin="1"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
                                                             Background="{TemplateBinding Background}">
                                                         <Grid>
                                                             <ListBox ItemsSource="{Binding Items}" BorderThickness="0">
@@ -309,8 +311,8 @@
                                                                             <Setter.Value>
                                                                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                                                                     <Border BorderThickness="0" 
-                                                                                        BorderBrush="#eeeeee"
-                                                                                        Background="{TemplateBinding Background}">
+                                                                                            BorderBrush="#eeeeee"
+                                                                                            Background="{TemplateBinding Background}">
                                                                                         <Grid>
                                                                                             <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                                                      Grid.Row="0" Grid.Column="0"
@@ -332,7 +334,7 @@
                                                                                                     </Rectangle>
                                                                                                     <StackPanel Margin="5" Orientation="Vertical">
                                                                                                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                                                        <wpf:HtmlPanel Padding="2" Width="380" Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                                                        <wpf:HtmlPanel Width="380" Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                                                         <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                                                             <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                                                             <TextBlock Text="{Binding PriceTotal}" Margin="5 0 0 0" FontWeight="Bold"/>
@@ -355,8 +357,9 @@
                                             </Setter.Value>
                                         </Setter>
                                         <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#eeeeee"></Setter>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"></Setter>
+                                                <Setter Property="BorderThickness" Value="2"></Setter>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -365,6 +368,7 @@
                         </GroupBox>
                         <GroupBox Header="核心装备" FontSize="15" Margin="5">
                             <ListBox ItemsSource="{Binding DisplayItems.CoreItems,UpdateSourceTrigger=PropertyChanged}" 
+                                     SelectedItem="{Binding DisplayItems.CoreItem,UpdateSourceTrigger=PropertyChanged}"
                                      ScrollViewer.CanContentScroll="True"
                                      ScrollViewer.IsDeferredScrollingEnabled="True"
                                      PreviewMouseWheel="ListView_PreviewMouseWheel"
@@ -382,9 +386,9 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                    <Border BorderThickness="0 0.4 0 0" 
-                                                            BorderBrush="#eeeeee"
+                                                    <Border BorderThickness="{TemplateBinding BorderThickness}" 
                                                             Margin="1"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
                                                             Background="{TemplateBinding Background}">
                                                         <Grid>
                                                             <ListBox ItemsSource="{Binding Items}" BorderThickness="0">
@@ -449,8 +453,9 @@
                                             </Setter.Value>
                                         </Setter>
                                         <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#eeeeee"></Setter>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"></Setter>
+                                                <Setter Property="BorderThickness" Value="2"></Setter>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -459,6 +464,7 @@
                         </GroupBox>
                         <GroupBox Header="鞋子" FontSize="15" Margin="5">
                             <ListBox ItemsSource="{Binding DisplayItems.ShoeItems,UpdateSourceTrigger=PropertyChanged}" 
+                                     SelectedItem="{Binding DisplayItems.ShoeItem,UpdateSourceTrigger=PropertyChanged}" 
                                      ScrollViewer.CanContentScroll="True"
                                      ScrollViewer.IsDeferredScrollingEnabled="True"
                                      PreviewMouseWheel="ListView_PreviewMouseWheel"
@@ -476,9 +482,9 @@
                                         <Setter Property="Template">
                                             <Setter.Value>
                                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                    <Border BorderThickness="0 0.4 0 0" 
-                                                            BorderBrush="#eeeeee"
+                                                    <Border BorderThickness="{TemplateBinding BorderThickness}" 
                                                             Margin="1"
+                                                            BorderBrush="{TemplateBinding BorderBrush}"
                                                             Background="{TemplateBinding Background}">
                                                         <Grid>
                                                             <ListBox ItemsSource="{Binding Items}" BorderThickness="0">
@@ -520,7 +526,7 @@
                                                                                                     </Rectangle>
                                                                                                     <StackPanel Margin="5" Orientation="Vertical">
                                                                                                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                                                        <wpf:HtmlPanel Padding="2" Width="380" Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                                                        <wpf:HtmlPanel Width="380" Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                                                         <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                                                             <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                                                             <TextBlock Text="{Binding PriceTotal}" Margin="5 0 0 0" FontWeight="Bold"/>
@@ -543,8 +549,9 @@
                                             </Setter.Value>
                                         </Setter>
                                         <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Background" Value="#eeeeee"></Setter>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"></Setter>
+                                                <Setter Property="BorderThickness" Value="2"></Setter>
                                             </Trigger>
                                         </Style.Triggers>
                                     </Style>
@@ -553,6 +560,8 @@
                         </GroupBox>
                     </StackPanel>
                 </ScrollViewer>
+
+                <Button Content="应用" Grid.Row="2" Command="{Binding ApplyItemCommandAsync}" HorizontalAlignment="Center" Grid.ColumnSpan="2" Width="150" Cursor="Hand"></Button>
             </Grid>
         </hc:Card>
     </Grid>

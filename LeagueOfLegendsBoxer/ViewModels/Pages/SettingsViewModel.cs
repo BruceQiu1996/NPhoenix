@@ -39,6 +39,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _autoLockHero, value);
         }
 
+        private bool _rankAutoLockHero;
+        public bool RankAutoLockHero
+        {
+            get => _rankAutoLockHero;
+            set => SetProperty(ref _rankAutoLockHero, value);
+        }
+        
         private bool _autoDisableHero;
         public bool AutoDisableHero
         {
@@ -60,6 +67,80 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _lockHerosOpen, value);
         }
 
+        private bool _topLockHerosOpen1;
+        public bool TopLockHerosOpen1
+        {
+            get => _topLockHerosOpen1;
+            set => SetProperty(ref _topLockHerosOpen1, value);
+
+        }
+
+        private bool _topLockHerosOpen2;
+        public bool TopLockHerosOpen2
+        {
+            get => _topLockHerosOpen2;
+            set => SetProperty(ref _topLockHerosOpen2, value);
+
+        }
+
+        private bool _jungleLockHerosOpen1;
+        public bool JungleLockHerosOpen1
+        {
+            get => _jungleLockHerosOpen1;
+            set => SetProperty(ref _jungleLockHerosOpen1, value);
+
+        }
+
+        private bool _jungleLockHerosOpen2;
+        public bool JungleLockHerosOpen2
+        {
+            get => _jungleLockHerosOpen2;
+            set => SetProperty(ref _jungleLockHerosOpen2, value);
+
+        }
+
+        private bool _middleLockHerosOpen1;
+        public bool MiddleLockHerosOpen1
+        {
+            get => _middleLockHerosOpen1;
+            set => SetProperty(ref _middleLockHerosOpen1, value);
+        }
+
+        private bool _middleLockHerosOpen2;
+        public bool MiddleLockHerosOpen2
+        {
+            get => _middleLockHerosOpen2;
+            set => SetProperty(ref _middleLockHerosOpen2, value);
+        }
+
+        private bool _bottomLockHerosOpen1;
+        public bool BottomLockHerosOpen1
+        {
+            get => _bottomLockHerosOpen1;
+            set => SetProperty(ref _bottomLockHerosOpen1, value);
+        }
+
+        private bool _bottomLockHerosOpen2;
+        public bool BottomLockHerosOpen2
+        {
+            get => _bottomLockHerosOpen2;
+            set => SetProperty(ref _bottomLockHerosOpen2, value);
+        }
+
+        private bool _utilityLockHerosOpen1;
+        public bool UtilityLockHerosOpen1
+        {
+            get => _utilityLockHerosOpen1;
+            set => SetProperty(ref _utilityLockHerosOpen1, value);
+        }
+
+        private bool _utilityLockHerosOpen2;
+        public bool UtilityLockHerosOpen2
+        {
+            get => _utilityLockHerosOpen2;
+            set => SetProperty(ref _utilityLockHerosOpen2, value);
+
+        }
         private bool _autoLockHeroInAram;
         public bool AutoLockHeroInAram
         {
@@ -89,6 +170,76 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _lockHeros, value);
         }
 
+        private ObservableCollection<Hero> _topLockHeros1;
+        public ObservableCollection<Hero> TopLockHeros1
+        {
+            get => _topLockHeros1;
+            set => SetProperty(ref _topLockHeros1, value);
+        }
+
+        private ObservableCollection<Hero> _topLockHeros2;
+        public ObservableCollection<Hero> TopLockHeros2
+        {
+            get => _topLockHeros2;
+            set => SetProperty(ref _topLockHeros2, value);
+        }
+
+        private ObservableCollection<Hero> _JungleLockHeros1;
+        public ObservableCollection<Hero> JungleLockHeros1
+        {
+            get => _JungleLockHeros1;
+            set => SetProperty(ref _JungleLockHeros1, value);
+        }
+
+        private ObservableCollection<Hero> _JungleLockHeros2;
+        public ObservableCollection<Hero> JungleLockHeros2
+        {
+            get => _JungleLockHeros2;
+            set => SetProperty(ref _JungleLockHeros2, value);
+        }
+
+        private ObservableCollection<Hero> _MiddleLockHeros1;
+        public ObservableCollection<Hero> MiddleLockHeros1
+        {
+            get => _MiddleLockHeros1;
+            set => SetProperty(ref _MiddleLockHeros1, value);
+        }
+
+        private ObservableCollection<Hero> _MiddleLockHeros2;
+        public ObservableCollection<Hero> MiddleLockHeros2
+        {
+            get => _MiddleLockHeros2;
+            set => SetProperty(ref _MiddleLockHeros2, value);
+        }
+
+        private ObservableCollection<Hero> _BottomLockHeros1;
+        public ObservableCollection<Hero> BottomLockHeros1
+        {
+            get => _BottomLockHeros1;
+            set => SetProperty(ref _BottomLockHeros1, value);
+        }
+
+        private ObservableCollection<Hero> _BottomLockHeros2;
+        public ObservableCollection<Hero> BottomLockHeros2
+        {
+            get => _BottomLockHeros2;
+            set => SetProperty(ref _BottomLockHeros2, value);
+        }
+
+        private ObservableCollection<Hero> _UtilityLockHeros1;
+        public ObservableCollection<Hero> UtilityLockHeros1
+        {
+            get => _UtilityLockHeros1;
+            set => SetProperty(ref _UtilityLockHeros1, value);
+        }
+
+        private ObservableCollection<Hero> _UtilityLockHeros2;
+        public ObservableCollection<Hero> UtilityLockHeros2
+        {
+            get => _UtilityLockHeros2;
+            set => SetProperty(ref _UtilityLockHeros2, value);
+        }
+
         private Hero _lockHero;
         public Hero LockHero
         {
@@ -96,7 +247,128 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _lockHero, value);
-                _iniSettingsModel.WriteAutoLockHeroIdAsync(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteAutoLockHeroIdAsync(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _topLockHero1;
+        public Hero TopLockHero1
+        {
+            get => _topLockHero1;
+            set
+            {
+                SetProperty(ref _topLockHero1, value);
+                if (value != null)
+                    _iniSettingsModel.WriteTopAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _topLockHero2;
+        public Hero TopLockHero2
+        {
+            get => _topLockHero2;
+            set
+            {
+                SetProperty(ref _topLockHero2, value);
+                if (value != null)
+                    _iniSettingsModel.WriteTopAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _jungleLockHero1;
+        public Hero JungleLockHero1
+        {
+            get => _jungleLockHero1;
+            set
+            {
+                SetProperty(ref _jungleLockHero1, value);
+                if (value != null)
+                    _iniSettingsModel.WriteJungleAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _jungleLockHero2;
+        public Hero JungleLockHero2
+        {
+            get => _jungleLockHero2;
+            set
+            {
+                SetProperty(ref _jungleLockHero2, value);
+                if (value != null)
+                    _iniSettingsModel.WriteJungleAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _middleLockHero1;
+        public Hero MiddleLockHero1
+        {
+            get => _middleLockHero1;
+            set
+            {
+                SetProperty(ref _middleLockHero1, value);
+                if (value != null)
+                    _iniSettingsModel.WriteMiddleAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _middleLockHero2;
+        public Hero MiddleLockHero2
+        {
+            get => _middleLockHero2;
+            set
+            {
+                SetProperty(ref _middleLockHero2, value);
+                if (value != null)
+                    _iniSettingsModel.WriteMiddleAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _bottomLockHero1;
+        public Hero BottomLockHero1
+        {
+            get => _bottomLockHero1;
+            set
+            {
+                SetProperty(ref _bottomLockHero1, value);
+                if (value != null)
+                    _iniSettingsModel.WriteBottomAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _bottomLockHero2;
+        public Hero BottomLockHero2
+        {
+            get => _bottomLockHero2;
+            set
+            {
+                SetProperty(ref _bottomLockHero2, value);
+                if (value != null)
+                    _iniSettingsModel.WriteBottomAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _utilityLockHero1;
+        public Hero UtilityLockHero1
+        {
+            get => _utilityLockHero1;
+            set
+            {
+                SetProperty(ref _utilityLockHero1, value);
+                if (value != null)
+                    _iniSettingsModel.WriteUtilityAutoLockHeroChampId1Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private Hero _utilityLockHero2;
+        public Hero UtilityLockHero2
+        {
+            get => _utilityLockHero2;
+            set
+            {
+                SetProperty(ref _utilityLockHero2, value);
+                if (value != null)
+                    _iniSettingsModel.WriteUtilityAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -114,7 +386,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _disableHero, value);
-                _iniSettingsModel.WriteAutoDisableHeroIdAsync(value == null ? 0 : value.ChampId).GetAwaiter().GetResult();
+                if (value != null)
+                    _iniSettingsModel.WriteAutoDisableHeroIdAsync(value.ChampId).GetAwaiter().GetResult();
             }
         }
 
@@ -134,6 +407,86 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _searchLockText, value);
         }
 
+        private string _preTopSearchLockText1;
+        private string _topSearchLockText1;
+        public string TopSearchLockText1
+        {
+            get => _topSearchLockText1;
+            set => SetProperty(ref _topSearchLockText1, value);
+        }
+
+        private string _preTopSearchLockText2;
+        private string _topSearchLockText2;
+        public string TopSearchLockText2
+        {
+            get => _topSearchLockText2;
+            set => SetProperty(ref _topSearchLockText2, value);
+        }
+
+        private string _preJungleSearchLockText1;
+        private string _jungleSearchLockText1;
+        public string JungleSearchLockText1
+        {
+            get => _jungleSearchLockText1;
+            set => SetProperty(ref _jungleSearchLockText1, value);
+        }
+
+        private string _preJungleSearchLockText2;
+        private string _jungleSearchLockText2;
+        public string JungleSearchLockText2
+        {
+            get => _jungleSearchLockText2;
+            set => SetProperty(ref _jungleSearchLockText2, value);
+        }
+
+        private string _preMiddleSearchLockText1;
+        private string _middleSearchLockText1;
+        public string MiddleSearchLockText1
+        {
+            get => _middleSearchLockText1;
+            set => SetProperty(ref _middleSearchLockText1, value);
+        }
+
+        private string _preMiddleSearchLockText2;
+        private string _middleSearchLockText2;
+        public string MiddleSearchLockText2
+        {
+            get => _middleSearchLockText2;
+            set => SetProperty(ref _middleSearchLockText2, value);
+        }
+
+        private string _preBottomSearchLockText1;
+        private string _bottomSearchLockText1;
+        public string BottomSearchLockText1
+        {
+            get => _bottomSearchLockText1;
+            set => SetProperty(ref _bottomSearchLockText1, value);
+        }
+
+        private string _preBottomSearchLockText2;
+        private string _bottomSearchLockText2;
+        public string BottomSearchLockText2
+        {
+            get => _bottomSearchLockText2;
+            set => SetProperty(ref _bottomSearchLockText2, value);
+        }
+
+        private string _preUtilitySearchLockText1;
+        private string _utilitySearchLockText1;
+        public string UtilitySearchLockText1
+        {
+            get => _utilitySearchLockText1;
+            set => SetProperty(ref _utilitySearchLockText1, value);
+        }
+
+        private string _preUtilitySearchLockText2;
+        private string _utilitySearchLockText2;
+        public string UtilitySearchLockText2
+        {
+            get => _utilitySearchLockText2;
+            set => SetProperty(ref _utilitySearchLockText2, value);
+
+        }
         private ObservableCollection<Hero> _chooseHeroForSkins;
         public ObservableCollection<Hero> ChooseHeroForSkins
         {
@@ -244,6 +597,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoLockHeroCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedRankAutoLockHeroCommandAsync { get; set; }
+        public AsyncRelayCommand UncheckedRankAutoLockHeroCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoDisableHeroCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoDisableHeroCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroInAramCommandAsync { get; set; }
@@ -252,6 +607,16 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand ExitGameCommandAsync { get; set; }
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public RelayCommand SearchLockHeroCommand { get; set; }
+        public RelayCommand TopSearchLockHeroCommand1 { get; set; }
+        public RelayCommand TopSearchLockHeroCommand2 { get; set; }
+        public RelayCommand JungleSearchLockHeroCommand1 { get; set; }
+        public RelayCommand JungleSearchLockHeroCommand2 { get; set; }
+        public RelayCommand MiddleSearchLockHeroCommand1 { get; set; }
+        public RelayCommand MiddleSearchLockHeroCommand2 { get; set; }
+        public RelayCommand BottomSearchLockHeroCommand1 { get; set; }
+        public RelayCommand BottomSearchLockHeroCommand2 { get; set; }
+        public RelayCommand UtilitySearchLockHeroCommand1 { get; set; }
+        public RelayCommand UtilitySearchLockHeroCommand2 { get; set; }
         public RelayCommand SearchDisableHeroCommand { get; set; }
         public RelayCommand SearchHeroForSkinCommand { get; set; }
         public AsyncRelayCommand ModifyRankLevelCommandAsync { get; set; }
@@ -259,8 +624,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand FetchRunesAndItemsCommandAsync { get; set; }
         public RelayCommand OpenAramChooseCommand { get; set; }
         public RelayCommand StartGameCommand { get; set; }
-        public AsyncRelayCommand CheckedCloseRecommmandCommandAsync { get; set; }
-        public AsyncRelayCommand UnCheckedCloseRecommmandCommandAsync { get; set; }
         public AsyncRelayCommand CheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
         public AsyncRelayCommand UnCheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
         public AsyncRelayCommand SaveHorseTemplateCommandAsync { get; set; }
@@ -283,12 +646,26 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             UncheckedAutoAcceptCommandAsync = new AsyncRelayCommand(UncheckedAutoAcceptAsync);
             CheckedAutoLockHeroCommandAsync = new AsyncRelayCommand(CheckedAutoLockHeroAsync);
             UncheckedAutoLockHeroCommandAsync = new AsyncRelayCommand(UncheckedAutoLockHeroAsync);
+            CheckedRankAutoLockHeroCommandAsync = new AsyncRelayCommand(CheckedRankAutoLockHeroAsync);
+            UncheckedRankAutoLockHeroCommandAsync = new AsyncRelayCommand(UncheckedRankAutoLockHeroAsync);
             CheckedAutoDisableHeroCommandAsync = new AsyncRelayCommand(CheckedAutoDisableHeroAsync);
             UncheckedAutoDisableHeroCommandAsync = new AsyncRelayCommand(UncheckedAutoDisableHeroAsync);
             CheckedAutoLockHeroInAramCommandAsync = new AsyncRelayCommand(CheckedAutoLockHeroInAramAsync);
             UncheckedAutoLockHeroInAramCommandAsync = new AsyncRelayCommand(UncheckedAutoLockHeroInAramAsync);
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             SearchLockHeroCommand = new RelayCommand(SearchLockHero);
+
+            TopSearchLockHeroCommand1 = new RelayCommand(TopSearchLockHero1);
+            TopSearchLockHeroCommand2 = new RelayCommand(TopSearchLockHero2);
+            JungleSearchLockHeroCommand1 = new RelayCommand(JungleSearchLockHero1);
+            JungleSearchLockHeroCommand2 = new RelayCommand(JungleSearchLockHero2);
+            MiddleSearchLockHeroCommand1 = new RelayCommand(MiddleSearchLockHero1);
+            MiddleSearchLockHeroCommand2 = new RelayCommand(MiddleSearchLockHero2);
+            BottomSearchLockHeroCommand1 = new RelayCommand(BottomSearchLockHero1);
+            BottomSearchLockHeroCommand2 = new RelayCommand(BottomSearchLockHero2);
+            UtilitySearchLockHeroCommand1 = new RelayCommand(UtilitySearchLockHero1);
+            UtilitySearchLockHeroCommand2 = new RelayCommand(UtilitySearchLockHero2);
+
             SearchDisableHeroCommand = new RelayCommand(SearchDisableHero);
             GetGameFolderCommandAsync = new AsyncRelayCommand(GetGameFolderAsync);
             ExitGameCommandAsync = new AsyncRelayCommand(ExitGameAsync);
@@ -298,8 +675,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SearchSkinsForHeroCommandAsync = new AsyncRelayCommand(SearchSkinsForHeroAsync);
             OpenAramChooseCommand = new RelayCommand(OpenAramChoose);
             StartGameCommand = new RelayCommand(StartGame);
-            CheckedCloseRecommmandCommandAsync = new AsyncRelayCommand(CheckedCloseRecommmandAsync);
-            UnCheckedCloseRecommmandCommandAsync = new AsyncRelayCommand(UnCheckedCloseRecommmandAsync);
             CheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(CheckedCloseSendOtherWhenBeginAsync);
             UnCheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(UnCheckedCloseSendOtherWhenBeginAsync);
             SaveHorseTemplateCommandAsync = new AsyncRelayCommand(SaveHorseTemplateAsync);
@@ -312,16 +687,88 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private async Task LoadAsync()
         {
             LockHeros = new ObservableCollection<Hero>(Constant.Heroes);
+            LockHeros.Insert(0, new Hero() 
+            {
+                ChampId = 0
+            });
+
+            TopLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            TopLockHeros1.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+            TopLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            TopLockHeros2.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+
+            JungleLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            JungleLockHeros1.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+            JungleLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            JungleLockHeros2.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+
+            MiddleLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            MiddleLockHeros1.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+            MiddleLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            MiddleLockHeros2.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+
+            BottomLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            BottomLockHeros1.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+            BottomLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            BottomLockHeros2.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+
+            UtilityLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            UtilityLockHeros1.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+            UtilityLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            UtilityLockHeros2.Insert(0, new Hero()
+            {
+                ChampId = 0
+            });
+
             DisableHeros = new ObservableCollection<Hero>(Constant.Heroes);
             ChooseHeroForSkins = new ObservableCollection<Hero>(Constant.Heroes);
             AutoAcceptGame = _iniSettingsModel.AutoAcceptGame;
             AutoDisableHero = _iniSettingsModel.AutoDisableHero;
+            RankAutoLockHero = _iniSettingsModel.RankAutoLockHero;
             AutoLockHero = _iniSettingsModel.AutoLockHero;
             AutoLockHeroInAram = _iniSettingsModel.AutoLockHeroInAram;
-            DisableHero = DisableHeros.FirstOrDefault(x => x.ChampId == _iniSettingsModel.AutoDisableChampId);
-            LockHero = LockHeros.FirstOrDefault(x => x.ChampId == _iniSettingsModel.AutoLockHeroChampId);
+            DisableHero = DisableHeros.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.AutoDisableChampId);
+            LockHero = LockHeros.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.AutoLockHeroChampId);
+
+            TopLockHero1 = TopLockHeros1.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.TopAutoLockHeroChampId1);
+            TopLockHero2 = TopLockHeros2.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.TopAutoLockHeroChampId2);
+            MiddleLockHero1 = MiddleLockHeros1.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.MiddleAutoLockHeroChampId1);
+            MiddleLockHero2 = MiddleLockHeros2.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.MiddleAutoLockHeroChampId2);
+            JungleLockHero1 = JungleLockHeros1.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.JungleAutoLockHeroChampId1);
+            JungleLockHero2 = JungleLockHeros2.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.JungleAutoLockHeroChampId2);
+            BottomLockHero1 = BottomLockHeros1.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.BottomAutoLockHeroChampId1);
+            BottomLockHero2 = BottomLockHeros2.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.BottomAutoLockHeroChampId2);
+            UtilityLockHero1 = UtilityLockHeros1.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.UtilityAutoLockHeroChampId1);
+            UtilityLockHero2 = UtilityLockHeros2.FirstOrDefault(x => x?.ChampId == _iniSettingsModel.UtilityAutoLockHeroChampId2);
+
             GameStartupLocation = _iniSettingsModel.GameExeLocation;
-            IsCloseRecommmand = _iniSettingsModel.IsCloseRecommand;
             CloseSendOtherWhenBegin = _iniSettingsModel.CloseSendOtherWhenBegin;
             HorseTemplate = _iniSettingsModel.HorseTemplate;
             Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
@@ -354,6 +801,19 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteAutoLockHeroAsync(false);
             AutoLockHero = false;
         }
+
+        private async Task CheckedRankAutoLockHeroAsync() 
+        {
+            await _iniSettingsModel.WriteRankAutoLockHeroAsync(true);
+            RankAutoLockHero = true;
+        }
+
+        private async Task UncheckedRankAutoLockHeroAsync()
+        {
+            await _iniSettingsModel.WriteRankAutoLockHeroAsync(false);
+            RankAutoLockHero = false;
+        }
+
         private async Task CheckedAutoDisableHeroAsync()
         {
             await _iniSettingsModel.WriteAutoDisableHeroAsync(true);
@@ -373,16 +833,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             await _iniSettingsModel.WriteAutoLockHeroInAramAsync(false);
             AutoLockHeroInAram = false;
-        }
-        private async Task CheckedCloseRecommmandAsync()
-        {
-            await _iniSettingsModel.WriteIsCloseRecommandAsync(true);
-            IsCloseRecommmand = true;
-        }
-        private async Task UnCheckedCloseRecommmandAsync()
-        {
-            await _iniSettingsModel.WriteIsCloseRecommandAsync(false);
-            IsCloseRecommmand = false;
         }
         private async Task CheckedCloseSendOtherWhenBeginAsync()
         {
@@ -475,6 +925,136 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 LockHeros = new ObservableCollection<Hero>(Constant.Heroes);
             else
                 LockHeros = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(SearchLockText) || x.Title.Contains(SearchLockText)));
+        }
+
+        private void TopSearchLockHero1()
+       {
+            TopLockHerosOpen1 = true;
+            if (_preTopSearchLockText1 == TopSearchLockText1)
+                return;
+            _preTopSearchLockText1 = TopSearchLockText1;
+            TopLockHero1 = null;
+            if (string.IsNullOrEmpty(TopSearchLockText1))
+                TopLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                TopLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(TopSearchLockText1) || x.Title.Contains(TopSearchLockText1)));
+        }
+
+        private void TopSearchLockHero2()
+        {
+            TopLockHerosOpen2 = true;
+            if (_preTopSearchLockText2 == TopSearchLockText2)
+                return;
+            _preTopSearchLockText2 = TopSearchLockText2;
+            TopLockHero2 = null;
+            if (string.IsNullOrEmpty(TopSearchLockText2))
+                TopLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                TopLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(TopSearchLockText2) || x.Title.Contains(TopSearchLockText2)));
+        }
+
+        private void JungleSearchLockHero1()
+        {
+            JungleLockHerosOpen1 = true;
+            if (_preJungleSearchLockText1 == JungleSearchLockText1)
+                return;
+            _preJungleSearchLockText1 = JungleSearchLockText1;
+            JungleLockHero1 = null;
+            if (string.IsNullOrEmpty(JungleSearchLockText1))
+                JungleLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                JungleLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(JungleSearchLockText1) || x.Title.Contains(JungleSearchLockText1)));
+        }
+
+        private void JungleSearchLockHero2()
+        {
+            JungleLockHerosOpen2 = true;
+            if (_preJungleSearchLockText2 == JungleSearchLockText2)
+                return;
+            _preJungleSearchLockText2 = JungleSearchLockText2;
+            JungleLockHero2 = null;
+            if (string.IsNullOrEmpty(JungleSearchLockText2))
+                JungleLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                JungleLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(JungleSearchLockText2) || x.Title.Contains(JungleSearchLockText2)));
+        }
+
+        private void MiddleSearchLockHero1()
+        {
+            MiddleLockHerosOpen1 = true;
+            if (_preMiddleSearchLockText1 == MiddleSearchLockText1)
+                return;
+            _preMiddleSearchLockText1 = MiddleSearchLockText1;
+            MiddleLockHero1 = null;
+            if (string.IsNullOrEmpty(MiddleSearchLockText1))
+                MiddleLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                MiddleLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(MiddleSearchLockText1) || x.Title.Contains(MiddleSearchLockText1)));
+        }
+
+        private void MiddleSearchLockHero2()
+        {
+            MiddleLockHerosOpen2 = true;
+            if (_preMiddleSearchLockText2 == MiddleSearchLockText2)
+                return;
+            _preMiddleSearchLockText2 = MiddleSearchLockText2;
+            MiddleLockHero2 = null;
+            if (string.IsNullOrEmpty(MiddleSearchLockText2))
+                MiddleLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                MiddleLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(MiddleSearchLockText2) || x.Title.Contains(MiddleSearchLockText2)));
+        }
+
+        private void BottomSearchLockHero1()
+        {
+            BottomLockHerosOpen1 = true;
+            if (_preBottomSearchLockText1 == BottomSearchLockText1)
+                return;
+            _preBottomSearchLockText1 = BottomSearchLockText1;
+            BottomLockHero1 = null;
+            if (string.IsNullOrEmpty(BottomSearchLockText1))
+                BottomLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                BottomLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(BottomSearchLockText1) || x.Title.Contains(BottomSearchLockText1)));
+        }
+
+        private void BottomSearchLockHero2()
+        {
+            BottomLockHerosOpen2 = true;
+            if (_preBottomSearchLockText2 == BottomSearchLockText2)
+                return;
+            _preBottomSearchLockText2 = BottomSearchLockText2;
+            BottomLockHero2 = null;
+            if (string.IsNullOrEmpty(BottomSearchLockText2))
+                BottomLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                BottomLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(BottomSearchLockText2) || x.Title.Contains(BottomSearchLockText2)));
+        }
+
+        private void UtilitySearchLockHero1()
+        {
+            UtilityLockHerosOpen1 = true;
+            if (_preUtilitySearchLockText1 == UtilitySearchLockText1)
+                return;
+            _preUtilitySearchLockText1 = UtilitySearchLockText1;
+            UtilityLockHero1 = null;
+            if (string.IsNullOrEmpty(UtilitySearchLockText1))
+                UtilityLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                UtilityLockHeros1 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(UtilitySearchLockText1) || x.Title.Contains(UtilitySearchLockText1)));
+        }
+
+        private void UtilitySearchLockHero2()
+        {
+            UtilityLockHerosOpen2 = true;
+            if (_preUtilitySearchLockText2 == UtilitySearchLockText2)
+                return;
+            _preUtilitySearchLockText2 = UtilitySearchLockText2;
+            UtilityLockHero2 = null;
+            if (string.IsNullOrEmpty(UtilitySearchLockText2))
+                UtilityLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes);
+            else
+                UtilityLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(UtilitySearchLockText2) || x.Title.Contains(UtilitySearchLockText2)));
         }
 
         private void StartGame()

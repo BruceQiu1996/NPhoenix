@@ -202,7 +202,7 @@ namespace LeagueOfLegendsBoxer.Models
         public int QuadraKills { get; set; }
         [JsonPropertyName("pentaKills")]
         public int PentaKills { get; set; }
-        public string KDA => $"{Kills}/{Deaths}/{Assists}";
+        public string KDA => $"{Kills}-{Deaths}-{Assists}";
         [JsonPropertyName("totalMinionsKilled")]
         public int TotalMinionsKilled { get; set; }
         [JsonPropertyName("goldEarned")]
@@ -290,6 +290,7 @@ namespace LeagueOfLegendsBoxer.Models
         public Item Item4Model => Constant.Items.FirstOrDefault(x => x.Id == Item4);
         public Item Item5Model => Constant.Items.FirstOrDefault(x => x.Id == Item5);
         public Item Item6Model => Constant.Items.FirstOrDefault(x => x.Id == Item6);
+        public double BarWidth { get; set; }
     }
 
     public class Timeline
