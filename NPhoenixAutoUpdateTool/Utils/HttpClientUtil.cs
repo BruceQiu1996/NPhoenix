@@ -10,8 +10,8 @@ namespace NPhoenixAutoUpdateTool.Utils
 {
   public static class HttpClientUtil
   {
-    // 每次读取 128kb
-    private const int BufferSize = 1024 * 128;
+    // 每次读取 256kb
+    private const int BufferSize = 1024 * 256;
 
     public static async Task<byte[]> GetByteArrayAsync(this HttpClient client, Uri requestUri, IProgress<HttpDownloadProgress> progress, CancellationToken cancellationToken)
     {

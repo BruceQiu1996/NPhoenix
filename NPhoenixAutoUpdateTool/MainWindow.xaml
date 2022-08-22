@@ -3,10 +3,49 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:NPhoenixAutoUpdateTool"
+        xmlns:local="clr-namespace:NPhoenixAutoUpdateTool.ViewModels"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:utils="clr-namespace:NPhoenixAutoUpdateTool.Utils"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="400">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="更新" Height="400" Width="700">
+    
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+    <behaviors:Interaction.Triggers>
+        <behaviors:EventTrigger EventName="Loaded">
+            <behaviors:InvokeCommandAction Command="{Binding LoadedCommand}"/>
+        </behaviors:EventTrigger>
+    </behaviors:Interaction.Triggers>
+
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <Image Source="http://www.dotlemon.top:5200/upload/NPhoenix/home.jpg" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" Margin="5"/>
+        <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center">
+            <Grid Height="30">
+                <ProgressBar Margin="15 0 15 0" Minimum="0" Maximum="100" Value="{Binding ProgressValue}"/>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Text="{Binding Percentage}"/>
+            </Grid>
+            <Grid HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="总大小:" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="1" Text="{Binding TotalSize}" HorizontalAlignment="Left"/>
+                <TextBlock Grid.Column="2" Text="已下载:" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="3" Text="{Binding CurrentSize}" HorizontalAlignment="Left"/>
+            </Grid>
+        </StackPanel>
 
     </Grid>
 </Window>

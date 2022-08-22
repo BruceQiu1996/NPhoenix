@@ -16,18 +16,18 @@ namespace NPhoenixAutoUpdateTool
   {
     private void Application_Startup(object sender, StartupEventArgs e)
     {
-      if(e.Args.Length == 0)
-      {
-        this.Shutdown();
-      }
+      //if(e.Args.Length == 0)
+      //{
+      //  this.Shutdown();
+      //}
 
-      if(Regex.IsMatch(e.Args[0], "^(((ht|f)tp[s]?):\\/\\/)?([^!@#$%^&*?.\\s-]([^!@#$%^&*?.\\s]{0,63}[^!@#$%^&*?.\\s])?\\.)+[a-z]{2,6}\\/?"))
-      {
-        Global.UpdateUrl = e.Args[0];
-        MessageBox.Show(Global.UpdateUrl);
-      }
+      //if(Regex.IsMatch(e.Args[0], "^(((ht|f)tp[s]?):\\/\\/)?([^!@#$%^&*?.\\s-]([^!@#$%^&*?.\\s]{0,63}[^!@#$%^&*?.\\s])?\\.)+[a-z]{2,6}\\/?"))
+      //{
+      //  Global.UpdateUrl = e.Args[0];
+      //  MessageBox.Show(Global.UpdateUrl);
+      //}
 
-      this.Shutdown();
+      //this.Shutdown();
     }
   }
 }

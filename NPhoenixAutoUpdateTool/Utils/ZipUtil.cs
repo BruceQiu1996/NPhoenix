@@ -20,19 +20,16 @@ namespace NPhoenixAutoUpdateTool.Utils
     {
       try
       {
-        string zipFile = Path.Combine(sourcePath, "temp.zip");
-        string extractPath = Path.Combine(targetPath, "temp");
+        string zipFile = sourcePath;
+        string extractPath = Path.Combine(targetPath, "temp/SeriesApp");
         if (!Directory.Exists(extractPath))
         {
           Directory.CreateDirectory(extractPath);
         }
         ZipFile.ExtractToDirectory(zipFile, extractPath);//将zip文件拷贝到临时文件夹
-        if (Directory.Exists(Path.Combine(extractPath, "SeriesApp")))
-        {
-          extractPath = Path.Combine(extractPath, "SeriesApp");
-        }
+
         //将临时文件夹下的文件复制到原程序路径中
-        CopyDirectory(extractPath, sourcePath);//注意,此时临时文件夹为源地址,sourcePath为目标地址
+        CopyDirectory(extractPath, targetPath);//注意,此时临时文件夹为源地址,sourcePath为目标地址
         File.Delete(zipFile);//删除zip文件
         Directory.Delete(Path.Combine(targetPath, "temp"), true);
         return true;
@@ -46,8 +43,8 @@ namespace NPhoenixAutoUpdateTool.Utils
     /// <summary>
     /// 递归copy文件
     /// </summary>
-    /// <param name="sourcePath"></param>
-    /// <param name="targetPath"></param>
+    /// <param name="sourcePath">源目录</param>
+    /// <param name="targetPath">拷贝到目录</param>
     private static void CopyDirectory(string sourcePath, string targetPath)
     {
       try
@@ -82,5 +79,4 @@ namespace NPhoenixAutoUpdateTool.Utils
       }
     }
   }
-}
 }
