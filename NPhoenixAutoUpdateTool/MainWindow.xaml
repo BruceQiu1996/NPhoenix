@@ -30,7 +30,7 @@
         <StackPanel Orientation="Vertical" Grid.Row="1" VerticalAlignment="Center">
             <Grid Height="30">
                 <ProgressBar Margin="15 0 15 0" Minimum="0" Maximum="100" Value="{Binding ProgressValue}"/>
-                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Text="{Binding Percentage}"/>
+                <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="15" Text="{Binding Percentage,UpdateSourceTrigger=PropertyChanged}"/>
             </Grid>
             <Grid HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
