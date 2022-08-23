@@ -30,7 +30,7 @@
 
   <ItemGroup>
     <Content Include="logo.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
