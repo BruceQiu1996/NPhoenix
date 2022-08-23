@@ -8,9 +8,9 @@
         xmlns:utils="clr-namespace:NPhoenixAutoUpdateTool.Utils"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
-        Title="更新" Height="400" Width="700">
-    
+        WindowStartupLocation="CenterScreen" Height="400" Width="700" Title="更新">
+
+   
     <Window.DataContext>
         <local:MainWindowViewModel/>
     </Window.DataContext>
