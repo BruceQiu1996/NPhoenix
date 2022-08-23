@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using NPhoenixAutoUpdateTool.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -61,6 +64,27 @@ namespace NPhoenixAutoUpdateTool.Utils
           return bytes.ToArray();
         }
       }
+    }
+
+    /// <summary>
+    /// 从服务器获取最新的版本
+    /// </summary>
+    /// <returns></returns>
+    public static async Task<NPhoenix> FindLastDataAsync()
+    {
+      using HttpClient httpClient = new HttpClient();
+      var result = await httpClient.GetAsync("http://www.dotlemon.top:5200/NPhoenix/FindLast");
+      if (result.StatusCode == HttpStatusCode.OK)
+      {
+        var json = await result.Content.ReadAsStringAsync();
+        var nphoenix = JsonConvert.DeserializeObject<Response<NPhoenix>>(json);
+        if (nphoenix.Code == ResponseCode.Success)
+        {
+          return nphoenix.Data;
+        }
+      }
+
+      return null;
     }
   }
 

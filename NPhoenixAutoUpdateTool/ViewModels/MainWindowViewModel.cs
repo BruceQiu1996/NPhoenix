@@ -38,7 +38,7 @@ namespace NPhoenixAutoUpdateTool.ViewModels
       get => _totalSize;
       set
       {
-        if(value != _totalSize)
+        if (value != _totalSize)
         {
           SetProperty(ref _totalSize, value);
         }
@@ -65,10 +65,20 @@ namespace NPhoenixAutoUpdateTool.ViewModels
 
     private async void Loaded()
     {
-      if(MessageBox.Show("发现新版本是否更新?","更新",MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+      try
       {
-        ProcessUtil.KillProcessByName("LeagueOfLegendsBoxer");
-        await DownLoadFileAsync();
+        if (Global.NPhoenix != null)
+        {
+          if (MessageBox.Show($"发现新版本是否更新?\r\n请确保软件放在了某个文件夹下 否则更新后会出现很多文件!\r\n更新描述: {Global.NPhoenix.Describe}", "更新", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+          {
+            ProcessUtil.KillProcessByName(Global.NPhoenix.StartName);
+            await RunUpdateAsync();
+          }
+        }
+      }
+      catch (Exception ex)
+      {
+        LogUtil.WriteError(ex, "下载操作文件异常");
       }
 
       // 退出程序
@@ -76,12 +86,54 @@ namespace NPhoenixAutoUpdateTool.ViewModels
 
     }
 
-    private async Task DownLoadFileAsync()
+    /// <summary>
+    /// 开始运行更新
+    /// </summary>
+    /// <returns></returns>
+    private async Task RunUpdateAsync()
+    {
+      // 下载文件字节数据
+      var bytes = await DownLoadFileAsync();
+
+      // 检查文件目录
+      var path = CheckDir();
+
+      Percentage = "正在写入...";
+      using (FileStream fileStream = new FileStream(path, FileMode.Create))
+      {
+        await fileStream.WriteAsync(bytes, 0, bytes.Length);
+      }
+
+      Percentage = "开始解压...";
+      await UnzipFileAsync(path, Directory.GetCurrentDirectory());
+
+      var lolBoxerPath = $"{Directory.GetCurrentDirectory()}/{Global.NPhoenix.StartName}";
+
+      Percentage = "创建图标...";
+      CreateLink(lolBoxerPath);
+
+      Percentage = "运行程序...";
+      Process.Start(lolBoxerPath);
+    }
+
+    /// <summary>
+    /// 下载文件
+    /// </summary>
+    /// <returns></returns>
+    private async Task<byte[]> DownLoadFileAsync()
     {
       HttpClient httpClient = new HttpClient();
       Progress progress = new Progress();
       progress.Handler += Progress_Handler;
-      var bytes = await httpClient.GetByteArrayAsync(new Uri("http://www.dotlemon.top:5200/upload/NPhoenix/NPhoenix2.3.zip"), progress, CancellationToken.None);
+      return await httpClient.GetByteArrayAsync(new Uri(Global.NPhoenix.DownUrl), progress, CancellationToken.None);
+    }
+
+    /// <summary>
+    /// 检查文件目录和多余文件
+    /// </summary>
+    /// <returns>文件路径</returns>
+    private string CheckDir()
+    {
       var pathDir = Directory.GetCurrentDirectory() + "\\temp";
       if (!Directory.Exists(pathDir))
       {
@@ -94,42 +146,40 @@ namespace NPhoenixAutoUpdateTool.ViewModels
         File.Delete(path);
       }
 
-      Percentage = "正在写入...";
-      using (FileStream fileStream = new FileStream(path, FileMode.Create))
+      return path;
+    }
+
+    /// <summary>
+    /// 解压文件
+    /// </summary>
+    /// <param name="filePath"></param>
+    /// <param name="fileDir"></param>
+    /// <returns></returns>
+    private async Task UnzipFileAsync(string filePath, string fileDir)
+    {
+      await Task.Run(() =>
       {
-        await fileStream.WriteAsync(bytes, 0, bytes.Length);
-      }
+        ZipUtil.UnZip(filePath, fileDir);
+      });
+    }
 
-      // 开始解压
-      await UnzipFileAsync(path, Directory.GetCurrentDirectory());
-
-      var lolBoxerPath = Directory.GetCurrentDirectory() + "/LeagueOfLegendsBoxer.exe";
-
-      Percentage = "创建图标...";
+    /// <summary>
+    /// 创建图标
+    /// </summary>
+    /// <param name="lolBoxerPath"></param>
+    private void CreateLink(string lolBoxerPath)
+    {
+      var linkName = Global.NPhoenix.LinkName == null ? "LeagueOfLegendsBoxer" : Global.NPhoenix.LinkName;
       // 获取桌面所有图标
       var links = LinkUtil.GetDesktopLink();
-      var link = links.FirstOrDefault(l => l == "LeagueOfLegendsBoxer");
+      var link = links.FirstOrDefault(l => l == linkName);
       if (link != null)
       {
         File.Delete(link);
       }
 
       // 创建图标
-      LinkUtil.CreateLinkToDesktop("LeagueOfLegendsBoxer", lolBoxerPath, "LOL", lolBoxerPath);
-
-
-      Percentage = "运行程序...";
-      // 运行助手
-      Process.Start(lolBoxerPath);
-    }
-
-    private async Task UnzipFileAsync(string filePath,string fileDir)
-    {
-      Percentage = "开始解压...";
-      await Task.Run(() =>
-      {
-        ZipUtil.UnZip(filePath, fileDir);
-      });
+      LinkUtil.CreateLinkToDesktop(linkName, lolBoxerPath, "LOL", lolBoxerPath);
     }
 
     private void Progress_Handler(HttpDownloadProgress progress)

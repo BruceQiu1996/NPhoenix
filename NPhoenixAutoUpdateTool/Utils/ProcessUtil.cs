@@ -15,6 +15,10 @@ namespace NPhoenixAutoUpdateTool.Utils
     /// <param name="processName"></param>
     public static void KillProcessByName(string processName)
     {
+      if(processName.Contains('.'))
+      {
+        processName = processName.Split('.')[0];
+      }
       var processs = Process.GetProcessesByName(processName);
       foreach (var process in processs)
       {

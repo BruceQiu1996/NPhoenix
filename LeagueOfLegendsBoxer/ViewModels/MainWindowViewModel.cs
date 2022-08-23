@@ -25,9 +25,12 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -303,6 +306,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         #endregion 
         private async Task LoadAsync()
         {
+            CheckUpdate();
             await LoadConfig();
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
             await ConnnectAsync();
@@ -320,6 +324,47 @@ namespace LeagueOfLegendsBoxer.ViewModels
             LoopLiveGameEventAsync();
             await LoopforClientStatus();
         }
+        
+    private void CheckUpdate()
+    {
+      var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+      var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.exe");
+      var updateFile = files.FirstOrDefault(f => f.Split('\\').LastOrDefault() == "NPhoenixAutoUpdateTool.exe");
+      if(updateFile != null)
+      {
+        Process.Start(updateFile, version);
+      }
+      else
+      {
+        Task.Run(async () =>
+        {
+          try
+          {
+            using (HttpClient client = new HttpClient())
+            {
+              var responseMessage = await client.GetAsync("http://www.dotlemon.top:5200/upload/NPhoenix/NPhoenixAutoUpdateTool.exe", HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
+              responseMessage.EnsureSuccessStatusCode();
+              if(responseMessage.StatusCode == HttpStatusCode.OK)
+              {
+                var filePath = Directory.GetCurrentDirectory() + "/NPhoenixAutoUpdateTool.exe";
+                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                {
+                  await responseMessage.Content.CopyToAsync(fs);
+                }
+                if (File.Exists(filePath))
+                {
+                  Process.Start(filePath, version);
+                }
+              }
+            }
+          }
+          catch (Exception ex)
+          {
+            _logger.LogError(ex, "下载自动更新程序失败:");
+          }
+        });
+      }
+    }
 
         private async Task ResetAsync()
         {
