@@ -13,6 +13,8 @@ using System.Reflection;
 using System.IO;
 using System.Diagnostics;
 using System.Windows;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace NPhoenixAutoUpdateTool.ViewModels
 {
@@ -72,6 +74,7 @@ namespace NPhoenixAutoUpdateTool.ViewModels
           if (MessageBox.Show($"发现新版本是否更新?\r\n请确保软件放在了某个文件夹下 否则更新后会出现很多文件!\r\n更新描述: {Global.NPhoenix.Describe}", "更新", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
           {
             ProcessUtil.KillProcessByName(Global.NPhoenix.StartName);
+            await UpdateDownLoadNumberAsync();
             await RunUpdateAsync();
           }
         }
@@ -84,6 +87,21 @@ namespace NPhoenixAutoUpdateTool.ViewModels
       // 退出程序
       Application.Current.Shutdown();
 
+    }
+
+    private async Task UpdateDownLoadNumberAsync()
+    {
+      using HttpClient httpClient = new HttpClient();
+      var httpResponseMessage = await httpClient.GetAsync($"http://www.dotlemon.top:5200/NPhoenix/DownLoadFileById?id={Global.NPhoenix.Id}");
+      if(httpResponseMessage != null && httpResponseMessage.StatusCode == HttpStatusCode.OK)
+      {
+        var json = await httpResponseMessage.Content.ReadAsStringAsync();
+        var response = JsonConvert.DeserializeObject<Response<object>>(json);
+        if(response.Code != ResponseCode.Success)
+        {
+          LogUtil.WriteInfo(json);
+        }
+      }
     }
 
     /// <summary>

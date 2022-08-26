@@ -13,6 +13,8 @@ namespace NPhoenixAutoUpdateTool.Models
 
     public string Version { get; set; }
 
+    public int DownLoadNumber { get; set; }
+
     public string? LinkName { get; set; }
 
     public string DownUrl { get; set; }
