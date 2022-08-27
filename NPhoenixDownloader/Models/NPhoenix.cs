@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NPhoenixAutoUpdateTool.Models
+namespace NPhoenixDownloader.Models
 {
   public class NPhoenix
   {
@@ -15,12 +15,12 @@ namespace NPhoenixAutoUpdateTool.Models
 
     public int DownLoadNumber { get; set; }
 
-    public string? LinkName { get; set; }
+    public string LinkName { get; set; }
 
     public string DownUrl { get; set; }
 
     public string StartName { get; set; }
 
-    public string? Describe { get; set; }
+    public string Describe { get; set; }
   }
 }

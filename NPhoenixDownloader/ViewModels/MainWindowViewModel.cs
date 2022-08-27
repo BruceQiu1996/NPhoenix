@@ -1,12 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using NPhoenixAutoUpdateTool.Models;
+using NPhoenixDownloader.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
-using NPhoenixAutoUpdateTool.Utils;
+using NPhoenixDownloader.Utils;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Reflection;
@@ -15,8 +15,10 @@ using System.Diagnostics;
 using System.Windows;
 using System.Net;
 using Newtonsoft.Json;
+using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
-namespace NPhoenixAutoUpdateTool.ViewModels
+namespace NPhoenixDownloader.ViewModels
 {
   public class MainWindowViewModel : ObservableObject
   {
@@ -57,7 +59,15 @@ namespace NPhoenixAutoUpdateTool.ViewModels
       }
     }
 
+    private string _title = "下载";
+    public string Title
+    {
+      get => _title;
+      set => SetProperty(ref _title, value);
+    }
+
     public RelayCommand LoadedCommand { get; set; }
+    private string filePath = string.Empty;
 
 
     public MainWindowViewModel()
@@ -71,9 +81,12 @@ namespace NPhoenixAutoUpdateTool.ViewModels
       {
         if (Global.NPhoenix != null)
         {
-          if (MessageBox.Show($"发现新版本是否更新?\r\n请确保软件放在了某个文件夹下 否则更新后会出现很多文件!\r\n更新描述: {Global.NPhoenix.Describe}", "更新", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+          Title = $"下载 版本: V{Global.NPhoenix.Version}";
+          CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+          dialog.IsFolderPicker = true;
+          if(dialog.ShowDialog() == CommonFileDialogResult.Ok)
           {
-            ProcessUtil.KillProcessByName(Global.NPhoenix.StartName);
+            filePath = dialog.FileName;
             await UpdateDownLoadNumberAsync();
             await RunUpdateAsync();
           }
@@ -91,15 +104,17 @@ namespace NPhoenixAutoUpdateTool.ViewModels
 
     private async Task UpdateDownLoadNumberAsync()
     {
-      using HttpClient httpClient = new HttpClient();
-      var httpResponseMessage = await httpClient.GetAsync($"http://www.dotlemon.top:5200/NPhoenix/DownLoadFileById?id={Global.NPhoenix.Id}");
-      if(httpResponseMessage != null && httpResponseMessage.StatusCode == HttpStatusCode.OK)
+      using (HttpClient httpClient = new HttpClient())
       {
-        var json = await httpResponseMessage.Content.ReadAsStringAsync();
-        var response = JsonConvert.DeserializeObject<Response<object>>(json);
-        if(response.Code != ResponseCode.Success)
+        var httpResponseMessage = await httpClient.GetAsync($"http://www.dotlemon.top:5200/NPhoenix/DownLoadFileById?id={Global.NPhoenix.Id}");
+        if (httpResponseMessage != null && httpResponseMessage.StatusCode == HttpStatusCode.OK)
         {
-          LogUtil.WriteInfo(json);
+          var json = await httpResponseMessage.Content.ReadAsStringAsync();
+          var response = JsonConvert.DeserializeObject<Response<object>>(json);
+          if (response.Code != ResponseCode.Success)
+          {
+            LogUtil.WriteInfo(json);
+          }
         }
       }
     }
@@ -123,9 +138,9 @@ namespace NPhoenixAutoUpdateTool.ViewModels
       }
 
       Percentage = "开始解压...";
-      await UnzipFileAsync(path, Directory.GetCurrentDirectory());
+      await UnzipFileAsync(path, filePath);
 
-      var lolBoxerPath = $"{Directory.GetCurrentDirectory()}/{Global.NPhoenix.StartName}";
+      var lolBoxerPath = $"{filePath}/{Global.NPhoenix.StartName}";
 
       Percentage = "创建图标...";
       CreateLink(lolBoxerPath);
@@ -152,7 +167,7 @@ namespace NPhoenixAutoUpdateTool.ViewModels
     /// <returns>文件路径</returns>
     private string CheckDir()
     {
-      var pathDir = Directory.GetCurrentDirectory() + "\\temp";
+      var pathDir = filePath + "\\temp";
       if (!Directory.Exists(pathDir))
       {
         Directory.CreateDirectory(pathDir);
