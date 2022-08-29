@@ -168,7 +168,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         private async Task LoadAsync()
         {       
-            await _iniSettingsModel.Initialize();
             Position = Positions.FirstOrDefault();
             LevelOption = LevelOptions.FirstOrDefault(x => x.Item2 == 200);
             SortRole = SortRoles.FirstOrDefault();

@@ -47,10 +47,7 @@ namespace LeagueOfLegendsBoxer.Models
             if (Records == null || Records.Count <= 0)
                 return "未知的马";
 
-            var score = Records.Where(x => x.CnQueue != "其他")?.Average(x => x.GetScore());
-            if (score == null)
-                return "未知的马";
-
+            var score = Records.Average(x => x.GetScore());
             if (score >= 120)
             {
                 return App.ServiceProvider.GetRequiredService<IniSettingsModel>().Above120ScoreTxt;

@@ -17,7 +17,7 @@
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="5"/>
     </WindowChrome.WindowChrome>
     <Grid>
-        <Border Margin="5" Background="White" Opacity="0.8" CornerRadius="5">
+        <Border Margin="5" Background="{DynamicResource DefaultBackgroundColor}" Opacity="0.9" CornerRadius="5">
             <Border.Effect>
                 <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
                                   Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
@@ -71,14 +71,16 @@
                                                 Margin="1"
                                                 ToolTip="{Binding Description,UpdateSourceTrigger=PropertyChanged}"
                                                 Background="{TemplateBinding Background}">
-                                            <hc:Card>
+                                            <hc:Card Background="{DynamicResource DefaultCardBackgroundColor}" BorderThickness="0">
                                                 <Grid>
                                                     <Grid.RowDefinitions>
                                                         <RowDefinition Height="*"></RowDefinition>
                                                         <RowDefinition Height="30"></RowDefinition>
                                                     </Grid.RowDefinitions>
                                                     <Image Width="250" Height="200" Source="{Binding Image,UpdateSourceTrigger=PropertyChanged}"></Image>
-                                                    <TextBlock Text="{Binding Name}" Grid.Row="1" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                                                    <TextBlock Text="{Binding Name}" 
+                                                               Foreground="{DynamicResource DefaultFontColor}"
+                                                               Grid.Row="1" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
                                                 </Grid>
                                             </hc:Card>
                                         </Border>

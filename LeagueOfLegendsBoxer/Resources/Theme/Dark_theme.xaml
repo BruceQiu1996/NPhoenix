@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+    <SolidColorBrush x:Key="DefaultFontColor">#f0e6d2</SolidColorBrush>
+    <SolidColorBrush x:Key="DefaultBackgroundColor">#1f1f1f</SolidColorBrush>
+    <SolidColorBrush x:Key="DefaultCardBackgroundColor">#2d2a2e</SolidColorBrush>
+
+    <SolidColorBrush x:Key="DefaultHoverColor">#222222</SolidColorBrush>
+    <SolidColorBrush x:Key="DefaultBorderColor">#444444</SolidColorBrush>
+</ResourceDictionary>

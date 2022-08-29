@@ -24,7 +24,7 @@
     </behaviors:Interaction.Triggers>
 
     <StackPanel Orientation="Vertical">
-        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10">
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10 5" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
             <!--Card 的内容部分-->
             <Border CornerRadius="4,4,0,0">
                 <Grid>
@@ -64,7 +64,7 @@
                             </behaviors:Interaction.Triggers>
                         </TextBlock>
 
-                        <Label Height="45" Width="45" BorderThickness="0" Margin="20 0 0 0" ToolTip="刷新" Cursor="Hand">
+                        <Label Height="45" Width="45" BorderThickness="0" Margin="20 0 0 0" ToolTip="刷新" Cursor="Hand" Background="{DynamicResource DefaultCardBackgroundColor}">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="MouseLeftButtonDown">
                                     <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
@@ -77,7 +77,7 @@
                     <hc:Shield Subject="Level" 
                                Grid.Row="2"
                                Grid.Column="1"
-                               Status="{Binding Account.SummonerLevel}" Color="#4eb899"/>
+                               Status="{Binding Account.SummonerLevel}"/>
 
                     <ProgressBar Value="{Binding Account.XpSinceLastLevel}" 
                                  Grid.Row="2"
@@ -90,7 +90,9 @@
             </Border>
         </hc:Card>
 
-        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10">
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10 5" 
+                 Background="{DynamicResource DefaultCardBackgroundColor}" 
+                 Foreground="{DynamicResource DefaultFontColor}">
             <StackPanel Orientation="Vertical">
                 <StackPanel.Resources>
                     <Style TargetType="Border">
@@ -109,7 +111,7 @@
                         <TextBlock Text="单双" FontSize="15" Margin="10 10 0 0"></TextBlock>
                         <hc:Shield Subject="{Binding Account.Rank.RANKED_SOLO_5x5.CnTier}" 
                                    Grid.Column="1" FontSize="12"
-                                   Status="{Binding Account.Rank.RANKED_SOLO_5x5.Division}" Color="#4eb899"/>
+                                   Status="{Binding Account.Rank.RANKED_SOLO_5x5.Division}"/>
                         <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_SOLO_5x5.Desc}" FontSize="15" Margin="10 10 0 0"></TextBlock>
                     </Grid>
                 </Border>
@@ -123,7 +125,7 @@
                         <TextBlock Text="灵活" FontSize="15" Margin="10 10 0 0"></TextBlock>
                         <hc:Shield Subject="{Binding Account.Rank.RANKED_FLEX_SR.CnTier}" 
                                    Grid.Column="1" FontSize="12"
-                                   Status="{Binding Account.Rank.RANKED_FLEX_SR.Division}" Color="#4eb899"/>
+                                   Status="{Binding Account.Rank.RANKED_FLEX_SR.Division}"/>
                         <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_FLEX_SR.Desc}" FontSize="15" Margin="10 10 0 0"></TextBlock>
                     </Grid>
                 </Border>
@@ -137,16 +139,18 @@
                         <TextBlock Text="云顶" FontSize="15" Margin="10 10 0 0"></TextBlock>
                         <hc:Shield Subject="{Binding Account.Rank.RANKED_TFT.CnTier}" 
                                    Grid.Column="1" FontSize="12"
-                                   Status="{Binding Account.Rank.RANKED_TFT.Division}" Color="#4eb899"/>
+                                   Status="{Binding Account.Rank.RANKED_TFT.Division}"/>
                         <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_TFT.Desc}" FontSize="15" Margin="10 10 0 0"></TextBlock>
                     </Grid>
                 </Border>
             </StackPanel>
         </hc:Card>
 
-        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10" Height="320">
-            <GroupBox Header="最近20场对局" BorderThickness="0" FontSize="18">
-                <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="10 5" Height="350" 
+                 Background="{DynamicResource DefaultCardBackgroundColor}" 
+                 Foreground="{DynamicResource DefaultFontColor}">
+            <GroupBox Header="最近20场对局" BorderThickness="0" FontSize="18" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}" Style="{StaticResource GroupBoxOriginal}">
+                <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"></StackPanel>
@@ -157,7 +161,7 @@
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="OverridesDefaultStyle" Value="True" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
-                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}" />
                             <Setter Property="Height" Value="80" />
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -176,7 +180,7 @@
                                                 </Grid.RowDefinitions>
                                                 <hc:Gravatar Grid.RowSpan="2" Source="{Binding Participants[0].ChampionImage}" />
                                                 <TextBlock Text="{Binding Participants[0].ChampionName}" 
-                                                           FontSize="16" Grid.Column="1" Margin="0 5 0 0"></TextBlock>
+                                                           FontSize="16" Grid.Column="1" Margin="-5 5 0 0"></TextBlock>
                                                 <StackPanel HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                                                     <hc:Tag ShowCloseButton="False" 
                                                             HorizontalAlignment="Left" Margin="-5 0 0 0"

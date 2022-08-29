@@ -23,6 +23,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public bool RankAutoLockHero { get; set; }
         public bool AutoDisableHero { get; set; }
         public bool AutoLockHeroInAram { get; set; }
+        public bool IsDarkTheme { get; set; }
         public List<int> LockHerosInAram { get; set; }
         public List<int> ReadedNotices { get; set; }
         public int AutoDisableChampId { get; set; }
@@ -123,6 +124,7 @@ namespace LeagueOfLegendsBoxer.Resources
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoAcceptGameDelay), out var tempAutoAcceptGameDelay) ? tempAutoAcceptGameDelay : 0;
             var readedNotices = await _settingsService.ReadAsync(Constant.Game, Constant.ReadedNotice);
             ReadedNotices = string.IsNullOrEmpty(readedNotices) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(readedNotices);
+            IsDarkTheme = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsDarkTheme), out var tempIsDarkTheme) ? tempIsDarkTheme : false;
             if (!File.Exists(_blackListLoc)) 
             {
                 File.Create(_blackListLoc);
@@ -314,6 +316,12 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.IsAltQOpenVsDetail, value.ToString());
             IsAltQOpenVsDetail = value;
+        }
+
+        public async Task WriteIsDarkTheme(bool isDarkTheme)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.IsDarkTheme, isDarkTheme.ToString());
+            IsDarkTheme = isDarkTheme;
         }
 
         public async Task RemoveBlackAccountAsync(long id)

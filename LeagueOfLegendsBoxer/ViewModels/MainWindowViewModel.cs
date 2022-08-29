@@ -924,8 +924,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             Constant.Runes = runeDic.Select(x => x.Value).ToList();
             var heros = await _requestService.GetJsonResponseAsync(HttpMethod.Get, "https://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js");
             Constant.Heroes = JToken.Parse(heros)["hero"].ToObject<IEnumerable<Hero>>();
-
-            await _iniSettingsModel.Initialize();
         }
 
         private async Task<bool> InGameSendMessage(string message)

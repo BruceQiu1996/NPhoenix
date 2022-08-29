@@ -1,4 +1,5 @@
-﻿using LeagueOfLegendsBoxer.Helpers;
+﻿using HandyControl.Themes;
+using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Pages;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.ViewModels;
@@ -22,6 +23,7 @@ namespace LeagueOfLegendsBoxer
     /// </summary>
     public partial class App : System.Windows.Application
     {
+        public static Theme CURRENT_THEME;
         public static IServiceProvider ServiceProvider;
         protected async override void OnStartup(StartupEventArgs e)
         {
@@ -34,7 +36,33 @@ namespace LeagueOfLegendsBoxer
             var host = await hostbuilder.StartAsync();
             ServiceProvider = host.Services;
             host.Services.GetRequiredService<MainWindow>()?.Show();
+            await host.Services.GetRequiredService<IniSettingsModel>().Initialize();
+            ChangeTheme(host.Services.GetRequiredService<IniSettingsModel>().IsDarkTheme ? Theme.Dark : Theme.Light);
         }
+
+        public static void ChangeTheme(Theme theme)
+        {
+            var mergedDictionaries = Current.Resources.MergedDictionaries;
+
+            foreach (var merged in mergedDictionaries)
+            {
+                if (merged.Source != null && merged.Source.ToString().Contains("_theme"))
+                {
+                    mergedDictionaries.Remove(merged);
+                    break;
+                }
+            }
+
+            mergedDictionaries.Add(new ResourceDictionary { Source = new Uri($"pack://application:,,,/LeagueOfLegendsBoxer;component/Resources/Theme/{theme}_theme.xaml") });
+            CURRENT_THEME = theme;
+        }
+
+        public enum Theme
+        {
+            Dark,
+            Light
+        }
+
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             var hostBuilder = Host.CreateDefaultBuilder(args).UseSerilog((context, logger) =>//注册Serilog
@@ -42,7 +70,7 @@ namespace LeagueOfLegendsBoxer
                 logger.ReadFrom.Configuration(context.Configuration);
                 logger.Enrich.FromLogContext();
             });
-            hostBuilder.ConfigureServices((ctx,services) =>
+            hostBuilder.ConfigureServices((ctx, services) =>
             {
                 services.AddApplicationServices();
                 services.AddSingleton<MainWindow>();

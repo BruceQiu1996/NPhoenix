@@ -17,10 +17,12 @@
 
     <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="5">
         <StackPanel Orientation="Vertical">
-            <GroupBox Margin="20 5" Header="游戏设置" FontSize="18">
+            <GroupBox Margin="10 5" Header="游戏设置" Padding="5" FontSize="18" Style="{StaticResource GroupBoxOriginal}" 
+                      Foreground="{DynamicResource DefaultFontColor}"
+                      Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="自动接受对局" FontSize="18" IsChecked="{Binding AutoAcceptGame,UpdateSourceTrigger=PropertyChanged}">
+                        <CheckBox Content="自动接受对局" FontSize="18" Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding AutoAcceptGame,UpdateSourceTrigger=PropertyChanged}">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckedAutoAcceptCommandAsync}"></behaviors:InvokeCommandAction>
@@ -32,9 +34,10 @@
                         </CheckBox>
                         <hc:NumericUpDown Maximum="8" 
                                           Margin="20 0 0 0"
-                                          Width="155"
+                                          Width="180"
                                           Minimum="0"
                                           ToolTip="最大8s"
+                                          Foreground="{DynamicResource DefaultFontColor}"
                                           Value="{Binding AutoAcceptGameDelay,UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource NumericUpDownExtend}" 
                                           hc:TitleElement.Title="延迟(s)" hc:TitleElement.TitlePlacement="Left">
@@ -47,7 +50,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="匹配秒选英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}">
+                        <CheckBox Content="匹配秒选英雄" Foreground="{DynamicResource DefaultFontColor}" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckedAutoLockHeroCommandAsync}"></behaviors:InvokeCommandAction>
@@ -61,7 +64,7 @@
                         <ComboBox hc:TitleElement.Title="匹配秒选英雄" 
                                   IsEnabled="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}"
                                   IsEditable="True"
-                                  Width="170"
+                                  Width="190"
                                   IsReadOnly="False"
                                   IsTextSearchEnabled="False"
                                   IsDropDownOpen="{Binding LockHerosOpen,UpdateSourceTrigger=PropertyChanged}"
@@ -83,7 +86,7 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical">
-                        <CheckBox Content="排位秒选英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}">
+                        <CheckBox Content="排位秒选英雄" Foreground="{DynamicResource DefaultFontColor}" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding RankAutoLockHero,UpdateSourceTrigger=PropertyChanged}">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckedRankAutoLockHeroCommandAsync}"></behaviors:InvokeCommandAction>
@@ -346,7 +349,8 @@
                     </StackPanel>
                     
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="排位秒禁英雄" VerticalAlignment="Top" Margin="0 15 0 0" FontSize="18" IsChecked="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}">
+                        <CheckBox Content="排位秒禁英雄" VerticalAlignment="Top" Foreground="{DynamicResource DefaultFontColor}" 
+                                  Margin="0 15 0 0" FontSize="18" IsChecked="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckedAutoDisableHeroCommandAsync}"></behaviors:InvokeCommandAction>
@@ -365,7 +369,7 @@
                                       HorizontalAlignment="Left"
                                       IsTextSearchEnabled="False"
                                       IsDropDownOpen="{Binding DisableHerosOpen,UpdateSourceTrigger=PropertyChanged}"
-                                      Margin="10 10 0 0"
+                                      Margin="30 10 0 0"
                                       IsEnabled="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True"
                                       DisplayMemberPath="Label"
@@ -384,7 +388,7 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Content="大乱斗秒抢英雄" Margin="0 10 0 0" FontSize="18" IsChecked="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}">
+                        <CheckBox Content="大乱斗秒抢英雄" Margin="0 10 0 0" Foreground="{DynamicResource DefaultFontColor}" FontSize="18" IsChecked="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckedAutoLockHeroInAramCommandAsync}"></behaviors:InvokeCommandAction>
@@ -397,15 +401,16 @@
                         <Button Content="配置大乱斗英雄" Width="140" Height="35"
                                 IsEnabled="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}"
                                 Command="{Binding OpenAramChooseCommand}"
-                                FontSize="15" VerticalAlignment="Center" Margin="15 10 0 0"></Button>
+                                FontSize="15" VerticalAlignment="Center" Margin="40 10 0 0"></Button>
                     </StackPanel>
-                    <Button Content="黑名单" Width="120" Height="35"
+                    <Button Content="黑名单" Width="140" Height="35"
                             HorizontalAlignment="Right"
                             Command="{Binding OpenBlackRecordCommand}"
-                            FontSize="15" VerticalAlignment="Center" Margin="0 10 8 0"></Button>
+                            FontSize="15" VerticalAlignment="Center" 
+                            Margin="10 10 2 0"></Button>
                     <StackPanel Orientation="Horizontal" Margin="0 20 0 10">
                         <TextBox Style="{StaticResource TextBoxExtend}" hc:InfoElement.Placeholder="输入段位信息" Width="220" Text="{Binding RankSetting}" FontSize="14"></TextBox>
-                        <Button Content="修改段位" Cursor="Hand" FontSize="15" Height="35" Command="{Binding ModifyRankLevelCommandAsync}" Margin="5 0 0 0" Width="85"/>
+                        <Button Content="修改段位" Cursor="Hand" FontSize="15" Height="35" Command="{Binding ModifyRankLevelCommandAsync}" Margin="5 0 0 0" Width="100"/>
                     </StackPanel>
                     <TextBox Text="rank模式
                              
@@ -469,17 +474,22 @@
                         </ComboBox>
                         <Button Content="查询皮肤"
                                 Command="{Binding SearchSkinsForHeroCommandAsync}" FontSize="15"
-                                Width="115" Margin="5 0 0 0" Height="35" Cursor="Hand"></Button>
+                                Width="135" Margin="5 2 0 0" Height="35" Cursor="Hand"></Button>
                     </StackPanel>
 
-                    <Button Content="获取最新符文装备推荐" Width="310" FontSize="15" Height="35"
+                    <Button Content="获取最新符文装备推荐" Width="330" FontSize="15" Height="35"
                             Cursor="Hand"
                             Margin="0 20 0 0"
                             Command="{Binding FetchRunesAndItemsCommandAsync}"
                             HorizontalAlignment="Center"></Button>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Margin="20 5" Header="游戏内消息设置" FontSize="18">
+            <GroupBox Margin="10 5" Header="游戏内消息设置" FontSize="18" 
+                      Padding="5"
+                      hc:BorderElement.CornerRadius="5"
+                      Style="{StaticResource GroupBoxOriginal}" 
+                      Foreground="{DynamicResource DefaultFontColor}"
+                      Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
                     <!--<CheckBox Content="关闭开局发送对方上等马信息" FontSize="18" IsChecked="{Binding CloseSendOtherWhenBegin,UpdateSourceTrigger=PropertyChanged}" Margin="0 10 0 0">
                         <behaviors:Interaction.Triggers>
@@ -505,12 +515,12 @@
                                     如 : 
                              
                              
-                             我方上等马浦东Faker,评分120,单双排黄金一,灵活组排白银二,最近五场战绩10/1/1 , 10/1/1 , 10/1/1 , 10/1/1 , 10/1/1
+                             上等马浦东Faker,评分120,单双排黄金一,灵活组排白银二,最近五场战绩10/1/1 , 10/1/1 , 10/1/1 , 10/1/1 , 10/1/1
                                     
                              =
                              
                               
-                             我方{horse}{name},评分{score},单双排{solorank},灵活组排{flexrank},最近五场战绩{kda}
+                             {horse}{name},评分{score},单双排{solorank},灵活组排{flexrank},最近五场战绩{kda}
                              " 
                                         
                              FontSize="16"
@@ -527,23 +537,39 @@
                              Height="150"
                              />
 
-                    <TextBox Style="{StaticResource TextBoxExtend}" 
-                             hc:InfoElement.Placeholder="最多5个字"
-                             Text="{Binding Above120ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
-                             hc:TitleElement.Title=">120分：" 
-                             hc:TitleElement.TitlePlacement="Left" Margin="2"></TextBox>
-                    <TextBox Style="{StaticResource TextBoxExtend}" 
-                             hc:InfoElement.Placeholder="最多5个字"
-                             Text="{Binding Above110ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
-                             hc:TitleElement.Title=">110分：" hc:TitleElement.TitlePlacement="Left" Margin="2"></TextBox>
-                    <TextBox Style="{StaticResource TextBoxExtend}" 
-                             hc:InfoElement.Placeholder="最多5个字"
-                             Text="{Binding Above100ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
-                             hc:TitleElement.Title=">100分：" hc:TitleElement.TitlePlacement="Left" Margin="2"></TextBox>
-                    <TextBox Style="{StaticResource TextBoxExtend}" 
-                             hc:InfoElement.Placeholder="最多5个字"
-                             Text="{Binding Below100ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
-                             hc:TitleElement.Title="&lt;100分：" hc:TitleElement.TitlePlacement="Left" Margin="2"></TextBox>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text=">120分：" Margin="10"></TextBlock>
+                        <TextBox Style="{DynamicResource TextBoxExtendBaseStyle}" 
+                                 hc:InfoElement.Placeholder="最多5个字"
+                                 Width="224"
+                                 Text="{Binding Above120ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
+                                 Margin="5 5"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text=">110分：" Margin="10"></TextBlock>
+                        <TextBox Style="{StaticResource TextBoxExtend}" 
+                                 hc:InfoElement.Placeholder="最多5个字"
+                                 Width="224"
+                                 Text="{Binding Above110ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
+                                 Margin="5 5"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text=">100分：" Margin="10"></TextBlock>
+                        <TextBox Style="{StaticResource TextBoxExtend}" 
+                                 hc:InfoElement.Placeholder="最多5个字"
+                                 Width="224"
+                                 Text="{Binding Above100ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
+                                 Margin="5 5"></TextBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&lt;100分：" Margin="10"></TextBlock>
+                        <TextBox Style="{StaticResource TextBoxExtend}" 
+                                 hc:InfoElement.Placeholder="最多5个字"
+                                 Width="224"
+                                 Text="{Binding Below100ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
+                                 Margin="5 5"></TextBox>
+                    </StackPanel>
                     <Button Content="保存" HorizontalAlignment="Right" 
                             Margin="0 5 0 0"
                             Cursor="Hand"
@@ -553,18 +579,21 @@
                             Command="{Binding SaveHorseTemplateCommandAsync}"></Button>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Margin="20 5" Header="软件设置" FontSize="18">
+            <GroupBox Margin="10 5" Header="软件设置" FontSize="18" Padding="5"
+                      Style="{StaticResource GroupBoxOriginal}" 
+                      Foreground="{DynamicResource DefaultFontColor}"
+                      Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <TextBlock Text="对局详情快捷键"></TextBlock>
-                        <RadioButton Content="Alt+Q" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail}" Margin="10 0 0 0" FontSize="18">
+                        <RadioButton Content="Alt+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail}" Margin="10 0 0 0" FontSize="18">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckUseAltQOpenVsDetailCommandAsync}"></behaviors:InvokeCommandAction>
                                 </behaviors:EventTrigger>
                             </behaviors:Interaction.Triggers>
                         </RadioButton>
-                        <RadioButton Content="Ctrl+Q" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail,Converter={StaticResource Boolean2BooleanReConverter}}" Margin="10 0 0 0" FontSize="18">
+                        <RadioButton Content="Ctrl+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail,Converter={StaticResource Boolean2BooleanReConverter}}" Margin="10 0 0 0" FontSize="18">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding UnCheckUseAltQOpenVsDetailCommandAsync}"></behaviors:InvokeCommandAction>
@@ -587,6 +616,7 @@
 
                     <hc:TextBox IsReadOnly="True" 
                                 FontSize="16"
+                                Foreground="{DynamicResource DefaultFontColor}"
                                 ToolTip="{Binding GameStartupLocation,UpdateSourceTrigger=PropertyChanged}"
                                 Text="{Binding GameStartupLocation,UpdateSourceTrigger=PropertyChanged}"
                                 hc:TitleElement.Title="游戏目录" hc:TitleElement.TitlePlacement="Left" Margin="0 5 0 0"></hc:TextBox>
@@ -603,6 +633,23 @@
                             Command="{Binding StartGameCommand}"
                             Margin="20 5 1 0" FontSize="15" Height="35" 
                             HorizontalAlignment="Right"></Button>
+
+                    <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                        <RadioButton Content="明亮模式" Foreground="{DynamicResource DefaultFontColor}" FontSize="16" Margin="30 0 0 0" IsChecked="{Binding IsDarkTheme,Converter={StaticResource Boolean2BooleanReConverter}}" GroupName="theme">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding ChooseLightThemeCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </RadioButton>
+                        <RadioButton Content="暗黑模式" Foreground="{DynamicResource DefaultFontColor}" FontSize="16" Margin="80 0 0 0" IsChecked="{Binding IsDarkTheme}" GroupName="theme">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding ChooseDarkThemeCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </RadioButton>
+                    </StackPanel>
                 </StackPanel>
             </GroupBox>
 
@@ -622,7 +669,7 @@
                     VerticalAlignment="Bottom" Width="310" FontSize="18">
             </Button>
 
-            <TextBlock HorizontalAlignment="Right" FontSize="14" Margin="0 10 25 10" Text="{Binding Version,StringFormat={}版本号 ：v{0}}"/>
+            <TextBlock HorizontalAlignment="Right" Foreground="{DynamicResource DefaultFontColor}" FontSize="14" Margin="0 10 25 10" Text="{Binding Version,StringFormat={}版本号 ：v{0}}"/>
         </StackPanel>
     </ScrollViewer>
 </Page>

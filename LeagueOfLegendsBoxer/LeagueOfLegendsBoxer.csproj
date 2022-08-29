@@ -4,7 +4,7 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<Nullable>disable</Nullable>
-		<Version>2.3</Version>
+		<Version>2.3.1</Version>
 		<UseWPF>true</UseWPF>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>Resources\logo.ico</ApplicationIcon>
@@ -14,7 +14,6 @@
 	<ItemGroup>
 		<None Remove="appsettings.json" />
 		<None Remove="Resources\blackList.json" />
-		<None Remove="Resources\happy.ttf" />
 		<None Remove="Resources\logo.ico" />
 		<None Remove="Resources\Positions\bot.svg" />
 		<None Remove="Resources\Positions\jug.svg" />
@@ -71,9 +70,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Resource Include="Resources\happy.ttf">
-			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
-		</Resource>
 		<Resource Include="Resources\Positions\bot.svg" />
 		<Resource Include="Resources\Positions\jug.svg" />
 		<Resource Include="Resources\Positions\mid.svg" />

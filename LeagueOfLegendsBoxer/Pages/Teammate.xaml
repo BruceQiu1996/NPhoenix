@@ -20,6 +20,7 @@
         </Grid.RowDefinitions>
         <hc:Card BorderThickness="0"
                  Grid.Row="0"
+                 Background="{DynamicResource DefaultCardBackgroundColor}"
                  Effect="{DynamicResource EffectShadow2}" 
                  Margin="20 0">
             <ListBox Grid.Row="1" 
@@ -48,7 +49,7 @@
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                     <Border Margin="3" BorderThickness="0 0 0 0.4" 
-                                            BorderBrush="#dddddd"
+                                            BorderBrush="{DynamicResource DefaultBorderColor}"
                                             Cursor="Hand"
                                             Background="{TemplateBinding Background}">
                                         <Grid>
@@ -81,6 +82,7 @@
                                                        VerticalAlignment="Top"
                                                        Grid.ColumnSpan="2"
                                                        Grid.Column="1"
+                                                       Foreground="{DynamicResource DefaultFontColor}"
                                                        Text="{Binding DisplayName}"/>
 
                                             <hc:Shield Subject="Level" 
@@ -88,24 +90,27 @@
                                                        Grid.Column="2"
                                                        HorizontalAlignment="Left"
                                                        VerticalAlignment="Top"
+                                                       Foreground="{DynamicResource DefaultFontColor}"
                                                        Status="{Binding SummonerLevel}" Color="#4eb899"/>
 
                                             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
-                                                <TextBlock Text="单双" VerticalAlignment="Center"></TextBlock>
+                                                <TextBlock Text="单双" VerticalAlignment="Center" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                                                 <hc:Shield Subject="{Binding Rank.RANKED_SOLO_5x5.CnTier}" 
                                                            Grid.Row="1"
                                                            Grid.Column="2"
                                                            Margin="5 3 0 0"
                                                            HorizontalAlignment="Left"
+                                                           Foreground="{DynamicResource DefaultFontColor}"
                                                            VerticalAlignment="Top"
                                                            Status="{Binding Rank.RANKED_SOLO_5x5.Division}" Color="#4eb899"/>
-                                                <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0"></TextBlock>
+                                                <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                                                 <hc:Shield Subject="{Binding Rank.RANKED_FLEX_SR.CnTier}" 
                                                            Grid.Row="1"
                                                            Grid.Column="2"
                                                            Margin="5 3 0 0"
                                                            HorizontalAlignment="Left"
                                                            VerticalAlignment="Top"
+                                                           Foreground="{DynamicResource DefaultFontColor}"
                                                            Status="{Binding Rank.RANKED_FLEX_SR.Division}" Color="#4eb899"/>
                                             </StackPanel>
                                         </Grid>

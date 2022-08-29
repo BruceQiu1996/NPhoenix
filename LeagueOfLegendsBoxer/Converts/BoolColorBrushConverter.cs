@@ -13,7 +13,12 @@ namespace LeagueOfLegendsBoxer.Converts
             if (temp)
                 return System.Windows.Application.Current.FindResource("PrimaryBrush");
             else
-                return new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            {
+                if (App.CURRENT_THEME == App.Theme.Light)
+                    return new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                else
+                    return new SolidColorBrush(Color.FromRgb(240, 230, 210));
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -30,7 +35,12 @@ namespace LeagueOfLegendsBoxer.Converts
             if (!temp)
                 return System.Windows.Application.Current.FindResource("PrimaryBrush");
             else
-                return new SolidColorBrush(Color.FromRgb(0, 0, 0));
+            {
+                if (App.CURRENT_THEME == App.Theme.Light)
+                    return new SolidColorBrush(Color.FromRgb(0, 0, 0));
+                else
+                    return new SolidColorBrush(Color.FromRgb(240, 230, 210));
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

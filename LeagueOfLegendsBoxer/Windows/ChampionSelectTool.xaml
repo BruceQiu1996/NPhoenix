@@ -17,7 +17,7 @@
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="10"/>
     </WindowChrome.WindowChrome>
     <Grid>
-        <Border Margin="10" Background="White" Opacity="0.9" CornerRadius="5">
+        <Border Margin="10" Background="{DynamicResource DefaultBackgroundColor}" Opacity="0.6" CornerRadius="5">
             <Border.Effect>
                 <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
                                   Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
@@ -79,8 +79,8 @@
                                     <Setter Property="Background" Value="{StaticResource PrimaryBrush}"></Setter>
                                 </Trigger>
                                 <Trigger Property="IsSelected" Value="False">
-                                    <Setter Property="Foreground" Value="Black"></Setter>
-                                    <Setter Property="Background" Value="White"></Setter>
+                                    <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                    <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"></Setter>
                                 </Trigger>
                             </Style.Triggers>
                         </Style>

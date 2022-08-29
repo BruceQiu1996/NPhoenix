@@ -34,7 +34,7 @@
             <ColumnDefinition Width="200"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <hc:Card Grid.Row="0" Margin="5" Grid.ColumnSpan="2">
+        <hc:Card Grid.Row="0" Margin="5" Grid.ColumnSpan="2" BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="{Binding Account.DisplayName,StringFormat={}召唤师名:{0}}" FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
                 <TextBlock Text="{Binding Account.Rank.RANKED_SOLO_5x5.CnTier,StringFormat={}单双段位:{0}}" FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
@@ -43,8 +43,11 @@
                 <TextBlock Text="{Binding Account.Rank.RANKED_FLEX_SR.Division}" FontSize="16" Margin="2 0 0 0" VerticalAlignment="Center"></TextBlock>
             </StackPanel>
         </hc:Card>
-        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="0" Margin="5">
-            <GroupBox Header="最近100场对局" BorderThickness="0" FontSize="15">
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="0" Margin="5"
+                 Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+            <GroupBox Header="最近100场对局" BorderThickness="0" FontSize="15" 
+                      Style="{StaticResource GroupBoxOriginal}"
+                      Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
@@ -52,6 +55,7 @@
                     </Grid.RowDefinitions>
                     <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
                              Grid.Row="0"
+                             Background="Transparent"
                              SelectedItem="{Binding Record,UpdateSourceTrigger=PropertyChanged}">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="SelectionChanged">
@@ -73,7 +77,7 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <Border Background="Transparent" Cursor="Hand">
+                                            <Border Background="Transparent" Cursor="Hand" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{StaticResource PrimaryBrush}">
                                                 <Grid Margin="0 5 5 5">
                                                     <Grid.ColumnDefinitions>
                                                         <ColumnDefinition Width="*"></ColumnDefinition>
@@ -95,8 +99,8 @@
                                                             FontSize="13" Grid.Column="1" Margin="0 5 0 0"></hc:Tag>
 
                                                     <TextBlock Text="{Binding Participants[0].Stats.KDA}" 
-                                                           VerticalAlignment="Center" FontSize="15" Grid.Row="1"
-                                                           Grid.Column="1" ></TextBlock>
+                                                               VerticalAlignment="Center" FontSize="15" Grid.Row="1"
+                                                               Grid.Column="1" ></TextBlock>
 
                                                     <TextBlock Text="{Binding Participants[0].Stats.Win,Converter={StaticResource WinTextConverter}}"
                                                                Grid.Column="3" VerticalAlignment="Center" Grid.Row="1"
@@ -110,9 +114,10 @@
                                 <Style.Triggers>
                                     <Trigger Property="IsSelected" Value="True">
                                         <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                        <Setter Property="BorderThickness" Value="1"></Setter>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
-                                        <Setter Property="Foreground" Value="Black"></Setter>
+                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -120,7 +125,7 @@
                     </ListBox>
                     <hc:Pagination Foreground="{StaticResource PrimaryBrush}" 
                                    MaxPageCount="5"
-                                   Grid.Row="1" 
+                                   Grid.Row="1"
                                    PageIndex="{Binding PageIndex,UpdateSourceTrigger=PropertyChanged}" 
                                    HorizontalAlignment="Center" Margin="0,10,0,0" Height="30" VerticalAlignment="Top">
                         <behaviors:Interaction.Triggers>
@@ -133,7 +138,8 @@
             </GroupBox>
         </hc:Card>
 
-        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="1" Margin="5">
+        <hc:Card BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" 
+                 Foreground="{DynamicResource DefaultFontColor}" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="1" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="100"></RowDefinition>
@@ -191,7 +197,7 @@
                     </StackPanel>
                 </Grid>
                 <ListBox ItemsSource="{Binding LeftParticipants,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
-                         Grid.Row="1" Grid.Column="0" Margin="10 0 0 0">
+                         Grid.Row="1" Grid.Column="0" Margin="10 0 0 0" Background="Transparent">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"></StackPanel>
@@ -564,7 +570,7 @@
                 </ListBox>
 
                 <ListBox ItemsSource="{Binding RightParticipants,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
-                         Grid.Row="1" Grid.Column="1" Margin="0 0 10 0">
+                         Grid.Row="1" Grid.Column="1" Margin="0 0 10 0" Background="Transparent">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"></StackPanel>
@@ -937,9 +943,12 @@
             </Grid>
         </hc:Card>
 
-        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="2" Margin="5">
-            <GroupBox Header="英雄熟练度" BorderThickness="0" FontSize="15">
-                <ListBox ItemsSource="{Binding Champs,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="2" Margin="5" 
+                 Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+            <GroupBox Header="英雄熟练度" BorderThickness="0" FontSize="15" 
+                      Style="{StaticResource GroupBoxOriginal}"
+                      Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+                <ListBox ItemsSource="{Binding Champs,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent">
                     <behaviors:Interaction.Triggers>
                         <behaviors:EventTrigger EventName="SelectionChanged">
                             <behaviors:InvokeCommandAction Command="{Binding GameSelectionChangedCommandAsync}"></behaviors:InvokeCommandAction>
@@ -978,7 +987,8 @@
                                                 </hc:Badge>
                                                 <hc:Tag VerticalAlignment="Center"
                                                         ShowCloseButton="False"
-                                                        Foreground="Black" FontSize="14"
+                                                        Background="{DynamicResource DefaultCardBackgroundColor}"
+                                                        Foreground="{DynamicResource DefaultFontColor}" FontSize="14"
                                                         Content="{Binding ChampionPointsDesc}" Grid.Column="1" Grid.Row="0"></hc:Tag>
                                                 <hc:Tag VerticalAlignment="Center"
                                                         ShowCloseButton="False" Background="{StaticResource PrimaryBrush}"

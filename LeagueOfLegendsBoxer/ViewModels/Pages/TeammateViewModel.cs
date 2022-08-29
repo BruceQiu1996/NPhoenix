@@ -176,6 +176,33 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             break;
                     }
                 }
+                else 
+                {
+                    var data = _iniSettingsModel.HorseTemplate.Trim();
+                    data = data.Replace(Constant.Horse, account.Horse)
+                                      .Replace(Constant.Name, account.DisplayName)
+                                      .Replace(Constant.Score, account.Records?.Average(x => x.GetScore()).ToString("0.0"))
+                                      .Replace(Constant.Solorank, $"{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division}")
+                                      .Replace(Constant.SolorankDetail, account.Rank.RANKED_SOLO_5x5.ShortDesc)
+                                      .Replace(Constant.Flexrank, $"{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division}")
+                                      .Replace(Constant.FlexrankDetail, account.Rank.RANKED_FLEX_SR.ShortDesc);
+
+                    var kdadesc = new StringBuilder();
+                    if (data.Contains(Constant.Kda))
+                    {
+                        int a = 0;
+                        foreach (var record in account.Records)
+                        {
+                            kdadesc.Append($"{record?.Participants?.FirstOrDefault()?.Stats?.KDA}  ");
+                            a++;
+                            if (a >= 5)
+                                break;
+                        }
+                        data = data.Replace(Constant.Kda, kdadesc.ToString());
+                    }
+
+                    sb.Append(data);
+                }
 
                 return sb.ToString();
             }

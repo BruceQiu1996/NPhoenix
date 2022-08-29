@@ -9,11 +9,7 @@
                 <ResourceDictionary Source="./Resources/Icons.xaml"></ResourceDictionary>
                 <ResourceDictionary>
                     <ResourceDictionary.MergedDictionaries>
-                        <ResourceDictionary Source="pack://application:,,,/LeagueOfLegendsBoxer;component/Resources/SkinLocal.xaml"/>
-                        <!--合并Dark为目标色系-->
-                        <!--<ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDark.xaml"/>-->
-                        <!--替换原始色系-->
-                        <!--<ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml"/>-->
+                        <ResourceDictionary Source="pack://application:,,,/LeagueOfLegendsBoxer;component/Resources/ColorsLocal.xaml"/>
                         <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml"/>
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>

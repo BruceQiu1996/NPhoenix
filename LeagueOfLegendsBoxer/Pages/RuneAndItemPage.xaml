@@ -30,7 +30,7 @@
         <hc:Card BorderThickness="0" 
                  Grid.Row="0"
                  Margin="15 0"
-                 Background="White" Effect="{DynamicResource EffectShadow2}" >
+                 Background="{DynamicResource DefaultCardBackgroundColor}" Effect="{DynamicResource EffectShadow2}" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="120"></ColumnDefinition>
@@ -43,7 +43,7 @@
                              Source="{Binding Hero.Avatar,UpdateSourceTrigger=PropertyChanged}"/>
 
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Hero.Name}" FontSize="15" Margin="20 0 0 0" VerticalAlignment="Center" 
+                    <TextBlock Text="{Binding Hero.Name}" Foreground="{DynamicResource DefaultFontColor}" FontSize="15" Margin="20 0 0 0" VerticalAlignment="Center" 
                                Grid.Column="1">
                     </TextBlock>
                     <Button Content="切换到装备推荐" 
@@ -56,11 +56,12 @@
             </Grid>
         </hc:Card>
 
-        <hc:Card BorderThickness="1" 
+        <hc:Card BorderThickness="0" 
                  Grid.Row="1"
+                 Background="{DynamicResource DefaultCardBackgroundColor}"
                  Margin="15 5 15 15"
                  Visibility="{Binding IsRunePage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}" 
-                 Background="White" Effect="{DynamicResource EffectShadow2}" >
+                 Effect="{DynamicResource EffectShadow2}" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -77,6 +78,7 @@
                        BorderThickness="0" 
                        FontSize="15" 
                        Cursor="Hand"
+                       Background="{DynamicResource DefaultCardBackgroundColor}"
                        Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushReConverter}}"
                        Width="150">
                     <behaviors:Interaction.Triggers>
@@ -89,6 +91,7 @@
                        Grid.Row="0" 
                        Grid.Column="1" 
                        BorderThickness="0" 
+                       Background="{DynamicResource DefaultCardBackgroundColor}"
                        FontSize="15"
                        Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                        Cursor="Hand" 
@@ -121,9 +124,9 @@
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                                 <Border BorderThickness="0 0.4 0 0" 
-                                                    BorderBrush="#eeeeee"
-                                                    Margin="1"
-                                                    Background="{TemplateBinding Background}">
+                                                        BorderBrush="{DynamicResource DefaultBorderColor}"
+                                                        Margin="1"
+                                                        Background="{TemplateBinding Background}">
                                                     <Grid Background="Transparent">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -212,7 +215,7 @@
                                     </Setter>
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#eeeeee"></Setter>
+                                            <Setter Property="Background" Value="{DynamicResource DefaultHoverColor}"></Setter>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -223,11 +226,11 @@
             </Grid>
         </hc:Card>
 
-        <hc:Card BorderThickness="1" 
+        <hc:Card BorderThickness="0" 
                  Grid.Row="1"
                  Margin="15 5 15 15"
                  Visibility="{Binding IsRunePage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}" 
-                 Background="White" Effect="{DynamicResource EffectShadow2}" >
+                 Background="{DynamicResource DefaultCardBackgroundColor}" Effect="{DynamicResource EffectShadow2}" >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -245,6 +248,7 @@
                        BorderThickness="0" 
                        FontSize="15" 
                        Cursor="Hand"
+                       Background="{DynamicResource DefaultCardBackgroundColor}"
                        Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushReConverter}}"
                        Width="150">
                     <behaviors:Interaction.Triggers>
@@ -258,6 +262,7 @@
                        Grid.Column="1" 
                        BorderThickness="0" 
                        FontSize="15"
+                       Background="{DynamicResource DefaultCardBackgroundColor}"
                        Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                        Cursor="Hand" 
                        Width="150">
@@ -270,7 +275,10 @@
 
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                     <StackPanel>
-                        <GroupBox Header="起始装备" FontSize="16" Margin="5">
+                        <GroupBox Header="起始装备" FontSize="16" Margin="5" 
+                                  Foreground="{DynamicResource DefaultFontColor}"
+                                  Background="{DynamicResource DefaultCardBackgroundColor}" 
+                                  Style="{StaticResource GroupBoxOriginal}">
                             <ListBox ItemsSource="{Binding DisplayItems.StartItems,UpdateSourceTrigger=PropertyChanged}" 
                                      SelectedItem="{Binding DisplayItems.StartItem,UpdateSourceTrigger=PropertyChanged}" 
                                      ScrollViewer.CanContentScroll="True"
@@ -295,7 +303,7 @@
                                                             BorderBrush="{TemplateBinding BorderBrush}"
                                                             Background="{TemplateBinding Background}">
                                                         <Grid>
-                                                            <ListBox ItemsSource="{Binding Items}" BorderThickness="0">
+                                                            <ListBox ItemsSource="{Binding Items}" BorderThickness="0" Background="Transparent">
                                                                 <ListBox.ItemsPanel>
                                                                     <ItemsPanelTemplate>
                                                                         <StackPanel Orientation="Horizontal"></StackPanel>
@@ -312,7 +320,7 @@
                                                                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                                                                     <Border BorderThickness="0" 
                                                                                             BorderBrush="#eeeeee"
-                                                                                            Background="{TemplateBinding Background}">
+                                                                                            Background="{DynamicResource Background}">
                                                                                         <Grid>
                                                                                             <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                                                      Grid.Row="0" Grid.Column="0"
@@ -366,7 +374,9 @@
                                 </ListBox.ItemContainerStyle>
                             </ListBox>
                         </GroupBox>
-                        <GroupBox Header="核心装备" FontSize="15" Margin="5">
+                        <GroupBox Header="核心装备" FontSize="15" Margin="5" Foreground="{DynamicResource DefaultFontColor}"
+                                  Background="{DynamicResource DefaultCardBackgroundColor}" 
+                                  Style="{StaticResource GroupBoxOriginal}">
                             <ListBox ItemsSource="{Binding DisplayItems.CoreItems,UpdateSourceTrigger=PropertyChanged}" 
                                      SelectedItem="{Binding DisplayItems.CoreItem,UpdateSourceTrigger=PropertyChanged}"
                                      ScrollViewer.CanContentScroll="True"
@@ -391,7 +401,7 @@
                                                             BorderBrush="{TemplateBinding BorderBrush}"
                                                             Background="{TemplateBinding Background}">
                                                         <Grid>
-                                                            <ListBox ItemsSource="{Binding Items}" BorderThickness="0">
+                                                            <ListBox ItemsSource="{Binding Items}" BorderThickness="0" Background="Transparent">
                                                                 <ListBox.ItemsPanel>
                                                                     <ItemsPanelTemplate>
                                                                         <StackPanel Orientation="Horizontal"></StackPanel>
@@ -462,7 +472,9 @@
                                 </ListBox.ItemContainerStyle>
                             </ListBox>
                         </GroupBox>
-                        <GroupBox Header="鞋子" FontSize="15" Margin="5">
+                        <GroupBox Header="鞋子" FontSize="15" Margin="5" Foreground="{DynamicResource DefaultFontColor}"
+                                  Background="{DynamicResource DefaultCardBackgroundColor}" 
+                                  Style="{StaticResource GroupBoxOriginal}">
                             <ListBox ItemsSource="{Binding DisplayItems.ShoeItems,UpdateSourceTrigger=PropertyChanged}" 
                                      SelectedItem="{Binding DisplayItems.ShoeItem,UpdateSourceTrigger=PropertyChanged}" 
                                      ScrollViewer.CanContentScroll="True"
@@ -487,7 +499,7 @@
                                                             BorderBrush="{TemplateBinding BorderBrush}"
                                                             Background="{TemplateBinding Background}">
                                                         <Grid>
-                                                            <ListBox ItemsSource="{Binding Items}" BorderThickness="0">
+                                                            <ListBox ItemsSource="{Binding Items}" BorderThickness="0" Background="Transparent">
                                                                 <ListBox.ItemsPanel>
                                                                     <ItemsPanelTemplate>
                                                                         <StackPanel Orientation="Horizontal"></StackPanel>

@@ -33,7 +33,7 @@
     </behaviors:Interaction.Triggers>
 
     <Grid>
-        <Border Margin="10" Background="White" CornerRadius="10">
+        <Border Margin="10" Background="{DynamicResource DefaultBackgroundColor}" CornerRadius="10">
             <Border.Effect>
                 <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
                                   Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
@@ -181,19 +181,23 @@
 
                     <TextBlock Text="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedTextConverter}}" 
                                FontSize="15" 
+                               Foreground="{DynamicResource DefaultFontColor}"
                                Canvas.Top="11" Canvas.Left="35"></TextBlock>
 
                     <TextBlock Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" 
                                FontSize="15" 
-                               Canvas.Top="11" Canvas.Left="220"></TextBlock>
+                               Foreground="{DynamicResource DefaultFontColor}"
+                               Canvas.Top="11" Canvas.Left="216"></TextBlock>
 
-                    <Label Width="40" BorderThickness="0" MouseLeftButtonDown="Label_MouseLeftButtonDown_2" Cursor="Hand" Canvas.Top="5" Canvas.Left="175" ToolTip="免费软件帮忙点个赞">
+                    <Label Width="40" BorderThickness="0" 
+                           MouseLeftButtonDown="Label_MouseLeftButtonDown_2" Cursor="Hand" 
+                           Canvas.Top="5" Canvas.Left="172" ToolTip="免费软件帮忙点个赞" Background="Transparent">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="MouseLeftButtonDown">
                                 <behaviors:InvokeCommandAction Command="{Binding OpenGitAddressCommand}"></behaviors:InvokeCommandAction>
                             </behaviors:EventTrigger>
                         </behaviors:Interaction.Triggers>
-                        <Path Data="{StaticResource gitIcon}" Fill="Black" Stretch="Uniform"/>
+                        <Path Data="{StaticResource gitIcon}" Fill="{DynamicResource DefaultFontColor}" Stretch="Uniform"/>
                     </Label>
                 </Canvas>
             </Border>

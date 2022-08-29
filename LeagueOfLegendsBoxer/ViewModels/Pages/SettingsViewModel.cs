@@ -25,6 +25,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
     public class SettingsViewModel : ObservableObject
     {
+        private bool _isDarkTheme;
+        public bool IsDarkTheme
+        {
+            get => _isDarkTheme;
+            set => SetProperty(ref _isDarkTheme, value);
+        }
+
         private bool _autoAcceptGame;
         public bool AutoAcceptGame
         {
@@ -631,6 +638,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand AutoAcceptGameDelayChangedCommandAsync { get; set; }
         public AsyncRelayCommand CheckUseAltQOpenVsDetailCommandAsync { get; set; }
         public AsyncRelayCommand UnCheckUseAltQOpenVsDetailCommandAsync { get; set; }
+        public AsyncRelayCommand ChooseLightThemeCommandAsync { get; set; }
+        public AsyncRelayCommand ChooseDarkThemeCommandAsync { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -682,6 +691,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             AutoAcceptGameDelayChangedCommandAsync = new AsyncRelayCommand(AutoAcceptGameDelayChangedAsync);
             CheckUseAltQOpenVsDetailCommandAsync = new AsyncRelayCommand(CheckUseAltQOpenVsDetailAsync);
             UnCheckUseAltQOpenVsDetailCommandAsync = new AsyncRelayCommand(UnCheckUseAltQOpenVsDetailAsync);
+            ChooseLightThemeCommandAsync = new AsyncRelayCommand(ChooseLightThemeAsync);
+            ChooseDarkThemeCommandAsync = new AsyncRelayCommand(ChooseDarkThemeAsync);
         }
 
         private async Task LoadAsync()
@@ -778,6 +789,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             Above100ScoreTxt = _iniSettingsModel.Above100ScoreTxt;
             Below100ScoreTxt = _iniSettingsModel.Below100ScoreTxt;
             IsAltQOpenVsDetail = _iniSettingsModel.IsAltQOpenVsDetail;
+            IsDarkTheme = _iniSettingsModel.IsDarkTheme;
         }
 
         #region checkbox
@@ -1252,6 +1264,19 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     }
                 }
             }
+        }
+
+        private async Task ChooseLightThemeAsync() 
+        {
+            await _iniSettingsModel.WriteIsDarkTheme(false);
+            IsDarkTheme = false;
+            App.ChangeTheme(App.Theme.Light);
+        }
+        private async Task ChooseDarkThemeAsync()
+        {
+            await _iniSettingsModel.WriteIsDarkTheme(true);
+            IsDarkTheme = true;
+            App.ChangeTheme(App.Theme.Dark);
         }
     }
 }

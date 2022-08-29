@@ -26,7 +26,8 @@
             </Grid.RowDefinitions>
 
             <hc:Card BorderThickness="0" 
-                     Effect="{DynamicResource EffectShadow2}" 
+                     Effect="{DynamicResource EffectShadow2}"
+                     Background="{DynamicResource DefaultCardBackgroundColor}"
                      Height="80" Margin="20 0">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -81,10 +82,10 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                             <Border BorderBrush="#dddddd"
-                                                CornerRadius="5"
-                                                Height="30"
-                                                HorizontalAlignment="Center"
-                                                Background="{TemplateBinding Background}">
+                                                    CornerRadius="5"
+                                                    Height="30"
+                                                    HorizontalAlignment="Center"
+                                                    Background="{TemplateBinding Background}">
                                                 <Label BorderThickness="0"
                                                    HorizontalAlignment="Center"
                                                    HorizontalContentAlignment="Center"
@@ -101,8 +102,8 @@
                                         <Setter Property="Background" Value="{StaticResource PrimaryBrush}"></Setter>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
-                                        <Setter Property="Foreground" Value="Black"></Setter>
-                                        <Setter Property="Background" Value="White"></Setter>
+                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                        <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"></Setter>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -111,10 +112,11 @@
                 </Grid>
             </hc:Card>
 
-            <hc:Card BorderThickness="0" Background="White" Effect="{DynamicResource EffectShadow2}" 
-                 Grid.Row="1"
-                 VerticalAlignment="Top"
-                 Height="415" Margin="20 0">
+            <hc:Card BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Effect="{DynamicResource EffectShadow2}" 
+                     Grid.Row="1"
+                     VerticalAlignment="Top"
+                     Foreground="{DynamicResource DefaultFontColor}"
+                     Height="415" Margin="20 0">
                 <Grid Visibility="{Binding ChampRankDataVisibility,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="44*"/>
@@ -126,8 +128,8 @@
                     </Grid.RowDefinitions>
 
                     <ListBox Grid.Row="0" Background="Transparent" BorderThickness="0" 
-                         SelectedItem="{Binding Position,UpdateSourceTrigger=PropertyChanged}"
-                         ItemsSource="{Binding Positions,UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2">
+                             SelectedItem="{Binding Position,UpdateSourceTrigger=PropertyChanged}"
+                             ItemsSource="{Binding Positions,UpdateSourceTrigger=PropertyChanged}" Grid.ColumnSpan="2">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="SelectionChanged">
                                 <behaviors:InvokeCommandAction Command="{Binding PositionSelectionChangedCommandAsync}"></behaviors:InvokeCommandAction>
@@ -170,8 +172,8 @@
                                         <Setter Property="Background" Value="{StaticResource PrimaryBrush}"></Setter>
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
-                                        <Setter Property="Foreground" Value="Black"></Setter>
-                                        <Setter Property="Background" Value="White"></Setter>
+                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                        <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"></Setter>
                                     </Trigger>
                                 </Style.Triggers>
                             </Style>
@@ -203,7 +205,7 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                             <Border Margin="0" BorderThickness="0 0.4 0 0" 
-                                                    BorderBrush="#dddddd"
+                                                    BorderBrush="{DynamicResource DefaultBorderColor}"
                                                     Cursor="Hand"
                                                     Background="{TemplateBinding Background}">
                                                 <Grid>
@@ -222,7 +224,9 @@
                                                              Height="45" Width="45"
                                                              Source="{Binding Avatar,UpdateSourceTrigger=PropertyChanged}"/>
 
-                                                    <TextBlock Text="{Binding Name}" FontSize="14" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"></TextBlock>
+                                                    <TextBlock Text="{Binding Name}" 
+                                                               Foreground="{DynamicResource DefaultFontColor}"
+                                                               FontSize="14" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"></TextBlock>
                                                     <TextBlock Foreground="#aaaaaa" Text="{Binding WinStr,StringFormat={}胜率: {0}%}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"></TextBlock>
 
                                                     <svgc:SvgViewbox Grid.Row="0" Grid.Column="2" IsHitTestVisible="False" Width="20" Source="{Binding TLevelIcon}"/>
@@ -258,7 +262,7 @@
                 <RowDefinition Height="70"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label HorizontalAlignment="Right" Margin="0 0 20 0" BorderThickness="0"
+            <Label HorizontalAlignment="Right" Margin="0 0 20 0" BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}"
                    Cursor="Hand" FontWeight="Bold" ToolTip="返回">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="MouseLeftButtonDown">
@@ -270,6 +274,7 @@
             <hc:Card BorderThickness="0" 
                      Width="280"
                      Grid.Row="1"
+                     Background="{DynamicResource DefaultCardBackgroundColor}"
                      Effect="{DynamicResource EffectShadow2}" 
                      Height="60">
                 <Grid>
@@ -288,7 +293,7 @@
                                                              Height="45" Width="45"
                                                              Source="{Binding ChampRank.Avatar,UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <TextBlock Text="{Binding ChampRank.Name}" FontSize="14" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"></TextBlock>
+                    <TextBlock Text="{Binding ChampRank.Name}" Foreground="{DynamicResource DefaultFontColor}" FontSize="14" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"></TextBlock>
                     <TextBlock Foreground="#aaaaaa" Text="{Binding ChampRank.WinStr,StringFormat={}胜率: {0}%}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"></TextBlock>
 
                     <svgc:SvgViewbox Grid.Row="0" 
@@ -301,10 +306,10 @@
             </hc:Card>
 
             <hc:Card BorderThickness="0" 
+                     Background="{DynamicResource DefaultCardBackgroundColor}"
                      Width="280"
                      Height="415"
                      Grid.Row="2" 
-                     Background="White" 
                      Effect="{DynamicResource EffectShadow2}">
                 <ListBox Background="Transparent" BorderThickness="0" 
                          ItemsSource="{Binding ChampRestraints,UpdateSourceTrigger=PropertyChanged}">
@@ -323,7 +328,7 @@
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                         <Border Margin="0" BorderThickness="0 0.4 0 0" 
-                                                BorderBrush="#dddddd"
+                                                BorderBrush="{DynamicResource DefaultBorderColor}"
                                                 Background="{TemplateBinding Background}">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -337,7 +342,7 @@
                                                              Height="40" Width="40"
                                                              Source="{Binding Avatar,UpdateSourceTrigger=PropertyChanged}"/>
 
-                                                <TextBlock Margin="8 0 0 0" Text="{Binding Name}" FontSize="14" Grid.Column="2" VerticalAlignment="Center" Grid.Row="0"></TextBlock>
+                                                <TextBlock Margin="8 0 0 0" Foreground="{DynamicResource DefaultFontColor}" Text="{Binding Name}" FontSize="14" Grid.Column="2" VerticalAlignment="Center" Grid.Row="0"></TextBlock>
                                                 <Label Foreground="White" 
                                                        FontSize="13" Content="{Binding WinrateStr}" Grid.Column="1">
                                                     <Label.Resources>
