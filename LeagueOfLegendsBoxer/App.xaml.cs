@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -35,9 +37,22 @@ namespace LeagueOfLegendsBoxer
             var hostbuilder = CreateHostBuilder(e.Args);
             var host = await hostbuilder.StartAsync();
             ServiceProvider = host.Services;
-            host.Services.GetRequiredService<MainWindow>()?.Show();
             await host.Services.GetRequiredService<IniSettingsModel>().Initialize();
             ChangeTheme(host.Services.GetRequiredService<IniSettingsModel>().IsDarkTheme ? Theme.Dark : Theme.Light);
+            CheckForStartGame();
+            host.Services.GetRequiredService<MainWindow>()?.Show();
+        }
+
+        private void CheckForStartGame()
+        {
+            if (ServiceProvider.GetRequiredService<IniSettingsModel>().AutoStartGame)
+            {
+                Process[] ps = Process.GetProcesses();
+                if (!ps.Where(x => !string.IsNullOrEmpty(x.ProcessName) && x.ProcessName.Contains("LeagueClient")).Any())
+                {
+                    ServiceProvider.GetRequiredService<SettingsViewModel>().StartGame();
+                }
+            }
         }
 
         public static void ChangeTheme(Theme theme)
@@ -92,6 +107,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<BlackListViewModel>();
                 services.AddSingleton<BlackRecord>();
                 services.AddSingleton<BlackRecordViewModel>();
+                services.AddSingleton<BlackTip>();
+                services.AddSingleton<BlackTipViewModel>();
                 //pages
                 services.AddSingleton<MainPage>();
                 services.AddSingleton<MainViewModel>();
@@ -137,7 +154,7 @@ namespace LeagueOfLegendsBoxer
             sbEx.Append("非UI线程异常：");
             if (e.ExceptionObject is Exception)
             {
-                sbEx.Append(((Exception)e.ExceptionObject).Message);
+                sbEx.Append(((Exception)e.ExceptionObject).ToString());
             }
             else
             {

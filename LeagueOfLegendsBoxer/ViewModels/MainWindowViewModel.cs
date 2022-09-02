@@ -107,6 +107,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly RuneAndItemViewModel _runeViewModel;
         private readonly ILiveGameService _livegameservice;
         private readonly TeammateViewModel _teammateViewModel;
+        private readonly SettingsViewModel _settingsViewModel;
         private readonly Team1V2Window _team1V2Window;
         private readonly BlackList _blackList;
 
@@ -121,6 +122,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                    MainPage mainPage,
                                    ImageManager imageManager,
                                    RuneAndItemViewModel runeViewModel,
+                                   SettingsViewModel settingsViewModel,
                                    ChampionSelectTool championSelectTool,
                                    ILogger<MainWindowViewModel> logger,
                                    ILiveGameService livegameservice,
@@ -146,6 +148,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _championSelectTool = championSelectTool;
             _mainPage = mainPage;
             _eventService = eventService;
+            _settingsViewModel = settingsViewModel;
             _gameService = gameService;
             _logger = logger;
             _blackList = blackList;
@@ -251,6 +254,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         {
             if (string.IsNullOrWhiteSpace(keyStr))
                 throw new ArgumentException("Cannot be null or whitespaces.", nameof(keyStr));
+
             Combination combination = Combination.FromString(keyStr);
             Keys result = combination.TriggerKey;
             foreach (var chord in combination.Chord)
@@ -324,47 +328,47 @@ namespace LeagueOfLegendsBoxer.ViewModels
             LoopLiveGameEventAsync();
             await LoopforClientStatus();
         }
-        
-    private void CheckUpdate()
-    {
-      var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-      var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.exe");
-      var updateFile = files.FirstOrDefault(f => f.Split('\\').LastOrDefault() == "NPhoenixAutoUpdateTool.exe");
-      if(updateFile != null)
-      {
-        Process.Start(updateFile, version);
-      }
-      else
-      {
-        Task.Run(async () =>
+
+        private void CheckUpdate()
         {
-          try
-          {
-            using (HttpClient client = new HttpClient())
+            var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.exe");
+            var updateFile = files.FirstOrDefault(f => f.Split('\\').LastOrDefault() == "NPhoenixAutoUpdateTool.exe");
+            if (updateFile != null)
             {
-              var responseMessage = await client.GetAsync("http://www.dotlemon.top:5200/upload/NPhoenix/NPhoenixAutoUpdateTool.exe", HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
-              responseMessage.EnsureSuccessStatusCode();
-              if(responseMessage.StatusCode == HttpStatusCode.OK)
-              {
-                var filePath = Directory.GetCurrentDirectory() + "/NPhoenixAutoUpdateTool.exe";
-                using (FileStream fs = new FileStream(filePath, FileMode.Create))
-                {
-                  await responseMessage.Content.CopyToAsync(fs);
-                }
-                if (File.Exists(filePath))
-                {
-                  Process.Start(filePath, version);
-                }
-              }
+                Process.Start(updateFile, version);
             }
-          }
-          catch (Exception ex)
-          {
-            _logger.LogError(ex, "下载自动更新程序失败:");
-          }
-        });
-      }
-    }
+            else
+            {
+                Task.Run(async () =>
+                {
+                    try
+                    {
+                        using (HttpClient client = new HttpClient())
+                        {
+                            var responseMessage = await client.GetAsync("http://www.dotlemon.top:5200/upload/NPhoenix/NPhoenixAutoUpdateTool.exe", HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
+                            responseMessage.EnsureSuccessStatusCode();
+                            if (responseMessage.StatusCode == HttpStatusCode.OK)
+                            {
+                                var filePath = Directory.GetCurrentDirectory() + "/NPhoenixAutoUpdateTool.exe";
+                                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                                {
+                                    await responseMessage.Content.CopyToAsync(fs);
+                                }
+                                if (File.Exists(filePath))
+                                {
+                                    Process.Start(filePath, version);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "下载自动更新程序失败:");
+                    }
+                });
+            }
+        }
 
         private async Task ResetAsync()
         {
@@ -804,7 +808,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             var myTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team2Accounts : Team1Accounts;
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                (_blackList.DataContext as BlackListViewModel).LoadAccount(myTeam);
+                (_blackList.DataContext as BlackListViewModel).LoadAccount(myTeam, Team1Accounts == myTeam ? Team2Accounts : Team1Accounts);
                 _blackList.Show();
                 _blackList.WindowStartupLocation = WindowStartupLocation.Manual;
                 _blackList.Top = (SystemParameters.PrimaryScreenHeight - _blackList.ActualHeight) - 50;
@@ -914,16 +918,19 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private async Task LoadConfig()
         {
-            //获取所有天赋列表
-            var runes = await _requestService.GetJsonResponseAsync(HttpMethod.Get, "https://game.gtimg.cn/images/lol/act/img/js/runeList/rune_list.js");
-            var runeDic = JToken.Parse(runes)["rune"].ToObject<IDictionary<int, Rune>>();
-            foreach (var runed in runeDic)
+            using (var client = new HttpClient())
             {
-                runed.Value.Id = runed.Key;
+                //获取所有天赋列表
+                var runes = await client.GetStringAsync("https://game.gtimg.cn/images/lol/act/img/js/runeList/rune_list.js");
+                var runeDic = JToken.Parse(runes)["rune"].ToObject<IDictionary<int, Rune>>();
+                foreach (var runed in runeDic)
+                {
+                    runed.Value.Id = runed.Key;
+                }
+                Constant.Runes = runeDic.Select(x => x.Value).ToList();
+                var heros = await client.GetStringAsync("https://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js");
+                Constant.Heroes = JToken.Parse(heros)["hero"].ToObject<IEnumerable<Hero>>();
             }
-            Constant.Runes = runeDic.Select(x => x.Value).ToList();
-            var heros = await _requestService.GetJsonResponseAsync(HttpMethod.Get, "https://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js");
-            Constant.Heroes = JToken.Parse(heros)["hero"].ToObject<IEnumerable<Hero>>();
         }
 
         private async Task<bool> InGameSendMessage(string message)

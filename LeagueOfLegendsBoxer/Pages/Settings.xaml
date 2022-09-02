@@ -479,6 +479,7 @@
 
                     <Button Content="获取最新符文装备推荐" Width="330" FontSize="15" Height="35"
                             Cursor="Hand"
+                            Style="{StaticResource ButtonWarning}"
                             Margin="0 20 0 0"
                             Command="{Binding FetchRunesAndItemsCommandAsync}"
                             HorizontalAlignment="Center"></Button>
@@ -620,12 +621,18 @@
                                 ToolTip="{Binding GameStartupLocation,UpdateSourceTrigger=PropertyChanged}"
                                 Text="{Binding GameStartupLocation,UpdateSourceTrigger=PropertyChanged}"
                                 hc:TitleElement.Title="游戏目录" hc:TitleElement.TitlePlacement="Left" Margin="0 5 0 0"></hc:TextBox>
-                    <Button Content="获取游戏启动目录" HorizontalAlignment="Right" 
+                    <Button Content="自动获取游戏启动程序" HorizontalAlignment="Right" 
                             Margin="0 5 1 0"
                             Cursor="Hand"
                             FontSize="15"
                             Height="35"
                             Command="{Binding GetGameFolderCommandAsync}"></Button>
+                    <Button Content="手动获取游戏启动程序" HorizontalAlignment="Right" 
+                            Margin="0 5 1 0"
+                            Cursor="Hand"
+                            FontSize="15"
+                            Height="35"
+                            Command="{Binding ManualGetGameFolderCommandAsync}"></Button>
 
                     <Button Content="启动游戏" 
                             Cursor="Hand"
@@ -634,7 +641,22 @@
                             Margin="20 5 1 0" FontSize="15" Height="35" 
                             HorizontalAlignment="Right"></Button>
 
-                    <StackPanel Orientation="Horizontal" Margin="0 10 0 10">
+                    <CheckBox Content="自动启动游戏" 
+                              Foreground="{DynamicResource DefaultFontColor}" 
+                              HorizontalAlignment="Right"
+                              Margin="0 10 2 0" FontSize="16" 
+                              IsChecked="{Binding AutoStartGame,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="Checked">
+                                <behaviors:InvokeCommandAction Command="{Binding CheckedAutoStartGameCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                            <behaviors:EventTrigger EventName="Unchecked">
+                                <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoStartGameCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </CheckBox>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="0 20 0 10">
                         <RadioButton Content="明亮模式" Foreground="{DynamicResource DefaultFontColor}" FontSize="16" Margin="30 0 0 0" IsChecked="{Binding IsDarkTheme,Converter={StaticResource Boolean2BooleanReConverter}}" GroupName="theme">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">

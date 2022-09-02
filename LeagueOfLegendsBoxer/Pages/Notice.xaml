@@ -23,7 +23,7 @@
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
 
-    <hc:Card Margin="10 20 10 0" BorderThickness="1">
+    <hc:Card Margin="10 20 10 0" BorderThickness="1" Background="{DynamicResource DefaultCardBackgroundColor}" BorderBrush="{DynamicResource DefaultBorderColor}">
         <ListBox ItemsSource="{Binding Notices,UpdateSourceTrigger=PropertyChanged}"
                  Background="Transparent" BorderThickness="0"
                  SelectedItem="{Binding Notice,UpdateSourceTrigger=PropertyChanged}">
@@ -41,7 +41,7 @@
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                <Border BorderBrush="#eeeeee" BorderThickness="0 0 0 1" Margin="5">
+                                <Border BorderBrush="{DynamicResource DefaultBorderColor}" BorderThickness="0 0 0 1" Margin="5">
                                     <StackPanel Orientation="Vertical" Margin="0 5">
                                         <Grid Cursor="Hand">
                                             <StackPanel Orientation="Horizontal">
@@ -65,7 +65,7 @@
                             <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Foreground" Value="Black"></Setter>
+                            <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
                         </Trigger>
                     </Style.Triggers>
                 </Style>

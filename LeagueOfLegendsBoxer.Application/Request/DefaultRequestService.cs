@@ -13,10 +13,20 @@ namespace LeagueOfLegendsBoxer.Application.Request
         {
             Port = port;
             Token = token;
-            CreateHttpClient();
+            _httpClientHandler = new HttpClientHandler
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+            };
+            _httpClientHandler.ServerCertificateCustomValidationCallback = (response, cert, chain, errors) => true;
+
             var authTokenBytes = Encoding.ASCII.GetBytes($"riot:{token}");
-            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authTokenBytes));
+            _httpClient = new HttpClient(_httpClientHandler);
             _httpClient.BaseAddress = new Uri($"https://127.0.0.1:{port}/");
+            _httpClient.DefaultRequestVersion = new Version(2, 0);
+            _httpClient.Timeout = TimeSpan.FromSeconds(10);
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "LeagueOfLegendsClient/12.7.433.4138 (CEF 91)");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authTokenBytes));
 
             return Task.CompletedTask;
         }
@@ -36,6 +46,19 @@ namespace LeagueOfLegendsBoxer.Application.Request
                 return await GetResponseContentAsync(response);
             }
             catch(Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> GetStringAsync(string relativeUrl, IEnumerable<string> queryParameters)
+        {
+            try
+            {
+                var url = queryParameters == null ? relativeUrl : relativeUrl + BuildQueryParameterString(queryParameters);
+                return await _httpClient.GetStringAsync(url);
+            }
+            catch (Exception ex)
             {
                 return null;
             }

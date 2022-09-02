@@ -136,7 +136,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
 
         public async Task<string> GetRecordsByPage(int pageStart, int pageEnd, string id)
         {
-            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_getRecordsByPage, id), new List<string>()
+            return await _requestService.GetStringAsync(string.Format(_getRecordsByPage, id), new List<string>()
             {
                 $"begIndex={pageStart}",
                 $"endIndex={pageEnd}",
@@ -155,7 +155,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
 
         public async Task<string> QueryGameDetailAsync(long gameId)
         {
-            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_gameDetails, gameId));
+            return await _requestService.GetStringAsync(string.Format(_gameDetails, gameId),null);
         }
 
         public async Task<string> QuerySummonerSuperChampDataAsync(long summonerId)

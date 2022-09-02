@@ -4,12 +4,16 @@ using HandyControl.Controls;
 using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Models;
+using LeagueOfLegendsBoxer.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
@@ -71,6 +75,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand GameSelectionChangedCommandAsync { get; set; }
         public AsyncRelayCommand<long> FetchPlayerDetailCommandAsync { get; set; }
         public AsyncRelayCommand<FunctionEventArgs<int>> SelectPageCommandAsync { get; set; }
+        public RelayCommand<Tuple<ParticipantIdentity, Participant>> CopyNameCommand { get; set; }
+        public RelayCommand<Tuple<ParticipantIdentity, Participant>> BlackAccountCommand { get; set; }
 
         private readonly IGameService _gameService;
         public SummonerDetailViewModel(IGameService gameService)
@@ -80,6 +86,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             FetchPlayerDetailCommandAsync = new AsyncRelayCommand<long>(FetchPlayerDetailAsync);
             GameSelectionChangedCommandAsync = new AsyncRelayCommand(GameSelectionChangedAsync);
             SelectPageCommandAsync = new AsyncRelayCommand<FunctionEventArgs<int>>(SelectPageAsync);
+            CopyNameCommand = new RelayCommand<Tuple<ParticipantIdentity, Participant>>(CopyName);
+            BlackAccountCommand = new RelayCommand<Tuple<ParticipantIdentity, Participant>>(BlackAccountMethod);
             LeftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
             RightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
         }
@@ -152,6 +160,24 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public async Task FetchPlayerDetailAsync(long id)
         {
             await SummonerAnalyseViewModel.LoadPageAsync(id);
+        }
+
+        private void CopyName(Tuple<ParticipantIdentity, Participant> tuple) 
+        {
+            if (tuple.Item1.Player == null)
+                return;
+
+            Clipboard.SetDataObject(tuple.Item1.Player?.SummonerName);
+        }
+
+        private void BlackAccountMethod(Tuple<ParticipantIdentity, Participant> tuple)
+        {
+            if (tuple.Item1.Player == null)
+                return;
+
+            var _window = App.ServiceProvider.GetRequiredService<BlackTip>();
+            (_window.DataContext as BlackTipViewModel).Load(tuple.Item1.Player.SummonerId, tuple.Item1.Player.SummonerName);
+            _window.ShowDialog();
         }
     }
 }

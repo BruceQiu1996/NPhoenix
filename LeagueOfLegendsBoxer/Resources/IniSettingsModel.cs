@@ -19,6 +19,7 @@ namespace LeagueOfLegendsBoxer.Resources
 
         public List<BlackAccount> BlackAccounts { get; set; }
         public bool AutoAcceptGame { get; set; }
+        public bool AutoStartGame { get; set; }
         public bool AutoLockHero { get; set; }
         public bool RankAutoLockHero { get; set; }
         public bool AutoDisableHero { get; set; }
@@ -68,6 +69,8 @@ namespace LeagueOfLegendsBoxer.Resources
             await _settingsService.Initialize(file);
             AutoAcceptGame = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoAcceptGame), out var tempAutoAcceptGame) ? tempAutoAcceptGame : false;
+            AutoStartGame = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.AutoStartGame), out var tempAutoStartGame) ? tempAutoStartGame : false;
             AutoLockHero = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoLockHero), out var tempAutoLockHero) ? tempAutoLockHero : false;
             RankAutoLockHero = bool.TryParse(
@@ -144,6 +147,12 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.AutoAcceptGame, value.ToString());
             AutoAcceptGame = value;
+        }
+
+        public async Task WriteAutoStartGameAsync(bool value)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.AutoStartGame, value.ToString());
+            AutoStartGame = value;
         }
 
         public async Task WriteAutoLockHeroAsync(bool value)

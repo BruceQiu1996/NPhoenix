@@ -19,10 +19,10 @@ using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
-    public class MainViewModel :  ObservableObject
+    public class MainViewModel : ObservableObject
     {
         private Account _account;
-        public Account Account 
+        public Account Account
         {
             get => _account;
             set => SetProperty(ref _account, value);
@@ -39,7 +39,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private readonly IAccountService _accountService;
         private readonly IGameService _gameService;
         private readonly ILogger<MainViewModel> _logger;
-       
+
         public MainViewModel(IAccountService accountService, ILogger<MainViewModel> logger, IGameService gameService)
         {
             _accountService = accountService;
@@ -60,10 +60,11 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 var records = await _accountService.GetRecordInformationAsync(Account.SummonerId);
                 var recordsData = JToken.Parse(records);
                 Account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
-                var rankData = JToken.Parse(await _accountService.GetUserRankInformationAsync());
+                var rankDataStr = await _accountService.GetUserRankInformationAsync();
+                var rankData = JToken.Parse(rankDataStr);
                 Account.Rank = rankData["queueMap"].ToObject<Rank>();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 Growl.WarningGlobal(new GrowlInfo()
                 {

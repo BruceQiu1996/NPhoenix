@@ -6,25 +6,8 @@ namespace LeagueOfLegendsBoxer.Application.Request
 {
     public abstract class AbstractRequestService
     {
-        private readonly HttpClientHandler _httpClientHandler;
+        protected HttpClientHandler _httpClientHandler;
         protected HttpClient _httpClient;
-
-        public AbstractRequestService()
-        {
-            _httpClientHandler = new HttpClientHandler
-            {
-                ClientCertificateOptions = ClientCertificateOption.Manual
-            };
-            _httpClientHandler.ServerCertificateCustomValidationCallback = (response, cert, chain, errors) => true;
-            CreateHttpClient();
-        }
-
-        protected void CreateHttpClient()
-        {
-            _httpClient = new HttpClient(_httpClientHandler);
-            _httpClient.Timeout = TimeSpan.FromSeconds(10);
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-        }
 
         protected HttpRequestMessage PrepareRequest(HttpMethod httpMethod, 
                                                     string relativeUrl,

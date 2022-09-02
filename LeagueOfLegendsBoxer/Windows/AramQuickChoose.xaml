@@ -48,10 +48,13 @@
                     <TextBlock Text="大乱斗秒选英雄选择" 
                                FontWeight="Bold"
                                HorizontalAlignment="Left"
-                               FontSize="20"
+                               FontSize="18"
                                Foreground="{StaticResource PrimaryBrush}"
                                VerticalAlignment="Center" Margin="10 10 0 0"></TextBlock>
-                    <Label HorizontalAlignment="Right" Height="35" Width="35" Margin="0 3 5 0" ToolTip="关闭" Cursor="Hand" MouseLeftButtonDown="Label_MouseLeftButtonDown">
+                    <Label HorizontalAlignment="Right" Height="35" 
+                           Background="Transparent"
+                           BorderThickness="0"
+                           Width="35" Margin="0 3 5 0" ToolTip="关闭" Cursor="Hand" MouseLeftButtonDown="Label_MouseLeftButtonDown">
                         <Path Data="{StaticResource CloseGeometry}" Fill="{StaticResource PrimaryBrush}" Stretch="Uniform" Stroke="{StaticResource PrimaryBrush}">
 
                         </Path>

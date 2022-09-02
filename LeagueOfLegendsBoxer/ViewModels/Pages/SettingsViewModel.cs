@@ -8,6 +8,7 @@ using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections;
@@ -37,6 +38,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get => _autoAcceptGame;
             set => SetProperty(ref _autoAcceptGame, value);
+        }
+
+        private bool _autoStartGame;
+        public bool AutoStartGame
+        {
+            get => _autoStartGame;
+            set => SetProperty(ref _autoStartGame, value);
         }
 
         private bool _autoLockHero;
@@ -602,6 +610,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedAutoStartGameCommandAsync { get; set; }
+        public AsyncRelayCommand UncheckedAutoStartGameCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoLockHeroCommandAsync { get; set; }
         public AsyncRelayCommand CheckedRankAutoLockHeroCommandAsync { get; set; }
@@ -611,6 +621,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand CheckedAutoLockHeroInAramCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoLockHeroInAramCommandAsync { get; set; }
         public AsyncRelayCommand GetGameFolderCommandAsync { get; set; }
+        public AsyncRelayCommand ManualGetGameFolderCommandAsync { get; set; }
         public AsyncRelayCommand ExitGameCommandAsync { get; set; }
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public RelayCommand SearchLockHeroCommand { get; set; }
@@ -653,6 +664,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _logger = logger;
             CheckedAutoAcceptCommandAsync = new AsyncRelayCommand(CheckedAutoAcceptAsync);
             UncheckedAutoAcceptCommandAsync = new AsyncRelayCommand(UncheckedAutoAcceptAsync);
+            CheckedAutoStartGameCommandAsync = new AsyncRelayCommand(CheckedAutoStartGameAsync);
+            UncheckedAutoStartGameCommandAsync = new AsyncRelayCommand(UncheckedAutoStartGameAsync);
             CheckedAutoLockHeroCommandAsync = new AsyncRelayCommand(CheckedAutoLockHeroAsync);
             UncheckedAutoLockHeroCommandAsync = new AsyncRelayCommand(UncheckedAutoLockHeroAsync);
             CheckedRankAutoLockHeroCommandAsync = new AsyncRelayCommand(CheckedRankAutoLockHeroAsync);
@@ -677,6 +690,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             SearchDisableHeroCommand = new RelayCommand(SearchDisableHero);
             GetGameFolderCommandAsync = new AsyncRelayCommand(GetGameFolderAsync);
+            ManualGetGameFolderCommandAsync = new AsyncRelayCommand(ManualGetGameFolderAsync);
             ExitGameCommandAsync = new AsyncRelayCommand(ExitGameAsync);
             ModifyRankLevelCommandAsync = new AsyncRelayCommand(ModifyRankLevelAsync);
             SearchHeroForSkinCommand = new RelayCommand(SearchHeroForSkin);
@@ -784,6 +798,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             HorseTemplate = _iniSettingsModel.HorseTemplate;
             Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
             AutoAcceptGameDelay = _iniSettingsModel.AutoAcceptGameDelay;
+            AutoStartGame = _iniSettingsModel.AutoStartGame;
             Above120ScoreTxt = _iniSettingsModel.Above120ScoreTxt;
             Above110ScoreTxt = _iniSettingsModel.Above110ScoreTxt;
             Above100ScoreTxt = _iniSettingsModel.Above100ScoreTxt;
@@ -802,6 +817,16 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             await _iniSettingsModel.WriteAutoAcceptAsync(false);
             AutoAcceptGame = false;
+        }
+        private async Task CheckedAutoStartGameAsync()
+        {
+            await _iniSettingsModel.WriteAutoStartGameAsync(true);
+            AutoStartGame = true;
+        }
+        private async Task UncheckedAutoStartGameAsync()
+        {
+            await _iniSettingsModel.WriteAutoStartGameAsync(false);
+            AutoStartGame = false;
         }
         private async Task CheckedAutoLockHeroAsync()
         {
@@ -1069,32 +1094,39 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 UtilityLockHeros2 = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(UtilitySearchLockText2) || x.Title.Contains(UtilitySearchLockText2)));
         }
 
-        private void StartGame()
+        public void StartGame()
         {
-            var loc = _iniSettingsModel.GameExeLocation;
-            if (string.IsNullOrEmpty(loc) || !File.Exists(loc))
+            try
             {
-                Growl.InfoGlobal(new GrowlInfo()
+                var loc = _iniSettingsModel.GameExeLocation;
+                if (string.IsNullOrEmpty(loc) || !File.Exists(loc))
                 {
-                    WaitTime = 2,
-                    Message = "无法获取客户端位置,请确保已经获取游戏路径",
-                    ShowDateTime = false
-                });
+                    Growl.InfoGlobal(new GrowlInfo()
+                    {
+                        WaitTime = 2,
+                        Message = "无法获取客户端位置,请确保已经获取游戏路径",
+                        ShowDateTime = false
+                    });
 
-                return;
+                    return;
+                }
+
+                using (Process p = new Process())
+                {
+                    p.StartInfo.FileName = loc;
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.RedirectStandardInput = true;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.Start();
+                    p.StandardInput.AutoFlush = true;
+                    p.Close();
+                }
             }
-
-            using (Process p = new Process())
+            catch (Exception ex) 
             {
-                p.StartInfo.FileName = loc;
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.RedirectStandardInput = true;
-                p.StartInfo.RedirectStandardOutput = true;
-                p.StartInfo.RedirectStandardError = true;
-                p.StartInfo.CreateNoWindow = true;
-                p.Start();
-                p.StandardInput.AutoFlush = true;
-                p.Close();
+                _logger.LogError(ex.ToString());
             }
         }
 
@@ -1110,6 +1142,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             else
                 DisableHeros = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(SearchDisableText) || x.Title.Contains(SearchDisableText)));
         }
+
         private void SearchHeroForSkin()
         {
             ChooseHeroForSkinsOpen = true;
@@ -1122,6 +1155,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             else
                 ChooseHeroForSkins = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(SearchChooseHeroForSkinText) || x.Title.Contains(SearchChooseHeroForSkinText)));
         }
+
         private async Task GetGameFolderAsync()
         {
 
@@ -1151,6 +1185,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 await _iniSettingsModel.WriteGameLocationAsync(GameStartupLocation);
             }
         }
+
+        private async Task ManualGetGameFolderAsync()
+        {
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            var result = openFileDialog.ShowDialog();
+            if (result != null && result.Value)
+            {
+                GameStartupLocation = openFileDialog.FileName;
+                await _iniSettingsModel.WriteGameLocationAsync(GameStartupLocation);
+            }
+        }
+
         private async Task ExitGameAsync()
         {
             await _applicationService.QuitAsync();

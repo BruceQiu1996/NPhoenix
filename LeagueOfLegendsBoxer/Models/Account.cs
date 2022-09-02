@@ -13,6 +13,8 @@ namespace LeagueOfLegendsBoxer.Models
         public string DisplayName { get; set; }
         [JsonPropertyName("summonerId")]
         public long SummonerId { get; set; }
+        [JsonPropertyName("accountId")]
+        public long AccountId { get; set; }
         [JsonPropertyName("summonerLevel")]
         public int SummonerLevel { get; set; }
         [JsonPropertyName("puuid")]

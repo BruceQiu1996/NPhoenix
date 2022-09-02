@@ -106,7 +106,7 @@
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                     <Grid>
                         <ListBox ItemsSource="{Binding DisplayRunes,UpdateSourceTrigger=PropertyChanged}" 
-                                 ScrollViewer.CanContentScroll="True"
+                                 ScrollViewer.CanContentScroll="False"
                                  ScrollViewer.IsDeferredScrollingEnabled="True"
                                  PreviewMouseWheel="ListView_PreviewMouseWheel"
                                  BorderThickness="0" Background="Transparent">

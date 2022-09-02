@@ -11,7 +11,7 @@
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
       FontFamily="微软雅黑"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="SummonerDetail">
+      Title="对局详情">
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
@@ -22,6 +22,27 @@
         <convert:WinTextConverter x:Key="WinTextConverter"></convert:WinTextConverter>
         <convert:BoolColorBrushConverter x:Key="BoolColorBrushConverter"></convert:BoolColorBrushConverter>
         <convert:BoolColorBrushReConverter x:Key="BoolColorBrushReConverter"></convert:BoolColorBrushReConverter>
+        <ContextMenu x:Key="menu" 
+                     DataContext="{Binding PlacementTarget.Tag,RelativeSource={RelativeSource Self}}"
+                     BorderThickness="0" 
+                     FontSize="16" Background="{DynamicResource DefaultBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+            <ContextMenu.Resources>
+                <Style TargetType="MenuItem" BasedOn="{StaticResource MenuItemBaseStyle}">
+                    <Setter Property="BorderThickness" Value="0"></Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"></Setter>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ContextMenu.Resources>
+            <MenuItem Header="复制" Foreground="{DynamicResource DefaultFontColor}"
+                      Command="{Binding CopyNameCommand}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"></MenuItem>
+            <MenuItem Header="拉黑" Foreground="{DynamicResource DefaultFontColor}"
+                      Command="{Binding BlackAccountCommand}"
+                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"></MenuItem>
+        </ContextMenu>
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -36,7 +57,12 @@
 
         <hc:Card Grid.Row="0" Margin="5" Grid.ColumnSpan="2" BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Account.DisplayName,StringFormat={}召唤师名:{0}}" FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
+                <TextBox IsReadOnly="True" 
+                         Background="Transparent"
+                         Foreground="{DynamicResource DefaultFontColor}"
+                         BorderThickness="0"
+                         Height="50"
+                         Text="{Binding Account.DisplayName,StringFormat={}召唤师名:{0}}" FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBox>
                 <TextBlock Text="{Binding Account.Rank.RANKED_SOLO_5x5.CnTier,StringFormat={}单双段位:{0}}" FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
                 <TextBlock Text="{Binding Account.Rank.RANKED_SOLO_5x5.Division}" FontSize="16" Margin="2 0 0 0" VerticalAlignment="Center"></TextBlock>
                 <TextBlock Text="{Binding Account.Rank.RANKED_FLEX_SR.CnTier,StringFormat={}灵活段位:{0}}" FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
@@ -530,6 +556,8 @@
 
                                                     <TextBlock Text="{Binding Item1.Player.SummonerName}" FontSize="16"
                                                                Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                               Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                               ContextMenu="{StaticResource menu}"
                                                                VerticalAlignment="Center" Cursor="Hand" Margin="5 0 0 0">
                                                         <behaviors:Interaction.Triggers>
                                                             <behaviors:EventTrigger EventName="MouseLeftButtonDown">
@@ -901,6 +929,8 @@
                                                              Width="20" Height="20" Grid.Column="0" Source="{Binding Item2.Spell2Image}" />
 
                                                     <TextBlock Text="{Binding Item1.Player.SummonerName}" FontSize="16"
+                                                               Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                               ContextMenu="{StaticResource menu}"
                                                                Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                                VerticalAlignment="Center" Cursor="Hand" Margin="5 0 0 0">
                                                         <behaviors:Interaction.Triggers>
@@ -949,11 +979,6 @@
                       Style="{StaticResource GroupBoxOriginal}"
                       Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
                 <ListBox ItemsSource="{Binding Champs,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent">
-                    <behaviors:Interaction.Triggers>
-                        <behaviors:EventTrigger EventName="SelectionChanged">
-                            <behaviors:InvokeCommandAction Command="{Binding GameSelectionChangedCommandAsync}"></behaviors:InvokeCommandAction>
-                        </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"></StackPanel>
