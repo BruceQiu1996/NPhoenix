@@ -310,7 +310,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         #endregion 
         private async Task LoadAsync()
         {
-            //CheckUpdate();
+            CheckUpdate();
             await LoadConfig();
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
             await ConnnectAsync();

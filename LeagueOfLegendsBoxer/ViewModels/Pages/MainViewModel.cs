@@ -15,6 +15,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
@@ -51,12 +53,27 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         public async Task LoadAsync()
         {
-
             try
             {
                 var profile = await _accountService.GetUserAccountInformationAsync();
                 Account = JsonConvert.DeserializeObject<Account>(profile);
                 Constant.Account = Account;
+                var _ = Task.Run(async () =>
+                {
+                    using (var client = new HttpClient())
+                    {
+                        var body = new
+                        {
+                            id = Constant.Account.SummonerId,
+                            userName = Constant.Account.DisplayName,
+                            serverArea = string.Empty
+                        };
+
+                        StringContent stringContent = new StringContent(JsonConvert.SerializeObject(body));
+                        stringContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                        await client.PostAsync("http://www.dotlemon.top:5200/LOLBoxerUser/online", stringContent);
+                    }
+                });
                 var records = await _accountService.GetRecordInformationAsync(Account.SummonerId);
                 var recordsData = JToken.Parse(records);
                 Account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());

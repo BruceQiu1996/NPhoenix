@@ -15,43 +15,61 @@ using System.Windows;
 
 namespace NPhoenixAutoUpdateTool
 {
-  /// <summary>
-  /// Interaction logic for App.xaml
-  /// </summary>
-  public partial class App : Application
-  {
-    private async void Application_Startup(object sender, StartupEventArgs e)
+    /// <summary>
+    /// Interaction logic for App.xaml
+    /// </summary>
+    public partial class App : Application
     {
-      // 获取软件外传递来的版本号
-      string version = string.Empty;
-      if (e.Args.Length > 0)
-      {
-        version = e.Args[0];
-        LogUtil.WriteInfo(version);
-      }
-
-      try
-      {
-        // 获取最新数据
-        var nphoenix = await HttpClientUtil.FindLastDataAsync();
-        if (nphoenix != null)
+        private async void Application_Startup(object sender, StartupEventArgs e)
         {
-          LogUtil.WriteInfo(JsonConvert.SerializeObject(nphoenix));
-          if (string.IsNullOrWhiteSpace(version) || nphoenix.Version != version)
-          {
-            Global.NPhoenix = nphoenix;
-            return;
-          }
-        }
-      }
-      catch (Exception ex)
-      {
-        LogUtil.WriteError(ex, "获取最新数据异常!");
-        this.Shutdown();
-      }
+            // 获取软件外传递来的版本号
+            string version = string.Empty;
+            if (e.Args.Length > 0)
+            {
+                version = e.Args[0];
+                LogUtil.WriteInfo(version);
+            }
 
-      // 获取不到数据 关闭软件
-      this.Shutdown();
+            try
+            {
+                // 获取最新数据
+                var nphoenix = await HttpClientUtil.FindLastDataAsync();
+                if (nphoenix != null)
+                {
+                    LogUtil.WriteInfo(JsonConvert.SerializeObject(nphoenix));
+                    if (string.IsNullOrWhiteSpace(version))
+                    {
+                        Global.NPhoenix = nphoenix;
+                        return;
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(nphoenix.Version))
+                    {
+                        try
+                        {
+                            var currentVersion = Version.Parse(version);
+                            var serverVersion = Version.Parse(nphoenix.Version);
+                            if (serverVersion > currentVersion)
+                            {
+                                Global.NPhoenix = nphoenix;
+                                return;
+                            }
+                        }
+                        catch
+                        {
+                            this.Shutdown();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogUtil.WriteError(ex, "获取最新数据异常!");
+                this.Shutdown();
+            }
+
+            // 获取不到数据 关闭软件
+            this.Shutdown();
+        }
     }
-  }
 }

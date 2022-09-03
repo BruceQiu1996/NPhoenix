@@ -76,9 +76,9 @@
 
                     <TextBlock Grid.Row="2"
                                Grid.Column="1"
-                               FontSize="14"
+                               FontSize="15"
                                Margin="0 1 0 0"
-                               Text="{Binding Account.SummonerLevel,StringFormat={}Level : {0}}"/>
+                               Text="{Binding Account.SummonerLevel,StringFormat={}等级: {0}}"/>
 
                     <ProgressBar Value="{Binding Account.XpSinceLastLevel}" 
                                  Grid.Row="2"
@@ -113,12 +113,12 @@
                         <TextBlock Grid.Row="1"
                                    Grid.Column="1"
                                    Margin="0 0 0 0"
-                                   FontSize="12"
+                                   FontSize="14"
                                    Foreground="{DynamicResource DefaultFontColor}"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} - {1}">
+                                <MultiBinding StringFormat="{}{0}- {1}">
                                     <Binding Path="Account.Rank.RANKED_SOLO_5x5.CnTier" />
                                     <Binding Path="Account.Rank.RANKED_SOLO_5x5.Division" />
                                 </MultiBinding>
@@ -138,12 +138,12 @@
                         <TextBlock Grid.Row="1"
                                    Grid.Column="1"
                                    Margin="0 0 0 0"
-                                   FontSize="12"
+                                   FontSize="14"
                                    Foreground="{DynamicResource DefaultFontColor}"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} - {1}">
+                                <MultiBinding StringFormat="{}{0}- {1}">
                                     <Binding Path="Account.Rank.RANKED_FLEX_SR.CnTier" />
                                     <Binding Path="Account.Rank.RANKED_FLEX_SR.Division" />
                                 </MultiBinding>
@@ -163,12 +163,12 @@
                         <TextBlock Grid.Row="1"
                                    Grid.Column="1"
                                    Margin="0 0 0 0"
-                                   FontSize="12"
+                                   FontSize="14"
                                    Foreground="{DynamicResource DefaultFontColor}"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0} - {1}">
+                                <MultiBinding StringFormat="{}{0}- {1}">
                                     <Binding Path="Account.Rank.RANKED_TFT.CnTier" />
                                     <Binding Path="Account.Rank.RANKED_TFT.Division" />
                                 </MultiBinding>
