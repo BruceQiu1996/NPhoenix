@@ -31,7 +31,7 @@
     </behaviors:Interaction.Triggers>
 
     <Grid>
-        <Border Margin="2" Background="{DynamicResource DefaultBackgroundColor}" Opacity="0.9" CornerRadius="5">
+        <Border Margin="2" Background="{DynamicResource DefaultBackgroundColor}" Opacity="0.95" CornerRadius="5">
             <Border.Effect>
                 <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
                                   Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
@@ -62,7 +62,6 @@
             <hc:Card Grid.Row="2" BorderThickness="0" Grid.Column="0" Margin="5"  Opacity="0.9" Background="{DynamicResource DefaultCardBackgroundColor}">
                 <ListBox ItemsSource="{Binding Team1Accounts,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
                          AllowDrop="True"
-                         Name="listbox1"
                          Background="Transparent"
                      >
                     <ListBox.ItemsPanel>
@@ -76,12 +75,12 @@
                             <Setter Property="OverridesDefaultStyle" Value="True" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Width" Value="200" />
+                            <Setter Property="Width" Value="205" />
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <Border Margin="2" BorderThickness="0 0 2 0" BorderBrush="{DynamicResource DefaultBorderColor}" Background="{TemplateBinding Background}">
+                                        <Border Margin="1 2" BorderThickness="0 0 2 0" Padding="1" BorderBrush="{DynamicResource DefaultBorderColor}" Background="{TemplateBinding Background}">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="5"></RowDefinition>
@@ -139,13 +138,13 @@
                                                         </behaviors:Interaction.Triggers>
                                                     </TextBlock>
 
-                                                    <hc:Shield Subject="等级" 
-                                                           Grid.Row="1"
-                                                           Grid.Column="2"
-                                                           HorizontalAlignment="Left"
-                                                           VerticalAlignment="Top"
-                                                           Margin="5 0 0 0"
-                                                           Status="{Binding SummonerLevel}" Color="#4eb899"/>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Top"
+                                                               Margin="10 1 0 0"
+                                                               FontSize="15"
+                                                               Text="{Binding SummonerLevel,StringFormat={}等级 : {0}}"/>
                                                 </StackPanel>
 
                                                 <Grid Grid.Row="1" Grid.Column="3">
@@ -183,21 +182,31 @@
                                                 
                                                 <StackPanel Margin="0 10 0 0" Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock Text="单双" VerticalAlignment="Center"></TextBlock>
-                                                    <hc:Shield Subject="{Binding Rank.RANKED_SOLO_5x5.CnTier}" 
-                                                           Grid.Row="1"
-                                                           Grid.Column="2"
-                                                           Margin="5 0 0 0"
-                                                           HorizontalAlignment="Left"
-                                                           VerticalAlignment="Center"
-                                                           Status="{Binding Rank.RANKED_SOLO_5x5.Division}" Color="#4eb899"/>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               Margin="5 0 0 0"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                                <Binding Path="Rank.RANKED_SOLO_5x5.CnTier" />
+                                                                <Binding Path="Rank.RANKED_SOLO_5x5.Division" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0"></TextBlock>
-                                                    <hc:Shield Subject="{Binding Rank.RANKED_FLEX_SR.CnTier}" 
-                                                           Grid.Row="1"
-                                                           Grid.Column="2"
-                                                           Margin="5 0 0 0"
-                                                           HorizontalAlignment="Left"
-                                                           VerticalAlignment="Center"
-                                                           Status="{Binding Rank.RANKED_FLEX_SR.Division}" Color="#4eb899"/>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               Margin="5 0 0 0"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                                <Binding Path="Rank.RANKED_FLEX_SR.CnTier" />
+                                                                <Binding Path="Rank.RANKED_FLEX_SR.Division" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                 </StackPanel>
 
                                                 <ListBox ItemsSource="{Binding Runes,UpdateSourceTrigger=PropertyChanged}"
@@ -383,12 +392,12 @@
                             <Setter Property="OverridesDefaultStyle" Value="True" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Width" Value="200" />
+                            <Setter Property="Width" Value="205" />
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <Border Margin="2" BorderThickness="0 0 2 0" BorderBrush="{DynamicResource DefaultBorderColor}" Background="{TemplateBinding Background}">
+                                        <Border Margin="1 2" BorderThickness="0 0 2 0" Padding="1" BorderBrush="{DynamicResource DefaultBorderColor}" Background="{TemplateBinding Background}">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="5"></RowDefinition>
@@ -446,13 +455,13 @@
                                                         </behaviors:Interaction.Triggers>
                                                     </TextBlock>
 
-                                                    <hc:Shield Subject="等级" 
-                                                           Grid.Row="1"
-                                                           Grid.Column="2"
-                                                           HorizontalAlignment="Left"
-                                                           VerticalAlignment="Top"
-                                                           Margin="5 0 0 0"
-                                                           Status="{Binding SummonerLevel}" Color="#4eb899"/>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Top"
+                                                               Margin="10 1 0 0"
+                                                               FontSize="15"
+                                                               Text="{Binding SummonerLevel,StringFormat={}等级 : {0}}"/>
                                                 </StackPanel>
 
                                                 <Grid Grid.Row="1" Grid.Column="3">
@@ -490,21 +499,31 @@
 
                                                 <StackPanel Margin="0 10 0 0" Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock Text="单双" VerticalAlignment="Center"></TextBlock>
-                                                    <hc:Shield Subject="{Binding Rank.RANKED_SOLO_5x5.CnTier}" 
-                                                           Grid.Row="1"
-                                                           Grid.Column="2"
-                                                           Margin="5 0 0 0"
-                                                           HorizontalAlignment="Left"
-                                                           VerticalAlignment="Center"
-                                                           Status="{Binding Rank.RANKED_SOLO_5x5.Division}" Color="#4eb899"/>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               Margin="5 0 0 0"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                                <Binding Path="Rank.RANKED_SOLO_5x5.CnTier" />
+                                                                <Binding Path="Rank.RANKED_SOLO_5x5.Division" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0"></TextBlock>
-                                                    <hc:Shield Subject="{Binding Rank.RANKED_FLEX_SR.CnTier}" 
-                                                           Grid.Row="1"
-                                                           Grid.Column="2"
-                                                           Margin="5 0 0 0"
-                                                           HorizontalAlignment="Left"
-                                                           VerticalAlignment="Center"
-                                                           Status="{Binding Rank.RANKED_FLEX_SR.Division}" Color="#4eb899"/>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               Margin="5 0 0 0"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                                <Binding Path="Rank.RANKED_FLEX_SR.CnTier" />
+                                                                <Binding Path="Rank.RANKED_FLEX_SR.Division" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                 </StackPanel>
 
                                                 <ListBox ItemsSource="{Binding Runes,UpdateSourceTrigger=PropertyChanged}"

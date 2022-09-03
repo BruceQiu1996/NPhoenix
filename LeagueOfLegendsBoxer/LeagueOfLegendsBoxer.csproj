@@ -4,7 +4,7 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<Nullable>disable</Nullable>
-		<Version>2.3.1</Version>
+		<Version>2.4.0</Version>
 		<UseWPF>true</UseWPF>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>Resources\logo.ico</ApplicationIcon>
@@ -26,6 +26,8 @@
 		<None Remove="Resources\Positions\t4.svg" />
 		<None Remove="Resources\Positions\top.svg" />
 		<None Remove="Resources\settings.ini" />
+		<None Remove="Resources\wx.jpg" />
+		<None Remove="Resources\zfb.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -67,7 +69,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\LeagueOfLegendsBoxer.Application\LeagueOfLegendsBoxer.Application.csproj" />
-		<ProjectReference Include="..\NPhoenixAutoUpdateTool\NPhoenixAutoUpdateTool.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -81,5 +82,7 @@
 		<Resource Include="Resources\Positions\t3.svg" />
 		<Resource Include="Resources\Positions\t4.svg" />
 		<Resource Include="Resources\Positions\top.svg" />
+		<Resource Include="Resources\wx.jpg" />
+		<Resource Include="Resources\zfb.jpg" />
 	</ItemGroup>
 </Project>

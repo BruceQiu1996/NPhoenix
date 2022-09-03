@@ -50,7 +50,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         
 
-        public async Task LoadDataAsync(IList<Account> t1, IList<Account> t2, IEnumerable<PlayerChampionSelection> selections)
+        public async Task LoadDataAsync(IList<Account> t1, IList<Account> t2)
         {
             Already14Minutes = false;
             Team1Accounts = new ObservableCollection<Account>(t1);
@@ -63,15 +63,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 {
                     item._isAram = true;
                 }
-                if (selections != null) 
-                {
-                    var spell = selections.FirstOrDefault(x => x.SummonerInternalName == item.SummonerInternalName);
-                    if (spell != null)
-                    {
-                        item.Spell1Id = spell.Spell1Id;
-                        item.Spell2Id = spell.Spell2Id;
-                    }
-                }
+
                 var sameRecords = item.Records.Where(x => x.GameMode == mode);
                 item.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00");
                 item.IsInBlackList = _iniSettingsModel.BlackAccounts?.FirstOrDefault(x => x.Id == item.SummonerId) != null;

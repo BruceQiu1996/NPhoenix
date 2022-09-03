@@ -28,7 +28,7 @@ namespace LeagueOfLegendsBoxer.Models
             "CHALLENGER" => "王者",
             "GRANDMASTER" => "宗师",
             "MASTER" => "大师",
-            "DIAMOND" => "砖石",
+            "DIAMOND" => "钻石",
             "PLATINUM" => "铂金",
             "GOLD" => "黄金",
             "SILVER" => "白银",

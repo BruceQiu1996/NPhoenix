@@ -23,6 +23,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
         private const string _rune = "lol-perks/v1/pages";
         private const string _getskins = "lol-game-data/assets/v1/champions/{0}.json";
         private const string _getIcons = "lol-game-data/assets/v1/profile-icons.json";
+        private const string _getSpells = "lol-game-data/assets/v1/summoner-spells.json";
         private const string _getItems = "lol-game-data/assets/v1/items.json";
         private const string _setSkinBackground = "lol-summoner/v1/current-summoner/summoner-profile";
         private const string _setIcon = "lol-summoner/v1/current-summoner/icon";
@@ -122,6 +123,11 @@ namespace LeagueOfLegendsBoxer.Application.Game
         public async Task<string> GetIcons()
         {
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _getIcons);
+        }
+
+        public async Task<string> GetSpells()
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _getSpells);
         }
 
         public async Task<string> GetItems()

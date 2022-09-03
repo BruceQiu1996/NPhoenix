@@ -74,10 +74,11 @@
                         </Label>
                     </StackPanel>
 
-                    <hc:Shield Subject="Level" 
-                               Grid.Row="2"
+                    <TextBlock Grid.Row="2"
                                Grid.Column="1"
-                               Status="{Binding Account.SummonerLevel}"/>
+                               FontSize="14"
+                               Margin="0 1 0 0"
+                               Text="{Binding Account.SummonerLevel,StringFormat={}Level : {0}}"/>
 
                     <ProgressBar Value="{Binding Account.XpSinceLastLevel}" 
                                  Grid.Row="2"
@@ -109,9 +110,20 @@
                         </Grid.ColumnDefinitions>
 
                         <TextBlock Text="单双" FontSize="15" Margin="10 10 0 0"></TextBlock>
-                        <hc:Shield Subject="{Binding Account.Rank.RANKED_SOLO_5x5.CnTier}" 
-                                   Grid.Column="1" FontSize="12"
-                                   Status="{Binding Account.Rank.RANKED_SOLO_5x5.Division}"/>
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="1"
+                                   Margin="0 0 0 0"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource DefaultFontColor}"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="Account.Rank.RANKED_SOLO_5x5.CnTier" />
+                                    <Binding Path="Account.Rank.RANKED_SOLO_5x5.Division" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                         <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_SOLO_5x5.Desc}" FontSize="15" Margin="10 10 0 0"></TextBlock>
                     </Grid>
                 </Border>
@@ -123,9 +135,20 @@
                             <ColumnDefinition Width="4*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="灵活" FontSize="15" Margin="10 10 0 0"></TextBlock>
-                        <hc:Shield Subject="{Binding Account.Rank.RANKED_FLEX_SR.CnTier}" 
-                                   Grid.Column="1" FontSize="12"
-                                   Status="{Binding Account.Rank.RANKED_FLEX_SR.Division}"/>
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="1"
+                                   Margin="0 0 0 0"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource DefaultFontColor}"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="Account.Rank.RANKED_FLEX_SR.CnTier" />
+                                    <Binding Path="Account.Rank.RANKED_FLEX_SR.Division" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                         <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_FLEX_SR.Desc}" FontSize="15" Margin="10 10 0 0"></TextBlock>
                     </Grid>
                 </Border>
@@ -137,9 +160,20 @@
                             <ColumnDefinition Width="4*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="云顶" FontSize="15" Margin="10 10 0 0"></TextBlock>
-                        <hc:Shield Subject="{Binding Account.Rank.RANKED_TFT.CnTier}" 
-                                   Grid.Column="1" FontSize="12"
-                                   Status="{Binding Account.Rank.RANKED_TFT.Division}"/>
+                        <TextBlock Grid.Row="1"
+                                   Grid.Column="1"
+                                   Margin="0 0 0 0"
+                                   FontSize="12"
+                                   Foreground="{DynamicResource DefaultFontColor}"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} - {1}">
+                                    <Binding Path="Account.Rank.RANKED_TFT.CnTier" />
+                                    <Binding Path="Account.Rank.RANKED_TFT.Division" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                         <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_TFT.Desc}" FontSize="15" Margin="10 10 0 0"></TextBlock>
                     </Grid>
                 </Border>

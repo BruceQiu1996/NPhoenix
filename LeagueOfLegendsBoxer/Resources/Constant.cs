@@ -11,6 +11,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public static IEnumerable<Hero> Heroes = new List<Hero>();
         public static IEnumerable<Rune> Runes = new List<Rune>();
         public static IEnumerable<Item> Items = new List<Item>();
+        public static IEnumerable<SpellModel> Spells = new List<SpellModel>();
         public static IEnumerable<ServerArea> ServerAreas = new List<ServerArea>();
         public static Account Account = null;
         //ini settings sections

@@ -585,6 +585,12 @@
                       Foreground="{DynamicResource DefaultFontColor}"
                       Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
+                    <Button Style="{StaticResource ButtonWarning}" HorizontalAlignment="Right" 
+                            Margin="5"
+                            FontSize="15"
+                            Height="35"
+                            Cursor="Hand"
+                            Content="打赏一下作者(留下姓名)" Command="{Binding PayCommand}"/>
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <TextBlock Text="对局详情快捷键"></TextBlock>
                         <RadioButton Content="Alt+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail}" Margin="10 0 0 0" FontSize="18">

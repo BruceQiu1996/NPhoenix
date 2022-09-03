@@ -8,6 +8,7 @@ namespace LeagueOfLegendsBoxer.Application.LiveGame
         private const string _gameEvent = "liveclientdata/eventdata?eventID=0";
         private const string _teamData = "liveclientdata/playerlist?teamID={0}";
         private const string _userItems = "liveclientdata/playeritems?summonerName={0}";
+        private const string _userSpells = "liveclientdata/playersummonerspells?summonerName={0}";
         public DefaultLiveGameService()
         {
             var _httpClientHandler = new HttpClientHandler
@@ -50,6 +51,18 @@ namespace LeagueOfLegendsBoxer.Application.LiveGame
             try
             {
                 return await _httpClient.GetStringAsync(string.Format(_userItems, summonerName));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> GetSpellByNameAsync(string summonerName)
+        {
+            try
+            {
+                return await _httpClient.GetStringAsync(string.Format(_userSpells, summonerName));
             }
             catch
             {

@@ -310,12 +310,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
         #endregion 
         private async Task LoadAsync()
         {
-            CheckUpdate();
+            //CheckUpdate();
             await LoadConfig();
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
             await ConnnectAsync();
-            var items = await _gameService.GetItems();
-            Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(items);
+            Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(await _gameService.GetItems());
+            Constant.Spells = JsonConvert.DeserializeObject<IEnumerable<SpellModel>>(await _gameService.GetSpells());
             _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
             _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
             Connected = true;
@@ -632,6 +632,21 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
                                 await Task.Delay(5000);
                             }
+                            else if (Team1Accounts.All(x => x.Spell1Id == default) && Team2Accounts.All(x => x.Spell1Id == default))
+                            {
+                                Team1Accounts.Concat(Team2Accounts).ToList().ForEach(async x =>
+                                {
+                                    var spells = await _livegameservice.GetSpellByNameAsync(x.SummonerInternalName);
+                                    if (!string.IsNullOrEmpty(spells))
+                                    {
+                                        var spell = JObject.Parse(spells).ToObject<InternalSpell>();
+                                        x.Spell1Id = Constant.Spells.FirstOrDefault(x => x.Name == spell.SummonerSpellOne.DisplayName).Id;
+                                        x.Spell2Id = Constant.Spells.FirstOrDefault(x => x.Name == spell.SummonerSpellTwo.DisplayName).Id;
+                                    }
+                                });
+
+                                await Task.Delay(5000);
+                            }
                             else
                             {
                                 await Task.Delay(30000);
@@ -770,7 +785,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 var token = JToken.Parse(gameInformation)["gameData"];
                 var t1 = token["teamOne"].ToObject<IEnumerable<Teammate>>();
                 var t2 = token["teamTwo"].ToObject<IEnumerable<Teammate>>();
-                var spells = token["playerChampionSelections"].ToObject<IEnumerable<PlayerChampionSelection>>();
 
                 if (t1.All(x => x.SummonerId == default) && t2.All(x => x.SummonerId == default))
                 {
@@ -789,7 +803,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
                 await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
                 {
-                     await (_team1V2Window.DataContext as Team1V2WindowViewModel).LoadDataAsync(Team1Accounts, Team2Accounts, spells);
+                    await (_team1V2Window.DataContext as Team1V2WindowViewModel).LoadDataAsync(Team1Accounts, Team2Accounts);
                     _team1V2Window.Topmost = true;
                     _team1V2Window.Opacity = 0;
                     _team1V2Window.Show();
@@ -807,7 +821,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             if (Team1Accounts.Count <= 0 && Team2Accounts.Count <= 0)
                 return;
 
-            var myTeam = Team1Accounts.FirstOrDefault(x => x.SummonerId == Constant.Account.SummonerId) == null ? Team2Accounts : Team1Accounts;
+            var myTeam = Team1Accounts.FirstOrDefault(x => x?.SummonerId == Constant.Account?.SummonerId) == null ? Team2Accounts : Team1Accounts;
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 (_blackList.DataContext as BlackListViewModel).LoadAccount(myTeam, Team1Accounts == myTeam ? Team2Accounts : Team1Accounts);

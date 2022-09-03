@@ -651,17 +651,24 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand UnCheckUseAltQOpenVsDetailCommandAsync { get; set; }
         public AsyncRelayCommand ChooseLightThemeCommandAsync { get; set; }
         public AsyncRelayCommand ChooseDarkThemeCommandAsync { get; set; }
+        public RelayCommand PayCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
         private readonly IConfiguration _iconfiguration;
         private readonly ILogger<SettingsViewModel> _logger;
-        public SettingsViewModel(IniSettingsModel iniSettingsModel, IApplicationService applicationService, IConfiguration iconfiguration, ILogger<SettingsViewModel> logger)
+        private readonly Pay _pay;
+        public SettingsViewModel(IniSettingsModel iniSettingsModel, 
+                                 IApplicationService applicationService,
+                                 Pay pay,
+                                 IConfiguration iconfiguration, ILogger<SettingsViewModel> logger)
         {
+            _pay = pay;
             _iniSettingsModel = iniSettingsModel;
             _applicationService = applicationService;
             _iconfiguration = iconfiguration;
             _logger = logger;
+            PayCommand = new RelayCommand(PayMethod);
             CheckedAutoAcceptCommandAsync = new AsyncRelayCommand(CheckedAutoAcceptAsync);
             UncheckedAutoAcceptCommandAsync = new AsyncRelayCommand(UncheckedAutoAcceptAsync);
             CheckedAutoStartGameCommandAsync = new AsyncRelayCommand(CheckedAutoStartGameAsync);
@@ -707,6 +714,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             UnCheckUseAltQOpenVsDetailCommandAsync = new AsyncRelayCommand(UnCheckUseAltQOpenVsDetailAsync);
             ChooseLightThemeCommandAsync = new AsyncRelayCommand(ChooseLightThemeAsync);
             ChooseDarkThemeCommandAsync = new AsyncRelayCommand(ChooseDarkThemeAsync);
+        }
+
+        private void PayMethod() 
+        {
+            _pay.ShowDialog();
+            _pay.Topmost = true;
         }
 
         private async Task LoadAsync()

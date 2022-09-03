@@ -85,33 +85,43 @@
                                                        Foreground="{DynamicResource DefaultFontColor}"
                                                        Text="{Binding DisplayName}"/>
 
-                                            <hc:Shield Subject="Level" 
-                                                       Grid.Row="1"
+                                            <TextBlock Grid.Row="1"
                                                        Grid.Column="2"
                                                        HorizontalAlignment="Left"
                                                        VerticalAlignment="Top"
+                                                       Margin="0 1 0 0" FontSize="14"
                                                        Foreground="{DynamicResource DefaultFontColor}"
-                                                       Status="{Binding SummonerLevel}" Color="#4eb899"/>
+                                                       Text="{Binding SummonerLevel,StringFormat={}等级 : {0}}"/>
 
                                             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
                                                 <TextBlock Text="单双" VerticalAlignment="Center" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
-                                                <hc:Shield Subject="{Binding Rank.RANKED_SOLO_5x5.CnTier}" 
-                                                           Grid.Row="1"
+                                                <TextBlock Grid.Row="1"
                                                            Grid.Column="2"
-                                                           Margin="5 3 0 0"
-                                                           HorizontalAlignment="Left"
+                                                           Margin="5 0 0 0"
                                                            Foreground="{DynamicResource DefaultFontColor}"
-                                                           VerticalAlignment="Top"
-                                                           Status="{Binding Rank.RANKED_SOLO_5x5.Division}" Color="#4eb899"/>
+                                                           HorizontalAlignment="Left"
+                                                           VerticalAlignment="Center">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                                            <Binding Path="Rank.RANKED_SOLO_5x5.CnTier" />
+                                                            <Binding Path="Rank.RANKED_SOLO_5x5.Division" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
                                                 <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
-                                                <hc:Shield Subject="{Binding Rank.RANKED_FLEX_SR.CnTier}" 
-                                                           Grid.Row="1"
+                                                <TextBlock Grid.Row="1"
                                                            Grid.Column="2"
-                                                           Margin="5 3 0 0"
-                                                           HorizontalAlignment="Left"
-                                                           VerticalAlignment="Top"
+                                                           Margin="5 0 0 0"
                                                            Foreground="{DynamicResource DefaultFontColor}"
-                                                           Status="{Binding Rank.RANKED_FLEX_SR.Division}" Color="#4eb899"/>
+                                                           HorizontalAlignment="Left"
+                                                           VerticalAlignment="Center">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} - {1}">
+                                                            <Binding Path="Rank.RANKED_FLEX_SR.CnTier" />
+                                                            <Binding Path="Rank.RANKED_FLEX_SR.Division" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
                                             </StackPanel>
                                         </Grid>
                                     </Border>

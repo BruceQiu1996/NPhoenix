@@ -130,7 +130,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 new Tuple<string, int>("王者",0),
                 new Tuple<string, int>("宗师",5),
                 new Tuple<string, int>("大师",6),
-                new Tuple<string, int>("砖石",10),
+                new Tuple<string, int>("钻石",10),
                 new Tuple<string, int>("铂金",20),
                 new Tuple<string, int>("黄金",30),
                 new Tuple<string, int>("白银",40),
