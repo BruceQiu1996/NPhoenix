@@ -511,7 +511,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 {
                     await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
                     {
-                        await _runeViewModel.LoadChampInfoAsync(me.ChampionId, true);
+                        if (me.ChampionId != default)
+                            await _runeViewModel.LoadChampInfoAsync(me.ChampionId, true);
                     });
 
                     if (_iniSettingsModel.AutoLockHeroInAram)
@@ -769,6 +770,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 var token = JToken.Parse(gameInformation)["gameData"];
                 var t1 = token["teamOne"].ToObject<IEnumerable<Teammate>>();
                 var t2 = token["teamTwo"].ToObject<IEnumerable<Teammate>>();
+                var spells = token["playerChampionSelections"].ToObject<IEnumerable<PlayerChampionSelection>>();
 
                 if (t1.All(x => x.SummonerId == default) && t2.All(x => x.SummonerId == default))
                 {
@@ -785,9 +787,9 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     Team2Accounts = await TeamToAccountsAsync(t2);
                 }
 
-                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
                 {
-                    (_team1V2Window.DataContext as Team1V2WindowViewModel).LoadData(Team1Accounts, Team2Accounts);
+                     await (_team1V2Window.DataContext as Team1V2WindowViewModel).LoadDataAsync(Team1Accounts, Team2Accounts, spells);
                     _team1V2Window.Topmost = true;
                     _team1V2Window.Opacity = 0;
                     _team1V2Window.Show();
@@ -826,6 +828,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             foreach (var id in teammates)
             {
                 var account = await teamvm.GetAccountAsync(id.SummonerId);
+                account.SummonerInternalName = id.SummonerInternalName;
                 if (id.TeamParticipantId == null)
                 {
                     account.TeamID = teamId++;

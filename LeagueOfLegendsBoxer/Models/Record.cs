@@ -17,6 +17,8 @@ namespace LeagueOfLegendsBoxer.Models
         public string GameCreationTimeString => TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("t");
         [JsonPropertyName("gameDuration")]
         public int GameDuration { get; set; }
+        [JsonPropertyName("gameMode")]
+        public string GameMode { get; set; }
         public int GameMinutes => GameDuration / 60;
         [JsonPropertyName("queueId")]
         public int QueueId { get; set; }

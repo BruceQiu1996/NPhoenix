@@ -146,7 +146,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         data = data.Replace(Constant.Kda, kdadesc.ToString());
                     }
 
-                    sb.Append(data);
+                    sb.Append($"我方 {data}");
                 }
 
                 return sb.ToString();
@@ -201,7 +201,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         data = data.Replace(Constant.Kda, kdadesc.ToString());
                     }
 
-                    sb.Append(data);
+                    sb.Append($"{team}{data}");
                 }
 
                 return sb.ToString();
