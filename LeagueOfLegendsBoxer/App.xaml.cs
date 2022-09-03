@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -136,11 +137,11 @@ namespace LeagueOfLegendsBoxer
             try
             {
                 e.Handled = true; //把 Handled 属性设为true，表示此异常已处理，程序可以继续运行，不会强制退出      
-                ServiceProvider.GetRequiredService<ILogger<App>>()?.LogError(e.ToString());
+                File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"error.txt"), e.Exception.ToString());
             }
             catch (Exception ex)
             {
-                ServiceProvider.GetRequiredService<ILogger<App>>()?.LogError(ex.ToString());
+                File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.txt"),ex.ToString());
             }
 
         }
@@ -162,12 +163,12 @@ namespace LeagueOfLegendsBoxer
                 sbEx.Append(e.ExceptionObject);
             }
 
-            ServiceProvider.GetRequiredService<ILogger<App>>()?.LogError(sbEx.ToString());
+            File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.txt"), sbEx.ToString());
         }
 
         void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            ServiceProvider.GetRequiredService<ILogger<App>>()?.LogError(e.Exception.ToString());
+            File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.txt"), e.Exception.ToString());
             e.SetObserved();
         }
         #endregion
