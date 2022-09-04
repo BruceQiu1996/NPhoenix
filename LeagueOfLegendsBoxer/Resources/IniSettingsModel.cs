@@ -130,7 +130,7 @@ namespace LeagueOfLegendsBoxer.Resources
             IsDarkTheme = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsDarkTheme), out var tempIsDarkTheme) ? tempIsDarkTheme : false;
             if (!File.Exists(_blackListLoc)) 
             {
-                File.Create(_blackListLoc);
+                File.Create(_blackListLoc).Close();
             }
             var blackAccounts = await File.ReadAllTextAsync(_blackListLoc);
             if (string.IsNullOrEmpty(blackAccounts))
@@ -314,10 +314,6 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             BlackAccounts.Add(account);
             var data = JsonSerializer.Serialize(BlackAccounts);
-            if (!File.Exists(_blackListLoc))
-            {
-                File.Create(_blackListLoc);
-            }
             await File.WriteAllTextAsync(_blackListLoc, data);
         }
 
@@ -342,10 +338,6 @@ namespace LeagueOfLegendsBoxer.Resources
             }
 
             var data = JsonSerializer.Serialize(BlackAccounts);
-            if (!File.Exists(_blackListLoc))
-            {
-                File.Create(_blackListLoc);
-            }
             await File.WriteAllTextAsync(_blackListLoc, data);
         }
     }
