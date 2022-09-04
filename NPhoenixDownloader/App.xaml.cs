@@ -34,7 +34,7 @@ namespace NPhoenixDownloader
         }
         else
         {
-          LogUtil.WriteInfo(JsonConvert.SerializeObject(nphoenix));
+          //LogUtil.WriteInfo(JsonConvert.SerializeObject(nphoenix));
           Global.NPhoenix = nphoenix;
           var mainWindow = new MainWindow();
           mainWindow.Show();

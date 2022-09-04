@@ -74,7 +74,6 @@ namespace NPhoenixAutoUpdateTool.ViewModels
           if (MessageBox.Show($"发现新版本是否更新?\r\n请确保软件放在了某个文件夹下 否则更新后会出现很多文件!\r\n更新描述: {Global.NPhoenix.Describe}", "更新", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
           {
             ProcessUtil.KillProcessByName(Global.NPhoenix.StartName);
-            await UpdateDownLoadNumberAsync();
             await RunUpdateAsync();
           }
         }
@@ -113,6 +112,8 @@ namespace NPhoenixAutoUpdateTool.ViewModels
       // 下载文件字节数据
       var bytes = await DownLoadFileAsync();
 
+      await UpdateDownLoadNumberAsync();
+
       // 检查文件目录
       var path = CheckDir();
 
@@ -123,14 +124,17 @@ namespace NPhoenixAutoUpdateTool.ViewModels
       }
 
       Percentage = "开始解压...";
+      await Task.Delay(1000);
       await UnzipFileAsync(path, Directory.GetCurrentDirectory());
 
       var lolBoxerPath = $"{Directory.GetCurrentDirectory()}/{Global.NPhoenix.StartName}";
 
       Percentage = "创建图标...";
+      await Task.Delay(1000);
       CreateLink(lolBoxerPath);
 
       Percentage = "运行程序...";
+      await Task.Delay(1000);
       Process.Start(lolBoxerPath);
     }
 
