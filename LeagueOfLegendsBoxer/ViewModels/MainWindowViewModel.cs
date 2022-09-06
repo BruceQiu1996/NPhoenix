@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Gma.System.MouseKeyHook;
+using HandyControl.Controls;
 using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Application.Client;
 using LeagueOfLegendsBoxer.Application.Event;
@@ -54,6 +55,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         public RelayCommand ShiftMainPageCommand { get; set; }
         public RelayCommand ShiftNoticePageCommand { get; set; }
         public RelayCommand OpenChampionSelectToolCommand { get; set; }
+        public RelayCommand OpenTeamDetailCommand { get; set; }
         public AsyncRelayCommand ResetCommandAsync { get; set; }
         public RelayCommand ExitCommand { get; set; }
 
@@ -135,6 +137,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             ShiftSettingsPageCommand = new RelayCommand(OpenSettingsPage);
             ShiftMainPageCommand = new RelayCommand(OpenMainPage);
             OpenChampionSelectToolCommand = new RelayCommand(OpenChampionSelectTool);
+            OpenTeamDetailCommand = new RelayCommand(OpenTeamDetail);
             ResetCommandAsync = new AsyncRelayCommand(ResetAsync);
             ShiftNoticePageCommand = new RelayCommand(OpenNoticePage);
             ExitCommand = new RelayCommand(() => { Environment.Exit(0); });
@@ -966,6 +969,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _championSelectTool.Top = (SystemParameters.PrimaryScreenHeight - _championSelectTool.ActualHeight) / 2;
             _championSelectTool.Left = SystemParameters.PrimaryScreenWidth - _championSelectTool.ActualWidth - 10;
             _championSelectTool.Topmost = true;
+        }
+
+        private void OpenTeamDetail() 
+        {
+            _team1V2Window.Opacity = 1;
+            _team1V2Window.Show();
         }
     }
 }

@@ -23,6 +23,7 @@
         <convert:ConnectedTextConverter x:Key="ConnectedTextConverter"></convert:ConnectedTextConverter>
         <ContextMenu x:Key="iconMenu">
             <MenuItem Header="打开助手工具" Command="{Binding OpenChampionSelectToolCommand}"></MenuItem>
+            <MenuItem Header="打开对局详情" Command="{Binding OpenTeamDetailCommand}"></MenuItem>
             <MenuItem Header="退出软件" Command="{Binding ExitCommand}"></MenuItem>
         </ContextMenu>
     </Window.Resources>

@@ -68,19 +68,27 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 var ids = JArray.Parse(messages).Select(x => x.Value<long>("fromSummonerId")).ToHashSet();
                 if (ids != null && ids.Count > 0)
                 {
-                    var blacks =  _iniSettingsModel.BlackAccounts.Where(x => ids.Contains(x.Id));
-                    if (blacks != null && blacks.Count() > 0) 
+                    var blacks = _iniSettingsModel.BlackAccounts.Where(x => ids.Contains(x.Id));
+                    if (blacks != null && blacks.Count() > 0)
                     {
                         var _window = App.ServiceProvider.GetRequiredService<BlackRecord>();
-                        (_window.DataContext as BlackRecordViewModel).Load(blacks.Select(x=>x.Id).ToList());
+                        (_window.DataContext as BlackRecordViewModel).Load(blacks.Select(x => x.Id).ToList());
                         _window.Show();
                     }
+                    var gameInfo = await _gameService.GetCurrentGameInfoAsync();
+                    var mode = JToken.Parse(gameInfo)["gameData"]["queue"]["gameMode"].ToString();
+
                     foreach (var id in ids)
                     {
                         try
                         {
                             var account = await GetAccountAsync(id);
-                            Accounts.Add(account);
+                            if (account != null)
+                            {
+                                var sameRecords = account.Records?.Where(x => x.GameMode == mode);
+                                account.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00") + "%";
+                                Accounts.Add(account);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -151,7 +159,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
                 return sb.ToString();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
                 return null;
@@ -176,7 +184,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             break;
                     }
                 }
-                else 
+                else
                 {
                     var data = _iniSettingsModel.HorseTemplate.Trim();
                     data = data.Replace(Constant.Horse, account.Horse)
@@ -242,7 +250,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ShowRecord(Account);
         }
 
-        public void ShowRecord(Account account) 
+        public void ShowRecord(Account account)
         {
             var summonerAnalyse = App.ServiceProvider.GetRequiredService<SummonerAnalyse>();
             var summonerAnalyseViewModel = App.ServiceProvider.GetRequiredService<SummonerAnalyseViewModel>();

@@ -43,7 +43,7 @@
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="OverridesDefaultStyle" Value="True" />
                         <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="Height" Value="70" />
+                        <Setter Property="Height" Value="80" />
                         <Setter Property="Background" Value="Transparent" />
                         <Setter Property="Template">
                             <Setter.Value>
@@ -57,15 +57,16 @@
                                                 <RowDefinition Height="5"></RowDefinition>
                                                 <RowDefinition Height="*"></RowDefinition>
                                                 <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="20"></RowDefinition>
                                                 <RowDefinition Height="5"></RowDefinition>
                                             </Grid.RowDefinitions>
 
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                                <ColumnDefinition Width="0.9*"></ColumnDefinition>
                                                 <ColumnDefinition Width="1.2*"></ColumnDefinition>
                                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
-                                            <hc:Badge Grid.Row="1" Grid.RowSpan="2"
+                                            <hc:Badge Grid.Row="1" Grid.RowSpan="3"
                                                       BadgeMargin="0 -8 -20 0"
                                                       Style="{DynamicResource BadgeDanger}" BorderThickness="0"
                                                       HorizontalAlignment="Left" Text="{Binding Horse}"
@@ -82,7 +83,6 @@
                                                        VerticalAlignment="Top"
                                                        Grid.ColumnSpan="2"
                                                        Grid.Column="1"
-                                                       Foreground="{DynamicResource DefaultFontColor}"
                                                        Text="{Binding DisplayName}"/>
 
                                             <TextBlock Grid.Row="1"
@@ -90,15 +90,13 @@
                                                        HorizontalAlignment="Left"
                                                        VerticalAlignment="Top"
                                                        Margin="0 1 0 0" FontSize="14"
-                                                       Foreground="{DynamicResource DefaultFontColor}"
                                                        Text="{Binding SummonerLevel,StringFormat={}等级 : {0}}"/>
 
                                             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
-                                                <TextBlock Text="单双" VerticalAlignment="Center" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                                <TextBlock Text="单双" VerticalAlignment="Center"></TextBlock>
                                                 <TextBlock Grid.Row="1"
                                                            Grid.Column="2"
                                                            Margin="5 0 0 0"
-                                                           Foreground="{DynamicResource DefaultFontColor}"
                                                            HorizontalAlignment="Left"
                                                            VerticalAlignment="Center">
                                                     <TextBlock.Text>
@@ -108,11 +106,10 @@
                                                         </MultiBinding>
                                                     </TextBlock.Text>
                                                 </TextBlock>
-                                                <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                                <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0"></TextBlock>
                                                 <TextBlock Grid.Row="1"
                                                            Grid.Column="2"
                                                            Margin="5 0 0 0"
-                                                           Foreground="{DynamicResource DefaultFontColor}"
                                                            HorizontalAlignment="Left"
                                                            VerticalAlignment="Center">
                                                     <TextBlock.Text>
@@ -123,6 +120,13 @@
                                                     </TextBlock.Text>
                                                 </TextBlock>
                                             </StackPanel>
+
+                                            <TextBlock Grid.Row="3" 
+                                                       FontSize="13"
+                                                       Grid.Column="1"
+                                                       Grid.ColumnSpan="4"
+                                                       HorizontalAlignment="Left"
+                                                       Text="{Binding WinRate,UpdateSourceTrigger=PropertyChanged,StringFormat={}胜率: {0}}"></TextBlock>
                                         </Grid>
                                     </Border>
                                 </ControlTemplate>
@@ -130,7 +134,10 @@
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"></Setter>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="False">
+                                <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
