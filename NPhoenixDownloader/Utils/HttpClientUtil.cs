@@ -74,7 +74,7 @@ namespace NPhoenixDownloader.Utils
     {
       using (HttpClient httpClient = new HttpClient())
       {
-        var result = await httpClient.GetAsync("http://www.dotlemon.top:5200/NPhoenix/FindLast");
+        var result = await httpClient.GetAsync("http://www.dotlemon.top:5200/NPhoenix/FindLast?isFullVersion=true");
         if (result.StatusCode == HttpStatusCode.OK)
         {
           var json = await result.Content.ReadAsStringAsync();

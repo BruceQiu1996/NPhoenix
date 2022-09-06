@@ -87,7 +87,6 @@ namespace NPhoenixDownloader.ViewModels
           if(dialog.ShowDialog() == CommonFileDialogResult.Ok)
           {
             filePath = dialog.FileName;
-            await UpdateDownLoadNumberAsync();
             await RunUpdateAsync();
           }
         }
@@ -113,7 +112,7 @@ namespace NPhoenixDownloader.ViewModels
           var response = JsonConvert.DeserializeObject<Response<object>>(json);
           if (response.Code != ResponseCode.Success)
           {
-            LogUtil.WriteInfo(json);
+            //LogUtil.WriteInfo(json);
           }
         }
       }
@@ -128,6 +127,11 @@ namespace NPhoenixDownloader.ViewModels
       // 下载文件字节数据
       var bytes = await DownLoadFileAsync();
 
+      await UpdateDownLoadNumberAsync();
+
+
+      ProcessUtil.KillProcessByName(Global.NPhoenix.StartName);
+
       // 检查文件目录
       var path = CheckDir();
 
@@ -138,15 +142,18 @@ namespace NPhoenixDownloader.ViewModels
       }
 
       Percentage = "开始解压...";
+      await Task.Delay(1000);
       await UnzipFileAsync(path, filePath);
 
       var lolBoxerPath = $"{filePath}/{Global.NPhoenix.StartName}";
 
       Percentage = "创建图标...";
+      await Task.Delay(1000);
       CreateLink(lolBoxerPath);
 
-      Percentage = "运行程序...";
-      Process.Start(lolBoxerPath);
+      //Percentage = "运行程序...";
+      //await Task.Delay(1000);
+      //Process.Start(lolBoxerPath);
     }
 
     /// <summary>
