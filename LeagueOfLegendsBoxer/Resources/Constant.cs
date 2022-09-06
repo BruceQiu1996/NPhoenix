@@ -64,5 +64,6 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string Flexrank = "{flexrank}";
         public const string FlexrankDetail = "{flexrankDetail}";
         public const string Score = "{score}";
+        public const string WinRate = "{winRate}";
     }
 }

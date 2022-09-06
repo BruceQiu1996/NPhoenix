@@ -512,23 +512,24 @@
                                    {flexrank} = 灵活段位  
                                    {flexrankDetail} = 灵活组排胜负场
                                    {score} = 评分
+                                   {winRate} = 胜率
                              
                                     如 : 
                              
                              
-                             上等马浦东Faker,评分120,单双排黄金一,灵活组排白银二,最近五场战绩10/1/1 , 10/1/1 , 10/1/1 , 10/1/1 , 10/1/1
+                             上等马浦东Faker,评分120,单双排黄金一,灵活组排白银二,最近五场战绩10/1/1 , 10/1/1 , 10/1/1 , 10/1/1 , 10/1/1 胜率60%
                                     
                              =
                              
                               
-                             {horse}{name},评分{score},单双排{solorank},灵活组排{flexrank},最近五场战绩{kda}
+                             {horse}{name},评分{score},单双排{solorank},灵活组排{flexrank},最近五场战绩{kda} 胜率{winRate}
                              " 
                                         
                              FontSize="16"
                              AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="True" Margin="0 10 0 0">
 
                     </TextBox>
-                    <TextBox Style="{StaticResource TextBoxExtend}" hc:InfoElement.Placeholder="自定义上等马消息模板"
+                    <TextBox Style="{StaticResource TextBoxExtend}" hc:InfoElement.Placeholder="自定义上等马消息模板(字数过多会发不出来)"
                              AcceptsReturn="True"
                              TextWrapping="Wrap"
                              FontSize="16"

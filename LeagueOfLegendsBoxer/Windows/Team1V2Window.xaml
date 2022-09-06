@@ -262,7 +262,7 @@
                                                     </ListBox.ItemContainerStyle>
                                                 </ListBox>
 
-                                                <TextBlock Text="{Binding WinRate,StringFormat={}胜率 : {0}%}" Margin="5 5 0 0" FontSize="15" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
+                                                <TextBlock Text="{Binding WinRate,StringFormat={}胜率 : {0}}" Margin="5 5 0 0" FontSize="15" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
 
                                                 <Grid Width="40" Height="40"
                                                       Grid.Row="4"
@@ -579,7 +579,7 @@
                                                     </ListBox.ItemContainerStyle>
                                                 </ListBox>
 
-                                                <TextBlock Text="{Binding WinRate,StringFormat={}胜率 : {0}%}" Margin="5 5 0 0" FontSize="15" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
+                                                <TextBlock Text="{Binding WinRate,StringFormat={}胜率 : {0}}" Margin="5 5 0 0" FontSize="15" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
 
                                                 <Grid Width="40" Height="40"
                                                       Grid.Row="4"

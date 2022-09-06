@@ -138,7 +138,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                                       .Replace(Constant.Solorank, $"{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division}")
                                       .Replace(Constant.SolorankDetail, account.Rank.RANKED_SOLO_5x5.ShortDesc)
                                       .Replace(Constant.Flexrank, $"{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division}")
-                                      .Replace(Constant.FlexrankDetail, account.Rank.RANKED_FLEX_SR.ShortDesc);
+                                      .Replace(Constant.FlexrankDetail, account.Rank.RANKED_FLEX_SR.ShortDesc)
+                                      .Replace(Constant.WinRate, account.WinRate);
 
                     var kdadesc = new StringBuilder();
                     if (data.Contains(Constant.Kda))
@@ -193,7 +194,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                                       .Replace(Constant.Solorank, $"{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division}")
                                       .Replace(Constant.SolorankDetail, account.Rank.RANKED_SOLO_5x5.ShortDesc)
                                       .Replace(Constant.Flexrank, $"{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division}")
-                                      .Replace(Constant.FlexrankDetail, account.Rank.RANKED_FLEX_SR.ShortDesc);
+                                      .Replace(Constant.FlexrankDetail, account.Rank.RANKED_FLEX_SR.ShortDesc)
+                                      .Replace(Constant.WinRate, account.WinRate);
 
                     var kdadesc = new StringBuilder();
                     if (data.Contains(Constant.Kda))
