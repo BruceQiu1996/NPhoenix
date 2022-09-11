@@ -45,7 +45,7 @@ namespace LeagueOfLegendsBoxer.Application.Request
                 response.EnsureSuccessStatusCode();
                 return await GetResponseContentAsync(response);
             }
-            catch(Exception ex)
+            catch
             {
                 return null;
             }
@@ -57,6 +57,28 @@ namespace LeagueOfLegendsBoxer.Application.Request
             {
                 var url = queryParameters == null ? relativeUrl : relativeUrl + BuildQueryParameterString(queryParameters);
                 return await _httpClient.GetStringAsync(url);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> PatchAsync(string relativeUrl, IEnumerable<string> queryParameters, dynamic body)
+        {
+            try
+            {
+                var url = queryParameters == null ? relativeUrl : relativeUrl + BuildQueryParameterString(queryParameters);
+                StringContent stringContent = null;
+                if (body != null)
+                {
+                    var json = JsonSerializer.Serialize(body);
+                    stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+                }
+
+                var resp =  await _httpClient.PatchAsync(url, stringContent);
+                resp.EnsureSuccessStatusCode();
+                return await resp.Content.ReadAsStringAsync();
             }
             catch (Exception ex)
             {
@@ -85,6 +107,28 @@ namespace LeagueOfLegendsBoxer.Application.Request
                 return await GetResponseContentByByteArrayAsync(response);
             }
             catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<string> PostAsync(string relativeUrl, IEnumerable<string> queryParameters, dynamic body)
+        {
+            try
+            {
+                var url = queryParameters == null ? relativeUrl : relativeUrl + BuildQueryParameterString(queryParameters);
+                StringContent stringContent = null;
+                if (body != null)
+                {
+                    var json = JsonSerializer.Serialize(body);
+                    stringContent = new StringContent(json, Encoding.UTF8, "application/json");
+                }
+
+                var resp = await _httpClient.PostAsync(url, stringContent);
+                resp.EnsureSuccessStatusCode();
+                return await resp.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
             {
                 return null;
             }

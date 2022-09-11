@@ -112,6 +112,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly SettingsViewModel _settingsViewModel;
         private readonly Team1V2Window _team1V2Window;
         private readonly BlackList _blackList;
+        private readonly HtmlHelper _htmlHelper;
 
         public MainWindowViewModel(IApplicationService applicationService,
                                    IClientService clientService,
@@ -130,6 +131,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                    ILiveGameService livegameservice,
                                    TeammateViewModel teammateViewModel,
                                    BlackList blackList,
+                                   HtmlHelper htmlHelper,
                                    LeagueOfLegendsBoxer.Pages.Notice notice,
                                    Team1V2Window team1V2Window)
         {
@@ -154,6 +156,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _settingsViewModel = settingsViewModel;
             _gameService = gameService;
             _logger = logger;
+            _htmlHelper = htmlHelper;
             _blackList = blackList;
             _runeViewModel = runeViewModel;
             _imageManager = imageManager;
@@ -318,6 +321,13 @@ namespace LeagueOfLegendsBoxer.ViewModels
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
             await ConnnectAsync();
             Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(await _gameService.GetItems());
+            if (Constant.Items != null) 
+            {
+                foreach (var item in Constant.Items)
+                {
+                    item.Description = _htmlHelper.ReplaceHtmlTag(item.Description);
+                }
+            }
             Constant.Spells = JsonConvert.DeserializeObject<IEnumerable<SpellModel>>(await _gameService.GetSpells());
             _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
             _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
@@ -437,6 +447,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
+                    _blackList.Hide();
                     Team1Accounts.Clear();
                     Team2Accounts.Clear();
                     _team1V2Window.Hide();
@@ -675,6 +686,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 await Task.Delay(_iniSettingsModel.AutoAcceptGameDelay * 1000);
             }
+
             await _gameService.AutoAcceptGameAsync();
         }
 
@@ -946,6 +958,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 foreach (var runed in runeDic)
                 {
                     runed.Value.Id = runed.Key;
+                    runed.Value.Shortdesc = _htmlHelper.ReplaceHtmlTag(runed.Value.Shortdesc);
                 }
                 Constant.Runes = runeDic.Select(x => x.Value).ToList();
                 var heros = await client.GetStringAsync("https://game.gtimg.cn/images/lol/act/img/js/heroList/hero_list.js");

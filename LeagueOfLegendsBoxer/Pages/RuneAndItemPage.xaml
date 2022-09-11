@@ -8,7 +8,6 @@
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
       xmlns:hc="https://handyorg.github.io/handycontrol"
-      xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="RunePage">
 
@@ -140,59 +139,256 @@
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                      Grid.Row="0" Grid.Column="0"
                                                                      Height="30" Width="30"
-                                                                     ToolTip="{Binding Main1Rune.Name}"
+                                                                     Name="Main1Rune"
                                                                      Margin="5 5 5 0"
-                                                                     Source="{Binding Main1Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                     Source="{Binding Main1Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                                    <Popup Focusable="False"
+                                                                           IsOpen="{Binding ElementName=Main1Rune,Path=IsMouseOver,Mode=OneWay}"
+                                                                           PlacementTarget="{Binding ElementName=Main1Rune}" 
+                                                                           Placement="Top" AllowsTransparency="True">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                <Rectangle.Effect>
+                                                                                    <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                </Rectangle.Effect>
+                                                                            </Rectangle>
+                                                                            <StackPanel Margin="5" Orientation="Vertical">
+                                                                                <TextBlock VerticalAlignment="Center" Text="{Binding Main1Rune.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                <TextBox Width="380" 
+                                                                                         IsReadOnly="True"
+                                                                                         AcceptsReturn="True"
+                                                                                         TextWrapping="Wrap"
+                                                                                         Text="{Binding Main1Rune.Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Popup>
+                                                                </hc:Gravatar>
+
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                      Grid.Row="0" Grid.Column="0"
                                                                      Height="30" Width="30"
-                                                                     ToolTip="{Binding Main2Rune.Name}"
+                                                                     Name="Main2Rune"
                                                                      Margin="5 5 5 0"
-                                                                     Source="{Binding Main2Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                     Source="{Binding Main2Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                                    <Popup Focusable="False"
+                                                                           IsOpen="{Binding ElementName=Main2Rune,Path=IsMouseOver,Mode=OneWay}"
+                                                                           PlacementTarget="{Binding ElementName=Main2Rune}" 
+                                                                           Placement="Top" AllowsTransparency="True">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                <Rectangle.Effect>
+                                                                                    <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                </Rectangle.Effect>
+                                                                            </Rectangle>
+                                                                            <StackPanel Margin="5" Orientation="Vertical">
+                                                                                <TextBlock VerticalAlignment="Center" Text="{Binding Main2Rune.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                <TextBox Width="380" 
+                                                                                         IsReadOnly="True"
+                                                                                         AcceptsReturn="True"
+                                                                                         TextWrapping="Wrap"
+                                                                                         Text="{Binding Main2Rune.Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Popup>
+                                                                </hc:Gravatar>
+
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                      Grid.Row="0" Grid.Column="0"
                                                                      Height="30" Width="30"
-                                                                     ToolTip="{Binding Main3Rune.Name}"
+                                                                     Name="Main3Rune"
                                                                      Margin="5 5 5 0"
-                                                                     Source="{Binding Main3Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                     Source="{Binding Main3Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                                    <Popup Focusable="False"
+                                                                           IsOpen="{Binding ElementName=Main3Rune,Path=IsMouseOver,Mode=OneWay}"
+                                                                           PlacementTarget="{Binding ElementName=Main3Rune}" 
+                                                                           Placement="Top" AllowsTransparency="True">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                <Rectangle.Effect>
+                                                                                    <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                </Rectangle.Effect>
+                                                                            </Rectangle>
+                                                                            <StackPanel Margin="5" Orientation="Vertical">
+                                                                                <TextBlock VerticalAlignment="Center" Text="{Binding Main3Rune.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                <TextBox Width="380" 
+                                                                                         IsReadOnly="True"
+                                                                                         AcceptsReturn="True"
+                                                                                         TextWrapping="Wrap"
+                                                                                         Text="{Binding Main3Rune.Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Popup>
+                                                                </hc:Gravatar>
+
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                      Grid.Row="0" Grid.Column="0"
                                                                      Height="30" Width="30"
-                                                                     ToolTip="{Binding Main4Rune.Name}"
+                                                                     Name="Main4Rune"
                                                                      Margin="5 5 5 0"
-                                                                     Source="{Binding Main4Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                     Source="{Binding Main4Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                                    <Popup Focusable="False"
+                                                                           IsOpen="{Binding ElementName=Main4Rune,Path=IsMouseOver,Mode=OneWay}"
+                                                                           PlacementTarget="{Binding ElementName=Main4Rune}" 
+                                                                           Placement="Top" AllowsTransparency="True">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                <Rectangle.Effect>
+                                                                                    <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                </Rectangle.Effect>
+                                                                            </Rectangle>
+                                                                            <StackPanel Margin="5" Orientation="Vertical">
+                                                                                <TextBlock VerticalAlignment="Center" Text="{Binding Main4Rune.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                <TextBox Width="380" 
+                                                                                         IsReadOnly="True"
+                                                                                         AcceptsReturn="True"
+                                                                                         TextWrapping="Wrap"
+                                                                                         Text="{Binding Main4Rune.Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Popup>
+                                                                </hc:Gravatar>
+
                                                             </StackPanel>
                                                             <StackPanel Orientation="Vertical">
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
-                                                                     Grid.Row="0" Grid.Column="0"
-                                                                     Height="30" Width="30"
-                                                                     ToolTip="{Binding Dputy1Rune.Name}"
-                                                                     Margin="5 5 5 0"
-                                                                     Source="{Binding Dputy1Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                             Grid.Row="0" Grid.Column="0"
+                                                                             Height="30" Width="30"
+                                                                             Margin="5 5 5 0"
+                                                                             Name="Dputy1Rune"
+                                                                             Source="{Binding Dputy1Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                                    <Popup Focusable="False"
+                                                                           IsOpen="{Binding ElementName=Dputy1Rune,Path=IsMouseOver,Mode=OneWay}"
+                                                                           PlacementTarget="{Binding ElementName=Dputy1Rune}" 
+                                                                           Placement="Top" AllowsTransparency="True">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                <Rectangle.Effect>
+                                                                                    <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                </Rectangle.Effect>
+                                                                            </Rectangle>
+                                                                            <StackPanel Margin="5" Orientation="Vertical">
+                                                                                <TextBlock VerticalAlignment="Center" Text="{Binding Dputy1Rune.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                <TextBox Width="380" 
+                                                                                         IsReadOnly="True"
+                                                                                         AcceptsReturn="True"
+                                                                                         TextWrapping="Wrap"
+                                                                                         Text="{Binding Dputy1Rune.Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Popup>
+                                                                </hc:Gravatar>
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
-                                                                     Grid.Row="0" Grid.Column="0"
-                                                                     Height="30" Width="30"
-                                                                     ToolTip="{Binding Dputy2Rune.Name}"
-                                                                     Margin="5 5 5 0"
-                                                                     Source="{Binding Dputy2Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                             Grid.Row="0" Grid.Column="0"
+                                                                             Height="30" Width="30"
+                                                                             Margin="5 5 5 0"
+                                                                             Name="Dputy2Rune"
+                                                                             Source="{Binding Dputy2Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                                    <Popup Focusable="False"
+                                                                           Name="pop"
+                                                                           IsOpen="{Binding ElementName=Dputy2Rune,Path=IsMouseOver,Mode=OneWay}"
+                                                                           PlacementTarget="{Binding ElementName=Dputy2Rune}" 
+                                                                           Placement="Top" AllowsTransparency="True">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                <Rectangle.Effect>
+                                                                                    <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                </Rectangle.Effect>
+                                                                            </Rectangle>
+                                                                            <StackPanel Margin="5" Orientation="Vertical">
+                                                                                <TextBlock VerticalAlignment="Center" Text="{Binding Dputy2Rune.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                <TextBox Width="380" 
+                                                                                         IsReadOnly="True"
+                                                                                         AcceptsReturn="True"
+                                                                                         TextWrapping="Wrap"
+                                                                                         Text="{Binding Dputy2Rune.Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Popup>
+                                                                </hc:Gravatar>
+
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
-                                                                         Grid.Row="0" Grid.Column="0"
-                                                                         Height="20" Width="20"
-                                                                         ToolTip="{Binding Extra1Rune.Name}"
-                                                                         Margin="5 5 5 0"
-                                                                         Source="{Binding Extra1Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                             Grid.Row="0" Grid.Column="0"
+                                                                             Height="20" Width="20"
+                                                                             Margin="5 5 5 0"
+                                                                             Name="Extra1Rune"
+                                                                             Source="{Binding Extra1Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                                    <Popup Focusable="False"
+                                                                           IsOpen="{Binding ElementName=Extra1Rune,Path=IsMouseOver,Mode=OneWay}"
+                                                                           PlacementTarget="{Binding ElementName=Extra1Rune}" 
+                                                                           Placement="Top" AllowsTransparency="True">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                <Rectangle.Effect>
+                                                                                    <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                </Rectangle.Effect>
+                                                                            </Rectangle>
+                                                                            <StackPanel Margin="5" Orientation="Vertical">
+                                                                                <TextBlock VerticalAlignment="Center" Text="{Binding Extra1Rune.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                <TextBox Width="380" 
+                                                                                         IsReadOnly="True"
+                                                                                         AcceptsReturn="True"
+                                                                                         TextWrapping="Wrap"
+                                                                                         Text="{Binding Extra1Rune.Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Popup>
+                                                                </hc:Gravatar>
+
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
-                                                                         Grid.Row="0" Grid.Column="0"
-                                                                         Height="20" Width="20"
-                                                                         ToolTip="{Binding Extra2Rune.Name}"
-                                                                         Margin="5 5 5 0"
-                                                                         Source="{Binding Extra2Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                             Grid.Row="0" Grid.Column="0"
+                                                                             Height="20" Width="20"
+                                                                             Margin="5 5 5 0"
+                                                                             Name="Extra2Rune"
+                                                                             Source="{Binding Extra2Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                                    <Popup Focusable="False"
+                                                                           IsOpen="{Binding ElementName=Extra2Rune,Path=IsMouseOver,Mode=OneWay}"
+                                                                           PlacementTarget="{Binding ElementName=Extra2Rune}" 
+                                                                           Placement="Top" AllowsTransparency="True">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                <Rectangle.Effect>
+                                                                                    <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                </Rectangle.Effect>
+                                                                            </Rectangle>
+                                                                            <StackPanel Margin="5" Orientation="Vertical">
+                                                                                <TextBlock VerticalAlignment="Center" Text="{Binding Extra2Rune.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                <TextBox Width="380" 
+                                                                                         IsReadOnly="True"
+                                                                                         AcceptsReturn="True"
+                                                                                         TextWrapping="Wrap"
+                                                                                         Text="{Binding Extra2Rune.Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Popup>
+                                                                </hc:Gravatar>
+
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
-                                                                         Grid.Row="0" Grid.Column="0"
-                                                                         Height="20" Width="20"
-                                                                         ToolTip="{Binding Extra3Rune.Name}"
-                                                                         Margin="5 5 5 0"
-                                                                         Source="{Binding Extra3Rune.Icon,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                             Grid.Row="0" Grid.Column="0"
+                                                                             Height="20" Width="20"
+                                                                             Margin="5 5 5 0"
+                                                                             Name="Extra3Rune"
+                                                                             Source="{Binding Extra3Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                                    <Popup Focusable="False"
+                                                                           IsOpen="{Binding ElementName=Extra3Rune,Path=IsMouseOver,Mode=OneWay}"
+                                                                           PlacementTarget="{Binding ElementName=Extra3Rune}" 
+                                                                           Placement="Top" AllowsTransparency="True">
+                                                                        <Grid>
+                                                                            <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                <Rectangle.Effect>
+                                                                                    <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                </Rectangle.Effect>
+                                                                            </Rectangle>
+                                                                            <StackPanel Margin="5" Orientation="Vertical">
+                                                                                <TextBlock VerticalAlignment="Center" Text="{Binding Extra3Rune.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                <TextBox Width="380" 
+                                                                                         IsReadOnly="True"
+                                                                                         AcceptsReturn="True"
+                                                                                         TextWrapping="Wrap"
+                                                                                         Text="{Binding Extra3Rune.Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Popup>
+                                                                </hc:Gravatar>
                                                             </StackPanel>
                                                         </StackPanel>
 
@@ -342,7 +538,11 @@
                                                                                                     </Rectangle>
                                                                                                     <StackPanel Margin="5" Orientation="Vertical">
                                                                                                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                                                        <wpf:HtmlPanel Width="380" Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                                                        <TextBox Width="380" 
+                                                                                                                 IsReadOnly="True"
+                                                                                                                 AcceptsReturn="True"
+                                                                                                                 TextWrapping="Wrap"
+                                                                                                                 Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                                                         <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                                                             <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                                                             <TextBlock Text="{Binding PriceTotal}" Margin="5 0 0 0" FontWeight="Bold"/>
@@ -440,7 +640,11 @@
                                                                                                     </Rectangle>
                                                                                                     <StackPanel Margin="5" Orientation="Vertical">
                                                                                                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                                                        <wpf:HtmlPanel Width="380" Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                                                        <TextBox IsReadOnly="True" 
+                                                                                                                 AcceptsReturn="True"
+                                                                                                                 Width="380" 
+                                                                                                                 TextWrapping="Wrap"
+                                                                                                                 Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                                                         <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                                                             <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                                                             <TextBlock Text="{Binding PriceTotal}" Margin="5 0 0 0" FontWeight="Bold"/>
@@ -538,7 +742,11 @@
                                                                                                     </Rectangle>
                                                                                                     <StackPanel Margin="5" Orientation="Vertical">
                                                                                                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                                                        <wpf:HtmlPanel Width="380" Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                                                        <TextBox Width="380" 
+                                                                                                                 IsReadOnly="True"
+                                                                                                                 AcceptsReturn="True"
+                                                                                                                 TextWrapping="Wrap"
+                                                                                                                 Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                                                         <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                                                             <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                                                             <TextBlock Text="{Binding PriceTotal}" Margin="5 0 0 0" FontWeight="Bold"/>

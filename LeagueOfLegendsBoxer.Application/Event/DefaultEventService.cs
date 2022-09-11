@@ -24,6 +24,7 @@ namespace LeagueOfLegendsBoxer.Application.Event
                 {
                     Options =
                     {
+                        KeepAliveInterval = TimeSpan.FromSeconds(5),
                         Credentials = new NetworkCredential("riot", token),
                         RemoteCertificateValidationCallback =
                             (sender, cert, chain, sslPolicyErrors) => true,
@@ -44,6 +45,18 @@ namespace LeagueOfLegendsBoxer.Application.Event
                 catch { }
             });
 
+            _webSocket.ReconnectionHappened.Subscribe(async _ =>
+            {
+                try
+                {
+                    await _webSocket?.Start();
+                    await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+                }
+                catch { }
+            });
+
+            _webSocket.ErrorReconnectTimeout = TimeSpan.FromSeconds(3);
+            _webSocket.ReconnectTimeout = TimeSpan.FromSeconds(3);
             _webSocket
                 .MessageReceived
                 .Where(msg => msg.Text != null)
@@ -72,13 +85,21 @@ namespace LeagueOfLegendsBoxer.Application.Event
 
         public async Task ConnectAsync()
         {
-            await _webSocket?.Start();
-            await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+            try
+            {
+                await _webSocket?.Start();
+                await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+            }
+            catch (Exception ex) 
+            {
+            
+            }
         }
 
-        public Task<bool> DisconnectAsync()
+        public ValueTask<bool> DisconnectAsync()
         {
-            throw new NotImplementedException();
+            _webSocket.Dispose();
+            return new ValueTask<bool>(true);
         }
 
         public void Subscribe(string uri, EventHandler<EventArgument> eventHandler)

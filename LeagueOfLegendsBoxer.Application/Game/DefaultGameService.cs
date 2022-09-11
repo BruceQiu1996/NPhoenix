@@ -42,7 +42,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
 
         public async Task AutoAcceptGameAsync()
         {
-            await _requestService.GetJsonResponseAsync(HttpMethod.Post, $"{_checkUrl}accept");
+            await _requestService.PostAsync($"{_checkUrl}accept", null, null);
         }
 
         public Task AutoDisableHeroAsync()
@@ -59,7 +59,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
                 championId = champID
             };
 
-            await _requestService.GetJsonResponseAsync(HttpMethod.Patch, string.Format(_gameActionUrl, actionID), null, body);
+            await _requestService.PatchAsync(string.Format(_gameActionUrl, actionID), null, body);
         }
 
         public async Task BenchSwapChampionsAsync(int champID)
@@ -117,7 +117,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
 
         public async Task<string> GetGameSessionAsync()
         {
-            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _gameSessionUrl);
+            return await _requestService.GetStringAsync(_gameSessionUrl, null);
         }
 
         public async Task<string> GetIcons()
@@ -161,7 +161,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
 
         public async Task<string> QueryGameDetailAsync(long gameId)
         {
-            return await _requestService.GetStringAsync(string.Format(_gameDetails, gameId),null);
+            return await _requestService.GetStringAsync(string.Format(_gameDetails, gameId), null);
         }
 
         public async Task<string> QuerySummonerSuperChampDataAsync(long summonerId)

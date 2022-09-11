@@ -8,7 +8,7 @@
 
         Task ConnectAsync();
 
-        Task<bool> DisconnectAsync();
+        ValueTask<bool> DisconnectAsync();
 
         Task Initialize(int port, string token);
 

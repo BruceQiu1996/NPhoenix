@@ -7,7 +7,6 @@
       mc:Ignorable="d" 
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:hc="https://handyorg.github.io/handycontrol"
-      xmlns:wpf="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
       FontFamily="微软雅黑"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -400,7 +399,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item0Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item0Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                              AcceptsReturn="True"
+                                                                              TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item0Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -423,7 +426,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item1Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item1Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item1Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -446,7 +453,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item2Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item2Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item2Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -469,7 +480,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item3Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item3Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item3Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item3Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -492,7 +507,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item4Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item4Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item4Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item4Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -515,7 +534,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item5Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item5Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item5Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item5Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -538,7 +561,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item6Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item6Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item6Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item6Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -774,7 +801,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item0Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item0Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item0Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -797,7 +828,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item1Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item1Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item1Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -820,7 +855,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item2Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item2Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item2Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -843,7 +882,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item3Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item3Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item3Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item3Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -866,7 +909,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item4Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item4Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item4Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item4Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -889,7 +936,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item5Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item5Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item5Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item5Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
@@ -912,7 +963,11 @@
                                                                 </Rectangle>
                                                                 <StackPanel Margin="5" Orientation="Vertical">
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item6Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                    <wpf:HtmlPanel Width="380" Text="{Binding Item2.Stats.Item6Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                    <TextBox Width="380" 
+                                                                             IsReadOnly="True"
+                                                                             AcceptsReturn="True"
+                                                                             TextWrapping="Wrap"
+                                                                             Text="{Binding Item2.Stats.Item6Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
                                                                         <TextBlock Text="{Binding Item2.Stats.Item6Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>

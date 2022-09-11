@@ -1,4 +1,5 @@
 ﻿using HandyControl.Themes;
+using LeagueOfLegendsBoxer.Application.Event;
 using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Pages;
 using LeagueOfLegendsBoxer.Resources;
@@ -42,6 +43,11 @@ namespace LeagueOfLegendsBoxer
             ChangeTheme(host.Services.GetRequiredService<IniSettingsModel>().IsDarkTheme ? Theme.Dark : Theme.Light);
             CheckForStartGame();
             host.Services.GetRequiredService<MainWindow>()?.Show();
+        }
+
+        protected async override void OnExit(ExitEventArgs e)
+        {
+            await ServiceProvider.GetRequiredService<IEventService>().DisconnectAsync();
         }
 
         private void CheckForStartGame()
@@ -102,6 +108,7 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<IniSettingsModel>();
                 services.AddSingleton<ImageManager>();
                 services.AddSingleton<RuneHelper>();
+                services.AddSingleton<HtmlHelper>();
                 services.AddSingleton<Team1V2Window>();
                 services.AddSingleton<Team1V2WindowViewModel>();
                 services.AddSingleton<BlackList>();
