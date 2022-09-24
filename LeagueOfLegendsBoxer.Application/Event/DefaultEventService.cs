@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.WebSockets;
 using System.Reactive.Linq;
 using Websocket.Client;
@@ -8,6 +9,7 @@ namespace LeagueOfLegendsBoxer.Application.Event
 {
     public class DefaultEventService : IEventService
     {
+        private bool _loopAlive = false;
         private const int ClientEventData = 2;
         private const int ClientEventNumber = 8;
         private WebsocketClient _webSocket;
@@ -30,8 +32,8 @@ namespace LeagueOfLegendsBoxer.Application.Event
                             (sender, cert, chain, sslPolicyErrors) => true,
                     }
                 };
-
                 socket.Options.AddSubProtocol("wamp");
+                socket.Options.SetRequestHeader("Connection", "keep-alive");
                 return socket;
             });
 
@@ -41,6 +43,7 @@ namespace LeagueOfLegendsBoxer.Application.Event
                 {
                     await _webSocket?.Start();
                     await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+                    SendMessage();
                 }
                 catch { }
             });
@@ -51,6 +54,7 @@ namespace LeagueOfLegendsBoxer.Application.Event
                 {
                     await _webSocket?.Start();
                     await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+                    SendMessage();
                 }
                 catch { }
             });
@@ -89,11 +93,26 @@ namespace LeagueOfLegendsBoxer.Application.Event
             {
                 await _webSocket?.Start();
                 await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+                SendMessage();
             }
             catch (Exception ex) 
             {
             
             }
+        }
+
+        private void SendMessage() 
+        {
+            if (_loopAlive) return;
+            _loopAlive = true;
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
+                    await Task.Delay(2000);
+                }
+            });
         }
 
         public ValueTask<bool> DisconnectAsync()

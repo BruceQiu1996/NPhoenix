@@ -4,7 +4,7 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<Nullable>disable</Nullable>
-		<Version>2.4.2</Version>
+		<Version>2.4.3</Version>
 		<UseWPF>true</UseWPF>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>Resources\logo.ico</ApplicationIcon>

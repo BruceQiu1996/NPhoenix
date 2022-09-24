@@ -19,8 +19,12 @@ namespace LeagueOfLegendsBoxer.Application.LiveGame
             _httpClientHandler.ServerCertificateCustomValidationCallback = (response, cert, chain, errors) => true;
             _httpClient = new HttpClient(_httpClientHandler);
             _httpClient.BaseAddress = new Uri("https://127.0.0.1:2999");
+            _httpClient.DefaultRequestVersion = new Version(2, 0);
             _httpClient.Timeout = TimeSpan.FromSeconds(10);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "LeagueOfLegendsClient/12.7.433.4138 (CEF 91)");
+            _httpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
+            _httpClient.Timeout = TimeSpan.FromSeconds(10);
         }
         public async Task<string> GetGameEventAsync()
         {

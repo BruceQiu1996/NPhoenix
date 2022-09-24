@@ -9,6 +9,8 @@ namespace LeagueOfLegendsBoxer.Models
         public string Content { get; set; }
         public string Time { get; set; }
         public int Priority { get; set; }
+        public bool IsMust { get; set; }
+
         private bool isReaded;
         public bool IsReaded
         {

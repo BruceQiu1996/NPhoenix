@@ -110,11 +110,14 @@
                 </Label>
                 <hc:Badge Grid.Column="2"
                           BadgeMargin="0 20 -5 0" BorderThickness="0"
-                          Value="{Binding UnReadNotices}">
+                          Text="{Binding UnReadNotices}">
                     <hc:Badge.Resources>
                         <Style BasedOn="{StaticResource BadgeDanger}" TargetType="hc:Badge">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding UnReadNotices}" Value="0">
+                                    <Setter Property="ShowBadge" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding UnReadNotices}" Value="必读0">
                                     <Setter Property="ShowBadge" Value="False"></Setter>
                                 </DataTrigger>
                             </Style.Triggers>
