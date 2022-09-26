@@ -18,6 +18,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string GameName = "LeagueClient";
         public const string Game = nameof(Game);
         public const string AutoAcceptGame = nameof(AutoAcceptGame);
+        public const string AutoEndGame = nameof(AutoEndGame);
         public const string AutoLockHero = nameof(AutoLockHero);
         public const string AutoStartGame = nameof(AutoStartGame);
         public const string RankAutoLockHero = nameof(RankAutoLockHero);
@@ -41,6 +42,8 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string CloseSendOtherWhenBegin = nameof(CloseSendOtherWhenBegin);
         public const string HorseTemplate = nameof(HorseTemplate);
         public const string ReadedNotice = nameof(ReadedNotice);
+        public const string FuckWords = nameof(FuckWords);
+        public const string GoodWords = nameof(GoodWords);
         public const string AutoAcceptGameDelay = nameof(AutoAcceptGameDelay);
         public const string Above120ScoreTxt = nameof(Above120ScoreTxt);
         public const string Above110ScoreTxt = nameof(Above110ScoreTxt);

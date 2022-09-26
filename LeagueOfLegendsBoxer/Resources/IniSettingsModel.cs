@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -23,10 +24,15 @@ namespace LeagueOfLegendsBoxer.Resources
         public bool AutoLockHero { get; set; }
         public bool RankAutoLockHero { get; set; }
         public bool AutoDisableHero { get; set; }
+        public bool AutoEndGame { get; set; }
         public bool AutoLockHeroInAram { get; set; }
         public bool IsDarkTheme { get; set; }
         public List<int> LockHerosInAram { get; set; }
         public List<int> ReadedNotices { get; set; }
+        public string FuckWords { get; set; }
+        public string GoodWords { get; set; }
+        public List<string> FuckWordCollection { get; set; }
+        public List<string> GoodWordCollection { get; set; }
         public int AutoDisableChampId { get; set; }
         public int AutoLockHeroChampId { get; set; }
         public int TopAutoLockHeroChampId1 { get; set; }
@@ -64,11 +70,13 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             var file = _configuration.GetSection("SettingsFileLocation").Value;
             if (string.IsNullOrEmpty(file))
-                throw new System.ArgumentNullException("can't find init file section in appsettings.json");
+                throw new ArgumentNullException("can't find init file section in appsettings.json");
 
             await _settingsService.Initialize(file);
             AutoAcceptGame = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoAcceptGame), out var tempAutoAcceptGame) ? tempAutoAcceptGame : false;
+            AutoEndGame = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.AutoEndGame), out var tempAutoEndGame) ? tempAutoEndGame : false;
             AutoStartGame = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoStartGame), out var tempAutoStartGame) ? tempAutoStartGame : false;
             AutoLockHero = bool.TryParse(
@@ -126,7 +134,11 @@ namespace LeagueOfLegendsBoxer.Resources
             AutoAcceptGameDelay = int.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoAcceptGameDelay), out var tempAutoAcceptGameDelay) ? tempAutoAcceptGameDelay : 0;
             var readedNotices = await _settingsService.ReadAsync(Constant.Game, Constant.ReadedNotice);
+            FuckWords = await _settingsService.ReadAsync(Constant.Game, Constant.GoodWords);
+            GoodWords = await _settingsService.ReadAsync(Constant.Game, Constant.FuckWords);
             ReadedNotices = string.IsNullOrEmpty(readedNotices) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(readedNotices);
+            FuckWordCollection = string.IsNullOrEmpty(FuckWords) ? new List<string>() : FuckWords.Split("\n").ToList();
+            GoodWordCollection = string.IsNullOrEmpty(GoodWords) ? new List<string>() : GoodWords.Split("\n").ToList();
             IsDarkTheme = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsDarkTheme), out var tempIsDarkTheme) ? tempIsDarkTheme : false;
             if (!File.Exists(_blackListLoc)) 
             {
@@ -147,6 +159,12 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.AutoAcceptGame, value.ToString());
             AutoAcceptGame = value;
+        }
+
+        public async Task WriteAutoEndGameAsync(bool value)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.AutoEndGame, value.ToString());
+            AutoEndGame = value;
         }
 
         public async Task WriteAutoStartGameAsync(bool value)
@@ -327,6 +345,19 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.IsDarkTheme, isDarkTheme.ToString());
             IsDarkTheme = isDarkTheme;
+        }
+
+        public async Task WriteFuckWords(string fuckwords)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.FuckWords, fuckwords);
+            FuckWords = fuckwords;
+            FuckWordCollection = string.IsNullOrEmpty(FuckWords) ? new List<string>() : FuckWords.Split("\n").ToList();
+        }
+        public async Task WriteGoodWords(string goodwords)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.GoodWords, goodwords);
+            GoodWords = goodwords;
+            GoodWordCollection = string.IsNullOrEmpty(GoodWords) ? new List<string>() : GoodWords.Split("\n").ToList();
         }
 
         public async Task RemoveBlackAccountAsync(long id)

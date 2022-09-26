@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Gma.System.MouseKeyHook;
 using HandyControl.Controls;
+using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Application.Client;
 using LeagueOfLegendsBoxer.Application.Event;
@@ -31,7 +32,6 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -257,6 +257,46 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
         }
 
+        private async void SendFuckWords()
+        {
+            if (_iniSettingsModel.FuckWordCollection != null && _iniSettingsModel.FuckWordCollection.Count <= 5) 
+            {
+                foreach (var str in _iniSettingsModel.FuckWordCollection) 
+                {
+                    await Task.Delay(300);
+                    await InGameSendMessage(str);
+                }
+            }
+            else if (_iniSettingsModel.FuckWordCollection != null && _iniSettingsModel.FuckWordCollection.Count > 5)
+            {
+                foreach (var str in _iniSettingsModel.FuckWordCollection.OrderBy(x => Guid.NewGuid()).Take(5))
+                {
+                    await Task.Delay(300);
+                    await InGameSendMessage(str);
+                }
+            }
+        }
+
+        private async void SendGoodWords()
+        {
+            if (_iniSettingsModel.GoodWordCollection != null && _iniSettingsModel.GoodWordCollection.Count <= 5)
+            {
+                foreach (var str in _iniSettingsModel.GoodWordCollection)
+                {
+                    await Task.Delay(300);
+                    await InGameSendMessage(str);
+                }
+            }
+            else if (_iniSettingsModel.GoodWordCollection != null && _iniSettingsModel.GoodWordCollection.Count > 5) 
+            {
+                foreach (var str in _iniSettingsModel.GoodWordCollection.OrderBy(x => Guid.NewGuid()).Take(5)) 
+                {
+                    await Task.Delay(300);
+                    await InGameSendMessage(str);
+                }
+            }
+        }
+
         public static Keys StringToKeys(string keyStr)
         {
             if (string.IsNullOrWhiteSpace(keyStr))
@@ -312,12 +352,21 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 ListenerTeamBuildInfo_Triggered(null, null, null);
             }
+            else if (e.KeyData == StringToKeys("Control+F7"))
+            {
+                SendFuckWords();
+            }
+            else if (e.KeyData == StringToKeys("Control+F8"))
+            {
+                SendGoodWords();
+            }
         }
 
         #endregion 
         private async Task LoadAsync()
         {
             CheckUpdate();
+            await CheckGameNotExistWhenStartAsync();
             await LoadConfig();
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
             await ConnnectAsync();
@@ -579,8 +628,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 case "WaitingForStats":
                     GameStatus = "等待结算界面";
                     break;
-                case "PreEndOfGame":
                 case "EndOfGame":
+                    await EndofGameAutoExit();
                     GameStatus = "对局结束";
                     ActionWhenGameEnd();
                     break;
@@ -611,7 +660,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                 _team1V2Window.Topmost = false;
                             });
                             GameStatus = "大厅或者游戏主界面";
-                            await Task.Delay(1000);
+                            await Task.Delay(500);
                             continue;
                         }
 
@@ -621,11 +670,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
                             await LoopGameFlow(phase);
                         }
 
-                        await Task.Delay(1000);
+                        await Task.Delay(500);
                     }
                     catch
                     {
-                        await Task.Delay(1000);
+                        await Task.Delay(500);
                         continue;
                     }
                 }
@@ -643,23 +692,23 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         var session = await _gameService.GetGameSessionAsync();
                         if (string.IsNullOrEmpty(session))
                         {
-                            await Task.Delay(1000);
+                            await Task.Delay(500);
                             continue;
                         }
 
                         var token = JToken.Parse(session);
                         if (token.Value<int>("httpStatus") == 404)
                         {
-                            await Task.Delay(1000);
+                            await Task.Delay(500);
                             continue;
                         }
 
                         await LoopChampSelect(token);
-                        await Task.Delay(1000);
+                        await Task.Delay(500);
                     }
                     catch
                     {
-                        await Task.Delay(1000);
+                        await Task.Delay(500);
                         continue;
                     }
                 }
@@ -1152,6 +1201,27 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
         }
 
+        /// <summary>
+        /// 首次打开不能存在lol进程
+        /// </summary>
+        /// <returns></returns>
+        private async Task CheckGameNotExistWhenStartAsync()
+        {
+            var authenticate = await GetAuthenticate();
+            if (!string.IsNullOrEmpty(authenticate) && authenticate.Contains("--remoting-auth-token="))
+            {
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "存在lol进程，请等待lol进程完全退出后再打开",
+                    ShowDateTime = false
+                });
+
+                await Task.Delay(1000);
+                Environment.Exit(0);
+            }
+        }
+
         private async Task ConnnectAsync()
         {
             while (true)
@@ -1214,6 +1284,19 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 .Click(message).Wait(75)
                 .Click(KeyCode.Enter)
                 .Invoke();
+        }
+
+        private async Task<bool> EndofGameAutoExit()
+        {
+            if (_iniSettingsModel.AutoEndGame)
+            {
+                return await Simulate.Events()
+                    .Hold(KeyCode.Alt).Wait(75)
+                    .Click(KeyCode.F4).Wait(75)
+                    .Click(KeyCode.F4).Invoke();
+            }
+
+            return false;
         }
 
         private void OpenChampionSelectTool()

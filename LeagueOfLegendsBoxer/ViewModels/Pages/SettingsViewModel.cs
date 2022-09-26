@@ -40,6 +40,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _autoAcceptGame, value);
         }
 
+        private bool _autoEndGame;
+        public bool AutoEndGame
+        {
+            get => _autoEndGame;
+            set => SetProperty(ref _autoEndGame, value);
+        }
+
         private bool _autoStartGame;
         public bool AutoStartGame
         {
@@ -607,7 +614,20 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _isAltQOpenVsDetail, value);
         }
 
-        
+        private string _fuckWords;
+        public string FuckWords
+        {
+            get => _fuckWords;
+            set => SetProperty(ref _fuckWords, value);
+        }
+
+        private string _goodWords;
+        public string GoodWords
+        {
+            get => _goodWords;
+            set => SetProperty(ref _goodWords, value);
+        }
+
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoStartGameCommandAsync { get; set; }
@@ -620,6 +640,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand UncheckedAutoDisableHeroCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroInAramCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoLockHeroInAramCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedAutoEndGameCommandAsync { get; set; }
+        public AsyncRelayCommand UncheckedAutoEndGameCommandAsync { get; set; }
         public AsyncRelayCommand GetGameFolderCommandAsync { get; set; }
         public AsyncRelayCommand ManualGetGameFolderCommandAsync { get; set; }
         public AsyncRelayCommand ExitGameCommandAsync { get; set; }
@@ -651,6 +673,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand UnCheckUseAltQOpenVsDetailCommandAsync { get; set; }
         public AsyncRelayCommand ChooseLightThemeCommandAsync { get; set; }
         public AsyncRelayCommand ChooseDarkThemeCommandAsync { get; set; }
+        public AsyncRelayCommand SaveFuckWordsCommandAsync { get; set; }
+        public AsyncRelayCommand SaveGoodWordsCommandAsync { get; set; }
         public RelayCommand PayCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
@@ -681,6 +705,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             UncheckedAutoDisableHeroCommandAsync = new AsyncRelayCommand(UncheckedAutoDisableHeroAsync);
             CheckedAutoLockHeroInAramCommandAsync = new AsyncRelayCommand(CheckedAutoLockHeroInAramAsync);
             UncheckedAutoLockHeroInAramCommandAsync = new AsyncRelayCommand(UncheckedAutoLockHeroInAramAsync);
+            CheckedAutoEndGameCommandAsync = new AsyncRelayCommand(CheckedAutoEndGameAsync);
+            UncheckedAutoEndGameCommandAsync = new AsyncRelayCommand(UncheckedAutoEndGameAsync);
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             SearchLockHeroCommand = new RelayCommand(SearchLockHero);
 
@@ -714,6 +740,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             UnCheckUseAltQOpenVsDetailCommandAsync = new AsyncRelayCommand(UnCheckUseAltQOpenVsDetailAsync);
             ChooseLightThemeCommandAsync = new AsyncRelayCommand(ChooseLightThemeAsync);
             ChooseDarkThemeCommandAsync = new AsyncRelayCommand(ChooseDarkThemeAsync);
+            SaveFuckWordsCommandAsync = new AsyncRelayCommand(SaveFuckWordsAsync);
+            SaveGoodWordsCommandAsync = new AsyncRelayCommand(SaveGoodWordsAsync);
         }
 
         private void PayMethod() 
@@ -818,6 +846,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             Below100ScoreTxt = _iniSettingsModel.Below100ScoreTxt;
             IsAltQOpenVsDetail = _iniSettingsModel.IsAltQOpenVsDetail;
             IsDarkTheme = _iniSettingsModel.IsDarkTheme;
+            FuckWords = _iniSettingsModel.FuckWords;
+            GoodWords = _iniSettingsModel.GoodWords;
         }
 
         #region checkbox
@@ -961,6 +991,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private async Task AutoAcceptGameDelayChangedAsync()
         {
             await _iniSettingsModel.WriteAutoAcceptGameDelay(AutoAcceptGameDelay);
+        }
+
+        private async Task CheckedAutoEndGameAsync() 
+        {
+            await _iniSettingsModel.WriteAutoEndGameAsync(true);
+            AutoEndGame = true;
+        }
+
+        private async Task UncheckedAutoEndGameAsync()
+        {
+            await _iniSettingsModel.WriteAutoEndGameAsync(false);
+            AutoEndGame = false;
         }
         #endregion
 
@@ -1331,11 +1373,60 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             IsDarkTheme = false;
             App.ChangeTheme(App.Theme.Light);
         }
+
         private async Task ChooseDarkThemeAsync()
         {
             await _iniSettingsModel.WriteIsDarkTheme(true);
             IsDarkTheme = true;
             App.ChangeTheme(App.Theme.Dark);
+        }
+
+        private async Task SaveFuckWordsAsync() 
+        {
+            try
+            {
+                await _iniSettingsModel.WriteFuckWords(FuckWords);
+                Growl.SuccessGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "保存成功",
+                    ShowDateTime = false
+                });
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex.ToString());
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "保存失败",
+                    ShowDateTime = false
+                });
+            }
+        }
+
+        private async Task SaveGoodWordsAsync()
+        {
+            try
+            {
+                await _iniSettingsModel.WriteGoodWords(GoodWords);
+                Growl.SuccessGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "保存成功",
+                    ShowDateTime = false
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "保存失败",
+                    ShowDateTime = false
+                });
+            }
         }
     }
 }
