@@ -8,18 +8,17 @@ using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
@@ -675,6 +674,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand ChooseDarkThemeCommandAsync { get; set; }
         public AsyncRelayCommand SaveFuckWordsCommandAsync { get; set; }
         public AsyncRelayCommand SaveGoodWordsCommandAsync { get; set; }
+        public AsyncRelayCommand ManualUpdateCommandAsync { get; set; }
         public RelayCommand PayCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
@@ -742,6 +742,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ChooseDarkThemeCommandAsync = new AsyncRelayCommand(ChooseDarkThemeAsync);
             SaveFuckWordsCommandAsync = new AsyncRelayCommand(SaveFuckWordsAsync);
             SaveGoodWordsCommandAsync = new AsyncRelayCommand(SaveGoodWordsAsync);
+            ManualUpdateCommandAsync = new AsyncRelayCommand(ManualUpdateAsync);
         }
 
         private void PayMethod() 
@@ -840,6 +841,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
             AutoAcceptGameDelay = _iniSettingsModel.AutoAcceptGameDelay;
             AutoStartGame = _iniSettingsModel.AutoStartGame;
+            AutoEndGame = _iniSettingsModel.AutoEndGame;
             Above120ScoreTxt = _iniSettingsModel.Above120ScoreTxt;
             Above110ScoreTxt = _iniSettingsModel.Above110ScoreTxt;
             Above100ScoreTxt = _iniSettingsModel.Above100ScoreTxt;
@@ -1379,6 +1381,47 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteIsDarkTheme(true);
             IsDarkTheme = true;
             App.ChangeTheme(App.Theme.Dark);
+        }
+
+        private async Task ManualUpdateAsync() 
+        {
+            var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.exe");
+            var updateFile = files.FirstOrDefault(f => f.Split('\\').LastOrDefault() == "NPhoenixAutoUpdateTool.exe");
+            if (updateFile != null)
+            {
+                Process.Start(updateFile, version);
+            }
+            else
+            {
+                await Task.Run(async () =>
+                {
+                    try
+                    {
+                        using (HttpClient client = new HttpClient())
+                        {
+                            var responseMessage = await client.GetAsync("http://www.dotlemon.top:5200/upload/NPhoenix/NPhoenixAutoUpdateTool.exe", HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
+                            responseMessage.EnsureSuccessStatusCode();
+                            if (responseMessage.StatusCode == HttpStatusCode.OK)
+                            {
+                                var filePath = Directory.GetCurrentDirectory() + "/NPhoenixAutoUpdateTool.exe";
+                                using (FileStream fs = new FileStream(filePath, FileMode.Create))
+                                {
+                                    await responseMessage.Content.CopyToAsync(fs);
+                                }
+                                if (File.Exists(filePath))
+                                {
+                                    Process.Start(filePath, version);
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "下载自动更新程序失败:");
+                    }
+                });
+            }
         }
 
         private async Task SaveFuckWordsAsync() 

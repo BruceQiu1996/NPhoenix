@@ -739,6 +739,12 @@
                             Margin="20 20 20 0" Width="310" FontSize="15" Height="35" 
                             HorizontalAlignment="Center"></Button>
             
+            <Button Content="手动更新" 
+                            Cursor="Hand"
+                            Style="{StaticResource ButtonSuccess}"
+                            Margin="20 20 20 0" Width="310" FontSize="15" Height="35" 
+                            HorizontalAlignment="Center" Command="{Binding ManualUpdateCommandAsync}"></Button>
+            
             <Button Content="退出游戏" 
                     Margin="20 10 20 0"
                     Cursor="Hand"
