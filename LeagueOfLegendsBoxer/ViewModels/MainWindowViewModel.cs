@@ -1294,7 +1294,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 return await Simulate.Events()
                     .Hold(KeyCode.Alt).Wait(75)
                     .Click(KeyCode.F4).Wait(75)
-                    .Click(KeyCode.F4).Invoke();
+                    .Click(KeyCode.F4).Wait(75).Release(KeyCode.Alt).Invoke();
             }
 
             return false;
