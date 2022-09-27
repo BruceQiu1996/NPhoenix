@@ -7,12 +7,12 @@
         xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        ResizeMode="CanMinimize"
+        ResizeMode="CanResize"
         Background="Transparent"
         AllowsTransparency="True"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         WindowStyle="None"
-        Title="NPhoenix" Height="700" Width="380">
+        Title="NPhoenix" Height="650" Width="380">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="3"/>

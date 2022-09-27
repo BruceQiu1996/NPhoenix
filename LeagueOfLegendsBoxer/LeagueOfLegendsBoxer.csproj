@@ -14,7 +14,9 @@
 	<ItemGroup>
 		<None Remove="appsettings.json" />
 		<None Remove="Resources\blackList.json" />
+		<None Remove="Resources\good.png" />
 		<None Remove="Resources\logo.ico" />
+		<None Remove="Resources\low.png" />
 		<None Remove="Resources\Positions\bot.svg" />
 		<None Remove="Resources\Positions\jug.svg" />
 		<None Remove="Resources\Positions\mid.svg" />
@@ -69,6 +71,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Resource Include="Resources\good.png" />
+		<Resource Include="Resources\low.png" />
 		<Resource Include="Resources\Positions\bot.svg" />
 		<Resource Include="Resources\Positions\jug.svg" />
 		<Resource Include="Resources\Positions\mid.svg" />
