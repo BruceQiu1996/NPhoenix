@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:usercontrol="clr-namespace:LeagueOfLegendsBoxer.UserControls"
         Background="Transparent"
         AllowsTransparency="True"
         ResizeMode="NoResize"
@@ -56,7 +57,7 @@
                 <Path Data="{StaticResource back}" Fill="{StaticResource PrimaryBrush}" Stretch="Uniform"></Path>
             </Label>
             <hc:Card Grid.Row="2" Margin="5"  Opacity="0.9" Background="{DynamicResource DefaultCardBackgroundColor}" BorderThickness="0">
-                <ListBox ItemsSource="{Binding Accounts,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent">
+                <ListBox ItemsSource="{Binding CurrentParticipants,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"></StackPanel>
@@ -84,9 +85,21 @@
                                                                  Width="55" Height="55"
                                                                  Margin="10 0 0 0"
                                                                  VerticalAlignment="Center" HorizontalAlignment="Left">
-                                                        <Image Source="{Binding Champion.Avatar}"/>
+                                                        <Image Source="{Binding Item2.ChampionImage}"/>
                                                     </hc:Gravatar>
-                                                    <TextBlock VerticalAlignment="Center" Margin="70 0 0 0" FontSize="16" Text="{Binding DisplayName}">
+                                                    <Canvas Width="55" Height="55"
+                                                            Margin="40 0 0 15"
+                                                            Visibility="{Binding Item1.IsSvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"
+                                                            VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                        <usercontrol:SVP></usercontrol:SVP>
+                                                    </Canvas>
+                                                    <Canvas Width="55" Height="55"
+                                                            Margin="40 0 0 15"
+                                                            Visibility="{Binding Item1.IsMvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"
+                                                            VerticalAlignment="Center" HorizontalAlignment="Left">
+                                                        <usercontrol:MVP></usercontrol:MVP>
+                                                    </Canvas>
+                                                    <TextBlock VerticalAlignment="Top" Margin="70 5 0 0" FontSize="16" Text="{Binding Item1.Player.SummonerName}">
                                                         <behaviors:Interaction.Triggers>
                                                             <behaviors:EventTrigger EventName="MouseLeftButtonDown">
                                                                 <behaviors:InvokeCommandAction Command="{Binding  DataContext.SearchRecordCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
@@ -94,6 +107,7 @@
                                                             </behaviors:EventTrigger>
                                                         </behaviors:Interaction.Triggers>
                                                     </TextBlock>
+                                                    <TextBlock Text="{Binding Item2.Stats.DamageConvert,StringFormat={}伤害转化 : {0}}" Margin="70 35 0 0" FontSize="14"/>
                                                     <Button Content="拉黑" Cursor="Hand"
                                                             HorizontalAlignment="Right"
                                                             Command="{Binding DataContext.ToggleBlackInfoCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}" 
@@ -102,15 +116,15 @@
                                                 </Grid>
                                                 <TextBox Grid.Row="1" Height="50" AcceptsReturn="True" TextWrapping="Wrap" VerticalContentAlignment="Top"
                                                          Style="{StaticResource TextBoxExtend}" 
-                                                         Visibility="{Binding IsOpenBlack,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"
-                                                         Text="{Binding Reason,UpdateSourceTrigger=PropertyChanged}"
+                                                         Visibility="{Binding Item1.IsOpenBlack,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"
+                                                         Text="{Binding Item1.Reason,UpdateSourceTrigger=PropertyChanged}"
                                                          hc:InfoElement.Placeholder="拉黑事由"></TextBox>
 
                                                 <Button Content="提交" Cursor="Hand"
                                                         HorizontalAlignment="Right" 
                                                         Grid.Row="2"
                                                         Width="80" Style="{StaticResource ButtonPrimary}" Margin="0 10 0 5" 
-                                                        Visibility="{Binding IsOpenBlack,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"
+                                                        Visibility="{Binding Item1.IsOpenBlack,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"
                                                         Command="{Binding DataContext.SubmitBlackListCommanmdAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}" 
                                                         CommandParameter="{Binding}">
                                                 </Button>

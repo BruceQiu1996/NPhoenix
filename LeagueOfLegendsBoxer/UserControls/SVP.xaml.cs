@@ -9,17 +9,17 @@ namespace LeagueOfLegendsBoxer.UserControls
     /// </summary>
     public partial class SVP : UserControl
     {
-        public static DependencyProperty MyFontSizeProperty = DependencyProperty.Register("MyFontSize", typeof(double), typeof(MVP));
-        public double MyFontSize
+        public static DependencyProperty MyFontSize1Property = DependencyProperty.Register("MyFontSize1", typeof(double), typeof(MVP));
+        public double MyFontSize1
         {
-            get { return (double)GetValue(MyFontSizeProperty); }
-            set { SetValue(MyFontSizeProperty, value); }
+            get { return (double)GetValue(MyFontSize1Property); }
+            set { SetValue(MyFontSize1Property, value); }
         }
 
         public SVP()
         {
             InitializeComponent();
-            txt.SetBinding(FontSizeProperty, new Binding("MyFontSize") { Source = this });
+            txt.SetBinding(FontSizeProperty, new Binding("MyFontSize1") { Source = this });
         }
     }
 }

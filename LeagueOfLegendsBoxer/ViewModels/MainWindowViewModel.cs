@@ -259,9 +259,9 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private async void SendFuckWords()
         {
-            if (_iniSettingsModel.FuckWordCollection != null && _iniSettingsModel.FuckWordCollection.Count <= 5) 
+            if (_iniSettingsModel.FuckWordCollection != null && _iniSettingsModel.FuckWordCollection.Count <= 5)
             {
-                foreach (var str in _iniSettingsModel.FuckWordCollection) 
+                foreach (var str in _iniSettingsModel.FuckWordCollection)
                 {
                     await Task.Delay(300);
                     await InGameSendMessage(str);
@@ -287,9 +287,9 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     await InGameSendMessage(str);
                 }
             }
-            else if (_iniSettingsModel.GoodWordCollection != null && _iniSettingsModel.GoodWordCollection.Count > 5) 
+            else if (_iniSettingsModel.GoodWordCollection != null && _iniSettingsModel.GoodWordCollection.Count > 5)
             {
-                foreach (var str in _iniSettingsModel.GoodWordCollection.OrderBy(x => Guid.NewGuid()).Take(5)) 
+                foreach (var str in _iniSettingsModel.GoodWordCollection.OrderBy(x => Guid.NewGuid()).Take(5))
                 {
                     await Task.Delay(300);
                     await InGameSendMessage(str);
@@ -633,17 +633,19 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 case "WaitingForStats":
                     GameStatus = "等待结算界面";
                     break;
-                case "EndOfGame":
+                case "PreEndOfGame":
                     await EndofGameAutoExit();
+                    break;
+                case "EndOfGame":
                     GameStatus = "对局结束";
-                    ActionWhenGameEnd();
+                    await ActionWhenGameEnd();
                     break;
                 default:
                     GameStatus = "未知状态" + phase;
                     break;
             }
         }
-        
+
         private void LoopGameStatus()
         {
             var _ = Task.Run(async () =>
@@ -1123,15 +1125,19 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 _logger.LogError(ex.ToString());
             }
         }
-        private void ActionWhenGameEnd()
+        private async Task ActionWhenGameEnd()
         {
+            var game = await _gameService.GetCurrentGameInfoAsync();
             if (Team1Accounts.Count <= 0 && Team2Accounts.Count <= 0)
                 return;
-
+            var gameId = JToken.Parse(game)["gameData"].Value<long>("gameId");
+            var details = await _gameService.QueryGameDetailAsync(gameId);
+            var detailRecordsData = JToken.Parse(details);
+            var DetailRecord = detailRecordsData.ToObject<Record>();
             var myTeam = Team1Accounts.FirstOrDefault(x => x?.SummonerId == Constant.Account?.SummonerId) == null ? Team2Accounts : Team1Accounts;
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
-                (_blackList.DataContext as BlackListViewModel).LoadAccount(myTeam, Team1Accounts == myTeam ? Team2Accounts : Team1Accounts);
+                (_blackList.DataContext as BlackListViewModel).LoadAccount(DetailRecord);
                 _blackList.Show();
                 _blackList.WindowStartupLocation = WindowStartupLocation.Manual;
                 _blackList.Top = (SystemParameters.PrimaryScreenHeight - _blackList.ActualHeight) - 50;
@@ -1254,8 +1260,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex.ToString());
-                    await Task.Delay(5000);
+                    await Task.Delay(2000);
                 }
             }
         }

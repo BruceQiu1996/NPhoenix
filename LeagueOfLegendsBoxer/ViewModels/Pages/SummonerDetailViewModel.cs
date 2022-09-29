@@ -8,6 +8,7 @@ using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json;
@@ -35,32 +36,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _record, value);
         }
 
-        private Record _detailRecord;
-        public Record DetailRecord
-        {
-            get => _detailRecord;
-            set => SetProperty(ref _detailRecord, value);
-        }
-
-        private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _leftParticipants;
-        public ObservableCollection<Tuple<ParticipantIdentity, Participant>> LeftParticipants
-        {
-            get => _leftParticipants;
-            set => SetProperty(ref _leftParticipants, value);
-        }
-
-        private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _rightParticipants;
-        public ObservableCollection<Tuple<ParticipantIdentity, Participant>> RightParticipants
-        {
-            get => _rightParticipants;
-            set => SetProperty(ref _rightParticipants, value);
-        }
-
         private ObservableCollection<Champ> _champs;
         public ObservableCollection<Champ> Champs
         {
             get => _champs;
             set => SetProperty(ref _champs, value);
+        }
+
+        private ObservableCollection<Record> _records;
+        public ObservableCollection<Record> Records
+        {
+            get => _records;
+            set => SetProperty(ref _records, value);
         }
 
         public int _pageIndex;
@@ -87,17 +74,15 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SelectPageCommandAsync = new AsyncRelayCommand<FunctionEventArgs<int>>(SelectPageAsync);
             CopyNameCommand = new RelayCommand<Tuple<ParticipantIdentity, Participant>>(CopyName);
             BlackAccountCommand = new RelayCommand<Tuple<ParticipantIdentity, Participant>>(BlackAccountMethod);
-            LeftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
-            RightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
         }
 
         private async Task SelectPageAsync(FunctionEventArgs<int> e)
         {
-            var records = await _gameService.GetRecordsByPage((e.Info - 1) * 20, e.Info * 20, Account.Puuid);
+            var records = await _gameService.GetRecordsByPage((e.Info - 1) * 5, e.Info * 5, Account.Puuid);
             var recordsData = JToken.Parse(records);
             var recordObjs = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<ObservableCollection<Record>>().Reverse());
-            Record = recordObjs.FirstOrDefault();
-            Account.Records = recordObjs;
+            Records = recordObjs;
+            await LoadRecordDetailDataGroup(Records);
         }
 
         public async Task LoadAsync()
@@ -113,7 +98,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     champ.Rank = ++rank;
                 }
                 Champs = list;
-                Record = Account.Records.FirstOrDefault();
+                Records = Account.Records.Count() >= 5 ? new ObservableCollection<Record>(Account.Records.Take(5)) : Account.Records;
+                await LoadRecordDetailDataGroup(Records);
                 PageIndex = 1;
                 _loaded = true;
             }
@@ -128,32 +114,89 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
+        private async Task LoadRecordDetailDataGroup(ObservableCollection<Record> recordObjs)
+        {
+            Record = recordObjs.FirstOrDefault();
+            foreach (var record in recordObjs)
+            {
+                var details = await _gameService.QueryGameDetailAsync(record.GameId);
+                var detailRecordsData = JToken.Parse(details);
+                record.DetailRecord = detailRecordsData.ToObject<Record>();
+                IList<Tuple<ParticipantIdentity, Participant>> members = new List<Tuple<ParticipantIdentity, Participant>>();
+                foreach (var index in Enumerable.Range(0, record.DetailRecord.ParticipantIdentities.Count()))
+                {
+                    var lidentity = record.DetailRecord.ParticipantIdentities[index];
+                    lidentity.IsCurrentUser = Account.SummonerId == lidentity.Player.SummonerId;
+                    members.Add(new Tuple<ParticipantIdentity, Participant>(lidentity, record.DetailRecord.Participants[index]));
+                }
+
+                record.LeftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>(members.Where(x => x.Item2.TeamId == 100));
+                record.RightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>(members.Where(x => x.Item2.TeamId == 200));
+
+                record.DetailRecord.Team1GoldEarned = record.LeftParticipants.Sum(x => x.Item2.Stats.GoldEarned);
+                record.DetailRecord.Team2GoldEarned = record.RightParticipants.Sum(x => x.Item2.Stats.GoldEarned);
+                record.DetailRecord.Team1Kills = record.LeftParticipants.Sum(x => x.Item2.Stats.Kills);
+                record.DetailRecord.Team2Kills = record.RightParticipants.Sum(x => x.Item2.Stats.Kills);
+
+                var team1TotalDamage = record.LeftParticipants.Sum(x => x.Item2.Stats.TotalDamageDealtToChampions);
+                var team2TotalDamage = record.RightParticipants.Sum(x => x.Item2.Stats.TotalDamageDealtToChampions);
+
+                foreach (var item in record.LeftParticipants)
+                {
+                    if (team1TotalDamage == 0)item.Item2.Stats.DamageConvert = "NaN%";
+                    else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team1TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team1GoldEarned) * 100).ToString("0.00") + "%";
+                }
+                foreach (var item in record.RightParticipants)
+                {
+                    if (team2TotalDamage == 0)item.Item2.Stats.DamageConvert = "NaN%";
+                    else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team2GoldEarned) * 100).ToString("0.00") + "%";
+                }
+                var maxdmg = record.LeftParticipants.Concat(record.RightParticipants).Max(x => x.Item2.Stats.TotalDamageDealtToChampions);
+                foreach (var item in record.LeftParticipants.Concat(record.RightParticipants))
+                {
+                    item.Item2.Stats.BarWidth = 350 * (item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / maxdmg);
+                }
+
+                if (record.QueueId == 420 || record.QueueId == 430 || record.QueueId == 440 || record.QueueId == 450)
+                {
+                    var my = record.LeftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Account.SummonerId) != null
+                        ? record.LeftParticipants : record.RightParticipants;
+                    var other = record.LeftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Account.SummonerId) != null
+                        ? record.RightParticipants : record.LeftParticipants;
+
+                    bool myIsWin = record.Participants.FirstOrDefault().Stats.Win;
+                    Tuple<ParticipantIdentity, Participant> mvp = null;
+                    Tuple<ParticipantIdentity, Participant> svp = null;
+                    if (myIsWin)
+                    {
+                        mvp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                        mvp.Item1.IsMvp = true;
+                        svp = other.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                        svp.Item1.IsSvp = true;
+                    }
+                    else
+                    {
+                        mvp = other.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                        mvp.Item1.IsMvp = true;
+                        svp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                        svp.Item1.IsSvp = true;
+                    }
+
+                    if (mvp.Item1.Player.SummonerId == Account.SummonerId)
+                    {
+                        record.IsMvp = true;
+                    }
+                    if (svp.Item1.Player.SummonerId == Account.SummonerId)
+                    {
+                        record.IsSvp = true;
+                    }
+                }
+            }
+        }
+
         public async Task GameSelectionChangedAsync()
         {
-            var details = await _gameService.QueryGameDetailAsync(Record.GameId);
-            var recordsData = JToken.Parse(details);
-            DetailRecord = recordsData.ToObject<Record>();
-            LeftParticipants.Clear();
-            RightParticipants.Clear();
-            foreach (var index in Enumerable.Range(0, 5))
-            {
-                DetailRecord.Team1GoldEarned += DetailRecord.Participants[index].Stats.GoldEarned;
-                DetailRecord.Team2GoldEarned += DetailRecord.Participants[index + 5].Stats.GoldEarned;
-                DetailRecord.Team1Kills += DetailRecord.Participants[index].Stats.Kills;
-                DetailRecord.Team2Kills += DetailRecord.Participants[index + 5].Stats.Kills;
-                var lidentity = DetailRecord.ParticipantIdentities[index];
-                lidentity.IsCurrentUser = Account.SummonerId == lidentity.Player.SummonerId;
-                var ridentity = DetailRecord.ParticipantIdentities[index + 5];
-                ridentity.IsCurrentUser = Account.SummonerId == ridentity.Player.SummonerId;
-                LeftParticipants.Add(new Tuple<ParticipantIdentity, Participant>(lidentity, DetailRecord.Participants[index]));
-                RightParticipants.Add(new Tuple<ParticipantIdentity, Participant>(ridentity, DetailRecord.Participants[index + 5]));
-            }
 
-            var maxdmg = LeftParticipants.Concat(RightParticipants).Max(x => x.Item2.Stats.TotalDamageDealtToChampions);
-            foreach (var item in LeftParticipants.Concat(RightParticipants))
-            {
-                item.Item2.Stats.BarWidth = 350 * (item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / maxdmg);
-            }
         }
 
         public async Task FetchPlayerDetailAsync(long id)
@@ -161,7 +204,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await SummonerAnalyseViewModel.LoadPageAsync(id);
         }
 
-        private void CopyName(Tuple<ParticipantIdentity, Participant> tuple) 
+        private void CopyName(Tuple<ParticipantIdentity, Participant> tuple)
         {
             if (tuple.Item1.Player == null)
                 return;

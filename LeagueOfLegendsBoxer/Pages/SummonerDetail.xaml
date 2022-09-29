@@ -7,6 +7,7 @@
       mc:Ignorable="d" 
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:usercontrol="clr-namespace:LeagueOfLegendsBoxer.UserControls"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
       FontFamily="微软雅黑"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -79,7 +80,7 @@
                         <RowDefinition Height="40"></RowDefinition>
                     </Grid.RowDefinitions>
                     <ScrollViewer Grid.Row="0">
-                        <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
+                        <ListBox ItemsSource="{Binding Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
                                  Background="Transparent"
                                  ScrollViewer.CanContentScroll="False"
                                  ScrollViewer.IsDeferredScrollingEnabled="True"
@@ -119,6 +120,20 @@
                                                         <hc:Gravatar Grid.RowSpan="2" Width="50" Height="50" 
                                                                  ToolTip="{Binding Participants[0].ChampionName}"
                                                                  Source="{Binding Participants[0].ChampionImage}" />
+                                                        <Canvas Margin="35 0 0 25" 
+                                                                Grid.RowSpan="2" 
+                                                                Width="50" Height="50" 
+                                                                Visibility="{Binding IsSvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"
+                                                                Background="Transparent">
+                                                            <usercontrol:SVP/>
+                                                        </Canvas>
+                                                        <Canvas Margin="35 0 0 25" 
+                                                                Grid.RowSpan="2" 
+                                                                Width="50" Height="50" 
+                                                                Visibility="{Binding IsMvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"
+                                                                Background="Transparent">
+                                                            <usercontrol:MVP/>
+                                                        </Canvas>
                                                         <TextBlock Text="{Binding GameCreationString}" VerticalAlignment="Center"
                                                                FontSize="15" Grid.Column="2" Margin="0 5 0 0"></TextBlock>
 
@@ -153,7 +168,7 @@
                         </ListBox>
                     </ScrollViewer>
                     <hc:Pagination Foreground="{StaticResource PrimaryBrush}" 
-                                   MaxPageCount="5"
+                                   MaxPageCount="20"
                                    Grid.Row="1"
                                    PageIndex="{Binding PageIndex,UpdateSourceTrigger=PropertyChanged}" 
                                    HorizontalAlignment="Center" Margin="0,10,0,0" Height="30" VerticalAlignment="Top">
@@ -194,9 +209,9 @@
                     <TextBlock Text="类型" HorizontalAlignment="Center" Grid.Column="1" FontSize="15" Foreground="#aaaaaa"/>
                     <TextBlock Text="开始时间" HorizontalAlignment="Center" Grid.Column="2" FontSize="15" Foreground="#aaaaaa"/>
 
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding DetailRecord.GameCreationString}" FontSize="15"  Grid.Row="1"/>
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding DetailRecord.CnQueue}" Grid.Column="1" Grid.Row="1" FontSize="15" />
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding DetailRecord.GameCreationTimeString}" Grid.Column="2"  Grid.Row="1" FontSize="15" />
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Center" Text="{Binding Record.DetailRecord.GameCreationString}" FontSize="15"  Grid.Row="1"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Record.DetailRecord.CnQueue}" Grid.Column="1" Grid.Row="1" FontSize="15" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Record.DetailRecord.GameCreationTimeString}" Grid.Column="2"  Grid.Row="1" FontSize="15" />
                 </Grid>
 
                 <Grid Grid.Row="0" Grid.Column="1" Margin="30 30 0 30">
@@ -213,19 +228,19 @@
                     <TextBlock Text="时长" HorizontalAlignment="Center" Grid.Column="1" FontSize="15" Foreground="#aaaaaa"/>
                     <TextBlock Text="金钱" HorizontalAlignment="Center" Grid.Column="2" FontSize="15" Foreground="#aaaaaa"/>
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="1">
-                        <TextBlock Text="{Binding DetailRecord.Team1Kills}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource DangerBrush}"/>
+                        <TextBlock Text="{Binding Record.DetailRecord.Team1Kills}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource DangerBrush}"/>
                         <TextBlock Text="/" HorizontalAlignment="Center" FontSize="15" Foreground="#aaaaaa"/>
-                        <TextBlock Text="{Binding DetailRecord.Team2Kills}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource PrimaryBrush}"/>
+                        <TextBlock Text="{Binding Record.DetailRecord.Team2Kills}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource PrimaryBrush}"/>
                     </StackPanel>
 
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding DetailRecord.GameMinutes,StringFormat={}{0}分钟}" Grid.Column="1" Grid.Row="1" FontSize="15" />
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Record.DetailRecord.GameMinutes,StringFormat={}{0}分钟}" Grid.Column="1" Grid.Row="1" FontSize="15" />
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="2"  Grid.Row="1">
-                        <TextBlock Text="{Binding DetailRecord.Team1GoldEarnedString}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource DangerBrush}"/>
+                        <TextBlock Text="{Binding Record.DetailRecord.Team1GoldEarnedString}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource DangerBrush}"/>
                         <TextBlock Text="/" HorizontalAlignment="Center" FontSize="15" Foreground="#aaaaaa"/>
-                        <TextBlock Text="{Binding DetailRecord.Team2GoldEarnedString}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource PrimaryBrush}"/>
+                        <TextBlock Text="{Binding Record.DetailRecord.Team2GoldEarnedString}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource PrimaryBrush}"/>
                     </StackPanel>
                 </Grid>
-                <ListBox ItemsSource="{Binding LeftParticipants,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
+                <ListBox ItemsSource="{Binding Record.LeftParticipants,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
                          Grid.Row="1" Grid.Column="0" Margin="10 0 0 0" Background="Transparent">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -261,6 +276,18 @@
                                                     <Grid>
                                                         <hc:Gravatar Style="{StaticResource GravatarCircle}" Name="headimg"
                                                                      Width="55" Height="55" Source="{Binding Item2.ChampionImage}" />
+                                                        <Canvas Margin="0 0 0 25" 
+                                                                Grid.RowSpan="2" 
+                                                                Width="55" Height="55" 
+                                                                Visibility="{Binding Item1.IsSvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}">
+                                                            <usercontrol:SVP/>
+                                                        </Canvas>
+                                                        <Canvas Margin="0 0 0 35" 
+                                                                Grid.RowSpan="2" 
+                                                                Width="75" Height="55" 
+                                                                Visibility="{Binding Item1.IsMvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}">
+                                                            <usercontrol:MVP/>
+                                                        </Canvas>
                                                         <Popup Focusable="False"
                                                                IsOpen="{Binding ElementName=headimg,Path=IsMouseOver,Mode=OneWay}"
                                                                PlacementTarget="{Binding ElementName=headimg}" 
@@ -288,6 +315,7 @@
                                                                     </StackPanel>
                                                                     <Grid Grid.Row="1" Grid.ColumnSpan="2">
                                                                         <Grid.RowDefinitions>
+                                                                            <RowDefinition Height="*"></RowDefinition>
                                                                             <RowDefinition Height="*"></RowDefinition>
                                                                             <RowDefinition Height="*"></RowDefinition>
                                                                             <RowDefinition Height="*"></RowDefinition>
@@ -367,9 +395,13 @@
                                                                             <TextBlock Text="{Binding Item2.Stats.PhysicalDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.ColumnSpan="2" Margin="20 2 0 10">
+                                                                        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.ColumnSpan="2" Margin="20 2 0 2">
                                                                             <TextBlock Text="给敌方英雄的魔法伤害：" FontSize="15" Foreground="#888888"></TextBlock>
                                                                             <TextBlock Text="{Binding Item2.Stats.MagicDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
+                                                                        </StackPanel>
+                                                                        <StackPanel Orientation="Horizontal" Grid.Row="9" Grid.ColumnSpan="2" Margin="20 2 0 10">
+                                                                            <TextBlock Text="伤害转化率：" FontSize="15" Foreground="#888888"></TextBlock>
+                                                                            <TextBlock Text="{Binding Item2.Stats.DamageConvert}" FontSize="15" Foreground="Black"></TextBlock>
                                                                         </StackPanel>
                                                                     </Grid>
                                                                 </Grid>
@@ -433,7 +465,7 @@
                                                                              Text="{Binding Item2.Stats.Item1Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
+                                                                        <TextBlock Text="{Binding Item2.Stats.Item1Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
                                                                     </StackPanel>
                                                                 </StackPanel>
                                                             </Grid>
@@ -460,7 +492,7 @@
                                                                              Text="{Binding Item2.Stats.Item2Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
+                                                                        <TextBlock Text="{Binding Item2.Stats.Item2Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
                                                                     </StackPanel>
                                                                 </StackPanel>
                                                             </Grid>
@@ -628,7 +660,7 @@
                     </ListBox.ItemContainerStyle>
                 </ListBox>
 
-                <ListBox ItemsSource="{Binding RightParticipants,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
+                <ListBox ItemsSource="{Binding Record.RightParticipants,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
                          Grid.Row="1" Grid.Column="1" Margin="0 0 10 0" Background="Transparent">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
@@ -663,6 +695,18 @@
                                                     <Grid>
                                                         <hc:Gravatar Style="{StaticResource GravatarCircle}" Name="headimg"
                                                                      Width="55" Height="55" Source="{Binding Item2.ChampionImage}" />
+                                                        <Canvas Margin="0 0 0 25" 
+                                                                Grid.RowSpan="2" 
+                                                                Width="55" Height="55" 
+                                                                Visibility="{Binding Item1.IsSvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}">
+                                                            <usercontrol:SVP/>
+                                                        </Canvas>
+                                                        <Canvas Margin="0 0 0 35" 
+                                                                Grid.RowSpan="2" 
+                                                                Width="75" Height="55" 
+                                                                Visibility="{Binding Item1.IsMvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}">
+                                                            <usercontrol:MVP/>
+                                                        </Canvas>
                                                         <Popup Focusable="False"
                                                                IsOpen="{Binding ElementName=headimg,Path=IsMouseOver,Mode=OneWay}"
                                                                PlacementTarget="{Binding ElementName=headimg}" 
@@ -690,6 +734,7 @@
                                                                     </StackPanel>
                                                                     <Grid Grid.Row="1" Grid.ColumnSpan="2">
                                                                         <Grid.RowDefinitions>
+                                                                            <RowDefinition Height="*"></RowDefinition>
                                                                             <RowDefinition Height="*"></RowDefinition>
                                                                             <RowDefinition Height="*"></RowDefinition>
                                                                             <RowDefinition Height="*"></RowDefinition>
@@ -769,9 +814,13 @@
                                                                             <TextBlock Text="{Binding Item2.Stats.PhysicalDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
                                                                         </StackPanel>
 
-                                                                        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.ColumnSpan="2" Margin="20 2 0 10">
+                                                                        <StackPanel Orientation="Horizontal" Grid.Row="8" Grid.ColumnSpan="2" Margin="20 2 0 2">
                                                                             <TextBlock Text="给敌方英雄的魔法伤害：" FontSize="15" Foreground="#888888"></TextBlock>
                                                                             <TextBlock Text="{Binding Item2.Stats.MagicDamageDealtToChampions}" FontSize="15" Foreground="Black"></TextBlock>
+                                                                        </StackPanel>
+                                                                        <StackPanel Orientation="Horizontal" Grid.Row="9" Grid.ColumnSpan="2" Margin="20 2 0 10">
+                                                                            <TextBlock Text="伤害转化率：" FontSize="15" Foreground="#888888"></TextBlock>
+                                                                            <TextBlock Text="{Binding Item2.Stats.DamageConvert}" FontSize="15" Foreground="Black"></TextBlock>
                                                                         </StackPanel>
                                                                     </Grid>
                                                                 </Grid>
@@ -835,7 +884,7 @@
                                                                              Text="{Binding Item2.Stats.Item1Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
+                                                                        <TextBlock Text="{Binding Item2.Stats.Item1Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
                                                                     </StackPanel>
                                                                 </StackPanel>
                                                             </Grid>
@@ -862,7 +911,7 @@
                                                                              Text="{Binding Item2.Stats.Item2Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                        <TextBlock Text="{Binding Item2.Stats.Item0Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
+                                                                        <TextBlock Text="{Binding Item2.Stats.Item2Model.PriceTotal}" Margin="5 0 0 0" FontSize="16" FontWeight="Bold"/>
                                                                     </StackPanel>
                                                                 </StackPanel>
                                                             </Grid>

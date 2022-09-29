@@ -2,75 +2,132 @@
 using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
+using LeagueOfLegendsBoxer.Application.Account;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.ViewModels.Pages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels
 {
     public class BlackListViewModel : ObservableObject
     {
-        public ObservableCollection<Account> _accounts;
-        public ObservableCollection<Account> Accounts
+        private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _currentParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
+        public ObservableCollection<Tuple<ParticipantIdentity, Participant>> CurrentParticipants
         {
-            get { return _accounts; }
-            set { SetProperty(ref _accounts, value); }
+            get => _currentParticipants;
+            set => SetProperty(ref _currentParticipants, value);
         }
 
-        public ObservableCollection<Account> _accounts1;
-        public ObservableCollection<Account> Accounts1
+        private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _leftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
+        public ObservableCollection<Tuple<ParticipantIdentity, Participant>> LeftParticipants
         {
-            get { return _accounts1; }
-            set { SetProperty(ref _accounts1, value); }
+            get => _leftParticipants;
+            set => SetProperty(ref _leftParticipants, value);
         }
 
-        public ObservableCollection<Account> _accounts2;
-        public ObservableCollection<Account> Accounts2
+        private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _rightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
+        public ObservableCollection<Tuple<ParticipantIdentity, Participant>> RightParticipants
         {
-            get { return _accounts2; }
-            set { SetProperty(ref _accounts2, value); }
+            get => _rightParticipants;
+            set => SetProperty(ref _rightParticipants, value);
         }
-        public AsyncRelayCommand<Account> SubmitBlackListCommanmdAsync { get; set; }
-        public RelayCommand<Account> ToggleBlackInfoCommand { get; set; }
-        public RelayCommand<Account> SearchRecordCommand { get; set; }
+
+        public AsyncRelayCommand<Tuple<ParticipantIdentity, Participant>> SubmitBlackListCommanmdAsync { get; set; }
+        public RelayCommand<Tuple<ParticipantIdentity, Participant>> ToggleBlackInfoCommand { get; set; }
+        public AsyncRelayCommand<Tuple<ParticipantIdentity, Participant>> SearchRecordCommand { get; set; }
         public RelayCommand SwitchTeamCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly ILogger<BlackListViewModel> _logger;
-        public BlackListViewModel(IniSettingsModel iniSettingsModel, ILogger<BlackListViewModel> logger)
+        private readonly IAccountService _accountService;
+        public BlackListViewModel(IniSettingsModel iniSettingsModel, ILogger<BlackListViewModel> logger, IAccountService accountService)
         {
-            Accounts = new ObservableCollection<Account>();
             _iniSettingsModel = iniSettingsModel;
             _logger = logger;
-            SubmitBlackListCommanmdAsync = new AsyncRelayCommand<Account>(SubmitBlackListAsync);
-            ToggleBlackInfoCommand = new RelayCommand<Account>(ToggleBlackInfo);
-            SearchRecordCommand = new RelayCommand<Account>(SearchRecord);
+            SubmitBlackListCommanmdAsync = new AsyncRelayCommand<Tuple<ParticipantIdentity, Participant>>(SubmitBlackListAsync);
+            ToggleBlackInfoCommand = new RelayCommand<Tuple<ParticipantIdentity, Participant>>(ToggleBlackInfo);
+            SearchRecordCommand = new AsyncRelayCommand<Tuple<ParticipantIdentity, Participant>>(SearchRecord);
             SwitchTeamCommand = new RelayCommand(SwitchTeam);
+            _accountService = accountService;
         }
 
-        public void LoadAccount(IEnumerable<Account> accounts, IEnumerable<Account> accounts1)
+        public void LoadAccount(Record record)
         {
-            Accounts1 = new ObservableCollection<Account>(accounts);
-            Accounts2 = new ObservableCollection<Account>(accounts1);
-            Accounts = Accounts1;
+            IList<Tuple<ParticipantIdentity, Participant>> members = new List<Tuple<ParticipantIdentity, Participant>>();
+            foreach (var index in Enumerable.Range(0, record.Participants.Count()))
+            {
+                var lidentity = record.ParticipantIdentities[index];
+                lidentity.IsCurrentUser = Constant.Account.SummonerId == lidentity.Player.SummonerId;
+                members.Add(new Tuple<ParticipantIdentity, Participant>(lidentity, record.Participants[index]));
+            }
+
+            _leftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>(members.Where(x => x.Item2.TeamId == 100));
+            _rightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>(members.Where(x => x.Item2.TeamId == 200));
+            var my = _leftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Constant.Account.SummonerId) != null
+                   ? _leftParticipants : _rightParticipants;
+            var other = _leftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Constant.Account.SummonerId) != null
+                ? _rightParticipants : _leftParticipants;
+
+            var team1GoldEarned = _leftParticipants.Sum(x => x.Item2.Stats.GoldEarned);
+            var team2GoldEarned = _rightParticipants.Sum(x => x.Item2.Stats.GoldEarned);
+
+            var team1TotalDamage = _leftParticipants.Sum(x => x.Item2.Stats.TotalDamageDealtToChampions);
+            var team2TotalDamage = _rightParticipants.Sum(x => x.Item2.Stats.TotalDamageDealtToChampions);
+
+            foreach (var item in _leftParticipants)
+            {
+                if (team1TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
+                else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team1TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / team1GoldEarned) * 100).ToString("0.00") + "%";
+            }
+            foreach (var item in _rightParticipants)
+            {
+                if (team2TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
+                else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / team2GoldEarned) * 100).ToString("0.00") + "%";
+            }
+            if (record.QueueId == 420 || record.QueueId == 430 || record.QueueId == 440 || record.QueueId == 450)
+            {
+                bool myIsWin = my.FirstOrDefault().Item2.Stats.Win;
+                Tuple<ParticipantIdentity, Participant> mvp = null;
+                Tuple<ParticipantIdentity, Participant> svp = null;
+                if (myIsWin)
+                {
+                    mvp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                    mvp.Item1.IsMvp = true;
+                    svp = other.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                    svp.Item1.IsSvp = true;
+                }
+                else
+                {
+                    mvp = other.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                    mvp.Item1.IsMvp = true;
+                    svp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                    svp.Item1.IsSvp = true;
+                }
+            }
+
+            CurrentParticipants = my;
         }
 
-        private async Task SubmitBlackListAsync(Account account)
+        private async Task SubmitBlackListAsync(Tuple<ParticipantIdentity, Participant> account)
         {
             try
             {
                 var blackAccount = new BlackAccount()
                 {
-                    Id = account.SummonerId,
-                    AccountName = account.DisplayName,
-                    CreateTime = System.DateTime.Now,
-                    Reason = account.Reason,
+                    Id = account.Item1.Player.SummonerId,
+                    AccountName = account.Item1.Player.SummonerName,
+                    CreateTime = DateTime.Now,
+                    Reason = account.Item1.Reason,
                 };
                 await _iniSettingsModel.WriteBlackAccountAsync(blackAccount);
                 Growl.SuccessGlobal(new GrowlInfo()
@@ -93,19 +150,25 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
         }
 
-        private void ToggleBlackInfo(Account account)
+        private void ToggleBlackInfo(Tuple<ParticipantIdentity, Participant> item)
         {
-            account.IsOpenBlack = !account.IsOpenBlack;
+            item.Item1.IsOpenBlack = !item.Item1.IsOpenBlack;
         }
 
-        private void SearchRecord(Account account) 
+        private async Task SearchRecord(Tuple<ParticipantIdentity, Participant> item)
         {
+            var infromation = await _accountService.GetSummonerInformationAsync(item.Item1.Player.SummonerId);
+            var account = JsonConvert.DeserializeObject<Account>(infromation);
+            var rankData = JToken.Parse(await _accountService.GetSummonerRankInformationAsync(account.Puuid));
+            account.Rank = rankData["queueMap"].ToObject<Rank>();
+            var recordsData = JToken.Parse(await _accountService.GetRecordInformationAsync(account.SummonerId));
+            account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
             App.ServiceProvider.GetRequiredService<TeammateViewModel>().ShowRecord(account);
         }
 
-        private void SwitchTeam() 
+        private void SwitchTeam()
         {
-            Accounts = Accounts == Accounts1 ? Accounts2 : Accounts1;
+            CurrentParticipants = CurrentParticipants == _leftParticipants ? _rightParticipants : _leftParticipants;
         }
     }
 }

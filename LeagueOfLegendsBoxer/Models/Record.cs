@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LeagueOfLegendsBoxer.Resources;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -94,33 +95,80 @@ namespace LeagueOfLegendsBoxer.Models
             if (Participants == null || Participants.FirstOrDefault() == null || Participants.FirstOrDefault().Stats == null)
                 return 110;
 
-            var stats = Participants.FirstOrDefault().Stats;
-            double score = 100;
-            if (stats.FirstBloodKill)
-                score += 10;
-            if (stats.FirstBloodAssist)
-                score += 5;
-            if (stats.CausedEarlySurrender)
-                score -= 10;
-            if (stats.Win)
-                score += 5;
-            else
-                score -= 5;
+            return Participants.FirstOrDefault().GetScore();
+        }
 
-            score += stats.DoubleKills * 2;
-            score += stats.TripleKills * 5;
-            score += stats.QuadraKills * 10;
-            score += stats.PentaKills * 15;
-            score += stats.Kills - stats.Deaths + (stats.Assists * 0.5);
-            return score;
+        private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _leftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
+        public ObservableCollection<Tuple<ParticipantIdentity, Participant>> LeftParticipants
+        {
+            get => _leftParticipants;
+            set => SetProperty(ref _leftParticipants, value);
+        } 
+
+        private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _rightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
+        public ObservableCollection<Tuple<ParticipantIdentity, Participant>> RightParticipants
+        {
+            get => _rightParticipants;
+            set => SetProperty(ref _rightParticipants, value);
+        }
+
+        private Record _detailRecord;
+        public Record DetailRecord
+        {
+            get => _detailRecord;
+            set => SetProperty(ref _detailRecord, value);
+        }
+
+        private bool _isMvp;
+        public bool IsMvp
+        {
+            get => _isMvp;
+            set => SetProperty(ref _isMvp, value);
+        }
+
+        private bool _isSvp;
+        public bool IsSvp
+        {
+            get => _isSvp;
+            set => SetProperty(ref _isSvp, value);
         }
     }
 
-    public class ParticipantIdentity
+    public class ParticipantIdentity : ObservableObject
     {
         [JsonPropertyName("player")]
         public Player Player { get; set; }
         public bool IsCurrentUser { get; set; }
+
+        private bool _isMvp;
+        public bool IsMvp
+        {
+            get => _isMvp;
+            set => SetProperty(ref _isMvp, value);
+        }
+
+        private bool _isSvp;
+        public bool IsSvp
+        {
+            get => _isSvp;
+            set => SetProperty(ref _isSvp, value);
+        }
+
+        public double Score { get; set; }
+
+        private bool _isOpenBlack;
+        public bool IsOpenBlack
+        {
+            get => _isOpenBlack;
+            set => SetProperty(ref _isOpenBlack, value);
+        }
+
+        public string _reason;
+        public string Reason
+        {
+            get { return _reason; }
+            set { SetProperty(ref _reason, value); }
+        }
     }
 
     public class Player
@@ -176,10 +224,35 @@ namespace LeagueOfLegendsBoxer.Models
             32 => "https://game.gtimg.cn/images/lol/act/img/spell/Summoner_Mark.png",
             _ => "https://game.gtimg.cn/images/lol/act/img/spell/SummonerMana.png"
         };
+
+        public double GetScore()
+        {
+            var stats = Stats;
+            double score = 100;
+            if (stats.FirstBloodKill)
+                score += 10;
+            if (stats.FirstBloodAssist)
+                score += 5;
+            if (stats.CausedEarlySurrender)
+                score -= 10;
+            if (stats.Win)
+                score += 5;
+            else
+                score -= 5;
+
+            score += stats.DoubleKills * 2;
+            score += stats.TripleKills * 5;
+            score += stats.QuadraKills * 10;
+            score += stats.PentaKills * 15;
+            score += stats.Kills - stats.Deaths + (stats.Assists * 0.5);
+            return score;
+        }
     }
 
     public class Stats
     {
+        public string DamageConvert { get; set; }
+
         [JsonPropertyName("assists")]
         public int Assists { get; set; }
         [JsonPropertyName("deaths")]
