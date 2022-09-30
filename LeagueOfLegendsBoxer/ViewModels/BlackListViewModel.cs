@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using LeagueOfLegendsBoxer.Application.Teamup;
+using LeagueOfLegendsBoxer.Application.Teamup.Dtos;
 
 namespace LeagueOfLegendsBoxer.ViewModels
 {
@@ -50,10 +52,13 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly ILogger<BlackListViewModel> _logger;
         private readonly IAccountService _accountService;
-        public BlackListViewModel(IniSettingsModel iniSettingsModel, ILogger<BlackListViewModel> logger, IAccountService accountService)
+        private readonly ITeamupService _teamupService;
+
+        public BlackListViewModel(IniSettingsModel iniSettingsModel, ILogger<BlackListViewModel> logger, IAccountService accountService, ITeamupService teamupService)
         {
             _iniSettingsModel = iniSettingsModel;
             _logger = logger;
+            _teamupService = teamupService;
             SubmitBlackListCommanmdAsync = new AsyncRelayCommand<Tuple<ParticipantIdentity, Participant>>(SubmitBlackListAsync);
             ToggleBlackInfoCommand = new RelayCommand<Tuple<ParticipantIdentity, Participant>>(ToggleBlackInfo);
             SearchRecordCommand = new AsyncRelayCommand<Tuple<ParticipantIdentity, Participant>>(SearchRecord);
@@ -61,7 +66,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _accountService = accountService;
         }
 
-        public void LoadAccount(Record record)
+        public async Task LoadAccount(Record record)
         {
             IList<Tuple<ParticipantIdentity, Participant>> members = new List<Tuple<ParticipantIdentity, Participant>>();
             foreach (var index in Enumerable.Range(0, record.Participants.Count()))
@@ -75,6 +80,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _rightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>(members.Where(x => x.Item2.TeamId == 200));
             var my = _leftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Constant.Account.SummonerId) != null
                    ? _leftParticipants : _rightParticipants;
+            CurrentParticipants = my;
             var other = _leftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Constant.Account.SummonerId) != null
                 ? _rightParticipants : _leftParticipants;
 
@@ -94,8 +100,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 if (team2TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
                 else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / team2GoldEarned) * 100).ToString("0.00") + "%";
             }
-            if (record.QueueId == 420 || record.QueueId == 430 || record.QueueId == 440 || record.QueueId == 450)
-            {
+            //if (record.QueueId == 420 || record.QueueId == 430 || record.QueueId == 440 || record.QueueId == 450)
+            //{
                 bool myIsWin = my.FirstOrDefault().Item2.Stats.Win;
                 Tuple<ParticipantIdentity, Participant> mvp = null;
                 Tuple<ParticipantIdentity, Participant> svp = null;
@@ -113,9 +119,27 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     svp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
                     svp.Item1.IsSvp = true;
                 }
-            }
 
-            CurrentParticipants = my;
+                var me = _leftParticipants.Concat(_rightParticipants).FirstOrDefault(x => x.Item1.Player.SummonerId == Constant.Account.SummonerId);
+
+                if (me != null)
+                {
+                    var isLeast = _leftParticipants.Concat(_rightParticipants).OrderBy(x => x.Item2.GetScore()).FirstOrDefault() == me;
+                    //上传战绩
+                    await _teamupService.UploadRecordAsync(new CreateGameRecordByClientDto()
+                    {
+                        UserId = Constant.Account.SummonerId,
+                        GameId = record.GameId,
+                        GameMode = record.QueueId,
+                        Kill = me.Item2.Stats.Kills,
+                        Death = me.Item2.Stats.Deaths,
+                        Assit = me.Item2.Stats.Assists,
+                        IsMvp = mvp.Item1.Player.SummonerId == me.Item1.Player.SummonerId,
+                        IsSvp = svp.Item1.Player.SummonerId == me.Item1.Player.SummonerId,
+                        IsLeastScore = isLeast
+                    });
+                }
+            //}
         }
 
         private async Task SubmitBlackListAsync(Tuple<ParticipantIdentity, Participant> account)

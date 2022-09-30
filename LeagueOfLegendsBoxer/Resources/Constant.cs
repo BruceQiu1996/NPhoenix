@@ -5,6 +5,7 @@ namespace LeagueOfLegendsBoxer.Resources
 {
     internal class Constant
     {
+        public static bool ConnectTeamupSuccessful = false;
         public static string Token = string.Empty;
         public static int Port = 0;
         public static int Pid = 0;

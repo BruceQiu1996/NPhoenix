@@ -1,5 +1,4 @@
-﻿using HandyControl.Themes;
-using LeagueOfLegendsBoxer.Application.Event;
+﻿using LeagueOfLegendsBoxer.Application.Event;
 using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Pages;
 using LeagueOfLegendsBoxer.Resources;
@@ -9,7 +8,6 @@ using LeagueOfLegendsBoxer.Windows;
 using LeagueOfLegendsBoxerApplication.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Serilog;
 using System;
 using System.Diagnostics;

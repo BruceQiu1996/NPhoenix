@@ -10,6 +10,7 @@ using LeagueOfLegendsBoxer.Application.Event;
 using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Application.LiveGame;
 using LeagueOfLegendsBoxer.Application.Request;
+using LeagueOfLegendsBoxer.Application.Teamup;
 using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Pages;
@@ -97,6 +98,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly IApplicationService _applicationService;
         private readonly IRequestService _requestService;
         private readonly IGameService _gameService;
+        private readonly ITeamupService _teamupService;
         private readonly IClientService _clientService;
         private readonly IEventService _eventService;
         private readonly IniSettingsModel _iniSettingsModel;
@@ -119,6 +121,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                    IClientService clientService,
                                    IRequestService requestService,
                                    IEventService eventService,
+                                   ITeamupService teamupService,
                                    IGameService gameService,
                                    IniSettingsModel iniSettingsModel,
                                    IConfiguration configuration,
@@ -147,6 +150,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _applicationService = applicationService;
             _requestService = requestService;
             _clientService = clientService;
+            _teamupService = teamupService;
             _iniSettingsModel = iniSettingsModel;
             _configuration = configuration;
             _settingsPage = settingsPage;
@@ -1135,9 +1139,9 @@ namespace LeagueOfLegendsBoxer.ViewModels
             var detailRecordsData = JToken.Parse(details);
             var DetailRecord = detailRecordsData.ToObject<Record>();
             var myTeam = Team1Accounts.FirstOrDefault(x => x?.SummonerId == Constant.Account?.SummonerId) == null ? Team2Accounts : Team1Accounts;
-            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
             {
-                (_blackList.DataContext as BlackListViewModel).LoadAccount(DetailRecord);
+                await (_blackList.DataContext as BlackListViewModel).LoadAccount(DetailRecord);
                 _blackList.Show();
                 _blackList.WindowStartupLocation = WindowStartupLocation.Manual;
                 _blackList.Top = (SystemParameters.PrimaryScreenHeight - _blackList.ActualHeight) - 50;
@@ -1250,6 +1254,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
                         var settingFileLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _configuration.GetSection("SettingsFileLocation").Value);
                         await Task.WhenAll(_requestService.Initialize(Constant.Port, Constant.Token),
+                                           _teamupService.Initialize(_configuration.GetSection("TeamupApi").Value),
                                            _eventService.Initialize(Constant.Port, Constant.Token));
 
                         //await _eventService.ConnectAsync();
