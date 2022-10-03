@@ -1,7 +1,6 @@
 ﻿using LeagueOfLegendsBoxer.Application.Teamup.Dtos;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
-using System.Text.Json;
 
 namespace LeagueOfLegendsBoxer.Application.Teamup
 {
@@ -15,6 +14,18 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
         public TeamupService()
         {
             
+        }
+
+        public async Task<string> GetRankDataAsync()
+        {
+            try
+            {
+                return await _httpClient.GetStringAsync(_record);
+            }
+            catch (Exception ex) 
+            {
+                return null;
+            }
         }
 
         public Task Initialize(string baseAddress)

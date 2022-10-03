@@ -17,6 +17,8 @@ namespace LeagueOfLegendsBoxer.Resources
         private readonly IApplicationService _applicationService;
         private readonly IConfiguration _configuration;
         private readonly string _blackListLoc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/blackList.json");
+        private readonly string _fuckLoc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/fuckwords.txt");
+        private readonly string _goodLoc = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/goodwords.txt");
 
         public List<BlackAccount> BlackAccounts { get; set; }
         public bool AutoAcceptGame { get; set; }
@@ -134,15 +136,19 @@ namespace LeagueOfLegendsBoxer.Resources
             AutoAcceptGameDelay = int.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoAcceptGameDelay), out var tempAutoAcceptGameDelay) ? tempAutoAcceptGameDelay : 0;
             var readedNotices = await _settingsService.ReadAsync(Constant.Game, Constant.ReadedNotice);
-            FuckWords = await _settingsService.ReadAsync(Constant.Game, Constant.GoodWords);
-            GoodWords = await _settingsService.ReadAsync(Constant.Game, Constant.FuckWords);
             ReadedNotices = string.IsNullOrEmpty(readedNotices) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(readedNotices);
-            FuckWordCollection = string.IsNullOrEmpty(FuckWords) ? new List<string>() : FuckWords.Split("\n").ToList();
-            GoodWordCollection = string.IsNullOrEmpty(GoodWords) ? new List<string>() : GoodWords.Split("\n").ToList();
             IsDarkTheme = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsDarkTheme), out var tempIsDarkTheme) ? tempIsDarkTheme : false;
             if (!File.Exists(_blackListLoc)) 
             {
                 File.Create(_blackListLoc).Close();
+            }
+            if (!File.Exists(_fuckLoc))
+            {
+                File.Create(_fuckLoc).Close();
+            }
+            if (!File.Exists(_goodLoc))
+            {
+                File.Create(_goodLoc).Close();
             }
             var blackAccounts = await File.ReadAllTextAsync(_blackListLoc);
             if (string.IsNullOrEmpty(blackAccounts))
@@ -153,6 +159,10 @@ namespace LeagueOfLegendsBoxer.Resources
             {
                 BlackAccounts = JsonSerializer.Deserialize<List<BlackAccount>>(blackAccounts);
             }
+            FuckWords = await File.ReadAllTextAsync(_fuckLoc);
+            GoodWords = await File.ReadAllTextAsync(_goodLoc);
+            FuckWordCollection = string.IsNullOrEmpty(FuckWords) ? new List<string>() : FuckWords.Split("\n").ToList();
+            GoodWordCollection = string.IsNullOrEmpty(GoodWords) ? new List<string>() : GoodWords.Split("\n").ToList();
         }
 
         public async Task WriteAutoAcceptAsync(bool value)
@@ -349,13 +359,14 @@ namespace LeagueOfLegendsBoxer.Resources
 
         public async Task WriteFuckWords(string fuckwords)
         {
-            await _settingsService.WriteAsync(Constant.Game, Constant.FuckWords, fuckwords);
+            await File.WriteAllTextAsync(_fuckLoc, fuckwords);
             FuckWords = fuckwords;
             FuckWordCollection = string.IsNullOrEmpty(FuckWords) ? new List<string>() : FuckWords.Split("\n").ToList();
         }
+
         public async Task WriteGoodWords(string goodwords)
         {
-            await _settingsService.WriteAsync(Constant.Game, Constant.GoodWords, goodwords);
+            await File.WriteAllTextAsync(_goodLoc, goodwords);
             GoodWords = goodwords;
             GoodWordCollection = string.IsNullOrEmpty(GoodWords) ? new List<string>() : GoodWords.Split("\n").ToList();
         }

@@ -127,12 +127,12 @@ namespace LeagueOfLegendsBoxer.Application.Game
 
         public async Task<string> GetSpells()
         {
-            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _getSpells);
+            return await _requestService.GetStringAsync(_getSpells, null);
         }
 
         public async Task<string> GetItems()
         {
-            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _getItems);
+            return await _requestService.GetStringAsync(_getItems, null);
         }
 
         public async Task<string> GetPickableChampionsAsync()

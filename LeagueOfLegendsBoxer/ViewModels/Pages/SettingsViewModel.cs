@@ -676,6 +676,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand SaveGoodWordsCommandAsync { get; set; }
         public AsyncRelayCommand ManualUpdateCommandAsync { get; set; }
         public RelayCommand PayCommand { get; set; }
+        public RelayCommand OpenRankCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -743,12 +744,19 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SaveFuckWordsCommandAsync = new AsyncRelayCommand(SaveFuckWordsAsync);
             SaveGoodWordsCommandAsync = new AsyncRelayCommand(SaveGoodWordsAsync);
             ManualUpdateCommandAsync = new AsyncRelayCommand(ManualUpdateAsync);
+            OpenRankCommand = new RelayCommand(OpenRank);
         }
 
         private void PayMethod() 
         {
             _pay.ShowDialog();
             _pay.Topmost = true;
+        }
+
+        private void OpenRank() 
+        {
+           var window =  App.ServiceProvider.GetRequiredService<RecordRank>();
+            window.Show();
         }
 
         private async Task LoadAsync()

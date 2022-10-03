@@ -369,11 +369,13 @@ namespace LeagueOfLegendsBoxer.ViewModels
         #endregion 
         private async Task LoadAsync()
         {
+            await _teamupService.Initialize(_configuration.GetSection("TeamupApi").Value);
             CheckUpdate();
             await CheckGameNotExistWhenStartAsync();
             await LoadConfig();
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
             await ConnnectAsync();
+            await Task.Delay(2000);
             Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(await _gameService.GetItems());
             if (Constant.Items != null)
             {
@@ -638,7 +640,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     GameStatus = "等待结算界面";
                     break;
                 case "PreEndOfGame":
-                    await EndofGameAutoExit();
+                    //await EndofGameAutoExit();
                     break;
                 case "EndOfGame":
                     GameStatus = "对局结束";
@@ -1221,13 +1223,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             var authenticate = await GetAuthenticate();
             if (!string.IsNullOrEmpty(authenticate) && authenticate.Contains("--remoting-auth-token="))
             {
-                Growl.WarningGlobal(new GrowlInfo()
-                {
-                    WaitTime = 2,
-                    Message = "存在lol进程，请等待lol进程完全退出后再打开",
-                    ShowDateTime = false
-                });
-
+                HandyControl.Controls.MessageBox.Show("存在lol进程，请等待lol进程完全退出后再打开", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 await Task.Delay(1000);
                 Environment.Exit(0);
             }

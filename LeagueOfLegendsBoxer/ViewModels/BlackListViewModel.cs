@@ -100,8 +100,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 if (team2TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
                 else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / team2GoldEarned) * 100).ToString("0.00") + "%";
             }
-            //if (record.QueueId == 420 || record.QueueId == 430 || record.QueueId == 440 || record.QueueId == 450)
-            //{
+            if (record.QueueId == 420 || record.QueueId == 430 || record.QueueId == 440 || record.QueueId == 450)
+            {
                 bool myIsWin = my.FirstOrDefault().Item2.Stats.Win;
                 Tuple<ParticipantIdentity, Participant> mvp = null;
                 Tuple<ParticipantIdentity, Participant> svp = null;
@@ -122,7 +122,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
                 var me = _leftParticipants.Concat(_rightParticipants).FirstOrDefault(x => x.Item1.Player.SummonerId == Constant.Account.SummonerId);
 
-                if (me != null)
+                if (me != null && Constant.ConnectTeamupSuccessful)
                 {
                     var isLeast = _leftParticipants.Concat(_rightParticipants).OrderBy(x => x.Item2.GetScore()).FirstOrDefault() == me;
                     //上传战绩
@@ -139,7 +139,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         IsLeastScore = isLeast
                     });
                 }
-            //}
+            }
         }
 
         private async Task SubmitBlackListAsync(Tuple<ParticipantIdentity, Participant> account)

@@ -97,6 +97,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<MainWindowViewModel>();
                 services.AddTransient<SummonerAnalyse>();
                 services.AddTransient<SummonerAnalyseViewModel>();
+                services.AddSingleton<RecordRank>();
+                services.AddSingleton<RecordRankViewModel>();
                 services.AddSingleton<ChampionSelectTool>();
                 services.AddSingleton<ChampionSelectToolViewModel>();
                 services.AddTransient<SkinsWindow>();

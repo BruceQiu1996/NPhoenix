@@ -8,5 +8,6 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
         void SetToken(string token);
         Task<UserCreateOrUpdateByClientResponseDto> LoginAsync(UserCreateOrUpdateByClientDto dto);
         Task<bool> UploadRecordAsync(CreateGameRecordByClientDto dto);
+        Task<string> GetRankDataAsync();
     }
 }
