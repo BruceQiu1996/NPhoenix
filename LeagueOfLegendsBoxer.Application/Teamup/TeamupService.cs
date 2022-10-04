@@ -65,5 +65,13 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
             var resp = await _httpClient.PostAsync(_record, content);
             return resp.IsSuccessStatusCode;
         }
+
+        public async Task<bool> UpdateServerAreaAsync(UserServerAreaUpdateDto dto)
+        {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var resp = await _httpClient.PutAsync(_user, content);
+            return resp.IsSuccessStatusCode;
+        }
     }
 }

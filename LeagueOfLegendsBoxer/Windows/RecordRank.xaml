@@ -73,16 +73,19 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"></ColumnDefinition>
-                                    <ColumnDefinition Width="400"></ColumnDefinition>
+                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="300"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock VerticalAlignment="Center" Text="召唤师名" Grid.Column="1" FontSize="16"/>
-                                <TextBlock VerticalAlignment="Center" Text="获得次数" Grid.Column="3" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="大区" Grid.Column="2" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="获得次数" Grid.Column="4" FontSize="16"/>
                             </Grid>
                             <ListBox Foreground="{DynamicResource DefaultFontColor}"
                                      Margin="0 10 0 0"
+                                     Height="350"
                                      BorderThickness="0" Background="Transparent"
                                      ItemsSource="{Binding TotalRank.Mvp,UpdateSourceTrigger=PropertyChanged}">
                                 <ListBox.ItemsPanel>
@@ -103,8 +106,9 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="100"></ColumnDefinition>
-                                                                <ColumnDefinition Width="400"></ColumnDefinition>
+                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="300"></ColumnDefinition>
+                                                                <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
@@ -115,8 +119,9 @@
                                                                    Style="{DynamicResource LabelDanger}">
                                                             </Label>
                                                             <TextBlock VerticalAlignment="Center" Grid.Column="1" FontSize="16" Text="{Binding UserName}"/>
-                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding Desc}"/>
-                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="3" FontSize="16"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding ServerArea}"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="3" FontSize="16" Text="{Binding Desc}"/>
+                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="4" FontSize="16"/>
                                                         </Grid>
                                                     </Border>
                                                 </ControlTemplate>
@@ -149,16 +154,19 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"></ColumnDefinition>
-                                    <ColumnDefinition Width="400"></ColumnDefinition>
+                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="300"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock VerticalAlignment="Center" Text="召唤师名" Grid.Column="1" FontSize="16"/>
-                                <TextBlock VerticalAlignment="Center" Text="获得次数" Grid.Column="3" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="大区" Grid.Column="2" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="获得次数" Grid.Column="4" FontSize="16"/>
                             </Grid>
                             <ListBox Foreground="{DynamicResource DefaultFontColor}"
                                      Margin="0 10 0 0"
+                                     Height="350"
                                      BorderThickness="0" Background="Transparent"
                                      ItemsSource="{Binding TotalRank.Svp,UpdateSourceTrigger=PropertyChanged}">
                                 <ListBox.ItemsPanel>
@@ -179,8 +187,9 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="100"></ColumnDefinition>
-                                                                <ColumnDefinition Width="400"></ColumnDefinition>
+                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="300"></ColumnDefinition>
+                                                                <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
@@ -191,8 +200,9 @@
                                                                    Style="{DynamicResource LabelDanger}">
                                                             </Label>
                                                             <TextBlock VerticalAlignment="Center" Grid.Column="1" FontSize="16" Text="{Binding UserName}"/>
-                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding Desc}"/>
-                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="3" FontSize="16"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding ServerArea}"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="3" FontSize="16" Text="{Binding Desc}"/>
+                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="4" FontSize="16"/>
                                                         </Grid>
                                                     </Border>
                                                 </ControlTemplate>
@@ -217,7 +227,7 @@
                     <TabItem.HeaderTemplate>
                         <ItemContainerTemplate>
                             <Grid>
-                                <TextBlock Text="牛马排行"  FontSize="16" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                <TextBlock Text="小可爱排行"  FontSize="16" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                             </Grid>
                         </ItemContainerTemplate>
                     </TabItem.HeaderTemplate>
@@ -225,16 +235,19 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"></ColumnDefinition>
-                                    <ColumnDefinition Width="400"></ColumnDefinition>
+                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="300"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock VerticalAlignment="Center" Text="召唤师名" Grid.Column="1" FontSize="16"/>
-                                <TextBlock VerticalAlignment="Center" Text="获得次数" Grid.Column="3" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="大区" Grid.Column="2" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="获得次数" Grid.Column="4" FontSize="16"/>
                             </Grid>
                             <ListBox Foreground="{DynamicResource DefaultFontColor}"
                                      Margin="0 10 0 0"
+                                     Height="350"
                                      BorderThickness="0" Background="Transparent"
                                      ItemsSource="{Binding TotalRank.Noob,UpdateSourceTrigger=PropertyChanged}">
                                 <ListBox.ItemsPanel>
@@ -255,8 +268,9 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="100"></ColumnDefinition>
-                                                                <ColumnDefinition Width="400"></ColumnDefinition>
+                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="300"></ColumnDefinition>
+                                                                <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
@@ -267,8 +281,9 @@
                                                                    Style="{DynamicResource LabelDanger}">
                                                             </Label>
                                                             <TextBlock VerticalAlignment="Center" Grid.Column="1" FontSize="16" Text="{Binding UserName}"/>
-                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding Desc}"/>
-                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="3" FontSize="16"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding ServerArea}"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="3" FontSize="16" Text="{Binding Desc}"/>
+                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="4" FontSize="16"/>
                                                         </Grid>
                                                     </Border>
                                                 </ControlTemplate>
@@ -301,16 +316,19 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"></ColumnDefinition>
-                                    <ColumnDefinition Width="400"></ColumnDefinition>
+                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="300"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock VerticalAlignment="Center" Text="召唤师名" Grid.Column="1" FontSize="16"/>
-                                <TextBlock VerticalAlignment="Center" Text="获得次数" Grid.Column="3" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="大区" Grid.Column="2" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="击杀次数" Grid.Column="4" FontSize="16"/>
                             </Grid>
                             <ListBox Foreground="{DynamicResource DefaultFontColor}"
                                      Margin="0 10 0 0"
+                                     Height="350"
                                      BorderThickness="0" Background="Transparent"
                                      ItemsSource="{Binding TotalRank.Xiagu,UpdateSourceTrigger=PropertyChanged}">
                                 <ListBox.ItemsPanel>
@@ -331,8 +349,9 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="100"></ColumnDefinition>
-                                                                <ColumnDefinition Width="400"></ColumnDefinition>
+                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="300"></ColumnDefinition>
+                                                                <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
@@ -343,8 +362,9 @@
                                                                    Style="{DynamicResource LabelDanger}">
                                                             </Label>
                                                             <TextBlock VerticalAlignment="Center" Grid.Column="1" FontSize="16" Text="{Binding UserName}"/>
-                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding Desc}"/>
-                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="3" FontSize="16"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding ServerArea}"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="3" FontSize="16" Text="{Binding Desc}"/>
+                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="4" FontSize="16"/>
                                                         </Grid>
                                                     </Border>
                                                 </ControlTemplate>
@@ -377,16 +397,19 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"></ColumnDefinition>
-                                    <ColumnDefinition Width="400"></ColumnDefinition>
+                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="300"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock VerticalAlignment="Center" Text="召唤师名" Grid.Column="1" FontSize="16"/>
-                                <TextBlock VerticalAlignment="Center" Text="获得次数" Grid.Column="3" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="大区" Grid.Column="2" FontSize="16"/>
+                                <TextBlock VerticalAlignment="Center" Text="击杀次数" Grid.Column="4" FontSize="16"/>
                             </Grid>
                             <ListBox Foreground="{DynamicResource DefaultFontColor}"
                                      Margin="0 10 0 0"
+                                     Height="350"
                                      BorderThickness="0" Background="Transparent"
                                      ItemsSource="{Binding TotalRank.Aram,UpdateSourceTrigger=PropertyChanged}">
                                 <ListBox.ItemsPanel>
@@ -407,8 +430,9 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="100"></ColumnDefinition>
-                                                                <ColumnDefinition Width="400"></ColumnDefinition>
+                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="300"></ColumnDefinition>
+                                                                <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
                                                             </Grid.ColumnDefinitions>
@@ -419,8 +443,9 @@
                                                                    Style="{DynamicResource LabelDanger}">
                                                             </Label>
                                                             <TextBlock VerticalAlignment="Center" Grid.Column="1" FontSize="16" Text="{Binding UserName}"/>
-                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding Desc}"/>
-                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="3" FontSize="16"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="2" FontSize="16" Text="{Binding ServerArea}"/>
+                                                            <TextBlock VerticalAlignment="Center" Grid.Column="3" FontSize="16" Text="{Binding Desc}"/>
+                                                            <TextBlock VerticalAlignment="Center" Text="{Binding Times}" Grid.Column="4" FontSize="16"/>
                                                         </Grid>
                                                     </Border>
                                                 </ControlTemplate>

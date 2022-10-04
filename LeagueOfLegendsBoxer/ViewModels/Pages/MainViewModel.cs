@@ -22,6 +22,7 @@ using System.Net.Http.Headers;
 using System.Reflection;
 using System.Security.Principal;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
@@ -71,41 +72,49 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 var rankDataStr = await _accountService.GetUserRankInformationAsync();
                 var rankData = JToken.Parse(rankDataStr);
                 Account.Rank = rankData["queueMap"].ToObject<Rank>();
-                var resp = await _teamupService.LoginAsync(new UserCreateOrUpdateByClientDto()
+                if (!Constant.ConnectTeamupSuccessful)
                 {
-                    Id = Account.SummonerId,
-                    UserName = Account.DisplayName,
-                    Rank_FLEX_SR = $"{Account.Rank.RANKED_FLEX_SR.CnTier}{Account.Rank.RANKED_FLEX_SR.Division}",
-                    Rank_SOLO_5x5 = $"{Account.Rank.RANKED_SOLO_5x5.CnTier}{Account.Rank.RANKED_SOLO_5x5.Division}",
-                    Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion
-                });
-
-                if (resp == null)
-                {
-                    Growl.WarningGlobal(new GrowlInfo()
+                    var resp = await _teamupService.LoginAsync(new UserCreateOrUpdateByClientDto()
                     {
-                        WaitTime = 2,
-                        Message = "连接服务器出现问题,部分功能不能使用",
-                        ShowDateTime = false
-                    });
-                    Constant.ConnectTeamupSuccessful = false;
-                }
-                else if (resp.IsDeleted)
-                {
-                    Growl.WarningGlobal(new GrowlInfo()
-                    {
-                        WaitTime = 2,
-                        Message = "该账号已被封禁，请联系管理员",
-                        ShowDateTime = false
+                        Id = Account.SummonerId,
+                        UserName = Account.DisplayName,
+                        Rank_FLEX_SR = $"{Account.Rank.RANKED_FLEX_SR.CnTier}{Account.Rank.RANKED_FLEX_SR.Division}",
+                        Rank_SOLO_5x5 = $"{Account.Rank.RANKED_SOLO_5x5.CnTier}{Account.Rank.RANKED_SOLO_5x5.Division}",
+                        Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion
                     });
 
-                    await Task.Delay(2000);
-                    Environment.Exit(0);
-                } 
-                else
-                {
-                    _teamupService.SetToken(resp.Token);
-                    Constant.ConnectTeamupSuccessful = true;
+                    if (resp == null)
+                    {
+                        Growl.WarningGlobal(new GrowlInfo()
+                        {
+                            WaitTime = 2,
+                            Message = "连接服务器出现问题,部分功能不能使用",
+                            ShowDateTime = false
+                        });
+                        Constant.ConnectTeamupSuccessful = false;
+                    }
+                    else if (resp.IsDeleted)
+                    {
+                        Growl.WarningGlobal(new GrowlInfo()
+                        {
+                            WaitTime = 2,
+                            Message = "该账号已被封禁，请联系管理员",
+                            ShowDateTime = false
+                        });
+
+                        await Task.Delay(2000);
+                        Environment.Exit(0);
+                    }
+                    else
+                    {
+                        _teamupService.SetToken(resp.Token);
+                        Constant.Account.ServerArea = resp.ServerArea;
+                        Constant.ConnectTeamupSuccessful = true;
+                        if (string.IsNullOrEmpty(Constant.Account.ServerArea)) 
+                        {
+                            HandyControl.Controls.MessageBox.Show("请尽快在设置里配置本账号所属服务大区,否则之后将禁止登录", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                        }
+                    }
                 }
             }
             catch (Exception ex)

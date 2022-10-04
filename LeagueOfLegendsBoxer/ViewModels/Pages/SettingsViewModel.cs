@@ -20,6 +20,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using ServerArea = LeagueOfLegendsBoxer.Windows.ServerArea;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
@@ -677,6 +678,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand ManualUpdateCommandAsync { get; set; }
         public RelayCommand PayCommand { get; set; }
         public RelayCommand OpenRankCommand { get; set; }
+        public RelayCommand ChooseServerAreaForCurrentAccountCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -745,17 +747,36 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SaveGoodWordsCommandAsync = new AsyncRelayCommand(SaveGoodWordsAsync);
             ManualUpdateCommandAsync = new AsyncRelayCommand(ManualUpdateAsync);
             OpenRankCommand = new RelayCommand(OpenRank);
+            ChooseServerAreaForCurrentAccountCommand = new RelayCommand(ChooseServerAreaForCurrentAccount);
         }
 
-        private void PayMethod() 
+        private void PayMethod()
         {
             _pay.ShowDialog();
             _pay.Topmost = true;
         }
 
-        private void OpenRank() 
+        private void OpenRank()
         {
-           var window =  App.ServiceProvider.GetRequiredService<RecordRank>();
+            var window = App.ServiceProvider.GetRequiredService<RecordRank>();
+            window.Show();
+        }
+
+        private void ChooseServerAreaForCurrentAccount()
+        {
+            if (Constant.Account == null)
+            {
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "成功登录后才可以设置所在服务大区",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
+
+            var window = App.ServiceProvider.GetRequiredService<ServerArea>();
             window.Show();
         }
 

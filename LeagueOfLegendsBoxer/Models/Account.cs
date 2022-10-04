@@ -60,7 +60,7 @@ namespace LeagueOfLegendsBoxer.Models
             get => _records;
             set => SetProperty(ref _records, value);
         }
-
+        public string ServerArea { get; set; }
         public int TeamID { get; set; }
         public string Horse => GetHorse();
         private string GetHorse()

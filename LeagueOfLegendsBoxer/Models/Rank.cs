@@ -11,6 +11,7 @@ namespace LeagueOfLegendsBoxer.Models
         //云顶
         public RANKED_TFT RANKED_TFT { get; set; }
     }
+
     public class RankedEntry
     {
         [JsonPropertyName("division")]

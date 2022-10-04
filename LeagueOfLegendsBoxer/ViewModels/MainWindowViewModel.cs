@@ -2,8 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Gma.System.MouseKeyHook;
-using HandyControl.Controls;
-using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Application.Client;
 using LeagueOfLegendsBoxer.Application.Event;
@@ -31,7 +29,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;

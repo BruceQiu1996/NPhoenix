@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -39,8 +40,8 @@ namespace LeagueOfLegendsBoxer
             ServiceProvider = host.Services;
             await host.Services.GetRequiredService<IniSettingsModel>().Initialize();
             ChangeTheme(host.Services.GetRequiredService<IniSettingsModel>().IsDarkTheme ? Theme.Dark : Theme.Light);
-            CheckForStartGame();
             host.Services.GetRequiredService<MainWindow>()?.Show();
+            CheckForStartGame();
         }
 
         protected async override void OnExit(ExitEventArgs e)
@@ -99,6 +100,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddTransient<SummonerAnalyseViewModel>();
                 services.AddSingleton<RecordRank>();
                 services.AddSingleton<RecordRankViewModel>();
+                services.AddSingleton<ServerArea>();
+                services.AddSingleton<ServerAreaViewModel>();
                 services.AddSingleton<ChampionSelectTool>();
                 services.AddSingleton<ChampionSelectToolViewModel>();
                 services.AddTransient<SkinsWindow>();
@@ -133,8 +136,10 @@ namespace LeagueOfLegendsBoxer
                 services.AddTransient<SummonerDetailViewModel>();
                 services.AddSingleton<Notice>();
                 services.AddSingleton<NoticeViewModel>();
-            });
 
+                services.Configure<List<Models.ServerArea>>(ctx.Configuration.GetSection("ServerAreas"));
+            });
+            
             return hostBuilder;
         }
 

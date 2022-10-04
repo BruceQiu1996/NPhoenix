@@ -32,6 +32,9 @@
                             <Path Data="{StaticResource rank}" Fill="{StaticResource PrimaryBrush}" Stretch="Uniform"></Path>
                         </Label.Content>
                     </Label>
+                    <Button Content="设置账号所在大区" 
+                            FontSize="15" Height="35" HorizontalAlignment="Right" Margin="0 5 0 10" Cursor="Hand"
+                            Command="{Binding ChooseServerAreaForCurrentAccountCommand}"></Button>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Content="自动接受对局" FontSize="18" Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding AutoAcceptGame,UpdateSourceTrigger=PropertyChanged}">
                             <behaviors:Interaction.Triggers>
