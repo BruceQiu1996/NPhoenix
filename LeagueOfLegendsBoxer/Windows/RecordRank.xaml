@@ -73,7 +73,7 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="60"></ColumnDefinition>
                                     <ColumnDefinition Width="300"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
@@ -106,7 +106,7 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="60"></ColumnDefinition>
                                                                 <ColumnDefinition Width="300"></ColumnDefinition>
                                                                 <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
@@ -154,7 +154,7 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="60"></ColumnDefinition>
                                     <ColumnDefinition Width="300"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
@@ -187,7 +187,7 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="60"></ColumnDefinition>
                                                                 <ColumnDefinition Width="300"></ColumnDefinition>
                                                                 <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
@@ -235,7 +235,7 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="60"></ColumnDefinition>
                                     <ColumnDefinition Width="300"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
@@ -268,7 +268,7 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="60"></ColumnDefinition>
                                                                 <ColumnDefinition Width="300"></ColumnDefinition>
                                                                 <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
@@ -316,7 +316,7 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="60"></ColumnDefinition>
                                     <ColumnDefinition Width="300"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
@@ -349,7 +349,7 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="60"></ColumnDefinition>
                                                                 <ColumnDefinition Width="300"></ColumnDefinition>
                                                                 <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
@@ -397,7 +397,7 @@
                         <StackPanel Orientation="Vertical" Margin="0 10 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                    <ColumnDefinition Width="60"></ColumnDefinition>
                                     <ColumnDefinition Width="300"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="200"></ColumnDefinition>
@@ -430,7 +430,7 @@
                                                     <Border Margin="5" BorderThickness="0 0 0 1" BorderBrush="{DynamicResource DefaultBorderColor}">
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="50"></ColumnDefinition>
+                                                                <ColumnDefinition Width="60"></ColumnDefinition>
                                                                 <ColumnDefinition Width="300"></ColumnDefinition>
                                                                 <ColumnDefinition Width="150"></ColumnDefinition>
                                                                 <ColumnDefinition Width="200"></ColumnDefinition>
