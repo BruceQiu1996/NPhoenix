@@ -267,12 +267,7 @@
                                ToolTip="人才市场"
                                Background="Transparent"
                                VerticalContentAlignment="Center"
-                               Grid.Column="1">
-                            <behaviors:Interaction.Triggers>
-                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                    <behaviors:InvokeCommandAction Command="{Binding ShiftMainPageCommand}"></behaviors:InvokeCommandAction>
-                                </behaviors:EventTrigger>
-                            </behaviors:Interaction.Triggers>
+                               Grid.Column="1" MouseLeftButtonDown="Label_MouseLeftButtonDown_3">
                             <Path Data="{StaticResource team}" 
                                   SnapsToDevicePixels="True"
                                   Height="25"
