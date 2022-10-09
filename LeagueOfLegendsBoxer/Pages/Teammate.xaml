@@ -5,9 +5,14 @@
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Teammate">
+    <Page.Resources>
+        <convert:WinColorBrushConverter x:Key="WinColorBrushConverter"></convert:WinColorBrushConverter>
+        <convert:WinTextConverter x:Key="WinTextConverter"></convert:WinTextConverter>
+    </Page.Resources>
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
@@ -68,6 +73,7 @@
                                             </Grid.ColumnDefinitions>
                                             <hc:Badge Grid.Row="1" Grid.RowSpan="3"
                                                       BadgeMargin="0 -8 -20 0"
+                                                      Name="head"
                                                       Style="{DynamicResource BadgeDanger}" BorderThickness="0"
                                                       HorizontalAlignment="Left" Text="{Binding Horse}"
                                                       Grid.Column="0" >
@@ -89,7 +95,7 @@
                                                        Grid.Column="2"
                                                        HorizontalAlignment="Left"
                                                        VerticalAlignment="Top"
-                                                       Margin="0 1 0 0" FontSize="14"
+                                                       Margin="15 1 0 0" FontSize="14"
                                                        Text="{Binding SummonerLevel,StringFormat={}等级 : {0}}"/>
 
                                             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
@@ -127,6 +133,59 @@
                                                        Grid.ColumnSpan="4"
                                                        HorizontalAlignment="Left"
                                                        Text="{Binding WinRate,UpdateSourceTrigger=PropertyChanged,StringFormat={}胜率: {0}}"></TextBlock>
+                                            <Popup Focusable="False"
+                                                   IsOpen="{Binding ElementName=head,Path=IsMouseOver,Mode=OneWay}"
+                                                   PlacementTarget="{Binding ElementName=Dputy2Rune}" 
+                                                   Placement="Left" AllowsTransparency="True" Effect="{DynamicResource EffectShadow2}">
+                                                <Grid>
+                                                    <ListBox ItemsSource="{Binding CurrentModeRecord,UpdateSourceTrigger=PropertyChanged}"
+                                                             Width="250"
+                                                             BorderThickness="0"
+                                                             Background="{DynamicResource DefaultBackgroundColor}">
+                                                        <ListBox.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Vertical"></StackPanel>
+                                                            </ItemsPanelTemplate>
+                                                        </ListBox.ItemsPanel>
+
+                                                        <ListBox.ItemContainerStyle>
+                                                            <Style TargetType="{x:Type ListBoxItem}">
+                                                                <Setter Property="OverridesDefaultStyle" Value="True" />
+                                                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}" />
+                                                                <Setter Property="Height" Value="60" />
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                            <Border BorderThickness="0 0 0 0.5" BorderBrush="Gray">
+                                                                                <Grid Margin="0 5 5 5">
+                                                                                    <Grid.ColumnDefinitions>
+                                                                                        <ColumnDefinition Width="70"></ColumnDefinition>
+                                                                                        <ColumnDefinition Width="90"></ColumnDefinition>
+                                                                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                                    </Grid.ColumnDefinitions>
+                                                                                    <Grid.RowDefinitions>
+                                                                                        <RowDefinition Height="*"></RowDefinition>
+                                                                                    </Grid.RowDefinitions>
+                                                                                    <hc:Gravatar Height="50" Width="50" Grid.RowSpan="2" Source="{Binding Participants[0].ChampionImage}" />
+                                                                                    <TextBlock Text="{Binding Participants[0].ChampionName}" VerticalAlignment="Center" FontSize="16" Grid.Column="1" Margin="0 0 0 1">
+                                                                                        
+                                                                                    </TextBlock>
+
+                                                                                    <TextBlock Text="{Binding Participants[0].Stats.KDA}" 
+                                                                                               Foreground="{Binding Participants[0].Stats.Win,Converter={StaticResource WinColorBrushConverter}}"
+                                                                                               VerticalAlignment="Center" FontSize="17"
+                                                                                               Grid.Column="2" ></TextBlock>
+                                                                                </Grid>
+                                                                            </Border>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </ListBox.ItemContainerStyle>
+                                                    </ListBox>
+                                                </Grid>
+                                            </Popup>
                                         </Grid>
                                     </Border>
                                 </ControlTemplate>

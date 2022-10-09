@@ -1,7 +1,5 @@
-﻿using LeagueOfLegendsBoxer.Models;
-using LeagueOfLegendsBoxer.ViewModels;
+﻿using LeagueOfLegendsBoxer.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace LeagueOfLegendsBoxer.Windows

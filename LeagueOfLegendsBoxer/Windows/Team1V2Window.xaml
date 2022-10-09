@@ -20,6 +20,7 @@
     </WindowChrome.WindowChrome>
 
     <Window.Resources>
+        <convert:WinColorBrushConverter x:Key="WinColorBrushConverter"></convert:WinColorBrushConverter>
         <convert:BoolColorBrushConverter x:Key="BoolColorBrushConverter"></convert:BoolColorBrushConverter>
     </Window.Resources>
     
@@ -104,7 +105,7 @@
                                                           Style="{DynamicResource BadgeDanger}" BorderThickness="0"
                                                           HorizontalAlignment="Right" Text="{Binding Horse}"
                                                           Grid.Column="1" >
-                                                    <Grid>
+                                                    <Grid Name="head">
                                                         <hc:Gravatar Style="{StaticResource GravatarCircleImg}"                                                       
                                                                      Width="55" Height="55"
                                                                      Visibility="{Binding Champion,Converter={StaticResource Object2VisibilityReConverter}}"
@@ -119,6 +120,62 @@
                                                         </hc:Gravatar>
                                                     </Grid>
                                                 </hc:Badge>
+                                                <Popup Focusable="False"
+                                                       IsOpen="{Binding ElementName=head,Path=IsMouseOver,Mode=OneWay}"
+                                                       PlacementTarget="{Binding ElementName=Dputy2Rune}" 
+                                                       Placement="Left" AllowsTransparency="True">
+                                                    <Popup.Effect>
+                                                        <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
+                                                    </Popup.Effect>
+                                                    <Grid>
+                                                        <ListBox ItemsSource="{Binding CurrentModeRecord,UpdateSourceTrigger=PropertyChanged}"
+                                                             Width="250"
+                                                             BorderThickness="0"
+                                                             Background="{DynamicResource DefaultBackgroundColor}">
+                                                            <ListBox.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel Orientation="Vertical"></StackPanel>
+                                                                </ItemsPanelTemplate>
+                                                            </ListBox.ItemsPanel>
+
+                                                            <ListBox.ItemContainerStyle>
+                                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                                                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                    <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}" />
+                                                                    <Setter Property="Height" Value="60" />
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                                <Border BorderThickness="0 0 0 0.5" BorderBrush="Gray">
+                                                                                    <Grid Margin="0 5 5 5">
+                                                                                        <Grid.ColumnDefinitions>
+                                                                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                                                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                                        </Grid.ColumnDefinitions>
+                                                                                        <Grid.RowDefinitions>
+                                                                                            <RowDefinition Height="*"></RowDefinition>
+                                                                                        </Grid.RowDefinitions>
+                                                                                        <hc:Gravatar Height="50" Width="50" Grid.RowSpan="2" Source="{Binding Participants[0].ChampionImage}" />
+                                                                                        <TextBlock Text="{Binding Participants[0].ChampionName}" VerticalAlignment="Center" FontSize="16" Grid.Column="1" Margin="0 0 0 1">
+
+                                                                                        </TextBlock>
+
+                                                                                        <TextBlock Text="{Binding Participants[0].Stats.KDA}" 
+                                                                                               Foreground="{Binding Participants[0].Stats.Win,Converter={StaticResource WinColorBrushConverter}}"
+                                                                                               VerticalAlignment="Center" FontSize="17"
+                                                                                               Grid.Column="2" ></TextBlock>
+                                                                                    </Grid>
+                                                                                </Border>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </ListBox.ItemContainerStyle>
+                                                        </ListBox>
+                                                    </Grid>
+                                                </Popup>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock TextWrapping="Wrap"
                                                                FontSize="15"
@@ -424,7 +481,7 @@
                                                           Style="{DynamicResource BadgeDanger}" BorderThickness="0"
                                                           HorizontalAlignment="Right" Text="{Binding Horse}"
                                                           Grid.Column="1" >
-                                                    <Grid>
+                                                    <Grid Name="head">
                                                         <hc:Gravatar Style="{StaticResource GravatarCircleImg}"                                                       
                                                                      Width="55" Height="55"
                                                                      Visibility="{Binding Champion,Converter={StaticResource Object2VisibilityReConverter}}"
@@ -439,6 +496,62 @@
                                                         </hc:Gravatar>
                                                     </Grid>
                                                 </hc:Badge>
+                                                <Popup Focusable="False"
+                                                       IsOpen="{Binding ElementName=head,Path=IsMouseOver,Mode=OneWay}"
+                                                       PlacementTarget="{Binding ElementName=Dputy2Rune}" 
+                                                       Placement="Left" AllowsTransparency="True">
+                                                    <Popup.Effect>
+                                                        <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
+                                                    </Popup.Effect>
+                                                    <Grid>
+                                                        <ListBox ItemsSource="{Binding CurrentModeRecord,UpdateSourceTrigger=PropertyChanged}"
+                                                             Width="250"
+                                                             BorderThickness="0"
+                                                             Background="{DynamicResource DefaultBackgroundColor}">
+                                                            <ListBox.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel Orientation="Vertical"></StackPanel>
+                                                                </ItemsPanelTemplate>
+                                                            </ListBox.ItemsPanel>
+
+                                                            <ListBox.ItemContainerStyle>
+                                                                <Style TargetType="{x:Type ListBoxItem}">
+                                                                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                                                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                    <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}" />
+                                                                    <Setter Property="Height" Value="60" />
+                                                                    <Setter Property="Template">
+                                                                        <Setter.Value>
+                                                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                                <Border BorderThickness="0 0 0 0.5" BorderBrush="Gray">
+                                                                                    <Grid Margin="0 5 5 5">
+                                                                                        <Grid.ColumnDefinitions>
+                                                                                            <ColumnDefinition Width="70"></ColumnDefinition>
+                                                                                            <ColumnDefinition Width="90"></ColumnDefinition>
+                                                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                                                        </Grid.ColumnDefinitions>
+                                                                                        <Grid.RowDefinitions>
+                                                                                            <RowDefinition Height="*"></RowDefinition>
+                                                                                        </Grid.RowDefinitions>
+                                                                                        <hc:Gravatar Height="50" Width="50" Grid.RowSpan="2" Source="{Binding Participants[0].ChampionImage}" />
+                                                                                        <TextBlock Text="{Binding Participants[0].ChampionName}" VerticalAlignment="Center" FontSize="16" Grid.Column="1" Margin="0 0 0 1">
+
+                                                                                        </TextBlock>
+
+                                                                                        <TextBlock Text="{Binding Participants[0].Stats.KDA}" 
+                                                                                               Foreground="{Binding Participants[0].Stats.Win,Converter={StaticResource WinColorBrushConverter}}"
+                                                                                               VerticalAlignment="Center" FontSize="17"
+                                                                                               Grid.Column="2" ></TextBlock>
+                                                                                    </Grid>
+                                                                                </Border>
+                                                                            </ControlTemplate>
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                </Style>
+                                                            </ListBox.ItemContainerStyle>
+                                                        </ListBox>
+                                                    </Grid>
+                                                </Popup>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock TextWrapping="Wrap"
                                                                FontSize="15"

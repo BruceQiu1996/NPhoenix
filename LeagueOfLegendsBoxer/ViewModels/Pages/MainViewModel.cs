@@ -17,10 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Reflection;
-using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -41,6 +38,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             get => _records;
             set => SetProperty(ref _records, value);
         }
+
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public RelayCommand CurrentUserInfoCommand { get; set; }
         private readonly IAccountService _accountService;
@@ -62,7 +60,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             try
             {
-                await Task.Delay(2000);
+                await Task.Delay(1000);
                 var profile = await _accountService.GetUserAccountInformationAsync();
                 Account = JsonConvert.DeserializeObject<Account>(profile);
                 Constant.Account = Account;
@@ -72,6 +70,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 var rankDataStr = await _accountService.GetUserRankInformationAsync();
                 var rankData = JToken.Parse(rankDataStr);
                 Account.Rank = rankData["queueMap"].ToObject<Rank>();
+                var champData = await _gameService.QuerySummonerSuperChampDataAsync(Account.SummonerId);
+                Account.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
+
                 if (!Constant.ConnectTeamupSuccessful)
                 {
                     var resp = await _teamupService.LoginAsync(new UserCreateOrUpdateByClientDto()

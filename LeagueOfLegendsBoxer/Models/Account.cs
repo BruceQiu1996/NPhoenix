@@ -60,7 +60,21 @@ namespace LeagueOfLegendsBoxer.Models
             get => _records;
             set => SetProperty(ref _records, value);
         }
-        public string ServerArea { get; set; }
+
+        private ObservableCollection<Record> _currentModeRecord;
+        public ObservableCollection<Record> CurrentModeRecord
+        {
+            get => _currentModeRecord;
+            set => SetProperty(ref _currentModeRecord, value);
+        }
+
+        private string _serverArea;
+        public string ServerArea
+        {
+            get => _serverArea;
+            set => SetProperty(ref _serverArea, value);
+        }
+
         public int TeamID { get; set; }
         public string Horse => GetHorse();
         private string GetHorse()
@@ -103,6 +117,14 @@ namespace LeagueOfLegendsBoxer.Models
             get => runes;
             set => SetProperty(ref runes, value);
         }
+
+        private ObservableCollection<Champ> _champs;
+        public ObservableCollection<Champ> Champs
+        {
+            get => _champs;
+            set => SetProperty(ref _champs, value);
+        }
+
         //blacklist
         private bool _isOpenBlack;
         public bool IsOpenBlack

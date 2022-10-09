@@ -108,7 +108,7 @@
                             <StackPanel Orientation="Vertical"></StackPanel>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
-                    <ListBoxItem Height="50">
+                    <ListBoxItem Height="50" Width="65" Margin="0 10 0 0">
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -140,7 +140,7 @@
                         </Label>
                     </ListBoxItem>
 
-                    <ListBoxItem Height="50" Margin="0 20 0 0">
+                    <ListBoxItem Height="50" Width="65" Margin="0 20 0 0">
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -171,8 +171,8 @@
                                   Fill="{StaticResource PrimaryBrush}"/>
                         </Label>
                     </ListBoxItem>
-                    
-                    <ListBoxItem Margin="0 20 0 0" Height="50">
+
+                    <ListBoxItem Margin="0 20 0 0" Width="65" Height="50">
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -217,7 +217,7 @@
                         </hc:Badge>
                     </ListBoxItem>
 
-                    <ListBoxItem Height="50" Margin="0 20 0 0">
+                    <ListBoxItem Height="50"  Width="65" Margin="0 20 0 0">
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -249,7 +249,7 @@
                         </Label>
                     </ListBoxItem>
 
-                    <ListBoxItem Height="50" Margin="0 20 0 0">
+                    <ListBoxItem Height="50" Width="65" Margin="0 20 0 0">
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -308,7 +308,7 @@
 
                     <TextBlock Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" 
                                FontSize="15" 
-                               Margin="0 15 100 0"
+                               Margin="0 15 50 0"
                                HorizontalAlignment="Right"
                                Foreground="{DynamicResource DefaultFontColor}"
                                ></TextBlock>

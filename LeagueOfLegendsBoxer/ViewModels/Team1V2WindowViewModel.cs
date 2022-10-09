@@ -65,6 +65,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 }
 
                 var sameRecords = item.Records.Where(x => x.GameMode == mode);
+                item.CurrentModeRecord = new ObservableCollection<Record>(sameRecords);
                 item.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00") + "%";
                 item.IsInBlackList = _iniSettingsModel.BlackAccounts?.FirstOrDefault(x => x.Id == item.SummonerId) != null;
                 if (item.IsInBlackList)
