@@ -53,6 +53,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         public RelayCommand ShiftSettingsPageCommand { get; set; }
         public RelayCommand ShiftMainPageCommand { get; set; }
         public RelayCommand ShiftNoticePageCommand { get; set; }
+        public RelayCommand ShiftRankPageCommand { get; set; }
         public RelayCommand OpenChampionSelectToolCommand { get; set; }
         public RelayCommand OpenTeamDetailCommand { get; set; }
         public AsyncRelayCommand ResetCommandAsync { get; set; }
@@ -102,6 +103,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly IConfiguration _configuration;
         private readonly Settings _settingsPage;
         private readonly MainPage _mainPage;
+        private readonly RecordRank _recordRank;
         private readonly LeagueOfLegendsBoxer.Pages.Notice _notice;
         private readonly ChampionSelectTool _championSelectTool;
         private readonly ILogger<MainWindowViewModel> _logger;
@@ -124,6 +126,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                    IConfiguration configuration,
                                    Settings settingsPage,
                                    MainPage mainPage,
+                                   RecordRank recordRank,
                                    ImageManager imageManager,
                                    RuneAndItemViewModel runeViewModel,
                                    SettingsViewModel settingsViewModel,
@@ -143,6 +146,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             OpenTeamDetailCommand = new RelayCommand(OpenTeamDetail);
             ResetCommandAsync = new AsyncRelayCommand(ResetAsync);
             ShiftNoticePageCommand = new RelayCommand(OpenNoticePage);
+            ShiftRankPageCommand = new RelayCommand(OpenRankPage);
             ExitCommand = new RelayCommand(() => { Environment.Exit(0); });
             _applicationService = applicationService;
             _requestService = requestService;
@@ -151,6 +155,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _iniSettingsModel = iniSettingsModel;
             _configuration = configuration;
             _settingsPage = settingsPage;
+            _recordRank = recordRank;
             _notice = notice;
             _championSelectTool = championSelectTool;
             _mainPage = mainPage;
@@ -485,6 +490,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private void OpenNoticePage()
         {
             CurrentPage = _notice;
+        }
+        private void OpenRankPage()
+        {
+            CurrentPage = _recordRank;
         }
         #endregion
 

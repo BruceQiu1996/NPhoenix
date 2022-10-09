@@ -98,8 +98,6 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<MainWindowViewModel>();
                 services.AddTransient<SummonerAnalyse>();
                 services.AddTransient<SummonerAnalyseViewModel>();
-                services.AddSingleton<RecordRank>();
-                services.AddSingleton<RecordRankViewModel>();
                 services.AddSingleton<ServerArea>();
                 services.AddSingleton<ServerAreaViewModel>();
                 services.AddSingleton<ChampionSelectTool>();
@@ -136,6 +134,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddTransient<SummonerDetailViewModel>();
                 services.AddSingleton<Notice>();
                 services.AddSingleton<NoticeViewModel>();
+                services.AddSingleton<RecordRank>();
+                services.AddSingleton<RecordRankViewModel>();
 
                 services.Configure<List<Models.ServerArea>>(ctx.Configuration.GetSection("ServerAreas"));
             });

@@ -9,14 +9,14 @@ using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
-namespace LeagueOfLegendsBoxer.ViewModels
+namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
     public class RecordRankViewModel : ObservableObject
     {
         private readonly ITeamupService _teamupService;
         private readonly ILogger<RecordRankViewModel> _logger;
         private TotalRank _totalRank;
-        public TotalRank TotalRank 
+        public TotalRank TotalRank
         {
             get => _totalRank;
             set => SetProperty(ref _totalRank, value);
@@ -38,7 +38,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         public AsyncRelayCommand LoadCommandAsync { get; set; }
 
-        private async Task LoadAsync() 
+        private async Task LoadAsync()
         {
             try
             {
@@ -57,7 +57,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
                 TotalRank = JsonConvert.DeserializeObject<TotalRank>(result);
                 var mvpRank = 0;
-                foreach (var item in TotalRank.Mvp) 
+                foreach (var item in TotalRank.Mvp)
                 {
                     item.Rank = ++mvpRank;
                 }
@@ -72,7 +72,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     item.Rank = ++noobRank;
                 }
                 var xiaguRank = 0;
-                foreach (var item in TotalRank.Xiagu) 
+                foreach (var item in TotalRank.Xiagu)
                 {
                     item.Rank = ++xiaguRank;
                 }
@@ -82,7 +82,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     item.Rank = ++aramRank;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
                 Growl.WarningGlobal(new GrowlInfo()

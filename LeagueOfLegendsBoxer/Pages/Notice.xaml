@@ -23,7 +23,7 @@
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
 
-    <hc:Card Margin="10 20 10 0" BorderThickness="1" Background="{DynamicResource DefaultCardBackgroundColor}" BorderBrush="{DynamicResource DefaultBorderColor}">
+    <hc:Card Margin="2 5 10 0" BorderThickness="1" Background="{DynamicResource DefaultCardBackgroundColor}" BorderBrush="{DynamicResource DefaultBorderColor}">
         <ListBox ItemsSource="{Binding Notices,UpdateSourceTrigger=PropertyChanged}"
                  Background="Transparent" BorderThickness="0"
                  SelectedItem="{Binding Notice,UpdateSourceTrigger=PropertyChanged}">

@@ -15,23 +15,14 @@
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
 
-    <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="5">
-        <StackPanel Orientation="Vertical">
-            <GroupBox Margin="10 5" Header="游戏设置" Padding="5" FontSize="18" Style="{StaticResource GroupBoxOriginal}" 
+    <ScrollViewer VerticalScrollBarVisibility="Visible" Margin="2" HorizontalScrollBarVisibility="Visible">
+        <StackPanel Orientation="Horizontal">
+            <GroupBox Margin="2 0 10 0" Header="游戏设置" 
+                      Width="300"
+                      Padding="5" FontSize="18" Style="{StaticResource GroupBoxOriginal}" 
                       Foreground="{DynamicResource DefaultFontColor}"
                       Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
-                    <Label Width="35" Height="35" HorizontalAlignment="Right" 
-                           Margin="5 5 5 10" ToolTip="排行榜" Cursor="Hand">
-                        <behaviors:Interaction.Triggers>
-                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                <behaviors:InvokeCommandAction Command="{Binding OpenRankCommand}"></behaviors:InvokeCommandAction>
-                            </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
-                        <Label.Content>
-                            <Path Data="{StaticResource rank}" Fill="{StaticResource PrimaryBrush}" Stretch="Uniform"></Path>
-                        </Label.Content>
-                    </Label>
                     <Button Content="设置账号所在大区" 
                             FontSize="15" Height="35" HorizontalAlignment="Right" Margin="0 5 0 10" Cursor="Hand"
                             Command="{Binding ChooseServerAreaForCurrentAccountCommand}"></Button>
@@ -48,7 +39,7 @@
                         </CheckBox>
                         <hc:NumericUpDown Maximum="8" 
                                           Margin="20 0 0 0"
-                                          Width="180"
+                                          Width="140"
                                           Minimum="0"
                                           ToolTip="最大8s"
                                           Foreground="{DynamicResource DefaultFontColor}"
@@ -94,7 +85,7 @@
                         <ComboBox hc:TitleElement.Title="匹配秒选英雄" 
                                   IsEnabled="{Binding AutoLockHero,UpdateSourceTrigger=PropertyChanged}"
                                   IsEditable="True"
-                                  Width="190"
+                                  Width="150"
                                   IsReadOnly="False"
                                   IsTextSearchEnabled="False"
                                   IsDropDownOpen="{Binding LockHerosOpen,UpdateSourceTrigger=PropertyChanged}"
@@ -393,13 +384,13 @@
 
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                             <ComboBox hc:TitleElement.Title="排位秒禁英雄1" 
-                                      Width="170"
+                                      Width="140"
                                       FontSize="16"
                                       IsReadOnly="False"
                                       HorizontalAlignment="Left"
                                       IsTextSearchEnabled="False"
                                       IsDropDownOpen="{Binding DisableHerosOpen,UpdateSourceTrigger=PropertyChanged}"
-                                      Margin="30 10 0 0"
+                                      Margin="20 10 0 0"
                                       IsEnabled="{Binding AutoDisableHero,UpdateSourceTrigger=PropertyChanged}"
                                       IsEditable="True"
                                       DisplayMemberPath="Label"
@@ -428,10 +419,10 @@
                                 </behaviors:EventTrigger>
                             </behaviors:Interaction.Triggers>
                         </CheckBox>
-                        <Button Content="配置大乱斗英雄" Width="140" Height="35"
+                        <Button Content="配置大乱斗英雄" Width="130" Height="35"
                                 IsEnabled="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}"
                                 Command="{Binding OpenAramChooseCommand}"
-                                FontSize="15" VerticalAlignment="Center" Margin="40 10 0 0"></Button>
+                                FontSize="15" VerticalAlignment="Center" Margin="10 10 0 0"></Button>
                     </StackPanel>
                     <Button Content="黑名单" Width="140" Height="35"
                             HorizontalAlignment="Right"
@@ -439,7 +430,7 @@
                             FontSize="15" VerticalAlignment="Center" 
                             Margin="10 10 2 0"></Button>
                     <StackPanel Orientation="Horizontal" Margin="0 20 0 10">
-                        <TextBox Style="{StaticResource TextBoxExtend}" hc:InfoElement.Placeholder="输入段位信息" Width="220" Text="{Binding RankSetting}" FontSize="14"></TextBox>
+                        <TextBox Style="{StaticResource TextBoxExtend}" hc:InfoElement.Placeholder="输入段位信息" Width="183" Text="{Binding RankSetting}" FontSize="14"></TextBox>
                         <Button Content="修改段位" Cursor="Hand" FontSize="15" Height="35" Command="{Binding ModifyRankLevelCommandAsync}" Margin="5 0 0 0" Width="100"/>
                     </StackPanel>
                     <TextBox Text="rank模式
@@ -483,7 +474,7 @@
                     <StackPanel Orientation="Horizontal">
                         <ComboBox hc:TitleElement.Title="选择" 
                                   IsEditable="True"
-                                  Width="190"
+                                  Width="150"
                                   IsReadOnly="False"
                                   IsTextSearchEnabled="False"
                                   IsDropDownOpen="{Binding ChooseHeroForSkinsOpen,UpdateSourceTrigger=PropertyChanged}"
@@ -507,7 +498,7 @@
                                 Width="135" Margin="5 2 0 0" Height="35" Cursor="Hand"></Button>
                     </StackPanel>
 
-                    <Button Content="获取最新符文装备推荐" Width="330" FontSize="15" Height="35"
+                    <Button Content="获取最新符文装备推荐" Width="290" FontSize="15" Height="35"
                             Cursor="Hand"
                             Style="{StaticResource ButtonWarning}"
                             Margin="0 20 0 0"
@@ -515,8 +506,9 @@
                             HorizontalAlignment="Center"></Button>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Margin="10 5" Header="游戏内消息设置" FontSize="18" 
+            <GroupBox Margin="10 0" Header="消息设置" FontSize="18" 
                       Padding="5"
+                      Width="300"
                       hc:BorderElement.CornerRadius="5"
                       Style="{StaticResource GroupBoxOriginal}" 
                       Foreground="{DynamicResource DefaultFontColor}"
@@ -559,7 +551,7 @@
                              AcceptsReturn="True" TextWrapping="Wrap" IsReadOnly="True" Margin="0 10 0 0">
 
                     </TextBox>
-                    <TextBox Style="{StaticResource TextBoxExtend}" hc:InfoElement.Placeholder="自定义上等马消息模板(字数过多会发不出来)"
+                    <TextBox Style="{StaticResource TextBoxExtend}" hc:InfoElement.Placeholder="自定义马匹消息(字数过多会发不出来)"
                              AcceptsReturn="True"
                              TextWrapping="Wrap"
                              FontSize="16"
@@ -573,7 +565,7 @@
                         <TextBlock Text=">120分：" Margin="10"></TextBlock>
                         <TextBox Style="{DynamicResource TextBoxExtendBaseStyle}" 
                                  hc:InfoElement.Placeholder="最多5个字"
-                                 Width="224"
+                                 Width="184"
                                  Text="{Binding Above120ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
                                  Margin="5 5"></TextBox>
                     </StackPanel>
@@ -581,7 +573,7 @@
                         <TextBlock Text=">110分：" Margin="10"></TextBlock>
                         <TextBox Style="{StaticResource TextBoxExtend}" 
                                  hc:InfoElement.Placeholder="最多5个字"
-                                 Width="224"
+                                 Width="184"
                                  Text="{Binding Above110ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
                                  Margin="5 5"></TextBox>
                     </StackPanel>
@@ -589,7 +581,7 @@
                         <TextBlock Text=">100分：" Margin="10"></TextBlock>
                         <TextBox Style="{StaticResource TextBoxExtend}" 
                                  hc:InfoElement.Placeholder="最多5个字"
-                                 Width="224"
+                                 Width="184"
                                  Text="{Binding Above100ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
                                  Margin="5 5"></TextBox>
                     </StackPanel>
@@ -598,7 +590,7 @@
                         <TextBlock Text="&lt;100分：" Margin="10"></TextBlock>
                         <TextBox Style="{StaticResource TextBoxExtend}" 
                                  hc:InfoElement.Placeholder="最多5个字"
-                                 Width="224"
+                                 Width="184"
                                  Text="{Binding Below100ScoreTxt,UpdateSourceTrigger=PropertyChanged}" 
                                  Margin="5 5"></TextBox>
                     </StackPanel>
@@ -638,8 +630,9 @@
                     </StackPanel>
                 </StackPanel>
             </GroupBox>
-            <GroupBox Margin="10 5" Header="软件设置" FontSize="18" Padding="5"
+            <GroupBox Margin="10 0" Header="软件设置" FontSize="18" Padding="5"
                       Style="{StaticResource GroupBoxOriginal}" 
+                      Width="300"
                       Foreground="{DynamicResource DefaultFontColor}"
                       Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
@@ -650,7 +643,7 @@
                             Cursor="Hand"
                             Content="打赏一下作者(留下姓名)" Command="{Binding PayCommand}"/>
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                        <TextBlock Text="对局详情快捷键"></TextBlock>
+                        <TextBlock Text="对局详情按键"></TextBlock>
                         <RadioButton Content="Alt+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail}" Margin="10 0 0 0" FontSize="18">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
@@ -726,9 +719,9 @@
                             </behaviors:EventTrigger>
                         </behaviors:Interaction.Triggers>
                     </CheckBox>
-                    
+
                     <StackPanel Orientation="Horizontal" Margin="0 20 0 10">
-                        <RadioButton Content="明亮模式" Foreground="{DynamicResource DefaultFontColor}" FontSize="16" Margin="30 0 0 0" IsChecked="{Binding IsDarkTheme,Converter={StaticResource Boolean2BooleanReConverter}}" GroupName="theme">
+                        <RadioButton Content="明亮模式" Foreground="{DynamicResource DefaultFontColor}" FontSize="16" Margin="20 0 0 0" IsChecked="{Binding IsDarkTheme,Converter={StaticResource Boolean2BooleanReConverter}}" GroupName="theme">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding ChooseLightThemeCommandAsync}"></behaviors:InvokeCommandAction>
@@ -743,32 +736,33 @@
                             </behaviors:Interaction.Triggers>
                         </RadioButton>
                     </StackPanel>
-                </StackPanel>
-            </GroupBox>
-
-            <Button Content="免费开源软件.点个赞" 
+                    <Button Content="免费开源软件.点个赞" 
                             Cursor="Hand"
                             Click="Button_Click"
                             Style="{StaticResource ButtonPrimary}"
-                            Margin="20 20 20 0" Width="310" FontSize="15" Height="35" 
+                            Margin="10 20 10 0" Width="260" FontSize="15" Height="35" 
                             HorizontalAlignment="Center"></Button>
-            
-            <Button Content="手动更新" 
+
+                    <Button Content="手动更新" 
                             Cursor="Hand"
                             Style="{StaticResource ButtonSuccess}"
-                            Margin="20 20 20 0" Width="310" FontSize="15" Height="35" 
+                             Margin="10 20 10 0" Width="260" FontSize="15" Height="35" 
                             HorizontalAlignment="Center" Command="{Binding ManualUpdateCommandAsync}"></Button>
-            
-            <Button Content="退出游戏" 
-                    Margin="20 10 20 0"
-                    Cursor="Hand"
-                    Command="{Binding ExitGameCommandAsync}"
-                    Style="{StaticResource ButtonDanger}"
-                    Height="40"
-                    VerticalAlignment="Bottom" Width="310" FontSize="18">
-            </Button>
 
-            <TextBlock HorizontalAlignment="Right" Foreground="{DynamicResource DefaultFontColor}" FontSize="14" Margin="0 10 25 10" Text="{Binding Version,StringFormat={}版本号 ：v{0}}"/>
+                    <Button Content="退出游戏" 
+                             Margin="10 20 10 0" Width="260"
+                            Cursor="Hand"
+                            Command="{Binding ExitGameCommandAsync}"
+                            Style="{StaticResource ButtonDanger}"
+                            Height="40"
+                            VerticalAlignment="Bottom" FontSize="18">
+                    </Button>
+
+                    <TextBlock HorizontalAlignment="Right" 
+                               Foreground="{DynamicResource DefaultFontColor}" 
+                               FontSize="15" Margin="0 10 20 10" Text="{Binding Version,StringFormat={}版本号 ：v{0}}"/>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
     </ScrollViewer>
 </Page>

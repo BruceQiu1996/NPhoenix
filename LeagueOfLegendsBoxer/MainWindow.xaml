@@ -12,12 +12,12 @@
         AllowsTransparency="True"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         WindowStyle="None"
-        Title="NPhoenix" Height="650" Width="380">
+        Title="NPhoenix" Height="600" Width="880">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="3"/>
     </WindowChrome.WindowChrome>
-    
+
     <Window.Resources>
         <convert:ConnectedColorBrushConverter x:Key="ConnectedColorBrushConverter"></convert:ConnectedColorBrushConverter>
         <convert:ConnectedTextConverter x:Key="ConnectedTextConverter"></convert:ConnectedTextConverter>
@@ -34,7 +34,7 @@
     </behaviors:Interaction.Triggers>
 
     <Grid>
-        <Border Margin="10" Background="{DynamicResource DefaultBackgroundColor}" CornerRadius="10">
+        <Border Margin="5" Background="{DynamicResource DefaultBackgroundColor}" CornerRadius="5">
             <Border.Effect>
                 <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
                                   Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
@@ -43,24 +43,20 @@
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="60"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid MouseMove="Border_MouseMove" Background="Transparent">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="210"></ColumnDefinition>
-                    <ColumnDefinition Width="40"></ColumnDefinition>
-                    <ColumnDefinition Width="40"></ColumnDefinition>
-                    <ColumnDefinition Width="40"></ColumnDefinition>
-                    <ColumnDefinition Width="40"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid MouseMove="Border_MouseMove" Grid.ColumnSpan="2" Background="Transparent">
                 <TextBlock Text="NPhoenix" 
                            Foreground="{StaticResource PrimaryBrush}"
                            Grid.Column="0"
                            ToolTip="NPhoenix"
-                           Margin="20 25 0 0" 
+                           Margin="10 15 0 0" 
                            Cursor="Hand"
                            Width="130"
                            FontWeight="Bold"
@@ -72,93 +68,26 @@
                             </behaviors:EventTrigger>
                         </behaviors:Interaction.Triggers>
                 </TextBlock>
-
-                <!--<Label BorderThickness="0"
-                       Cursor="Hand"
-                       ToolTip="重置"
-                       Margin="0 20 0 0"
-                       Background="Transparent"
-                       Grid.Column="1">
-                    <behaviors:Interaction.Triggers>
-                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                            <behaviors:InvokeCommandAction Command="{Binding ResetCommandAsync}"></behaviors:InvokeCommandAction>
-                        </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
-                    <Path Data="{StaticResource reset}" 
-                          SnapsToDevicePixels="True"
-                          Height="20"
-                          Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
-                          Fill="{StaticResource PrimaryBrush}"/>
-                </Label>-->
-                
-                <Label BorderThickness="0"
-                       Cursor="Hand"
-                       ToolTip="设置"
-                       Margin="0 20 0 0"
-                       Background="Transparent"
-                       Grid.Column="1">
-                    <behaviors:Interaction.Triggers>
-                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                            <behaviors:InvokeCommandAction Command="{Binding ShiftSettingsPageCommand}"></behaviors:InvokeCommandAction>
-                        </behaviors:EventTrigger>
-                    </behaviors:Interaction.Triggers>
-                    <Path Data="{StaticResource setting}" 
-                          SnapsToDevicePixels="True"
-                          Height="20"
-                          Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
-                          Fill="{StaticResource PrimaryBrush}"/>
-                </Label>
-                <hc:Badge Grid.Column="2"
-                          BadgeMargin="0 20 -5 0" BorderThickness="0"
-                          Text="{Binding UnReadNotices}">
-                    <hc:Badge.Resources>
-                        <Style BasedOn="{StaticResource BadgeDanger}" TargetType="hc:Badge">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding UnReadNotices}" Value="0">
-                                    <Setter Property="ShowBadge" Value="False"></Setter>
-                                </DataTrigger>
-                                <DataTrigger Binding="{Binding UnReadNotices}" Value="必读0">
-                                    <Setter Property="ShowBadge" Value="False"></Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </hc:Badge.Resources>
-                    <Label BorderThickness="0"
-                           Cursor="Hand"
-                           ToolTip="通知"
-                           Margin="0 20 0 0"
-                           Background="Transparent"
-                           >
-                        <behaviors:Interaction.Triggers>
-                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                <behaviors:InvokeCommandAction Command="{Binding ShiftNoticePageCommand}"></behaviors:InvokeCommandAction>
-                            </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
-                        <Path Data="{StaticResource info}" 
-                          SnapsToDevicePixels="True"
-                          Height="20"
-                          Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
-                          Fill="{StaticResource PrimaryBrush}"/>
-                    </Label>
-                </hc:Badge>
                 <Label BorderThickness="0"
                        Cursor="Hand"
                        ToolTip="最小化"
-                       Margin="0 20 0 0"
+                       Margin="0 10 50 0"
                        Background="Transparent"
-                       Grid.Column="3" MouseLeftButtonDown="Label_MouseLeftButtonDown">
+                       HorizontalAlignment="Right" 
+                       MouseLeftButtonDown="Label_MouseLeftButtonDown">
                     <Path Data="{StaticResource WindowMinGeometry}" 
                           SnapsToDevicePixels="True"
                           Height="20"
+                          Width="20"
                           Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
                           Fill="{StaticResource PrimaryBrush}"/>
                 </Label>
                 <Label BorderThickness="0"
                        Cursor="Hand"
                        ToolTip="关闭到托盘"
-                       Margin="0 20 0 0"
+                       Margin="0 10 5 0"
                        Background="Transparent"
-                       Grid.Column="4" MouseLeftButtonDown="Label_MouseLeftButtonDown_1">
+                       HorizontalAlignment="Right" MouseLeftButtonDown="Label_MouseLeftButtonDown_1">
                     <Path Data="{StaticResource CloseGeometry}" 
                           SnapsToDevicePixels="True"
                           Height="20"
@@ -167,31 +96,222 @@
                 </Label>
             </Grid>
 
+            <hc:Card Grid.Row="1" 
+                     Grid.Column="0" 
+                     Background="{DynamicResource DefaultCardBackgroundColor}" 
+                     Margin="10 5 0 6"
+                     Effect="{DynamicResource EffectShadow2}"
+                     BorderThickness="0">
+                <ListBox Background="{DynamicResource DefaultCardBackgroundColor}"  BorderThickness="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBoxItem Height="50">
+                        <ListBoxItem.Style>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundColor}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBoxItem.Style>
+                        <Label BorderThickness="0"
+                               Cursor="Hand"
+                               ToolTip="主页"
+                               Background="Transparent"
+                               VerticalContentAlignment="Center"
+                               Grid.Column="1">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                    <behaviors:InvokeCommandAction Command="{Binding ShiftMainPageCommand}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                            <Path Data="{StaticResource main}" 
+                                  SnapsToDevicePixels="True"
+                                  Height="25"
+                                  Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                                  Fill="{StaticResource PrimaryBrush}"/>
+                        </Label>
+                    </ListBoxItem>
+
+                    <ListBoxItem Height="50" Margin="0 20 0 0">
+                        <ListBoxItem.Style>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundColor}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBoxItem.Style>
+                        <Label BorderThickness="0"
+                               Cursor="Hand"
+                               ToolTip="设置"
+                               Background="Transparent"
+                               VerticalContentAlignment="Center"
+                               Grid.Column="1">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                    <behaviors:InvokeCommandAction Command="{Binding ShiftSettingsPageCommand}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                            <Path Data="{StaticResource setting}" 
+                                  SnapsToDevicePixels="True"
+                                  Height="25"
+                                  Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                                  Fill="{StaticResource PrimaryBrush}"/>
+                        </Label>
+                    </ListBoxItem>
+                    
+                    <ListBoxItem Margin="0 20 0 0" Height="50">
+                        <ListBoxItem.Style>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundColor}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBoxItem.Style>
+                        <hc:Badge BadgeMargin="0 -8 0 0" BorderThickness="0"
+                                  Text="{Binding UnReadNotices}">
+                            <hc:Badge.Resources>
+                                <Style BasedOn="{StaticResource BadgeDanger}" TargetType="hc:Badge">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding UnReadNotices}" Value="0">
+                                            <Setter Property="ShowBadge" Value="False"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding UnReadNotices}" Value="必读0">
+                                            <Setter Property="ShowBadge" Value="False"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </hc:Badge.Resources>
+                            <Label BorderThickness="0"
+                                   Cursor="Hand"
+                                   ToolTip="通知"
+                                   Background="Transparent">
+                                <behaviors:Interaction.Triggers>
+                                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                        <behaviors:InvokeCommandAction Command="{Binding ShiftNoticePageCommand}"></behaviors:InvokeCommandAction>
+                                    </behaviors:EventTrigger>
+                                </behaviors:Interaction.Triggers>
+                                <Path Data="{StaticResource info}" 
+                                      SnapsToDevicePixels="True"
+                                      Height="25"
+                                      Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                                      Fill="{StaticResource PrimaryBrush}"/>
+                            </Label>
+                        </hc:Badge>
+                    </ListBoxItem>
+
+                    <ListBoxItem Height="50" Margin="0 20 0 0">
+                        <ListBoxItem.Style>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundColor}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBoxItem.Style>
+                        <Label BorderThickness="0"
+                               Cursor="Hand"
+                               ToolTip="排行榜"
+                               Background="Transparent"
+                               VerticalContentAlignment="Center"
+                               Grid.Column="1">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                    <behaviors:InvokeCommandAction Command="{Binding ShiftRankPageCommand}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                            <Path Data="{StaticResource rank}" 
+                                  SnapsToDevicePixels="True"
+                                  Height="25"
+                                  Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                                  Fill="{StaticResource PrimaryBrush}"/>
+                        </Label>
+                    </ListBoxItem>
+
+                    <ListBoxItem Height="50" Margin="0 20 0 0">
+                        <ListBoxItem.Style>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundColor}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBoxItem.Style>
+                        <Label BorderThickness="0"
+                               Cursor="Hand"
+                               ToolTip="人才市场"
+                               Background="Transparent"
+                               VerticalContentAlignment="Center"
+                               Grid.Column="1">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                    <behaviors:InvokeCommandAction Command="{Binding ShiftMainPageCommand}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                            <Path Data="{StaticResource team}" 
+                                  SnapsToDevicePixels="True"
+                                  Height="25"
+                                  Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                                  Fill="{StaticResource PrimaryBrush}"/>
+                        </Label>
+                    </ListBoxItem>
+                </ListBox>
+            </hc:Card>
+
             <Frame Content="{Binding CurrentPage,UpdateSourceTrigger=PropertyChanged}" 
                    NavigationUIVisibility="Hidden"
                    BorderThickness="0"
                    Margin="5 0 5 5"
-                   Grid.Row="1">
+                   Grid.Row="1" Grid.Column="1">
             </Frame>
 
-            <Border CornerRadius="0 0 5 5" Grid.Row="2">
-                <Canvas>
+            <Border CornerRadius="0 0 5 5" Grid.Row="2" Grid.ColumnSpan="2">
+                <Grid>
                     <Ellipse Height="10" 
                              Width="10" 
-                             Fill="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedColorBrushConverter}}" 
-                             Canvas.Top="15" Canvas.Left="20"
+                             Margin="50 0 0 0"
+                             HorizontalAlignment="Left"
+                             Fill="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedColorBrushConverter}}"
                              SnapsToDevicePixels="True">
                     </Ellipse>
 
                     <TextBlock Text="{Binding Connected,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ConnectedTextConverter}}" 
                                FontSize="15" 
+                               HorizontalAlignment="Left"
                                Foreground="{DynamicResource DefaultFontColor}"
-                               Canvas.Top="11" Canvas.Left="35"></TextBlock>
+                               Margin="65 15 0 0" Canvas.Left="35"></TextBlock>
 
                     <TextBlock Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" 
                                FontSize="15" 
+                               Margin="0 15 100 0"
+                               HorizontalAlignment="Right"
                                Foreground="{DynamicResource DefaultFontColor}"
-                               Canvas.Top="11" Canvas.Left="216"></TextBlock>
+                               ></TextBlock>
 
                     <Label Width="40" BorderThickness="0" 
                            MouseLeftButtonDown="Label_MouseLeftButtonDown_2" Cursor="Hand" 
@@ -203,7 +323,7 @@
                         </behaviors:Interaction.Triggers>
                         <Path Data="{StaticResource gitIcon}" Fill="{DynamicResource DefaultFontColor}" Stretch="Uniform"/>
                     </Label>
-                </Canvas>
+                </Grid>
             </Border>
         </Grid>
 

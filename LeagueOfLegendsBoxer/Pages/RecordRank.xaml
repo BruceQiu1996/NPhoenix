@@ -1,4 +1,4 @@
-﻿<Window x:Class="LeagueOfLegendsBoxer.Windows.RecordRank"
+﻿<Page x:Class="LeagueOfLegendsBoxer.Pages.RecordRank"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,15 +9,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:usercontrol="clr-namespace:LeagueOfLegendsBoxer.UserControls"
         Background="Transparent"
-        AllowsTransparency="True"
-        ResizeMode="NoResize"
-        WindowStyle="None"
-        WindowStartupLocation="CenterScreen"
-        Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
-        Title="排位详情" Height="550" Width="800">
-    <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="0" ResizeBorderThickness="2"/>
-    </WindowChrome.WindowChrome>
+        Title="排位详情">
 
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
@@ -26,28 +18,13 @@
     </behaviors:Interaction.Triggers>
 
     <Grid>
-        <Border Margin="2" Background="{DynamicResource DefaultBackgroundColor}" Opacity="0.95" CornerRadius="5">
-            <Border.Effect>
-                <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
-                                  Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
-            </Border.Effect>
-        </Border>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Border MouseMove="Border_MouseMove" Background="Transparent" Grid.Row="0" Grid.ColumnSpan="11">
-                <Label HorizontalAlignment="Right" Height="35" Width="35" Margin="0 5 10 0" ToolTip="关闭"
-                       Background="Transparent" BorderThickness="0"
-                       Cursor="Hand" MouseLeftButtonDown="Label_MouseLeftButtonDown">
-                    <Path Data="{StaticResource CloseGeometry}" Fill="{StaticResource PrimaryBrush}" Stretch="Uniform" Stroke="{StaticResource PrimaryBrush}"/>
-                </Label>
-            </Border>
-            
-            <TextBlock Grid.Row="1" Grid.ColumnSpan="11" 
+            <TextBlock Grid.Row="0"
                        FontSize="20" HorizontalAlignment="Center"
                        Foreground="{DynamicResource DefaultFontColor}">
                 <TextBlock.Text>
@@ -58,14 +35,14 @@
                 </TextBlock.Text>
             </TextBlock>
 
-            <TabControl Grid.Row="2" Margin="5 10 5 5" Foreground="{DynamicResource DefaultFontColor}"
+            <TabControl Grid.Row="2" Margin="2 0 5 0" Foreground="{DynamicResource DefaultFontColor}"
                         Background="{DynamicResource DefaultCardBackgroundColor}" BorderThickness="0">
                 <TabItem Foreground="{DynamicResource DefaultFontColor}"
                          Background="{DynamicResource DefaultCardBackgroundColor}">
                     <TabItem.HeaderTemplate>
                         <ItemContainerTemplate>
                             <Grid>
-                                <TextBlock Text="MVP排行" FontSize="16" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                <TextBlock Text="MVP排行" FontSize="18" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                             </Grid>
                         </ItemContainerTemplate>
                     </TabItem.HeaderTemplate>
@@ -146,7 +123,7 @@
                     <TabItem.HeaderTemplate>
                         <ItemContainerTemplate>
                             <Grid>
-                                <TextBlock Text="SVP排行" FontSize="16" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                <TextBlock Text="SVP排行" FontSize="18" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                             </Grid>
                         </ItemContainerTemplate>
                     </TabItem.HeaderTemplate>
@@ -227,7 +204,7 @@
                     <TabItem.HeaderTemplate>
                         <ItemContainerTemplate>
                             <Grid>
-                                <TextBlock Text="小可爱排行"  FontSize="16" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                <TextBlock Text="小可爱排行"  FontSize="18" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                             </Grid>
                         </ItemContainerTemplate>
                     </TabItem.HeaderTemplate>
@@ -308,7 +285,7 @@
                     <TabItem.HeaderTemplate>
                         <ItemContainerTemplate>
                             <Grid>
-                                <TextBlock Text="匹配/排位击杀排行"  FontSize="16" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                <TextBlock Text="匹配/排位击杀排行"  FontSize="18" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                             </Grid>
                         </ItemContainerTemplate>
                     </TabItem.HeaderTemplate>
@@ -389,7 +366,7 @@
                     <TabItem.HeaderTemplate>
                         <ItemContainerTemplate>
                             <Grid>
-                                <TextBlock Text="大乱斗击杀排行"  FontSize="16" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                <TextBlock Text="大乱斗击杀排行"  FontSize="18" Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                             </Grid>
                         </ItemContainerTemplate>
                     </TabItem.HeaderTemplate>
@@ -468,4 +445,4 @@
             </TabControl>
         </Grid>
     </Grid>
-</Window>
+</Page>
