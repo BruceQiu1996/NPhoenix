@@ -137,7 +137,35 @@
                                                    IsOpen="{Binding ElementName=head,Path=IsMouseOver,Mode=OneWay}"
                                                    PlacementTarget="{Binding ElementName=Dputy2Rune}" 
                                                    Placement="Left" AllowsTransparency="True" Effect="{DynamicResource EffectShadow2}">
-                                                <Grid>
+                                                <StackPanel Orientation="Vertical">
+                                                    <ListBox ItemsSource="{Binding Champs,UpdateSourceTrigger=PropertyChanged}"
+                                                             Width="250"
+                                                             BorderThickness="0"
+                                                             Background="{DynamicResource DefaultBackgroundColor}">
+                                                        <ListBox.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <StackPanel Orientation="Horizontal"></StackPanel>
+                                                            </ItemsPanelTemplate>
+                                                        </ListBox.ItemsPanel>
+
+                                                        <ListBox.ItemContainerStyle>
+                                                            <Style TargetType="{x:Type ListBoxItem}">
+                                                                <Setter Property="OverridesDefaultStyle" Value="True" />
+                                                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}" />
+                                                                <Setter Property="Height" Value="60" />
+                                                                <Setter Property="Template">
+                                                                    <Setter.Value>
+                                                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                            <Border BorderThickness="0 0 0 0.5" BorderBrush="Gray">
+                                                                                <hc:Gravatar Height="50" Width="50" Grid.RowSpan="2" Source="{Binding ChampImage}" />
+                                                                            </Border>
+                                                                        </ControlTemplate>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </Style>
+                                                        </ListBox.ItemContainerStyle>
+                                                    </ListBox>
                                                     <ListBox ItemsSource="{Binding CurrentModeRecord,UpdateSourceTrigger=PropertyChanged}"
                                                              Width="250"
                                                              BorderThickness="0"
@@ -184,7 +212,7 @@
                                                             </Style>
                                                         </ListBox.ItemContainerStyle>
                                                     </ListBox>
-                                                </Grid>
+                                                </StackPanel>
                                             </Popup>
                                         </Grid>
                                     </Border>
