@@ -63,6 +63,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 await Task.Delay(1000);
                 var profile = await _accountService.GetUserAccountInformationAsync();
                 Account = JsonConvert.DeserializeObject<Account>(profile);
+                Account.ServerArea = Constant.Account?.ServerArea;
                 Constant.Account = Account;
                 var records = await _accountService.GetRecordInformationAsync(Account.SummonerId);
                 var recordsData = JToken.Parse(records);
@@ -72,6 +73,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 Account.Rank = rankData["queueMap"].ToObject<Rank>();
                 var champData = await _gameService.QuerySummonerSuperChampDataAsync(Account.SummonerId);
                 Account.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
+                Account.Champs = new ObservableCollection<Champ>(Account.Champs?.Take(20));
 
                 if (!Constant.ConnectTeamupSuccessful)
                 {

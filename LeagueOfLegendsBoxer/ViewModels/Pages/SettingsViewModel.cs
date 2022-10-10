@@ -678,6 +678,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand ManualUpdateCommandAsync { get; set; }
         public RelayCommand PayCommand { get; set; }
         public RelayCommand ChooseServerAreaForCurrentAccountCommand { get; set; }
+        public RelayCommand OpenFireModeCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -711,6 +712,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             UncheckedAutoEndGameCommandAsync = new AsyncRelayCommand(UncheckedAutoEndGameAsync);
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             SearchLockHeroCommand = new RelayCommand(SearchLockHero);
+            OpenFireModeCommand = new RelayCommand(OpenFireMode);
 
             TopSearchLockHeroCommand1 = new RelayCommand(TopSearchLockHero1);
             TopSearchLockHeroCommand2 = new RelayCommand(TopSearchLockHero2);
@@ -1040,6 +1042,11 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 LockHeros = new ObservableCollection<Hero>(Constant.Heroes);
             else
                 LockHeros = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(SearchLockText) || x.Title.Contains(SearchLockText)));
+        }
+
+        private void OpenFireMode() 
+        {
+            Process.Start("notepad.exe", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/12.10firemode.txt"));
         }
 
         private void TopSearchLockHero1()

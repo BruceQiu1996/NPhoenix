@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<None Remove="appsettings.json" />
+		<None Remove="Resources\12.10firemode.txt" />
 		<None Remove="Resources\blackList.json" />
 		<None Remove="Resources\good.png" />
 		<None Remove="Resources\logo.ico" />
@@ -71,6 +72,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Content Include="Resources\12.10firemode.txt">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Resource Include="Resources\good.png" />
 		<Resource Include="Resources\low.png" />
 		<Resource Include="Resources\Positions\bot.svg" />

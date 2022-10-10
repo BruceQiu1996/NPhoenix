@@ -5,10 +5,12 @@ using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,8 +50,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _gameService = gameService;
         }
 
-        
-
         public async Task LoadDataAsync(IList<Account> t1, IList<Account> t2)
         {
             Already14Minutes = false;
@@ -65,7 +65,9 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 }
 
                 var sameRecords = item.Records.Where(x => x.GameMode == mode);
-                item.CurrentModeRecord = new ObservableCollection<Record>(sameRecords);
+                item.CurrentModeRecord = new ObservableCollection<Record>(sameRecords?.Take(5));
+                var champData = await _gameService.QuerySummonerSuperChampDataAsync(item.SummonerId);
+                item.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
                 item.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00") + "%";
                 item.IsInBlackList = _iniSettingsModel.BlackAccounts?.FirstOrDefault(x => x.Id == item.SummonerId) != null;
                 if (item.IsInBlackList)
