@@ -23,9 +23,6 @@
                       Foreground="{DynamicResource DefaultFontColor}"
                       Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
-                    <Button Content="无限火力攻略" 
-                            FontSize="15" Height="35" HorizontalAlignment="Right" Margin="0 5 0 10" Cursor="Hand"
-                            Command="{Binding OpenFireModeCommand}"></Button>
                     <Button Content="设置账号所在大区" 
                             FontSize="15" Height="35" HorizontalAlignment="Right" Margin="0 5 0 10" Cursor="Hand"
                             Command="{Binding ChooseServerAreaForCurrentAccountCommand}"></Button>

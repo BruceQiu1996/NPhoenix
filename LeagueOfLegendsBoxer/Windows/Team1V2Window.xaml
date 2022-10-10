@@ -127,35 +127,7 @@
                                                     <Popup.Effect>
                                                         <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
                                                     </Popup.Effect>
-                                                    <StackPanel Orientation="Vertical">
-                                                        <ListBox ItemsSource="{Binding Champs,UpdateSourceTrigger=PropertyChanged}"
-                                                             Width="250"
-                                                             BorderThickness="0"
-                                                             Background="{DynamicResource DefaultBackgroundColor}">
-                                                            <ListBox.ItemsPanel>
-                                                                <ItemsPanelTemplate>
-                                                                    <StackPanel Orientation="Horizontal"></StackPanel>
-                                                                </ItemsPanelTemplate>
-                                                            </ListBox.ItemsPanel>
-
-                                                            <ListBox.ItemContainerStyle>
-                                                                <Style TargetType="{x:Type ListBoxItem}">
-                                                                    <Setter Property="OverridesDefaultStyle" Value="True" />
-                                                                    <Setter Property="SnapsToDevicePixels" Value="True" />
-                                                                    <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}" />
-                                                                    <Setter Property="Height" Value="60" />
-                                                                    <Setter Property="Template">
-                                                                        <Setter.Value>
-                                                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                                                <Border BorderThickness="0 0 0 0.5" BorderBrush="Gray">
-                                                                                    <hc:Gravatar Height="50" Width="50" Grid.RowSpan="2" Source="{Binding ChampImage}" />
-                                                                                </Border>
-                                                                            </ControlTemplate>
-                                                                        </Setter.Value>
-                                                                    </Setter>
-                                                                </Style>
-                                                            </ListBox.ItemContainerStyle>
-                                                        </ListBox>
+                                                    <Grid>
                                                         <ListBox ItemsSource="{Binding CurrentModeRecord,UpdateSourceTrigger=PropertyChanged}"
                                                              Width="250"
                                                              BorderThickness="0"
@@ -202,7 +174,7 @@
                                                                 </Style>
                                                             </ListBox.ItemContainerStyle>
                                                         </ListBox>
-                                                    </StackPanel>
+                                                    </Grid>
                                                 </Popup>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock TextWrapping="Wrap"
@@ -531,35 +503,7 @@
                                                     <Popup.Effect>
                                                         <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
                                                     </Popup.Effect>
-                                                    <StackPanel Orientation="Vertical">
-                                                        <ListBox ItemsSource="{Binding Champs,UpdateSourceTrigger=PropertyChanged}"
-                                                             Width="250"
-                                                             BorderThickness="0"
-                                                             Background="{DynamicResource DefaultBackgroundColor}">
-                                                            <ListBox.ItemsPanel>
-                                                                <ItemsPanelTemplate>
-                                                                    <StackPanel Orientation="Horizontal"></StackPanel>
-                                                                </ItemsPanelTemplate>
-                                                            </ListBox.ItemsPanel>
-
-                                                            <ListBox.ItemContainerStyle>
-                                                                <Style TargetType="{x:Type ListBoxItem}">
-                                                                    <Setter Property="OverridesDefaultStyle" Value="True" />
-                                                                    <Setter Property="SnapsToDevicePixels" Value="True" />
-                                                                    <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}" />
-                                                                    <Setter Property="Height" Value="60" />
-                                                                    <Setter Property="Template">
-                                                                        <Setter.Value>
-                                                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                                                <Border BorderThickness="0 0 0 0.5" BorderBrush="Gray">
-                                                                                    <hc:Gravatar Height="50" Width="50" Grid.RowSpan="2" Source="{Binding ChampImage}" />
-                                                                                </Border>
-                                                                            </ControlTemplate>
-                                                                        </Setter.Value>
-                                                                    </Setter>
-                                                                </Style>
-                                                            </ListBox.ItemContainerStyle>
-                                                        </ListBox>
+                                                    <Grid>
                                                         <ListBox ItemsSource="{Binding CurrentModeRecord,UpdateSourceTrigger=PropertyChanged}"
                                                              Width="250"
                                                              BorderThickness="0"
@@ -606,7 +550,7 @@
                                                                 </Style>
                                                             </ListBox.ItemContainerStyle>
                                                         </ListBox>
-                                                    </StackPanel>
+                                                    </Grid>
                                                 </Popup>
                                                 <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock TextWrapping="Wrap"

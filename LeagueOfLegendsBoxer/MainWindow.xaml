@@ -108,7 +108,7 @@
                             <StackPanel Orientation="Vertical"></StackPanel>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
-                    <ListBoxItem Height="50" Width="65" Margin="0 10 0 0" IsSelected="True">
+                    <ListBoxItem Height="50" Width="65" Margin="0 10 0 0">
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>

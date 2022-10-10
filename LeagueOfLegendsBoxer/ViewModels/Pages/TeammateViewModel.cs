@@ -86,10 +86,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             if (account != null)
                             {
                                 var sameRecords = account.Records?.Where(x => x.GameMode == mode);
-                                account.CurrentModeRecord = new ObservableCollection<Record>(sameRecords?.Take(5));
-                                var champData = await _gameService.QuerySummonerSuperChampDataAsync(account.SummonerId);
-                                account.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
-                                account.Champs = new ObservableCollection<Champ>(account.Champs.Take(5));
+                                account.CurrentModeRecord = new ObservableCollection<Record>(sameRecords);
                                 account.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00") + "%";
                                 Accounts.Add(account);
                             }
