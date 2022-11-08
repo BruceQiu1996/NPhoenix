@@ -57,6 +57,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public string Below100ScoreTxt { get; set; }
         public int AutoAcceptGameDelay { get; set; }
         public bool IsAltQOpenVsDetail { get; set; }
+        public bool AutoStartWhenComputerRun { get; set; }
 
         public IniSettingsModel(ISettingsService settingsService,
                                 IApplicationService applicationService,
@@ -89,6 +90,8 @@ namespace LeagueOfLegendsBoxer.Resources
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoDisableHero), out var tempAutoDisableHero) ? tempAutoDisableHero : false;
             AutoLockHeroInAram = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoLockHeroInAram), out var tempAutoLockHeroInAram) ? tempAutoLockHeroInAram : false;
+            AutoStartWhenComputerRun = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.AutoStartWhenComputerRun), out var tempAutoStartWhenComputerRun) ? tempAutoStartWhenComputerRun : false;
             var lockHerosInAramData = await _settingsService.ReadAsync(Constant.Game, Constant.LockHerosInAram);
             LockHerosInAram = string.IsNullOrEmpty(lockHerosInAramData) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(lockHerosInAramData);
             AutoLockHeroChampId = int.TryParse(
@@ -369,6 +372,12 @@ namespace LeagueOfLegendsBoxer.Resources
             await File.WriteAllTextAsync(_goodLoc, goodwords);
             GoodWords = goodwords;
             GoodWordCollection = string.IsNullOrEmpty(GoodWords) ? new List<string>() : GoodWords.Split("\n").ToList();
+        }
+
+        public async Task WriteAutoStartWhenComputerRun(bool autoStartWhenComputerRun)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.AutoStartWhenComputerRun, autoStartWhenComputerRun.ToString());
+            AutoStartWhenComputerRun = autoStartWhenComputerRun;
         }
 
         public async Task RemoveBlackAccountAsync(long id)

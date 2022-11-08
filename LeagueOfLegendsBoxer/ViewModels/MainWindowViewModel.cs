@@ -322,14 +322,31 @@ namespace LeagueOfLegendsBoxer.ViewModels
         {
             if (_iniSettingsModel.IsAltQOpenVsDetail && e.KeyData == StringToKeys("Alt+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
             {
-                _team1V2Window.Opacity = 1;
                 _team1V2Window.Topmost = true;
+                _team1V2Window.Focus();
+                _team1V2Window.Activate();
+                _team1V2Window.Show();
+                Task.Run(() =>
+                {
+                    System.Windows.Application.Current.Dispatcher.Invoke(async () =>
+                    {
+                        await Task.Delay(500);
+                        _team1V2Window.Topmost = false;
+                    });
+                });
                 e.Handled = true;
             }
             else if (!_iniSettingsModel.IsAltQOpenVsDetail && e.KeyData == StringToKeys("Control+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
             {
-                _team1V2Window.Opacity = 1;
                 _team1V2Window.Topmost = true;
+                _team1V2Window.Focus();
+                _team1V2Window.Activate();
+                _team1V2Window.Show();
+                System.Windows.Application.Current.Dispatcher.Invoke(async () =>
+                {
+                    await Task.Delay(500);
+                    _team1V2Window.Topmost = false;
+                });
                 e.Handled = true;
             }
         }
@@ -338,12 +355,14 @@ namespace LeagueOfLegendsBoxer.ViewModels
         {
             if (_iniSettingsModel.IsAltQOpenVsDetail && (e.KeyData == StringToKeys("Q+Alt") || e.KeyData == StringToKeys("Alt+Q")))
             {
-                _team1V2Window.Opacity = 0;
+                _team1V2Window.Topmost = false;
+                _team1V2Window.Hide();
                 e.Handled = true;
             }
             else if (!_iniSettingsModel.IsAltQOpenVsDetail && (e.KeyData == StringToKeys("Q+Control") || e.KeyData == StringToKeys("Control+Q")))
             {
-                _team1V2Window.Opacity = 0;
+                _team1V2Window.Topmost = false;
+                _team1V2Window.Hide();
                 e.Handled = true;
             }
             else if (e.KeyData == Keys.F7)
@@ -373,11 +392,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
         {
             await _teamupService.Initialize(_configuration.GetSection("TeamupApi").Value);
             CheckUpdate();
-            await CheckGameNotExistWhenStartAsync();
+            //await CheckGameNotExistWhenStartAsync();
             await LoadConfig();
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
             await ConnnectAsync();
-            await Task.Delay(2000);
+            await Task.Delay(1000);
             Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(await _gameService.GetItems());
             if (Constant.Items != null)
             {
@@ -388,8 +407,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
             Constant.Spells = JsonConvert.DeserializeObject<IEnumerable<SpellModel>>(await _gameService.GetSpells());
             //等websocket恢复后在使用
-            //_eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
-            //_eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
+            _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
+            _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
             Connected = true;
             if (CurrentPage == _mainPage)
             {
@@ -398,8 +417,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
             CurrentPage = _mainPage;
             GameStatus = "获取状态中";
             LoopLiveGameEventAsync();
-            LoopGameStatus();
-            LoopChampSelect();
+            //LoopGameStatus();
+            //LoopChampSelect();
             await LoopforClientStatus();
         }
 
@@ -461,7 +480,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 try
                 {
                     var data = await _clientService.GetZoomScaleAsync();
-                    _team1V2Window.Topmost = true;
                     await Task.Delay(1500);
                 }
                 catch
@@ -500,81 +518,82 @@ namespace LeagueOfLegendsBoxer.ViewModels
         #region 各种事件
 
         #region websocket恢复后再恢复监听游戏流程代码
-        //private async void GameFlow(object obj, EventArgument @event)
-        //{
-        //    var data = $"{@event.Data}";
-        //    if (string.IsNullOrEmpty(data))
-        //        return;
+        private async void GameFlow(object obj, EventArgument @event)
+        {
+            var data = $"{@event.Data}";
+            if (string.IsNullOrEmpty(data))
+                return;
 
-        //    if (data == "ReadyCheck" ||
-        //        data == "ChampSelect" ||
-        //        data == "Lobby" ||
-        //        data == "Matchmaking" ||
-        //        data == "None")
-        //    {
-        //        System.Windows.Application.Current.Dispatcher.Invoke(() =>
-        //        {
-        //            _blackList.Hide();
-        //            Team1Accounts.Clear();
-        //            Team2Accounts.Clear();
-        //            _team1V2Window.Hide();
-        //            _team1V2Window.Topmost = false;
-        //        });
-        //    }
-        //    switch (data)
-        //    {
-        //        case "ReadyCheck":
-        //            GameStatus = "找到对局";
-        //            if (_iniSettingsModel.AutoAcceptGame)
-        //            {
-        //                await AutoAcceptAsync();
-        //            }
-        //            break;
-        //        case "ChampSelect":
-        //            GameStatus = "英雄选择中";
-        //            await ChampSelectAsync();
-        //            await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
-        //            {
-        //                _championSelectTool.Show();
-        //                _championSelectTool.WindowStartupLocation = WindowStartupLocation.Manual;
-        //                _championSelectTool.Top = (SystemParameters.PrimaryScreenHeight - _championSelectTool.ActualHeight) / 2;
-        //                _championSelectTool.Left = SystemParameters.PrimaryScreenWidth - _championSelectTool.ActualWidth - 10;
-        //            });
-        //            break;
-        //        case "None":
-        //            GameStatus = "大厅中或正在创建对局";
-        //            break;
-        //        case "Reconnect":
-        //            GameStatus = "游戏中,等待重新连接";
-        //            break;
-        //        case "Lobby":
-        //            GameStatus = "房间中";
-        //            break;
-        //        case "Matchmaking":
-        //            GameStatus = "匹配中";
-        //            break;
-        //        case "InProgress":
-        //            GameStatus = "游戏中";
-        //            break;
-        //        case "GameStart":
-        //            GameStatus = "游戏开始了";
-        //            Team1Accounts = new List<Account>();
-        //            Team2Accounts = new List<Account>();
-        //            await ActionWhenGameBegin();
-        //            break;
-        //        case "WaitingForStats":
-        //            GameStatus = "等待结算界面";
-        //            break;
-        //        case "PreEndOfGame":
-        //        case "EndOfGame":
-        //            GameStatus = "对局结束";
-        //            ActionWhenGameEnd();
-        //            break;
-        //        default:
-        //            GameStatus = "未知状态" + data;
-        //            break;
-        //    }
-        //}
+            if (data == "ReadyCheck" ||
+                data == "ChampSelect" ||
+                data == "Lobby" ||
+                data == "Matchmaking" ||
+                data == "None")
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _blackList.Hide();
+                    Team1Accounts.Clear();
+                    Team2Accounts.Clear();
+                    _team1V2Window.Hide();
+                    _team1V2Window.Topmost = false;
+                });
+            }
+            switch (data)
+            {
+                case "ReadyCheck":
+                    GameStatus = "找到对局";
+                    if (_iniSettingsModel.AutoAcceptGame)
+                    {
+                        await AutoAcceptAsync();
+                    }
+                    break;
+                case "ChampSelect":
+                    GameStatus = "英雄选择中";
+                    await ChampSelectAsync();
+                    await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        _championSelectTool.Show();
+                        _championSelectTool.Topmost = true;
+                        _championSelectTool.WindowStartupLocation = WindowStartupLocation.Manual;
+                        _championSelectTool.Top = (SystemParameters.PrimaryScreenHeight - _championSelectTool.ActualHeight) / 2;
+                        _championSelectTool.Left = SystemParameters.PrimaryScreenWidth - _championSelectTool.ActualWidth - 10;
+                    });
+                    break;
+                case "None":
+                    GameStatus = "大厅中或正在创建对局";
+                    break;
+                case "Reconnect":
+                    GameStatus = "游戏中,等待重新连接";
+                    break;
+                case "Lobby":
+                    GameStatus = "房间中";
+                    break;
+                case "Matchmaking":
+                    GameStatus = "匹配中";
+                    break;
+                case "InProgress":
+                    GameStatus = "游戏中";
+                    break;
+                case "GameStart":
+                    GameStatus = "游戏开始了";
+                    Team1Accounts = new List<Account>();
+                    Team2Accounts = new List<Account>();
+                    await ActionWhenGameBegin();
+                    break;
+                case "WaitingForStats":
+                    GameStatus = "等待结算界面";
+                    break;
+                case "PreEndOfGame":
+                case "EndOfGame":
+                    GameStatus = "对局结束";
+                    await ActionWhenGameEnd();
+                    break;
+                default:
+                    GameStatus = "未知状态" + data;
+                    break;
+            }
+        }
         #endregion
 
         private string _preStatus = string.Empty;
@@ -616,6 +635,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
                     {
                         _championSelectTool.Show();
+                        _championSelectTool.Topmost = true;
                         _championSelectTool.WindowStartupLocation = WindowStartupLocation.Manual;
                         _championSelectTool.Top = (SystemParameters.PrimaryScreenHeight - _championSelectTool.ActualHeight) / 2;
                         _championSelectTool.Left = SystemParameters.PrimaryScreenWidth - _championSelectTool.ActualWidth - 10;
@@ -712,23 +732,23 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         var session = await _gameService.GetGameSessionAsync();
                         if (string.IsNullOrEmpty(session))
                         {
-                            await Task.Delay(500);
+                            await Task.Delay(200);
                             continue;
                         }
 
                         var token = JToken.Parse(session);
                         if (token.Value<int>("httpStatus") == 404)
                         {
-                            await Task.Delay(500);
+                            await Task.Delay(200);
                             continue;
                         }
 
                         await LoopChampSelect(token);
-                        await Task.Delay(500);
+                        await Task.Delay(200);
                     }
                     catch
                     {
-                        await Task.Delay(500);
+                        await Task.Delay(200);
                         continue;
                     }
                 }
@@ -816,86 +836,88 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
         #endregion
         #region websocket恢复后再恢复监听选英雄流程代码
-        //private async void ChampSelect(object obj, EventArgument @event)
-        //{
-        //    try
-        //    {
-        //        var gInfo = await _gameService.GetCurrentGameInfoAsync();
-        //        var mode = JToken.Parse(gInfo)["gameData"]["queue"]["gameMode"].ToString();
-        //        var myData = JObject.Parse(@event.Data.ToString());
-        //        int playerCellId = int.Parse(@event.Data["localPlayerCellId"].ToString());
-        //        IEnumerable<Team> teams = JsonConvert.DeserializeObject<IEnumerable<Team>>(@event.Data["myTeam"].ToString());
-        //        var me = teams.FirstOrDefault(x => x.CellId == playerCellId);
-        //        if (me == null)
-        //            return;
+        private async void ChampSelect(object obj, EventArgument @event)
+        {
+            try
+            {
+                var gInfo = await _gameService.GetCurrentGameInfoAsync();
+                var mode = JToken.Parse(gInfo)["gameData"]["queue"]["gameMode"].ToString();
+                var myData = JObject.Parse(@event.Data.ToString());
+                int playerCellId = int.Parse(@event.Data["localPlayerCellId"].ToString());
+                IEnumerable<Team> teams = JsonConvert.DeserializeObject<IEnumerable<Team>>(@event.Data["myTeam"].ToString());
+                var me = teams.FirstOrDefault(x => x.CellId == playerCellId);
+                if (me == null)
+                    return;
 
-        //        if (mode == "ARAM")
-        //        {
-        //            await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
-        //            {
-        //                if (me.ChampionId != default)
-        //                    await _runeViewModel.LoadChampInfoAsync(me.ChampionId, true);
-        //            });
+                if (mode == "ARAM")
+                {
+                    await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
+                    {
+                        if (me.ChampionId != default)
+                            await _runeViewModel.LoadChampInfoAsync(me.ChampionId, true);
+                    });
 
-        //            if (_iniSettingsModel.AutoLockHeroInAram)
-        //            {
-        //                int[] champs = JsonConvert.DeserializeObject<int[]>(@event.Data["benchChampionIds"].ToString());
-        //                var loc = _iniSettingsModel.LockHerosInAram.IndexOf(me.ChampionId);
-        //                loc = loc == -1 ? _iniSettingsModel.LockHerosInAram.Count : loc;
-        //                if (loc != 0)
-        //                {
-        //                    var heros = _iniSettingsModel.LockHerosInAram.Take(loc);
-        //                    var swapHeros = new List<int>();
-        //                    foreach (var item in heros)
-        //                    {
-        //                        if (champs.Contains(item))
-        //                        {
-        //                            swapHeros.Add(item);
-        //                        }
-        //                    }
+                    if (_iniSettingsModel.AutoLockHeroInAram)
+                    {
+                        var session = await _gameService.GetGameSessionAsync();
+                        var token = JToken.Parse(session);
+                        BenchChampion[] champs = token["benchChampions"]?.ToObject<BenchChampion[]>();
+                        var loc = _iniSettingsModel.LockHerosInAram.IndexOf(me.ChampionId);
+                        loc = loc == -1 ? _iniSettingsModel.LockHerosInAram.Count : loc;
+                        if (loc != 0)
+                        {
+                            var heros = _iniSettingsModel.LockHerosInAram.Take(loc);
+                            var swapHeros = new List<int>();
+                            foreach (var item in heros)
+                            {
+                                if (champs.Select(x => x.ChampionId).ToList().Contains(item))
+                                {
+                                    swapHeros.Add(item);
+                                }
+                            }
 
-        //                    for (var index = swapHeros.Count - 1; index >= 0; index--)
-        //                    {
-        //                        await _gameService.BenchSwapChampionsAsync(swapHeros[index]);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            foreach (var action in @event.Data["actions"])
-        //            {
-        //                foreach (var actionItem in action)
-        //                {
-        //                    if (int.Parse(actionItem["actorCellId"].ToString()) == playerCellId)
-        //                    {
-        //                        if (actionItem["type"] == "pick")
-        //                        {
-        //                            foreach (var teamPlayer in myData["myTeam"])
-        //                            {
-        //                                if (teamPlayer["cellId"] == playerCellId)
-        //                                {
-        //                                    int champ = teamPlayer["championId"];
-        //                                    if (int.Parse((string)actionItem["championId"]) != 0 && champ != 0)
-        //                                    {
-        //                                        await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
-        //                                        {
-        //                                            await _runeViewModel.LoadChampInfoAsync(champ, false);
-        //                                        });
-        //                                    }
-        //                                }
-        //                            }
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex.ToString());
-        //    }
-        //}
+                            for (var index = swapHeros.Count - 1; index >= 0; index--)
+                            {
+                                await _gameService.BenchSwapChampionsAsync(swapHeros[index]);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var action in @event.Data["actions"])
+                    {
+                        foreach (var actionItem in action)
+                        {
+                            if (int.Parse(actionItem["actorCellId"].ToString()) == playerCellId)
+                            {
+                                if (actionItem["type"] == "pick")
+                                {
+                                    foreach (var teamPlayer in myData["myTeam"])
+                                    {
+                                        if (teamPlayer["cellId"] == playerCellId)
+                                        {
+                                            int champ = teamPlayer["championId"];
+                                            if (int.Parse((string)actionItem["championId"]) != 0 && champ != 0)
+                                            {
+                                                await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
+                                                {
+                                                    await _runeViewModel.LoadChampInfoAsync(champ, false);
+                                                });
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+            }
+        }
         #endregion
 
         //获取游戏内实时的一些数据，目前只是获取选择的英雄和召唤师技能
@@ -993,10 +1015,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
         private async Task AutoAcceptAsync()
         {
-            if (_iniSettingsModel.AutoAcceptGameDelay > 0)
-            {
-                await Task.Delay(_iniSettingsModel.AutoAcceptGameDelay * 1000);
-            }
+            //if (_iniSettingsModel.AutoAcceptGameDelay > 0)
+            //{
+            //    await Task.Delay(_iniSettingsModel.AutoAcceptGameDelay * 1000);
+            //}
 
             await _gameService.AutoAcceptGameAsync();
         }
@@ -1126,8 +1148,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
                 {
                     await (_team1V2Window.DataContext as Team1V2WindowViewModel).LoadDataAsync(Team1Accounts, Team2Accounts);
-                    _team1V2Window.Topmost = true;
-                    _team1V2Window.Opacity = 0;
                     _team1V2Window.Show();
                     _team1V2Window.Activate();
                 });
@@ -1137,6 +1157,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 _logger.LogError(ex.ToString());
             }
         }
+
         private async Task ActionWhenGameEnd()
         {
             var game = await _gameService.GetCurrentGameInfoAsync();
@@ -1230,7 +1251,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             if (!string.IsNullOrEmpty(authenticate) && authenticate.Contains("--remoting-auth-token="))
             {
                 HandyControl.Controls.MessageBox.Show("存在lol进程，请等待lol进程完全退出后再打开", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
-                await Task.Delay(1000);
+                await Task.Delay(500);
                 Environment.Exit(0);
             }
         }
@@ -1259,7 +1280,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                            _teamupService.Initialize(_configuration.GetSection("TeamupApi").Value),
                                            _eventService.Initialize(Constant.Port, Constant.Token));
 
-                        //await _eventService.ConnectAsync();
+                        await _eventService.ConnectAsync();
                         break;
                     }
                     else

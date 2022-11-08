@@ -66,7 +66,7 @@
                                 Grid.ColumnSpan="3" Orientation="Horizontal">
                         <TextBlock TextWrapping="Wrap"
                                FontSize="18"
-                               Margin="0 5 0 0"
+                               Margin="-2 5 0 0"
                                Cursor="Hand"
                                Text="{Binding Account.DisplayName}">
                             <behaviors:Interaction.Triggers>
@@ -77,8 +77,8 @@
                         </TextBlock>
 
                         <TextBlock TextWrapping="Wrap"
-                                   FontSize="17"
-                                   Margin="10 5 0 0"
+                                   FontSize="18"
+                                   Margin="10 6 0 0"
                                    Cursor="Hand"
                                    Text="{Binding Account.ServerArea,UpdateSourceTrigger=PropertyChanged}">
                         </TextBlock>
@@ -95,9 +95,9 @@
 
                     <TextBlock Grid.Row="2"
                                Grid.Column="1"
-                               FontSize="15"
+                               FontSize="16"
                                Margin="0 0 0 0"
-                               Text="{Binding Account.SummonerLevel,StringFormat={}等级: {0}}"/>
+                               Text="{Binding Account.SummonerLevel,StringFormat={}等级 : {0}}"/>
 
                     <ProgressBar Value="{Binding Account.XpSinceLastLevel}" 
                                  Grid.Row="2"
@@ -121,77 +121,77 @@
                         <Border>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="0.8*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="4*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="单双" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                                <TextBlock Text="单双" FontSize="16" Margin="10 10 0 0"></TextBlock>
                                 <TextBlock Grid.Row="1"
                                            Grid.Column="1"
-                                           Margin="20 0 0 0"
-                                           FontSize="14"
+                                           Margin="15 0 0 0"
+                                           FontSize="16"
                                            Foreground="{DynamicResource DefaultFontColor}"
                                            HorizontalAlignment="Left"
                                            VerticalAlignment="Center">
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0}- {1}">
+                                        <MultiBinding StringFormat="{}{0} - {1}">
                                             <Binding Path="Account.Rank.RANKED_SOLO_5x5.CnTier" />
                                             <Binding Path="Account.Rank.RANKED_SOLO_5x5.Division" />
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-                                <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_SOLO_5x5.Desc}" FontSize="15" Margin="70 10 0 0"></TextBlock>
+                                <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_SOLO_5x5.Desc}" FontSize="16" Margin="60 10 0 0"></TextBlock>
                             </Grid>
                         </Border>
                         <Border>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="0.8*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="4*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="灵活" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                                <TextBlock Text="灵活" FontSize="16" Margin="10 10 0 0"></TextBlock>
                                 <TextBlock Grid.Row="1"
                                    Grid.Column="1"
-                                   Margin="20 0 0 0"
-                                   FontSize="14"
+                                   Margin="15 0 0 0"
+                                   FontSize="16"
                                    Foreground="{DynamicResource DefaultFontColor}"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0}- {1}">
+                                        <MultiBinding StringFormat="{}{0} - {1}">
                                             <Binding Path="Account.Rank.RANKED_FLEX_SR.CnTier" />
                                             <Binding Path="Account.Rank.RANKED_FLEX_SR.Division" />
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-                                <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_FLEX_SR.Desc}" FontSize="15" Margin="70 10 0 0"></TextBlock>
+                                <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_FLEX_SR.Desc}" FontSize="16" Margin="60 10 0 0"></TextBlock>
                             </Grid>
                         </Border>
                         <Border>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="0.8*"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                     <ColumnDefinition Width="4*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="云顶" FontSize="15" Margin="10 10 0 0"></TextBlock>
+                                <TextBlock Text="云顶" FontSize="16" Margin="10 10 0 0"></TextBlock>
                                 <TextBlock Grid.Row="1"
                                    Grid.Column="1"
-                                   Margin="20 0 0 0"
-                                   FontSize="14"
+                                   Margin="15 0 0 0"
+                                   FontSize="16"
                                    Foreground="{DynamicResource DefaultFontColor}"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center">
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat="{}{0}- {1}">
+                                        <MultiBinding StringFormat="{}{0} - {1}">
                                             <Binding Path="Account.Rank.RANKED_TFT.CnTier" />
                                             <Binding Path="Account.Rank.RANKED_TFT.Division" />
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-                                <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_TFT.Desc}" FontSize="15" Margin="70 10 0 0"></TextBlock>
+                                <TextBlock Grid.Column="2" Grid.ColumnSpan="2" Text="{Binding Account.Rank.RANKED_TFT.Desc}" FontSize="16" Margin="60 10 0 0"></TextBlock>
                             </Grid>
                         </Border>
                     </StackPanel>
@@ -199,65 +199,72 @@
             </Border>
         </hc:Card>
 
-        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="2 5 0 0" 
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="2 5 0 0"
                  Background="{DynamicResource DefaultCardBackgroundColor}" 
                  Grid.Row="1"
                  Foreground="{DynamicResource DefaultFontColor}">
-            <ListBox ItemsSource="{Binding Account.Champs,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical"></StackPanel>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
+            <GroupBox Header="常用英雄" BorderThickness="0" FontSize="18" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}" Style="{StaticResource GroupBoxOriginal}">
+                <ListBox ItemsSource="{Binding Account.Champs,UpdateSourceTrigger=PropertyChanged}"
+                         UseLayoutRounding="True"
+                         ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                         ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                         TextOptions.TextFormattingMode="Display"
+                         BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
 
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="Foreground" Value="Black" />
-                        <Setter Property="Height" Value="70" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border Background="Transparent" Cursor="Hand" BorderThickness="0 0 0 0.4" BorderBrush="#cccccc">
-                                        <Grid Margin="5 5 5 5">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <hc:Gravatar Width="50" Height="50" Source="{Binding ChampImage}" Grid.RowSpan="3"/>
-                                            <hc:Tag VerticalAlignment="Center"
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Height" Value="70" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border Cursor="Hand" BorderThickness="0 0 0 0.4" BorderBrush="#cccccc">
+                                            <Grid Margin="5 5 5 5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="50"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <hc:Gravatar Width="50" Height="50" Source="{Binding ChampImage}" Grid.RowSpan="3"/>
+                                                <hc:Tag VerticalAlignment="Center"
                                                         ShowCloseButton="False"
                                                         Background="{DynamicResource DefaultCardBackgroundColor}"
                                                         Foreground="{DynamicResource DefaultFontColor}" FontSize="14"
                                                         Content="{Binding ChampionPointsDesc}" Grid.Column="1" Grid.Row="0"></hc:Tag>
-                                            <hc:Tag VerticalAlignment="Center"
+                                                <hc:Tag VerticalAlignment="Center"
                                                         ShowCloseButton="False" Background="{StaticResource PrimaryBrush}"
                                                         Foreground="White" FontSize="13"
                                                         Content="{Binding ChampionLevelDesc}" Grid.Column="2" Grid.Row="1"></hc:Tag>
-                                            <TextBlock VerticalAlignment="Center"
+                                                <TextBlock VerticalAlignment="Center"
                                                            FontSize="12"
                                                            HorizontalAlignment="Center"
                                                            Foreground="#aaaaaa"
                                                            Text="{Binding LastPlayTimeString,StringFormat={}最近:{0}}" Grid.Column="3" Grid.Row="2"></TextBlock>
-                                        </Grid>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter Property="Foreground" Value="Black"></Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="False">
+                                    <Setter Property="Foreground" Value="Black"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </GroupBox>
         </hc:Card>
 
         <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="2 5 10 0"
@@ -296,9 +303,10 @@
                                                 <TextBlock Text="{Binding Participants[0].ChampionName}" 
                                                            FontSize="16" Grid.Column="1" Margin="0 0 0 1"></TextBlock>
                                                 <StackPanel HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                                                    <hc:Tag ShowCloseButton="False" Margin="2 0 0 0"
-                                                            HorizontalAlignment="Left"
-                                                            Content="{Binding CnQueue}"/>
+                                                    <TextBlock Margin="2 4 0 0"
+                                                               FontSize="13"
+                                                               HorizontalAlignment="Left"
+                                                               Text="{Binding CnQueue}"/>
                                                 </StackPanel>
                                                 
                                                 <!--<TextBlock Text="{Binding Participants[0].Stats.KDA}" 

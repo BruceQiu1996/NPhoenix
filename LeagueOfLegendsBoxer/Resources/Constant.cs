@@ -52,6 +52,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string Below100ScoreTxt = nameof(Below100ScoreTxt);
         public const string IsAltQOpenVsDetail = nameof(IsAltQOpenVsDetail);
         public const string IsDarkTheme = nameof(IsDarkTheme);
+        public const string AutoStartWhenComputerRun = nameof(AutoStartWhenComputerRun);
         public static string _chatId = null;
         //event uri
         public const string GameFlow = @"/lol-gameflow/v1/gameflow-phase";

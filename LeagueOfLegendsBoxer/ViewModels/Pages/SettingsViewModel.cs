@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.ApplicationControl;
+using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
@@ -52,6 +53,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get => _autoStartGame;
             set => SetProperty(ref _autoStartGame, value);
+        }
+
+        private bool _autoStartWhenComputerRun;
+        public bool AutoStartWhenComputerRun
+        {
+            get => _autoStartWhenComputerRun;
+            set => SetProperty(ref _autoStartWhenComputerRun, value);
         }
 
         private bool _autoLockHero;
@@ -630,6 +638,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedAutoStartWhenComputerRunCommandAsync { get; set; }
+        public AsyncRelayCommand UncheckedAutoStartWhenComputerRunCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoStartGameCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoStartGameCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroCommandAsync { get; set; }
@@ -685,19 +695,26 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private readonly IConfiguration _iconfiguration;
         private readonly ILogger<SettingsViewModel> _logger;
         private readonly Pay _pay;
+        private readonly SoftwareHelper _softwareHelper;
+
         public SettingsViewModel(IniSettingsModel iniSettingsModel, 
                                  IApplicationService applicationService,
                                  Pay pay,
-                                 IConfiguration iconfiguration, ILogger<SettingsViewModel> logger)
+                                 SoftwareHelper softwareHelper,
+                                 IConfiguration iconfiguration, 
+                                 ILogger<SettingsViewModel> logger)
         {
             _pay = pay;
             _iniSettingsModel = iniSettingsModel;
             _applicationService = applicationService;
             _iconfiguration = iconfiguration;
             _logger = logger;
+            _softwareHelper = softwareHelper;
             PayCommand = new RelayCommand(PayMethod);
             CheckedAutoAcceptCommandAsync = new AsyncRelayCommand(CheckedAutoAcceptAsync);
             UncheckedAutoAcceptCommandAsync = new AsyncRelayCommand(UncheckedAutoAcceptAsync);
+            CheckedAutoStartWhenComputerRunCommandAsync = new AsyncRelayCommand(CheckedAutoStartWhenComputerRunAsync);
+            UncheckedAutoStartWhenComputerRunCommandAsync = new AsyncRelayCommand(UncheckedAutoStartWhenComputerRunAsync);
             CheckedAutoStartGameCommandAsync = new AsyncRelayCommand(CheckedAutoStartGameAsync);
             UncheckedAutoStartGameCommandAsync = new AsyncRelayCommand(UncheckedAutoStartGameAsync);
             CheckedAutoLockHeroCommandAsync = new AsyncRelayCommand(CheckedAutoLockHeroAsync);
@@ -725,16 +742,16 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             UtilitySearchLockHeroCommand1 = new RelayCommand(UtilitySearchLockHero1);
             UtilitySearchLockHeroCommand2 = new RelayCommand(UtilitySearchLockHero2);
 
-            SearchDisableHeroCommand = new RelayCommand(SearchDisableHero);
-            GetGameFolderCommandAsync = new AsyncRelayCommand(GetGameFolderAsync);
-            ManualGetGameFolderCommandAsync = new AsyncRelayCommand(ManualGetGameFolderAsync);
-            ExitGameCommandAsync = new AsyncRelayCommand(ExitGameAsync);
-            ModifyRankLevelCommandAsync = new AsyncRelayCommand(ModifyRankLevelAsync);
-            SearchHeroForSkinCommand = new RelayCommand(SearchHeroForSkin);
-            FetchRunesAndItemsCommandAsync = new AsyncRelayCommand(FetchRunesAndItemsAsync);
-            SearchSkinsForHeroCommandAsync = new AsyncRelayCommand(SearchSkinsForHeroAsync);
-            OpenAramChooseCommand = new RelayCommand(OpenAramChoose);
-            StartGameCommand = new RelayCommand(StartGame);
+            SearchDisableHeroCommand = new RelayCommand(SearchDisableHero);//设置禁用英雄
+            GetGameFolderCommandAsync = new AsyncRelayCommand(GetGameFolderAsync);//获取游戏所在目录
+            ManualGetGameFolderCommandAsync = new AsyncRelayCommand(ManualGetGameFolderAsync);//手动获取游戏所在目录
+            ExitGameCommandAsync = new AsyncRelayCommand(ExitGameAsync);//游戏进程是否存在
+            ModifyRankLevelCommandAsync = new AsyncRelayCommand(ModifyRankLevelAsync);//修改段位
+            SearchHeroForSkinCommand = new RelayCommand(SearchHeroForSkin);//获取英雄的皮肤
+            FetchRunesAndItemsCommandAsync = new AsyncRelayCommand(FetchRunesAndItemsAsync);//获取符文和装备推荐
+            SearchSkinsForHeroCommandAsync = new AsyncRelayCommand(SearchSkinsForHeroAsync);//获取英雄的皮肤
+            OpenAramChooseCommand = new RelayCommand(OpenAramChoose);//打开大乱斗秒选设置界面
+            StartGameCommand = new RelayCommand(StartGame);//启动游戏
             CheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(CheckedCloseSendOtherWhenBeginAsync);
             UnCheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(UnCheckedCloseSendOtherWhenBeginAsync);
             SaveHorseTemplateCommandAsync = new AsyncRelayCommand(SaveHorseTemplateAsync);
@@ -840,6 +857,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             DisableHeros = new ObservableCollection<Hero>(Constant.Heroes);
             ChooseHeroForSkins = new ObservableCollection<Hero>(Constant.Heroes);
             AutoAcceptGame = _iniSettingsModel.AutoAcceptGame;
+            AutoStartWhenComputerRun = _iniSettingsModel.AutoStartWhenComputerRun;
             AutoDisableHero = _iniSettingsModel.AutoDisableHero;
             RankAutoLockHero = _iniSettingsModel.RankAutoLockHero;
             AutoLockHero = _iniSettingsModel.AutoLockHero;
@@ -886,6 +904,21 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteAutoAcceptAsync(false);
             AutoAcceptGame = false;
         }
+
+        private async Task CheckedAutoStartWhenComputerRunAsync() 
+        {
+            _softwareHelper.RunAtStart(true);
+            await _iniSettingsModel.WriteAutoStartWhenComputerRun(true);
+            AutoStartWhenComputerRun = true;
+        }
+
+        private async Task UncheckedAutoStartWhenComputerRunAsync()
+        {
+            _softwareHelper.RunAtStart(false);
+            await _iniSettingsModel.WriteAutoStartWhenComputerRun(false);
+            AutoStartWhenComputerRun = false;
+        }
+
         private async Task CheckedAutoStartGameAsync()
         {
             await _iniSettingsModel.WriteAutoStartGameAsync(true);
@@ -1413,43 +1446,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         private async Task ManualUpdateAsync() 
         {
-            var version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-            var files = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.exe");
-            var updateFile = files.FirstOrDefault(f => f.Split('\\').LastOrDefault() == "NPhoenixAutoUpdateTool.exe");
-            if (updateFile != null)
-            {
-                Process.Start(updateFile, version);
-            }
-            else
-            {
-                await Task.Run(async () =>
-                {
-                    try
-                    {
-                        using (HttpClient client = new HttpClient())
-                        {
-                            var responseMessage = await client.GetAsync("http://www.dotlemon.top:5200/upload/NPhoenix/NPhoenixAutoUpdateTool.exe", HttpCompletionOption.ResponseHeadersRead, CancellationToken.None).ConfigureAwait(false);
-                            responseMessage.EnsureSuccessStatusCode();
-                            if (responseMessage.StatusCode == HttpStatusCode.OK)
-                            {
-                                var filePath = Directory.GetCurrentDirectory() + "/NPhoenixAutoUpdateTool.exe";
-                                using (FileStream fs = new FileStream(filePath, FileMode.Create))
-                                {
-                                    await responseMessage.Content.CopyToAsync(fs);
-                                }
-                                if (File.Exists(filePath))
-                                {
-                                    Process.Start(filePath, version);
-                                }
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "下载自动更新程序失败:");
-                    }
-                });
-            }
+            await _softwareHelper.Update();
         }
 
         private async Task SaveFuckWordsAsync() 

@@ -69,6 +69,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 var champData = await _gameService.QuerySummonerSuperChampDataAsync(item.SummonerId);
                 item.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
                 item.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00") + "%";
+                item.Horse = item.GetHorse();
                 item.IsInBlackList = _iniSettingsModel.BlackAccounts?.FirstOrDefault(x => x.Id == item.SummonerId) != null;
                 if (item.IsInBlackList)
                 {

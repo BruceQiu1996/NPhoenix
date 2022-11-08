@@ -65,7 +65,11 @@ namespace LeagueOfLegendsBoxer.Models
         public ObservableCollection<Record> CurrentModeRecord
         {
             get => _currentModeRecord;
-            set => SetProperty(ref _currentModeRecord, value);
+            set
+            {
+                SetProperty(ref _currentModeRecord, value);
+                Horse = GetHorse();
+            }
         }
 
         private string _serverArea;
@@ -76,13 +80,20 @@ namespace LeagueOfLegendsBoxer.Models
         }
 
         public int TeamID { get; set; }
-        public string Horse => GetHorse();
-        private string GetHorse()
+
+        private string _horse;
+        public string Horse 
         {
-            if (Records == null || Records.Count <= 0)
+            get => _horse;
+            set => SetProperty(ref _horse, value);
+        }
+
+        public string GetHorse()
+        {
+            if (CurrentModeRecord == null || CurrentModeRecord.Count <= 4)
                 return "未知的马";
 
-            var score = Records.Average(x => x.GetScore());
+            var score = CurrentModeRecord.Average(x => x.GetScore());
             if (score >= 120)
             {
                 return App.ServiceProvider.GetRequiredService<IniSettingsModel>().Above120ScoreTxt;

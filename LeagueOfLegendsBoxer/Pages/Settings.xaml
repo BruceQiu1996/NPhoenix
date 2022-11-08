@@ -23,9 +23,6 @@
                       Foreground="{DynamicResource DefaultFontColor}"
                       Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
-                    <Button Content="无限火力攻略" 
-                            FontSize="15" Height="35" HorizontalAlignment="Right" Margin="0 5 0 10" Cursor="Hand"
-                            Command="{Binding OpenFireModeCommand}"></Button>
                     <Button Content="设置账号所在大区" 
                             FontSize="15" Height="35" HorizontalAlignment="Right" Margin="0 5 0 10" Cursor="Hand"
                             Command="{Binding ChooseServerAreaForCurrentAccountCommand}"></Button>
@@ -40,7 +37,7 @@
                                 </behaviors:EventTrigger>
                             </behaviors:Interaction.Triggers>
                         </CheckBox>
-                        <hc:NumericUpDown Maximum="8" 
+                        <!--<hc:NumericUpDown Maximum="8" 
                                           Margin="20 0 0 0"
                                           Width="140"
                                           Minimum="0"
@@ -54,7 +51,7 @@
                                     <behaviors:InvokeCommandAction Command="{Binding AutoAcceptGameDelayChangedCommandAsync}"></behaviors:InvokeCommandAction>
                                 </behaviors:EventTrigger>
                             </behaviors:Interaction.Triggers>
-                        </hc:NumericUpDown>
+                        </hc:NumericUpDown>-->
                     </StackPanel>
                     
                     <!--<StackPanel Orientation="Horizontal" Margin="0 5 0 0">
@@ -645,16 +642,28 @@
                             Height="35"
                             Cursor="Hand"
                             Content="打赏一下作者(留下姓名)" Command="{Binding PayCommand}"/>
+                    <CheckBox Content="开机自启" FontSize="18" Foreground="{DynamicResource DefaultFontColor}" 
+                              Margin="5"
+                              IsChecked="{Binding AutoStartWhenComputerRun,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="Checked">
+                                <behaviors:InvokeCommandAction Command="{Binding CheckedAutoStartWhenComputerRunCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                            <behaviors:EventTrigger EventName="Unchecked">
+                                <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoStartWhenComputerRunCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </CheckBox>
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                        <TextBlock Text="对局详情按键"></TextBlock>
-                        <RadioButton Content="Alt+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail}" Margin="10 0 0 0" FontSize="18">
+                        <TextBlock Text="对局中查看详情"></TextBlock>
+                        <RadioButton Content="Alt+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail}" Margin="10 0 0 0" FontSize="15">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckUseAltQOpenVsDetailCommandAsync}"></behaviors:InvokeCommandAction>
                                 </behaviors:EventTrigger>
                             </behaviors:Interaction.Triggers>
                         </RadioButton>
-                        <RadioButton Content="Ctrl+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail,Converter={StaticResource Boolean2BooleanReConverter}}" Margin="10 0 0 0" FontSize="18">
+                        <RadioButton Content="Ctrl+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail,Converter={StaticResource Boolean2BooleanReConverter}}" Margin="10 0 0 0" FontSize="15">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding UnCheckUseAltQOpenVsDetailCommandAsync}"></behaviors:InvokeCommandAction>

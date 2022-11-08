@@ -91,6 +91,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                                 account.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
                                 account.Champs = new ObservableCollection<Champ>(account.Champs.Take(5));
                                 account.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00") + "%";
+                                account.Horse = account.GetHorse();
                                 Accounts.Add(account);
                             }
                         }
@@ -120,7 +121,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 var sb = new StringBuilder();
                 if (string.IsNullOrEmpty(_iniSettingsModel.HorseTemplate.Trim()))
                 {
-                    sb.Append($"我方 {account.Horse} {account.DisplayName} 评分：{account.Records?.Average(x => x.GetScore()).ToString("0.0")} " +
+                    sb.Append($"我方 {account.Horse} {account.DisplayName} 评分：{account.CurrentModeRecord?.Average(x => x.GetScore()).ToString("0.0")} " +
                         $"单双排：{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division} {account.Rank.RANKED_SOLO_5x5.ShortDesc}" +
                         $"灵活组排：{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division} {account.Rank.RANKED_FLEX_SR.ShortDesc} 最近五场KDA:");
 
@@ -138,7 +139,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     var data = _iniSettingsModel.HorseTemplate.Trim();
                     data = data.Replace(Constant.Horse, account.Horse)
                                       .Replace(Constant.Name, account.DisplayName)
-                                      .Replace(Constant.Score, account.Records?.Average(x => x.GetScore()).ToString("0.0"))
+                                      .Replace(Constant.Score, account.CurrentModeRecord?.Average(x => x.GetScore()).ToString("0.0"))
                                       .Replace(Constant.Solorank, $"{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division}")
                                       .Replace(Constant.SolorankDetail, account.Rank.RANKED_SOLO_5x5.ShortDesc)
                                       .Replace(Constant.Flexrank, $"{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division}")
@@ -181,7 +182,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 {
                     sb.Append($"{team}{account.Horse} {account.Champion.Label} KDA:");
                     int a = 0;
-                    foreach (var record in account.Records)
+                    foreach (var record in account.CurrentModeRecord)
                     {
                         sb.Append($"{record?.Participants?.FirstOrDefault()?.Stats?.KDA} ");
                         a++;
@@ -194,7 +195,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     var data = _iniSettingsModel.HorseTemplate.Trim();
                     data = data.Replace(Constant.Horse, account.Horse)
                                       .Replace(Constant.Name, account.DisplayName)
-                                      .Replace(Constant.Score, account.Records?.Average(x => x.GetScore()).ToString("0.0"))
+                                      .Replace(Constant.Score, account.CurrentModeRecord?.Average(x => x.GetScore()).ToString("0.0"))
                                       .Replace(Constant.Solorank, $"{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division}")
                                       .Replace(Constant.SolorankDetail, account.Rank.RANKED_SOLO_5x5.ShortDesc)
                                       .Replace(Constant.Flexrank, $"{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division}")
@@ -205,7 +206,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     if (data.Contains(Constant.Kda))
                     {
                         int a = 0;
-                        foreach (var record in account.Records)
+                        foreach (var record in account.CurrentModeRecord)
                         {
                             kdadesc.Append($"{record?.Participants?.FirstOrDefault()?.Stats?.KDA}  ");
                             a++;
