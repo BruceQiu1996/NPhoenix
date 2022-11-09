@@ -642,7 +642,7 @@
                             Height="35"
                             Cursor="Hand"
                             Content="打赏一下作者(留下姓名)" Command="{Binding PayCommand}"/>
-                    <CheckBox Content="开机自启" FontSize="18" Foreground="{DynamicResource DefaultFontColor}" 
+                    <!--<CheckBox Content="开机自启" FontSize="18" Foreground="{DynamicResource DefaultFontColor}" 
                               Margin="5"
                               IsChecked="{Binding AutoStartWhenComputerRun,UpdateSourceTrigger=PropertyChanged}">
                         <behaviors:Interaction.Triggers>
@@ -653,7 +653,7 @@
                                 <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoStartWhenComputerRunCommandAsync}"></behaviors:InvokeCommandAction>
                             </behaviors:EventTrigger>
                         </behaviors:Interaction.Triggers>
-                    </CheckBox>
+                    </CheckBox>-->
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <TextBlock Text="对局中查看详情"></TextBlock>
                         <RadioButton Content="Alt+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail}" Margin="10 0 0 0" FontSize="15">

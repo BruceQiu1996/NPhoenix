@@ -11,6 +11,7 @@
       Title="Teammate">
     <Page.Resources>
         <convert:WinColorBrushConverter x:Key="WinColorBrushConverter"></convert:WinColorBrushConverter>
+        <convert:HorseColorConverter x:Key="HorseColorConverter"></convert:HorseColorConverter>
         <convert:WinTextConverter x:Key="WinTextConverter"></convert:WinTextConverter>
     </Page.Resources>
     <behaviors:Interaction.Triggers>
@@ -76,6 +77,7 @@
                                                       Name="head"
                                                       Style="{DynamicResource BadgeDanger}" BorderThickness="0"
                                                       HorizontalAlignment="Left" Text="{Binding Horse}"
+                                                      Background="{Binding Horse,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource HorseColorConverter}}"
                                                       Grid.Column="0" >
                                                 <hc:Gravatar Style="{StaticResource GravatarCircleImg}"                                                           
                                                              Width="55" Height="55"
