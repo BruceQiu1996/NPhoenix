@@ -510,6 +510,7 @@
                                                           Margin="0 5 0 0"
                                                           Style="{DynamicResource BadgeDanger}" BorderThickness="0"
                                                           HorizontalAlignment="Right" Text="{Binding Horse}"
+                                                          Background="{Binding Horse,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource HorseColorConverter}}"
                                                           Grid.Column="1" >
                                                     <Grid Name="head">
                                                         <hc:Gravatar Style="{StaticResource GravatarCircleImg}"                                                       
