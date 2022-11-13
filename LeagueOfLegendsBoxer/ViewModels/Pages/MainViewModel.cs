@@ -6,6 +6,7 @@ using LeagueOfLegendsBoxer.Application.Account;
 using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Application.Teamup;
 using LeagueOfLegendsBoxer.Application.Teamup.Dtos;
+using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
@@ -44,14 +45,20 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private readonly IAccountService _accountService;
         private readonly IGameService _gameService;
         private readonly ILogger<MainViewModel> _logger;
+        private readonly SoftwareHelper _softwareHelper;
         private readonly ITeamupService _teamupService;
 
-        public MainViewModel(IAccountService accountService, ILogger<MainViewModel> logger, IGameService gameService, ITeamupService teamupService)
+        public MainViewModel(IAccountService accountService,
+                             ILogger<MainViewModel> logger,
+                             IGameService gameService,
+                             SoftwareHelper softwareHelper,
+                             ITeamupService teamupService)
         {
             _accountService = accountService;
             _gameService = gameService;
             _teamupService = teamupService;
             _logger = logger;
+            _softwareHelper = softwareHelper;
             CurrentUserInfoCommand = new RelayCommand(CurrentUserInfo);
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
         }
@@ -60,10 +67,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             try
             {
-                await Task.Delay(1000);
+                //await Task.Delay(1000);
                 var profile = await _accountService.GetUserAccountInformationAsync();
                 Account = JsonConvert.DeserializeObject<Account>(profile);
                 Account.ServerArea = Constant.Account?.ServerArea;
+                Account.MvpRank = Constant.Account?.MvpRank;
+                Account.XiaguKill = Constant.Account?.XiaguKill;
+                Account.AramKill = Constant.Account?.AramKill;
                 Constant.Account = Account;
                 var records = await _accountService.GetRecordInformationAsync(Account.SummonerId);
                 var recordsData = JToken.Parse(records);
@@ -112,8 +122,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     {
                         _teamupService.SetToken(resp.Token);
                         Constant.Account.ServerArea = resp.ServerArea;
+                        var ranks = await _softwareHelper.GetRanksAsync();
+                        Account.MvpRank = ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";
+                        Account.XiaguKill = ranks?.Xiagu.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Xiagu.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";
+                        Account.AramKill = ranks?.Aram.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Aram.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";
                         Constant.ConnectTeamupSuccessful = true;
-                        if (string.IsNullOrEmpty(Constant.Account.ServerArea)) 
+                        if (string.IsNullOrEmpty(Constant.Account.ServerArea))
                         {
                             HandyControl.Controls.MessageBox.Show("请尽快在设置里配置本账号所属服务大区,否则之后将禁止登录", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                         }

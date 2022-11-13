@@ -11,7 +11,6 @@ using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -28,6 +27,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private readonly IniSettingsModel _iniSettingsModel;
         private int priviouschampId;
         private int currentchampId;
+        private HeroRecommandModule _recommandModule;
+        private RuneModule _customerRuneModule;
 
         private Hero _hero;
         public Hero Hero
@@ -83,6 +84,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set { SetProperty(ref _displayItems, value); }
         }
 
+        private bool _autoLockHeroInAram;
+        public bool AutoLockHeroInAram
+        {
+            get => _autoLockHeroInAram;
+            set => SetProperty(ref _autoLockHeroInAram, value);
+        }
+
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public RelayCommand SwitchRuneToCommonCommand { get; set; }
         public RelayCommand SwitchRuneToAramCommand { get; set; }
@@ -90,10 +98,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand SwitchRunePageCommand { get; set; }
         public AsyncRelayCommand<RuneDetail> SetRuneCommandAsync { get; set; }
         public AsyncRelayCommand ApplyItemCommandAsync { get; set; }
+        public AsyncRelayCommand<RuneDetail> AutoApplyRuneCommandAsync { get; set; }
+        public AsyncRelayCommand UnAutoApplyRuneCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedAutoLockHeroInAramCommandAsync { get; set; }
+        public AsyncRelayCommand UncheckedAutoLockHeroInAramCommandAsync { get; set; }
 
         private readonly IApplicationService _applicationService;
         private readonly ILogger<RuneAndItemViewModel> _logger;
-        public RuneAndItemViewModel(RuneHelper runeHelper, 
+        public RuneAndItemViewModel(RuneHelper runeHelper,
                                     IGameService gameService,
                                     IApplicationService applicationService,
                                     ILogger<RuneAndItemViewModel> logger,
@@ -104,11 +116,15 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SwitchRuneToCommonCommand = new RelayCommand(SwitchRuneToCommon);
             SwitchRuneToAramCommand = new RelayCommand(SwitchRuneToAram);
             SetRuneCommandAsync = new AsyncRelayCommand<RuneDetail>(SetRuneAsync);
+            AutoApplyRuneCommandAsync = new AsyncRelayCommand<RuneDetail>(AutoApplyRuneAsync);
+            UnAutoApplyRuneCommandAsync = new AsyncRelayCommand(UnAutoApplyRuneAsync);
+            CheckedAutoLockHeroInAramCommandAsync = new AsyncRelayCommand(CheckedAutoLockHeroInAramAsync);
+            UncheckedAutoLockHeroInAramCommandAsync = new AsyncRelayCommand(UncheckedAutoLockHeroInAramAsync);
             SwitchItemPageCommand = new RelayCommand(() => IsRunePage = false);
             SwitchRunePageCommand = new RelayCommand(() => IsRunePage = true);
             _iniSettingsModel = iniSettingsModel;
             _logger = logger;
-            _applicationService =applicationService;
+            _applicationService = applicationService;
             ApplyItemCommandAsync = new AsyncRelayCommand(ApplyItemAsync);
         }
 
@@ -128,17 +144,51 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         }
 
-        public async Task LoadChampInfoAsync(int champId, bool isAram)
+        public async Task LoadChampInfoAsync(int champId, bool isAram, bool needFilterSame = true)
         {
+            AutoLockHeroInAram = _iniSettingsModel.AutoLockHeroInAram;
             priviouschampId = currentchampId;
             currentchampId = champId;
-            if (priviouschampId == currentchampId)
+            if (priviouschampId == currentchampId && needFilterSame)
                 return;
 
             var module = await _runeHelper.GetRuneAsync(champId);
+            var customerRunes = await _runeHelper.ReadCustomerRuneAsync(champId);
+            _recommandModule = module;
+            _customerRuneModule = customerRunes;
+            if (_customerRuneModule == null)
+            {
+                _customerRuneModule = new RuneModule()
+                {
+                    ChampId = champId
+                };
+            }
             Hero = Constant.Heroes?.FirstOrDefault(x => x.ChampId == champId);
             AramRunes = new ObservableCollection<RuneDetail>(module.Rune.Aram);
             CommonRunes = new ObservableCollection<RuneDetail>(module.Rune.Common);
+            foreach (var rune in _customerRuneModule.Aram.Reverse())
+            {
+                rune.IsCustomer = true;
+                AramRunes.Insert(0, rune);
+            }
+
+            foreach (var rune in _customerRuneModule.Common.Reverse())
+            {
+                rune.IsCustomer = true;
+                CommonRunes.Insert(0, rune);
+            }
+
+            //判断是否存在自动应用符文
+            if (isAram && AramRunes.Any(x => x.IsAutoApply))
+            {
+                var rune = AramRunes.FirstOrDefault(x => x.IsAutoApply);
+                await SetRuneAsyncMethod(rune,true);
+            }
+            else if (!isAram && CommonRunes.Any(x => x.IsAutoApply)) 
+            {
+                var rune = CommonRunes.FirstOrDefault(x => x.IsAutoApply);
+                await SetRuneAsyncMethod(rune, true);
+            }
             DisplayRunes = isAram ? AramRunes : CommonRunes;
             AramItems = module.Item.Aram;
             CommonItems = module.Item.Common;
@@ -150,6 +200,11 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         }
 
         private async Task SetRuneAsync(RuneDetail runeDetail)
+        {
+            await SetRuneAsyncMethod(runeDetail);
+        }
+
+        private async Task SetRuneAsyncMethod(RuneDetail runeDetail,bool isAuto = false) 
         {
             var result = await _gameService.GetAllRunePages();
             var array = JsonConvert.DeserializeObject<IEnumerable<RuneModel>>(result);
@@ -164,17 +219,72 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 current = true,
                 selectedPerkIds = new[] { runeDetail.Main1, runeDetail.Main2, runeDetail.Main3, runeDetail.Main4, runeDetail.Dputy1, runeDetail.Dputy2, runeDetail.Extra1, runeDetail.Extra2, runeDetail.Extra3 }
             };
-
             await _gameService.AddRunePage(creation);
-            Growl.SuccessGlobal(new GrowlInfo()
+            if (isAuto)
             {
-                WaitTime = 2,
-                Message = "符文设置成功",
-                ShowDateTime = false
-            });
+                Growl.SuccessGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "自动配置符文成功",
+                    ShowDateTime = false
+                });
+            }
+            else
+            {
+                Growl.SuccessGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "符文设置成功",
+                    ShowDateTime = false
+                });
+            }
         }
 
-        private async Task ApplyItemAsync() 
+        private async Task AutoApplyRuneAsync(RuneDetail runeDetail)
+        {
+            if (IsAramPage)
+            {
+                _customerRuneModule.Aram.Where(x => x != runeDetail).ToList().ForEach(x => x.IsAutoApply = false);
+                _recommandModule.Rune.Aram.Where(x => x != runeDetail).ToList().ForEach(x => x.IsAutoApply = false);
+            }
+            else
+            {
+                _customerRuneModule.Common.Where(x => x != runeDetail).ToList().ForEach(x => x.IsAutoApply = false);
+                _recommandModule.Rune.Common.Where(x => x != runeDetail).ToList().ForEach(x => x.IsAutoApply = false);
+            }
+
+            await _runeHelper.WriteCustomerRuneAsync(currentchampId, _customerRuneModule);
+            await _runeHelper.WriteSystemRuneAsync(currentchampId, _recommandModule);
+
+            await LoadChampInfoAsync(currentchampId, IsAramPage, false);
+        }
+
+        private async Task UnAutoApplyRuneAsync()
+        {
+            if (IsAramPage)
+            {
+                _recommandModule.Rune.Aram.ToList().ForEach(x => x.IsAutoApply = false);
+                _customerRuneModule.Aram.ToList().ForEach(x => x.IsAutoApply = false);
+            }
+            else
+            {
+                _customerRuneModule.Common.ToList().ForEach(x => x.IsAutoApply = false);
+                _recommandModule.Rune.Common.ToList().ForEach(x => x.IsAutoApply = false);
+            }
+
+            await _runeHelper.WriteCustomerRuneAsync(currentchampId, _customerRuneModule);
+            await _runeHelper.WriteSystemRuneAsync(currentchampId, _recommandModule);
+
+            await LoadChampInfoAsync(currentchampId, IsAramPage, false);
+        }
+
+        public void Clear() 
+        {
+            priviouschampId = 0;
+            currentchampId = 0;
+        }
+
+        private async Task ApplyItemAsync()
         {
             if (DisplayItems.CoreItem == null && DisplayItems.StartItem == null && DisplayItems.ShoeItem == null)
             {
@@ -189,7 +299,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
 
             var location = (await _applicationService.GetInstallLocation())?.Replace("\"", string.Empty);
-            if (string.IsNullOrEmpty(location)) 
+            if (string.IsNullOrEmpty(location))
             {
                 Growl.WarningGlobal(new GrowlInfo()
                 {
@@ -203,7 +313,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             var parent = Directory.GetParent(location);
             var path = Path.Combine(parent.FullName, "Game\\Config\\Global\\Recommended");
-            if (!Directory.Exists(path)) 
+            if (!Directory.Exists(path))
             {
                 Growl.WarningGlobal(new GrowlInfo()
                 {
@@ -322,6 +432,16 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             IsAramPage = true;
             DisplayRunes = AramRunes;
             DisplayItems = AramItems;
+        }
+        private async Task CheckedAutoLockHeroInAramAsync()
+        {
+            await _iniSettingsModel.WriteAutoLockHeroInAramAsync(true);
+            AutoLockHeroInAram = true;
+        }
+        private async Task UncheckedAutoLockHeroInAramAsync()
+        {
+            await _iniSettingsModel.WriteAutoLockHeroInAramAsync(false);
+            AutoLockHeroInAram = false;
         }
     }
 }

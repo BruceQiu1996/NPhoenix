@@ -20,6 +20,7 @@
         Task BenchSwapChampionsAsync(int champID);
         //rune
         Task<string> GetAllRunePages();
+        Task<string> GetCurrentRunePage();
         Task DeleteRunePage(long id);
         Task AddRunePage(dynamic body);
         Task<string> GetSkinsByHeroId(int id);

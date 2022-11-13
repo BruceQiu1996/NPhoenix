@@ -539,6 +539,13 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     _team1V2Window.Topmost = false;
                 });
             }
+            if (data != "ChampSelect")
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _championSelectTool.Hide();
+                });
+            }
             switch (data)
             {
                 case "ReadyCheck":
@@ -553,6 +560,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     await ChampSelectAsync();
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
                     {
+                        _runeViewModel.Clear();
                         _championSelectTool.Show();
                         _championSelectTool.Topmost = true;
                         _championSelectTool.WindowStartupLocation = WindowStartupLocation.Manual;
@@ -585,6 +593,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     GameStatus = "等待结算界面";
                     break;
                 case "PreEndOfGame":
+                    break;
                 case "EndOfGame":
                     GameStatus = "对局结束";
                     await ActionWhenGameEnd();
@@ -598,7 +607,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private string _preStatus = string.Empty;
 
-        #region websocket恢复后再删除loop游戏流程代码
+        #region !!!websocket恢复后再删除loop游戏流程代码
         private async Task LoopGameFlow(string phase)
         {
             if (string.IsNullOrEmpty(phase) || _preStatus == phase)
@@ -1163,21 +1172,30 @@ namespace LeagueOfLegendsBoxer.ViewModels
             var game = await _gameService.GetCurrentGameInfoAsync();
             if (Team1Accounts.Count <= 0 && Team2Accounts.Count <= 0)
                 return;
-            var gameId = JToken.Parse(game)["gameData"].Value<long>("gameId");
-            var details = await _gameService.QueryGameDetailAsync(gameId);
-            var detailRecordsData = JToken.Parse(details);
-            var DetailRecord = detailRecordsData.ToObject<Record>();
-            var myTeam = Team1Accounts.FirstOrDefault(x => x?.SummonerId == Constant.Account?.SummonerId) == null ? Team2Accounts : Team1Accounts;
-            await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
+
+            try
             {
-                await (_blackList.DataContext as BlackListViewModel).LoadAccount(DetailRecord);
-                _blackList.Show();
-                _blackList.WindowStartupLocation = WindowStartupLocation.Manual;
-                _blackList.Top = (SystemParameters.PrimaryScreenHeight - _blackList.ActualHeight) - 50;
-                _blackList.Left = SystemParameters.PrimaryScreenWidth - _blackList.ActualWidth - 10;
-                _blackList.Topmost = true;
-            });
+                var gameId = JToken.Parse(game)["gameData"].Value<long>("gameId");
+                var details = await _gameService.QueryGameDetailAsync(gameId);
+                var detailRecordsData = JToken.Parse(details);
+                var DetailRecord = detailRecordsData.ToObject<Record>();
+                var myTeam = Team1Accounts.FirstOrDefault(x => x?.SummonerId == Constant.Account?.SummonerId) == null ? Team2Accounts : Team1Accounts;
+                await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
+                {
+                    await (_blackList.DataContext as BlackListViewModel).LoadAccount(DetailRecord);
+                    _blackList.Show();
+                    _blackList.WindowStartupLocation = WindowStartupLocation.Manual;
+                    _blackList.Top = (SystemParameters.PrimaryScreenHeight - _blackList.ActualHeight) - 50;
+                    _blackList.Left = SystemParameters.PrimaryScreenWidth - _blackList.ActualWidth - 10;
+                    _blackList.Topmost = true;
+                });
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError(ex, "游戏异常结束");
+            }
         }
+
         private async Task<List<Account>> TeamToAccountsAsync(IEnumerable<Teammate> teammates)
         {
             var accounts = new List<Account>();

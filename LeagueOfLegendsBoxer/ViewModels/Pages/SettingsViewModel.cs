@@ -517,6 +517,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _utilitySearchLockText2, value);
 
         }
+
         private ObservableCollection<Hero> _chooseHeroForSkins;
         public ObservableCollection<Hero> ChooseHeroForSkins
         {
@@ -689,6 +690,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand PayCommand { get; set; }
         public RelayCommand ChooseServerAreaForCurrentAccountCommand { get; set; }
         public RelayCommand OpenFireModeCommand { get; set; }
+        public RelayCommand ManageRuneCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -696,11 +698,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private readonly ILogger<SettingsViewModel> _logger;
         private readonly Pay _pay;
         private readonly SoftwareHelper _softwareHelper;
+        private readonly ManageRune _manageRune;
 
         public SettingsViewModel(IniSettingsModel iniSettingsModel, 
                                  IApplicationService applicationService,
                                  Pay pay,
                                  SoftwareHelper softwareHelper,
+                                 ManageRune manageRune,
                                  IConfiguration iconfiguration, 
                                  ILogger<SettingsViewModel> logger)
         {
@@ -709,6 +713,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _applicationService = applicationService;
             _iconfiguration = iconfiguration;
             _logger = logger;
+            _manageRune = manageRune;
             _softwareHelper = softwareHelper;
             PayCommand = new RelayCommand(PayMethod);
             CheckedAutoAcceptCommandAsync = new AsyncRelayCommand(CheckedAutoAcceptAsync);
@@ -765,12 +770,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SaveGoodWordsCommandAsync = new AsyncRelayCommand(SaveGoodWordsAsync);
             ManualUpdateCommandAsync = new AsyncRelayCommand(ManualUpdateAsync);
             ChooseServerAreaForCurrentAccountCommand = new RelayCommand(ChooseServerAreaForCurrentAccount);
+            ManageRuneCommand = new RelayCommand(ManageRune);//打开符文管理界面
         }
 
         private void PayMethod()
         {
             _pay.ShowDialog();
             _pay.Topmost = true;
+        }
+
+        private void ManageRune() 
+        {
+            _manageRune.ShowDialog();
         }
 
         private void ChooseServerAreaForCurrentAccount()

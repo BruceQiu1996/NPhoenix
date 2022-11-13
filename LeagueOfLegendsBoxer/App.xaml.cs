@@ -142,6 +142,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<BlackListViewModel>();
                 services.AddSingleton<BlackRecord>();
                 services.AddSingleton<BlackRecordViewModel>();
+                services.AddSingleton<ManageRune>();
+                services.AddSingleton<ManageRuneViewModel>();
                 services.AddSingleton<BlackTip>();
                 services.AddSingleton<BlackTipViewModel>();
                 services.AddSingleton<Pay>();

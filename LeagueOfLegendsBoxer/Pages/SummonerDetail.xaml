@@ -9,7 +9,7 @@
       xmlns:hc="https://handyorg.github.io/handycontrol"
       xmlns:usercontrol="clr-namespace:LeagueOfLegendsBoxer.UserControls"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
-      FontFamily="微软雅黑"
+      FontFamily="Arial"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="对局详情">
     <behaviors:Interaction.Triggers>

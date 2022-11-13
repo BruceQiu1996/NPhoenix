@@ -1,5 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using HandyControl.Controls;
+using HandyControl.Data;
+using LeagueOfLegendsBoxer.Application.Teamup;
+using LeagueOfLegendsBoxer.Models;
+using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,20 +12,22 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Security.AccessControl;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
+using MessageBox = HandyControl.Controls.MessageBox;
 
 namespace LeagueOfLegendsBoxer.Helpers
 {
     public class SoftwareHelper
     {
         private readonly ILogger<SoftwareHelper> _logger;
-        public SoftwareHelper(ILogger<SoftwareHelper> logger)
+        private readonly ITeamupService _teamupService;
+
+        public SoftwareHelper(ILogger<SoftwareHelper> logger, ITeamupService teamupService)
         {
             _logger = logger;
+            _teamupService = teamupService;
         }
 
         //获取软件更新
@@ -97,6 +104,65 @@ namespace LeagueOfLegendsBoxer.Helpers
             catch
             {
                 _logger.LogInformation("写注册表操作发生错误");
+            }
+        }
+        public async Task<TotalRank> GetRanksAsync()
+        {
+            try
+            {
+                var result = await _teamupService.GetRankDataAsync();
+                if (string.IsNullOrEmpty(result))
+                {
+                    Growl.WarningGlobal(new GrowlInfo()
+                    {
+                        WaitTime = 2,
+                        Message = "拉取排位信息失败",
+                        ShowDateTime = false
+                    });
+
+                    return null;
+                }
+
+                var totalRank = JsonConvert.DeserializeObject<TotalRank>(result);
+                var mvpRank = 0;
+                foreach (var item in totalRank.Mvp)
+                {
+                    item.Rank = ++mvpRank;
+                }
+                var svpRank = 0;
+                foreach (var item in totalRank.Svp)
+                {
+                    item.Rank = ++svpRank;
+                }
+                var noobRank = 0;
+                foreach (var item in totalRank.Noob)
+                {
+                    item.Rank = ++noobRank;
+                }
+                var xiaguRank = 0;
+                foreach (var item in totalRank.Xiagu)
+                {
+                    item.Rank = ++xiaguRank;
+                }
+                var aramRank = 0;
+                foreach (var item in totalRank.Aram)
+                {
+                    item.Rank = ++aramRank;
+                }
+
+                return totalRank;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "拉取排位信息失败",
+                    ShowDateTime = false
+                });
+
+                return null;
             }
         }
     }

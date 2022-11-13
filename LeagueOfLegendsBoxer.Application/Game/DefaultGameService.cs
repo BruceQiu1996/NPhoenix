@@ -21,6 +21,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
         private const string _benchSwapChampion = " /lol-champ-select/v1/session/bench/swap/{0}";
         private const string _champRestraintData = "https://lol.qq.com/act/lbp/common/guides/champDetail/champDetail_{0}.js?ts=2760378";
         private const string _rune = "lol-perks/v1/pages";
+        private const string _currentRune = "lol-perks/v1/currentpage";
         private const string _getskins = "lol-game-data/assets/v1/champions/{0}.json";
         private const string _getIcons = "lol-game-data/assets/v1/profile-icons.json";
         private const string _getSpells = "lol-game-data/assets/v1/summoner-spells.json";
@@ -38,6 +39,11 @@ namespace LeagueOfLegendsBoxer.Application.Game
         public async Task AddRunePage(dynamic body)
         {
             var result = await _requestService.GetJsonResponseAsync(HttpMethod.Post, _rune, null, body);
+        }
+
+        public async Task<string> GetCurrentRunePage() 
+        {
+            return await _requestService.GetStringAsync(_currentRune,null);
         }
 
         public async Task AutoAcceptGameAsync()

@@ -38,8 +38,9 @@ namespace LeagueOfLegendsBoxer.Models
             _ => "未定"
         };
 
-        public string Desc => Wins + Losses <= 0 ? "暂无" : $"胜 : {Wins}\t 负 : {Losses}\t 胜率 : {(Wins * 100.0 / (Wins + Losses)).ToString("0.00")}%";
-        public string ShortDesc => Wins + Losses <= 0 ? "暂无" : $"胜:{Wins} 负:{Losses}";
+        public string Desc => Wins + Losses <= 0 ? "暂无" : $"胜: {Wins}\t 负: {Losses}\t 胜率: {(Wins * 100.0 / (Wins + Losses)).ToString("0.00")}%";
+        public string ShortDesc => Wins + Losses <= 0 ? "暂无" : $"胜: {Wins} 负: {Losses}";
+        public string WinRate => Wins + Losses <= 0 ? "暂无" : $"胜率: {(Wins * 100.0 / (Wins + Losses)).ToString("0.00")}%";
     }
 
     public class RANKED_FLEX_SR : RankedEntry

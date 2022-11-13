@@ -1,11 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HandyControl.Controls;
-using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.Teamup;
+using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -15,6 +13,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
     {
         private readonly ITeamupService _teamupService;
         private readonly ILogger<RecordRankViewModel> _logger;
+        private readonly SoftwareHelper _softwareHelper;
+
         private TotalRank _totalRank;
         public TotalRank TotalRank
         {
@@ -29,10 +29,11 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _now, value);
         }
 
-        public RecordRankViewModel(ITeamupService teamupService, ILogger<RecordRankViewModel> logger)
+        public RecordRankViewModel(ITeamupService teamupService, ILogger<RecordRankViewModel> logger, SoftwareHelper softwareHelper)
         {
             _logger = logger;
             _teamupService = teamupService;
+            _softwareHelper = softwareHelper;
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
         }
 
@@ -40,58 +41,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         private async Task LoadAsync()
         {
-            try
-            {
-                var result = await _teamupService.GetRankDataAsync();
-                if (string.IsNullOrEmpty(result))
-                {
-                    Growl.WarningGlobal(new GrowlInfo()
-                    {
-                        WaitTime = 2,
-                        Message = "拉取排位信息失败",
-                        ShowDateTime = false
-                    });
-
-                    return;
-                }
-
-                TotalRank = JsonConvert.DeserializeObject<TotalRank>(result);
-                var mvpRank = 0;
-                foreach (var item in TotalRank.Mvp)
-                {
-                    item.Rank = ++mvpRank;
-                }
-                var svpRank = 0;
-                foreach (var item in TotalRank.Svp)
-                {
-                    item.Rank = ++svpRank;
-                }
-                var noobRank = 0;
-                foreach (var item in TotalRank.Noob)
-                {
-                    item.Rank = ++noobRank;
-                }
-                var xiaguRank = 0;
-                foreach (var item in TotalRank.Xiagu)
-                {
-                    item.Rank = ++xiaguRank;
-                }
-                var aramRank = 0;
-                foreach (var item in TotalRank.Aram)
-                {
-                    item.Rank = ++aramRank;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.ToString());
-                Growl.WarningGlobal(new GrowlInfo()
-                {
-                    WaitTime = 2,
-                    Message = "拉取排位信息失败",
-                    ShowDateTime = false
-                });
-            }
+            TotalRank = await _softwareHelper.GetRanksAsync();
         }
     }
 }

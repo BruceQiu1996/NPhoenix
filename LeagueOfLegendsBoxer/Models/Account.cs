@@ -122,6 +122,29 @@ namespace LeagueOfLegendsBoxer.Models
             set => SetProperty(ref _champion, value);
         }
 
+        #region 排行
+        private string _mvpRank;
+        public string MvpRank
+        {
+            get => _mvpRank;
+            set => SetProperty(ref _mvpRank, value);
+        }
+
+        private string _xiaguKill;
+        public string XiaguKill
+        {
+            get => _xiaguKill;
+            set => SetProperty(ref _xiaguKill, value);
+        }
+
+        private string _aramKill;
+        public string AramKill
+        {
+            get => _aramKill;
+            set => SetProperty(ref _aramKill, value);
+        }
+        #endregion
+
         private ObservableCollection<Rune> runes;
         public ObservableCollection<Rune> Runes
         {

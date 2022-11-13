@@ -12,7 +12,7 @@
         WindowStyle="None"
         mc:Ignorable="d"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
-        Title="SkinWindow" Height="450" Width="800">
+        Title="皮肤选择" Height="450" Width="800">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="5"/>
     </WindowChrome.WindowChrome>

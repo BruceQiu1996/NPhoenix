@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:LeagueOfLegendsBoxer.Pages"
       mc:Ignorable="d" 
+      FontFamily="Arial"
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
       xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -68,6 +69,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
 
@@ -102,7 +104,23 @@
                     </behaviors:Interaction.Triggers>
                 </Label>
 
-                <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <CheckBox Content="大乱斗秒抢" Grid.Row="1" 
+                          Margin="0 0 5 5"
+                          Visibility="{Binding IsAramPage,Converter={StaticResource Boolean2VisibilityConverter}}"
+                          IsChecked="{Binding AutoLockHeroInAram,UpdateSourceTrigger=PropertyChanged}"
+                          FontSize="15" HorizontalAlignment="Right" Grid.ColumnSpan="2"
+                          Foreground="{DynamicResource DefaultFontColor}">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="Checked">
+                            <behaviors:InvokeCommandAction Command="{Binding CheckedAutoLockHeroInAramCommandAsync}"></behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                        <behaviors:EventTrigger EventName="Unchecked">
+                            <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoLockHeroInAramCommandAsync}"></behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
+                </CheckBox>
+                
+                <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
                     <Grid>
                         <ListBox ItemsSource="{Binding DisplayRunes,UpdateSourceTrigger=PropertyChanged}" 
                                  ScrollViewer.CanContentScroll="False"
@@ -392,18 +410,46 @@
                                                             </StackPanel>
                                                         </StackPanel>
 
-                                                        <StackPanel Grid.Column="1">
+                                                        <Grid Grid.Column="1">
                                                             <hc:Shield Subject="声望" Status="{Binding PopularTxt}" HorizontalAlignment="Center" 
-                                                                   FontSize="15"
-                                                                   Margin="0 50 0 0" Color="{StaticResource PrimaryBrush}"/>
+                                                                       FontSize="15" Margin="0 30 0 0"
+                                                                       Visibility="{Binding IsCustomer,Converter={StaticResource Boolean2VisibilityReConverter}}"
+                                                                       VerticalAlignment="Top" Color="{StaticResource PrimaryBrush}"/>
                                                             <hc:Shield Subject="胜率" 
-                                                                   FontSize="15"
-                                                                   Status="{Binding WinRateTxt}" HorizontalAlignment="Center" Margin="0 10 0 0" Color="{StaticResource DangerBrush}"/>
+                                                                       FontSize="15"
+                                                                       Visibility="{Binding IsCustomer,Converter={StaticResource Boolean2VisibilityReConverter}}"
+                                                                       Status="{Binding WinRateTxt}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 60 0 0" Color="{StaticResource DangerBrush}"/>
+                                                            <hc:Badge Text="自定义" 
+                                                                      FontSize="13"
+                                                                      Style="{StaticResource BadgeSuccess}"
+                                                                      BadgeMargin="0 -25 10 0"
+                                                                      Margin="0 35 0 0" BorderThickness="0"
+                                                                      Visibility="{Binding IsCustomer,Converter={StaticResource Boolean2VisibilityConverter}}">
+                                                                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="{DynamicResource DefaultFontColor}" 
+                                                                           TextWrapping="Wrap"></TextBlock>
+                                                            </hc:Badge>
                                                             <Button Content="应用" Cursor="Hand"
-                                                                Command="{Binding DataContext.SetRuneCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
-                                                                CommandParameter="{Binding}"
-                                                                Width="100" FontSize="14" Margin="0 20 0 0" VerticalAlignment="Bottom"></Button>
-                                                        </StackPanel>
+                                                                    Command="{Binding DataContext.SetRuneCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    Width="90" FontSize="14" Margin="0 0 0 40" VerticalAlignment="Bottom"></Button>
+                                                            <CheckBox IsChecked="{Binding IsAutoApply,UpdateSourceTrigger=PropertyChanged}" 
+                                                                      Foreground="{DynamicResource DefaultFontColor}" 
+                                                                      FontSize="13"
+                                                                      HorizontalAlignment="Right"
+                                                                      Margin="0 120 25 0"
+                                                                      ToolTip="下次自动应用"
+                                                                      Content="自动应用">
+                                                                <behaviors:Interaction.Triggers>
+                                                                    <behaviors:EventTrigger EventName="Checked">
+                                                                        <behaviors:InvokeCommandAction Command="{Binding DataContext.AutoApplyRuneCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                                       CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
+                                                                    </behaviors:EventTrigger>
+                                                                    <behaviors:EventTrigger EventName="Unchecked">
+                                                                        <behaviors:InvokeCommandAction Command="{Binding DataContext.UnAutoApplyRuneCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"></behaviors:InvokeCommandAction>
+                                                                    </behaviors:EventTrigger>
+                                                                </behaviors:Interaction.Triggers>
+                                                            </CheckBox>
+                                                        </Grid>
                                                     </Grid>
                                                 </Border>
                                             </ControlTemplate>

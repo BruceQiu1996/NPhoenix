@@ -6,6 +6,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:hc="https://handyorg.github.io/handycontrol"
       mc:Ignorable="d" 
+      FontFamily="Arial"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Settings">
 
@@ -498,10 +499,17 @@
                                 Width="135" Margin="5 2 0 0" Height="35" Cursor="Hand"></Button>
                     </StackPanel>
 
+                    <Button Content="符文管理" Width="100" FontSize="15" Height="35"
+                            Cursor="Hand"
+                            Style="{StaticResource ButtonPrimary}"
+                            Margin="0 20 0 0"
+                            Command="{Binding ManageRuneCommand}"
+                            HorizontalAlignment="Right"></Button>
+                    
                     <Button Content="获取最新符文装备推荐" Width="290" FontSize="15" Height="35"
                             Cursor="Hand"
                             Style="{StaticResource ButtonWarning}"
-                            Margin="0 20 0 0"
+                            Margin="0 5 0 0"
                             Command="{Binding FetchRunesAndItemsCommandAsync}"
                             HorizontalAlignment="Center"></Button>
                 </StackPanel>
