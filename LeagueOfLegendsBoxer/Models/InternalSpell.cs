@@ -15,6 +15,6 @@
     public class SpellModel
     {
         public string Name { get; set; }
-        public int Id { get; set; }
+        public long Id { get; set; }
     }
 }
