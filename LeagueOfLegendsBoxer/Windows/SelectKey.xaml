@@ -1,0 +1,27 @@
+﻿<Window x:Class="LeagueOfLegendsBoxer.Windows.SelectKey"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LeagueOfLegendsBoxer.Windows"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="SelectKey" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBox Name="tb" Width="250" Height="30"/>
+            <Button Name="btnReset" Click="btnReset_Click" Margin="5 0 0 0">重输</Button>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Right" Orientation="Horizontal" Margin="0 0 10 0">
+
+            <Button Name="btnOk" Click="btnOk_Click" Margin="0 0 5 0">确认</Button>
+            <Button Name="btnCancle" Click="btnCancle_Click">取消</Button>
+        </StackPanel>
+    </Grid>
+</Window>

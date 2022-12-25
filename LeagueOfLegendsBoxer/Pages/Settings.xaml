@@ -655,7 +655,7 @@
             </GroupBox>
             <GroupBox Margin="10 0" Header="软件设置" FontSize="18" Padding="5"
                       Style="{StaticResource GroupBoxOriginal}" 
-                      Width="300"
+                      Width="350"
                       Foreground="{DynamicResource DefaultFontColor}"
                       Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
@@ -678,8 +678,8 @@
                         </behaviors:Interaction.Triggers>
                     </CheckBox>-->
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
-                        <TextBlock Text="对局中查看详情"></TextBlock>
-                        <RadioButton Content="Alt+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail}" Margin="10 0 0 0" FontSize="15">
+                        <TextBlock Text="对局中查看详情: " VerticalAlignment="Center"></TextBlock>
+                        <!--<RadioButton Content="Alt+Q" Foreground="{DynamicResource DefaultFontColor}" GroupName="detail" IsChecked="{Binding IsAltQOpenVsDetail}" Margin="10 0 0 0" FontSize="15">
                             <behaviors:Interaction.Triggers>
                                 <behaviors:EventTrigger EventName="Checked">
                                     <behaviors:InvokeCommandAction Command="{Binding CheckUseAltQOpenVsDetailCommandAsync}"></behaviors:InvokeCommandAction>
@@ -692,7 +692,10 @@
                                     <behaviors:InvokeCommandAction Command="{Binding UnCheckUseAltQOpenVsDetailCommandAsync}"></behaviors:InvokeCommandAction>
                                 </behaviors:EventTrigger>
                             </behaviors:Interaction.Triggers>
-                        </RadioButton>
+                        </RadioButton>-->
+                        <TextBox Text="{Binding TeamDetailKeys}" IsReadOnly="True" Width="145"/>
+
+                        <Button Command="{Binding SaveTeamDetailKeyCommand}" Margin="5 0 0 0" FontSize="15" Height="35">设置</Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <TextBlock Text="游戏内发送我方牛马："></TextBlock>
@@ -708,11 +711,11 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <TextBlock Text="游戏内一键讲理："></TextBlock>
-                        <TextBlock Text="Ctrl+F7" FontSize="18"></TextBlock>
+                        <TextBlock Text="~+F7" FontSize="18"></TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <TextBlock Text="游戏内一键吹捧："></TextBlock>
-                        <TextBlock Text="Ctrl+F8" FontSize="18"></TextBlock>
+                        <TextBlock Text="~+F8" FontSize="18"></TextBlock>
                     </StackPanel>
                     <hc:TextBox IsReadOnly="True" 
                                 FontSize="16"
