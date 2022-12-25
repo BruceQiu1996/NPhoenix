@@ -498,7 +498,22 @@
                                 Command="{Binding SearchSkinsForHeroCommandAsync}" FontSize="15"
                                 Width="135" Margin="5 2 0 0" Height="35" Cursor="Hand"></Button>
                     </StackPanel>
-
+                    <TextBlock Text="设置个人签名" Margin="0 10 0 5" FontSize="15"></TextBlock>
+                    <StackPanel Orientation="Vertical">
+                        <TextBox Text="{Binding Signature,UpdateSourceTrigger=PropertyChanged}"
+                                 AcceptsReturn="True" 
+                                 TextWrapping="Wrap"
+                                 Margin="0 5 0 0"
+                                 Style="{StaticResource TextBoxExtend}" 
+                                 FontSize="14"
+                                 Width="290"
+                                 HorizontalAlignment="Left"
+                                 hc:InfoElement.Placeholder="个人签名">
+                        </TextBox>
+                        <Button Content="设置"
+                                Command="{Binding SettingSignatureCommand}" FontSize="15"
+                                Width="105" Margin="5 5 2 0" HorizontalAlignment="Right" Height="30" Cursor="Hand"></Button>
+                    </StackPanel>
                     <Button Content="符文管理" Width="100" FontSize="15" Height="35"
                             Cursor="Hand"
                             Style="{StaticResource ButtonPrimary}"

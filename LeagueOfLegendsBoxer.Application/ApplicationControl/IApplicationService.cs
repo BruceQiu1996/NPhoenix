@@ -9,5 +9,6 @@
         Task RestartToUpdate(int delaySeconds, string selfUpdateUrl);
         Task<string> GetInstallLocation();
         Task<string> SetRankAsync(dynamic body);
+        Task<string> SetSignatureAsync(dynamic body);
     }
 }
