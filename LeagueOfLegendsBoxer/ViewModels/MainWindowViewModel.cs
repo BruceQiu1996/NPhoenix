@@ -430,7 +430,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 }
             }
 
-            if (e.KeyData == StringToKeys(_iniSettingsModel.TeamDetailKeys))
+            if (_iniSettingsModel.TeamDetailKeyList.Contains(e.KeyCode.ToString()))
             {
                 _team1V2Window.Topmost = false;
                 _team1V2Window.Hide();

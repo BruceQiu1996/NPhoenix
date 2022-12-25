@@ -59,7 +59,7 @@ namespace LeagueOfLegendsBoxer.Application.Request
                 var url = queryParameters == null ? relativeUrl : relativeUrl + BuildQueryParameterString(queryParameters);
                 return await _httpClient.GetStringAsync(url);
             }
-            catch
+            catch(Exception ex)
             {
                 return null;
             }

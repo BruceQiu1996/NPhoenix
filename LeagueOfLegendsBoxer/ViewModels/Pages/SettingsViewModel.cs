@@ -17,10 +17,8 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using ServerArea = LeagueOfLegendsBoxer.Windows.ServerArea;
 
@@ -651,6 +649,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public bool IsOpenModifyHotkeys { get; set; }
 
 
+        private string _signature;
+        public string Signature
+        {
+            get => _signature;
+            set => SetProperty(ref _signature, value);
+        }
+        
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoStartWhenComputerRunCommandAsync { get; set; }
@@ -705,6 +710,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand ChooseServerAreaForCurrentAccountCommand { get; set; }
         public RelayCommand OpenFireModeCommand { get; set; }
         public RelayCommand ManageRuneCommand { get; set; }
+        public AsyncRelayCommand SettingSignatureCommand { get; set; }
 
         public AsyncRelayCommand SaveTeamDetailKeyCommand { get; set; }
 
@@ -792,6 +798,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ManageRuneCommand = new RelayCommand(ManageRune);//打开符文管理界面
 
             SaveTeamDetailKeyCommand = new AsyncRelayCommand(SaveTeamDetailKey);
+            SettingSignatureCommand = new AsyncRelayCommand(SettingSignature);//设置个人签名
         }
 
         private void PayMethod()
@@ -1529,6 +1536,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     ShowDateTime = false
                 });
             }
+        }
+
+        private async Task SettingSignature() 
+        {
+            await _applicationService.SetSignatureAsync(new 
+            {
+                statusMessage = Signature
+            });
         }
 
         private async Task SaveTeamDetailKey()

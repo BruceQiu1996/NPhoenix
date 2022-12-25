@@ -55,6 +55,11 @@ namespace LeagueOfLegendsBoxer.Application.ApplicationControl
             return await _requestService.GetJsonResponseAsync(HttpMethod.Put, _setRankUrl,null, body);
         }
 
+        public async Task<string> SetSignatureAsync(dynamic body)
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Put, _setRankUrl, null, body);
+        }
+
         private async Task RestartAsync(int delaySeconds, ICollection<string> queryParameters)
         {
             queryParameters.Add($"delaySeconds={delaySeconds}");
