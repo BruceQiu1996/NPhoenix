@@ -1,6 +1,7 @@
 ﻿using LeagueOfLegendsBoxer.Application.Teamup.Dtos;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.Text;
 
 namespace LeagueOfLegendsBoxer.Application.Teamup
 {
@@ -8,6 +9,9 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
     {
         private readonly string _user = "/Users";
         private readonly string _record = "/Records";
+        private readonly string _posts = "/Posts";
+        private readonly string _topPosts = "/Posts/top";
+        private readonly string _uploadImage = "/Posts/upload-image";
 
         private HttpClient _httpClient;
 
@@ -47,6 +51,7 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
             if (resp.StatusCode == System.Net.HttpStatusCode.OK) 
             {
                 var result = await resp.Content.ReadAsStringAsync();
+
                 return JsonConvert.DeserializeObject<UserCreateOrUpdateByClientResponseDto>(result);
             }
 
@@ -63,6 +68,7 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
             StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var resp = await _httpClient.PostAsync(_record, content);
+
             return resp.IsSuccessStatusCode;
         }
 
@@ -71,7 +77,61 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
             StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var resp = await _httpClient.PutAsync(_user, content);
+
             return resp.IsSuccessStatusCode;
+        }
+
+        public async Task<IEnumerable<PostResponseDto>> GetTopPostsAsync()
+        {
+            var resp = await _httpClient.GetAsync(_topPosts);
+            if (resp.IsSuccessStatusCode) 
+            {
+                return JsonConvert.DeserializeObject<IEnumerable<PostResponseDto>>(await resp.Content.ReadAsStringAsync());
+            }
+
+            return null;
+        }
+
+        public async Task<(int, IEnumerable<PostResponseDto>)> GetPostsAsync(string key, PostCategory? postCategory, int page, int pageSize = 10)
+        {
+            var sb = new StringBuilder(_posts);
+
+            sb.Append($"?keyWord={key}&");
+            sb.Append($"postCategory={postCategory}&");
+            sb.Append($"page={page}&");
+            sb.Append($"pageSize={pageSize}");
+
+            var resp = await _httpClient.GetAsync(sb.ToString());
+            if (resp.IsSuccessStatusCode)
+            {
+                var obj =  JsonConvert.DeserializeObject<PostResponsePageDto>(await resp.Content.ReadAsStringAsync());
+                return (obj.Count, obj.Data);
+            }
+
+            return default;
+        }
+
+        public async Task<bool> CreateOrUpdatePostAsync(PostCreateOrUpdateDto dto)
+        {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var resp = await _httpClient.PostAsync(_posts, content);
+
+            return resp.IsSuccessStatusCode;
+        }
+
+        public async Task<string> UploadImageAsync(UploadPostImageDto dto)
+        {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var resp = await _httpClient.PostAsync(_uploadImage, content);
+            if (resp.IsSuccessStatusCode)
+            {
+                var obj = JsonConvert.DeserializeObject<dynamic>(await resp.Content.ReadAsStringAsync());
+                return $"{obj.fileLoc}";
+            }
+
+            return null;
         }
     }
 }

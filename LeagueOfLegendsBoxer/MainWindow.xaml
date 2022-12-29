@@ -13,7 +13,7 @@
         AllowsTransparency="True"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         WindowStyle="None"
-        Title="NPhoenix" Height="600" Width="880">
+        Title="NPhoenix" Height="650" Width="880">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="3"/>
@@ -268,7 +268,12 @@
                                ToolTip="人才市场"
                                Background="Transparent"
                                VerticalContentAlignment="Center"
-                               Grid.Column="1" MouseLeftButtonDown="Label_MouseLeftButtonDown_3">
+                               Grid.Column="1">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                    <behaviors:InvokeCommandAction Command="{Binding ShiftTeamupPageCommand}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
                             <Path Data="{StaticResource team}" 
                                   SnapsToDevicePixels="True"
                                   Height="25"

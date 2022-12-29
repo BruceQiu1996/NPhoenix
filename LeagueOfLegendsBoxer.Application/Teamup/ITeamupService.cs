@@ -10,5 +10,9 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
         Task<bool> UploadRecordAsync(CreateGameRecordByClientDto dto);
         Task<bool> UpdateServerAreaAsync(UserServerAreaUpdateDto dto);
         Task<string> GetRankDataAsync();
+        Task<IEnumerable<PostResponseDto>> GetTopPostsAsync();
+        Task<(int, IEnumerable<PostResponseDto>)> GetPostsAsync(string key, PostCategory? postCategory, int page, int pageSize = 10);
+        Task<bool> CreateOrUpdatePostAsync(PostCreateOrUpdateDto dto);
+        Task<string> UploadImageAsync(UploadPostImageDto dto);
     }
 }

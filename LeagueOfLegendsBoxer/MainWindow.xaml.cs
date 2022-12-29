@@ -66,9 +66,5 @@ namespace LeagueOfLegendsBoxer
             }
         }
 
-        private void Label_MouseLeftButtonDown_3(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            MessageBox.Show("敬请期待");
-        }
     }
 }

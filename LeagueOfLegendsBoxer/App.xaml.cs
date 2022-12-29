@@ -147,6 +147,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<BlackTip>();
                 services.AddSingleton<BlackTipViewModel>();
                 services.AddSingleton<Pay>();
+                services.AddSingleton<Post>();
+                services.AddSingleton<PostViewModel>();
                 //pages
                 services.AddSingleton<MainPage>();
                 services.AddSingleton<MainViewModel>();
@@ -164,6 +166,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<NoticeViewModel>();
                 services.AddSingleton<RecordRank>();
                 services.AddSingleton<RecordRankViewModel>();
+                services.AddSingleton<Teamup>();
+                services.AddSingleton<TeamupViewModel>();
 
                 services.Configure<List<Models.ServerArea>>(ctx.Configuration.GetSection("ServerAreas"));
             });
