@@ -57,7 +57,12 @@ namespace LeagueOfLegendsBoxer.Resources
         public string Below100ScoreTxt { get; set; }
         public int AutoAcceptGameDelay { get; set; }
         public bool IsAltQOpenVsDetail { get; set; }
+
+        public string TeamDetailKeys { get; set; }
         public bool AutoStartWhenComputerRun { get; set; }
+
+        public long TeamDetailHash { get; set; }
+        public List<string> TeamDetailKeyList { get; set; } = new List<string>();
 
         public IniSettingsModel(ISettingsService settingsService,
                                 IApplicationService applicationService,
@@ -141,6 +146,10 @@ namespace LeagueOfLegendsBoxer.Resources
             var readedNotices = await _settingsService.ReadAsync(Constant.Game, Constant.ReadedNotice);
             ReadedNotices = string.IsNullOrEmpty(readedNotices) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(readedNotices);
             IsDarkTheme = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsDarkTheme), out var tempIsDarkTheme) ? tempIsDarkTheme : false;
+
+            TeamDetailKeys = await _settingsService.ReadAsync(Constant.Game, Constant.TeamDetailKey);
+            TeamDetailKeys = string.IsNullOrWhiteSpace(TeamDetailKeys) ? "Alt+Q" : TeamDetailKeys;
+            
             if (!File.Exists(_blackListLoc)) 
             {
                 File.Create(_blackListLoc).Close();
@@ -166,6 +175,9 @@ namespace LeagueOfLegendsBoxer.Resources
             GoodWords = await File.ReadAllTextAsync(_goodLoc);
             FuckWordCollection = string.IsNullOrEmpty(FuckWords) ? new List<string>() : FuckWords.Split("\n").ToList();
             GoodWordCollection = string.IsNullOrEmpty(GoodWords) ? new List<string>() : GoodWords.Split("\n").ToList();
+
+            TeamDetailKeyList = TeamDetailKeys.Split('+').ToList();
+            TeamDetailHash = ComputeHash(TeamDetailKeyList);
         }
 
         public async Task WriteAutoAcceptAsync(bool value)
@@ -380,6 +392,15 @@ namespace LeagueOfLegendsBoxer.Resources
             AutoStartWhenComputerRun = autoStartWhenComputerRun;
         }
 
+        public async Task WriteTeamDetailKeys(string teamDetailKeys)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.TeamDetailKey, teamDetailKeys);
+            TeamDetailHash = ComputeHash(teamDetailKeys.Split('+'));
+            TeamDetailKeyList.Clear();
+            TeamDetailKeyList.AddRange(teamDetailKeys.Split('+'));
+            TeamDetailKeys = teamDetailKeys;
+        }
+
         public async Task RemoveBlackAccountAsync(long id)
         {
             for (var i = BlackAccounts.Count - 1; i >= 0; i--)
@@ -390,6 +411,17 @@ namespace LeagueOfLegendsBoxer.Resources
 
             var data = JsonSerializer.Serialize(BlackAccounts);
             await File.WriteAllTextAsync(_blackListLoc, data);
+        }
+
+        private long ComputeHash(IEnumerable<string> source)
+        {
+            long hash = 0;
+            foreach (var item in source)
+            {
+                hash += item.GetHashCode();
+            }
+
+            return hash;
         }
     }
 }

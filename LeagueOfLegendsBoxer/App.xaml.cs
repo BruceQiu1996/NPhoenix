@@ -166,6 +166,7 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<NoticeViewModel>();
                 services.AddSingleton<RecordRank>();
                 services.AddSingleton<RecordRankViewModel>();
+                services.AddTransient<SelectKey>();
                 services.AddSingleton<Teamup>();
                 services.AddSingleton<TeamupViewModel>();
 

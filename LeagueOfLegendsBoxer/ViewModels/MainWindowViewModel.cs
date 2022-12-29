@@ -183,6 +183,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 UnReadNotices = y.FirstOrDefault(x => x.IsMust) != null ? "必读" + y.Where(x => x.IsMust).Count() : y.Count().ToString();
             });
+
         }
 
         /// <summary>
@@ -323,9 +324,62 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
 
         #region 热键
+        private List<string> selectKey = new List<string>();
+
+        private string ParseKey(string key)
+        {
+            if (key.Contains("Control"))
+            {
+                key = "Control";
+            }
+            else if (key.Contains("Menu"))
+            {
+                key = "Alt";
+            }
+
+            return key;
+        }
+
+        private long ComputeHash(IEnumerable<string> source)
+        {
+            long hash = 0;
+            foreach (var item in source)
+            {
+                hash += item.GetHashCode();
+            }
+
+            return hash;
+        }
+
         private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            if (_iniSettingsModel.IsAltQOpenVsDetail && e.KeyData == StringToKeys("Alt+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
+            if (_settingsViewModel.IsOpenModifyHotkeys)
+            {
+                return;
+            }
+
+            if (selectKey.Contains(ParseKey(e.KeyCode.ToString())))
+            {
+                return;
+            }
+            else
+            {
+                selectKey.Add(ParseKey(e.KeyCode.ToString()));
+            }
+
+            long keyHash = 0;
+            foreach (var key in selectKey)
+            {
+                var newKey = ParseKey(key);
+                keyHash += newKey.Trim().GetHashCode();
+            }
+
+            if (keyHash == 0)
+            {
+                return;
+            }
+
+            if (keyHash == _iniSettingsModel.TeamDetailHash && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
             {
                 _team1V2Window.Topmost = true;
                 _team1V2Window.Focus();
@@ -339,56 +393,53 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         _team1V2Window.Topmost = false;
                     });
                 });
-                e.Handled = true;
+                //e.Handled = true;
             }
-            else if (!_iniSettingsModel.IsAltQOpenVsDetail && e.KeyData == StringToKeys("Control+Q") && (Team1Accounts.Count > 0 || Team2Accounts.Count > 0))
+            else if (keyHash == "F7".GetHashCode())
             {
-                _team1V2Window.Topmost = true;
-                _team1V2Window.Focus();
-                _team1V2Window.Activate();
-                _team1V2Window.Show();
-                System.Windows.Application.Current.Dispatcher.Invoke(async () =>
-                {
-                    await Task.Delay(500);
-                    _team1V2Window.Topmost = false;
-                });
-                e.Handled = true;
+                ListenerSendMyTeamInfoInnerGame_Triggered(null, null, null);
+            }
+            else if (keyHash == "F8".GetHashCode())
+            {
+                ListenerSendOtherTeamInfoInnerGame_Triggered(null, null, null);
+            }
+            else if (keyHash == "F11".GetHashCode())
+            {
+                ListenerTeamBuildInfo_Triggered(null, null, null);
+            }
+            else if(keyHash == ComputeHash(new string[] { "Oemtilde", "F7"}))
+            {
+                SendFuckWords();
+            }
+            else if (keyHash == ComputeHash(new string[] { "Oemtilde", "F8" }))
+            {
+                SendGoodWords();
             }
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
         {
-            if (_iniSettingsModel.IsAltQOpenVsDetail && (e.KeyData == StringToKeys("Q+Alt") || e.KeyData == StringToKeys("Alt+Q")))
+            if (_settingsViewModel.IsOpenModifyHotkeys)
+            {
+                return;
+            }
+            var key = ParseKey(e.KeyCode.ToString());
+            if (selectKey.Contains(key))
+            {
+                for (int i = 0; i < selectKey.Count; i++)
+                {
+                    if (selectKey[i] == key)
+                    {
+                        selectKey.Remove(selectKey[i]);
+                    }
+                }
+            }
+
+            if (_iniSettingsModel.TeamDetailKeyList.Contains(e.KeyCode.ToString()))
             {
                 _team1V2Window.Topmost = false;
                 _team1V2Window.Hide();
-                e.Handled = true;
-            }
-            else if (!_iniSettingsModel.IsAltQOpenVsDetail && (e.KeyData == StringToKeys("Q+Control") || e.KeyData == StringToKeys("Control+Q")))
-            {
-                _team1V2Window.Topmost = false;
-                _team1V2Window.Hide();
-                e.Handled = true;
-            }
-            else if (e.KeyData == Keys.F7)
-            {
-                ListenerSendMyTeamInfoInnerGame_Triggered(null, null, null);
-            }
-            else if (e.KeyData == Keys.F8)
-            {
-                ListenerSendOtherTeamInfoInnerGame_Triggered(null, null, null);
-            }
-            else if (e.KeyData == Keys.F11)
-            {
-                ListenerTeamBuildInfo_Triggered(null, null, null);
-            }
-            else if (e.KeyData == StringToKeys("Control+F7"))
-            {
-                SendFuckWords();
-            }
-            else if (e.KeyData == StringToKeys("Control+F8"))
-            {
-                SendGoodWords();
+                //e.Handled = true;
             }
         }
 
@@ -1199,7 +1250,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     _blackList.Topmost = true;
                 });
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "游戏异常结束");
             }

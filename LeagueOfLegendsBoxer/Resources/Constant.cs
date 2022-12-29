@@ -54,6 +54,8 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string IsDarkTheme = nameof(IsDarkTheme);
         public const string AutoStartWhenComputerRun = nameof(AutoStartWhenComputerRun);
         public static string _chatId = null;
+
+        public const string TeamDetailKey = nameof(TeamDetailKey);
         //event uri
         public const string GameFlow = @"/lol-gameflow/v1/gameflow-phase";
         public const string DataStore = @"/data-store/v1/install-settings/gameflow-patcher-lock";

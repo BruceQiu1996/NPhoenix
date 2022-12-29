@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -73,7 +74,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             get => _rankAutoLockHero;
             set => SetProperty(ref _rankAutoLockHero, value);
         }
-        
+
         private bool _autoDisableHero;
         public bool AutoDisableHero
         {
@@ -516,6 +517,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         }
 
+
         private ObservableCollection<Hero> _chooseHeroForSkins;
         public ObservableCollection<Hero> ChooseHeroForSkins
         {
@@ -635,6 +637,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _goodWords, value);
         }
 
+
+        private string _teamDetailKeys;
+
+        public string TeamDetailKeys
+        {
+            get => _teamDetailKeys;
+            set => SetProperty(ref _teamDetailKeys, value);
+        }
+
+        public bool IsOpenModifyHotkeys { get; set; }
+
+
         private string _signature;
         public string Signature
         {
@@ -698,27 +712,32 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand ManageRuneCommand { get; set; }
         public AsyncRelayCommand SettingSignatureCommand { get; set; }
 
+        public AsyncRelayCommand SaveTeamDetailKeyCommand { get; set; }
+
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
         private readonly IConfiguration _iconfiguration;
         private readonly ILogger<SettingsViewModel> _logger;
+        private readonly IServiceProvider serviceProvider;
         private readonly Pay _pay;
         private readonly SoftwareHelper _softwareHelper;
         private readonly ManageRune _manageRune;
 
-        public SettingsViewModel(IniSettingsModel iniSettingsModel, 
+        public SettingsViewModel(IniSettingsModel iniSettingsModel,
                                  IApplicationService applicationService,
                                  Pay pay,
                                  SoftwareHelper softwareHelper,
                                  ManageRune manageRune,
-                                 IConfiguration iconfiguration, 
-                                 ILogger<SettingsViewModel> logger)
+                                 IConfiguration iconfiguration,
+                                 ILogger<SettingsViewModel> logger,
+                                 IServiceProvider serviceProvider)
         {
             _pay = pay;
             _iniSettingsModel = iniSettingsModel;
             _applicationService = applicationService;
             _iconfiguration = iconfiguration;
             _logger = logger;
+            this.serviceProvider = serviceProvider;
             _manageRune = manageRune;
             _softwareHelper = softwareHelper;
             PayCommand = new RelayCommand(PayMethod);
@@ -777,6 +796,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ManualUpdateCommandAsync = new AsyncRelayCommand(ManualUpdateAsync);
             ChooseServerAreaForCurrentAccountCommand = new RelayCommand(ChooseServerAreaForCurrentAccount);
             ManageRuneCommand = new RelayCommand(ManageRune);//打开符文管理界面
+
+            SaveTeamDetailKeyCommand = new AsyncRelayCommand(SaveTeamDetailKey);
             SettingSignatureCommand = new AsyncRelayCommand(SettingSignature);//设置个人签名
         }
 
@@ -786,7 +807,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _pay.Topmost = true;
         }
 
-        private void ManageRune() 
+        private void ManageRune()
         {
             _manageRune.ShowDialog();
         }
@@ -812,7 +833,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private async Task LoadAsync()
         {
             LockHeros = new ObservableCollection<Hero>(Constant.Heroes);
-            LockHeros.Insert(0, new Hero() 
+            LockHeros.Insert(0, new Hero()
             {
                 ChampId = 0
             });
@@ -909,6 +930,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             IsDarkTheme = _iniSettingsModel.IsDarkTheme;
             FuckWords = _iniSettingsModel.FuckWords;
             GoodWords = _iniSettingsModel.GoodWords;
+
+            TeamDetailKeys = _iniSettingsModel.TeamDetailKeys;
         }
 
         #region checkbox
@@ -923,7 +946,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             AutoAcceptGame = false;
         }
 
-        private async Task CheckedAutoStartWhenComputerRunAsync() 
+        private async Task CheckedAutoStartWhenComputerRunAsync()
         {
             _softwareHelper.RunAtStart(true);
             await _iniSettingsModel.WriteAutoStartWhenComputerRun(true);
@@ -958,7 +981,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             AutoLockHero = false;
         }
 
-        private async Task CheckedRankAutoLockHeroAsync() 
+        private async Task CheckedRankAutoLockHeroAsync()
         {
             await _iniSettingsModel.WriteRankAutoLockHeroAsync(true);
             RankAutoLockHero = true;
@@ -1001,7 +1024,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             CloseSendOtherWhenBegin = false;
         }
 
-        private async Task CheckUseAltQOpenVsDetailAsync() 
+        private async Task CheckUseAltQOpenVsDetailAsync()
         {
             await _iniSettingsModel.WriteIsAltQOpenVsDetail(true);
         }
@@ -1069,7 +1092,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteAutoAcceptGameDelay(AutoAcceptGameDelay);
         }
 
-        private async Task CheckedAutoEndGameAsync() 
+        private async Task CheckedAutoEndGameAsync()
         {
             await _iniSettingsModel.WriteAutoEndGameAsync(true);
             AutoEndGame = true;
@@ -1095,13 +1118,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 LockHeros = new ObservableCollection<Hero>(Constant.Heroes.Where(x => x.Label.Contains(SearchLockText) || x.Title.Contains(SearchLockText)));
         }
 
-        private void OpenFireMode() 
+        private void OpenFireMode()
         {
             Process.Start("notepad.exe", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/12.10firemode.txt"));
         }
 
         private void TopSearchLockHero1()
-       {
+        {
             TopLockHerosOpen1 = true;
             if (_preTopSearchLockText1 == TopSearchLockText1)
                 return;
@@ -1260,7 +1283,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     p.Close();
                 }
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
             }
@@ -1448,7 +1471,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
-        private async Task ChooseLightThemeAsync() 
+        private async Task ChooseLightThemeAsync()
         {
             await _iniSettingsModel.WriteIsDarkTheme(false);
             IsDarkTheme = false;
@@ -1462,12 +1485,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             App.ChangeTheme(App.Theme.Dark);
         }
 
-        private async Task ManualUpdateAsync() 
+        private async Task ManualUpdateAsync()
         {
             await _softwareHelper.Update();
         }
 
-        private async Task SaveFuckWordsAsync() 
+        private async Task SaveFuckWordsAsync()
         {
             try
             {
@@ -1479,7 +1502,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     ShowDateTime = false
                 });
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError(ex.ToString());
                 Growl.WarningGlobal(new GrowlInfo()
@@ -1521,6 +1544,24 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             {
                 statusMessage = Signature
             });
+        }
+
+        private async Task SaveTeamDetailKey()
+        {
+            var selectKeyWindows = serviceProvider.GetRequiredService<SelectKey>();
+            IsOpenModifyHotkeys = true;
+            try
+            {
+                if (selectKeyWindows.ShowDialog() == true)
+                {
+                    await _iniSettingsModel.WriteTeamDetailKeys(selectKeyWindows.SelectKeys);
+                    TeamDetailKeys = selectKeyWindows.SelectKeys;
+                }
+            }
+            finally
+            {
+                IsOpenModifyHotkeys = false;
+            }
         }
     }
 }
