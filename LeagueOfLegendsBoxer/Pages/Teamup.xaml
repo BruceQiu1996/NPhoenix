@@ -20,8 +20,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Button Content="发布动态" HorizontalAlignment="Right" Margin="0 0 5 2" FontSize="14" Cursor="Hand"
@@ -32,77 +33,217 @@
                  Effect="{StaticResource EffectShadow2}"
                  Background="{DynamicResource DefaultCardBackgroundColor}" 
                  Foreground="{DynamicResource DefaultFontColor}">
+            <ScrollViewer>
+                <ListBox ItemsSource="{Binding TopPosts,UpdateSourceTrigger=PropertyChanged}"
+                         UseLayoutRounding="True"
+                         ScrollViewer.CanContentScroll="False"
+                         ScrollViewer.IsDeferredScrollingEnabled="True"
+                         PreviewMouseWheel="ListView_PreviewMouseWheel"
+                         TextOptions.TextFormattingMode="Display"
+                         BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border BorderThickness="0 0 0 1" 
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{DynamicResource DefaultBorderColor}">
+                                            <Grid Margin="5 5 5 5">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="35"></RowDefinition>
+                                                    <RowDefinition Height="50"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="25"></RowDefinition>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Row="0" Text="{Binding Title}" 
+                                                           Margin="8 5 0 0"
+                                                           Cursor="Hand"
+                                                           Foreground="{DynamicResource DefaultFontColor}" FontSize="18"/>
+                                                <TextBox IsReadOnly="True" Background="Transparent" 
+                                                         BorderThickness="0" VerticalContentAlignment="Top"
+                                                         TextWrapping="Wrap"
+                                                         AcceptsReturn="True"
+                                                         Grid.ColumnSpan="2"
+                                                         Grid.Row="1" Text="{Binding Content}" 
+                                                         Foreground="{DynamicResource DefaultFontColor}" FontSize="15"/>
+                                                <TextBlock Text="{Binding UserName}" Foreground="{DynamicResource DefaultFontColor}" 
+                                                           HorizontalAlignment="Right" Grid.Row="3"
+                                                           FontSize="15" Grid.Column="1" Margin="0 5 5 0"></TextBlock>
+                                                <StackPanel Grid.Row="2" 
+                                                            Height="85" Margin="0 0 0 5"
+                                                            Grid.ColumnSpan="2"
+                                                            Orientation="Horizontal"
+                                                            Visibility="{Binding HasImages,Converter={StaticResource Boolean2VisibilityConverter}}">
+                                                    <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand"/>
+                                                    <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand"/>
+                                                    <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand"/>
+                                                </StackPanel>
+
+                                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" >
+                                                    <hc:Tag ShowCloseButton="False" HorizontalAlignment="Left"
+                                                            Margin="10 4 0 2"
+                                                            Content="{Binding PostCategoryText}">
+                                                    </hc:Tag>
+                                                    <Label Background="Transparent" BorderThickness="0"
+                                                           Height="30" Width="35" Margin="10 0 0 0" Cursor="Hand">
+                                                        <Path Data="{StaticResource good}"
+                                                              Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
+                                                    </Label>
+                                                    <TextBlock Text="0" Margin="-5 0 0 0"
+                                                               Width="30"
+                                                               Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+
+                                                    <Label Background="Transparent" BorderThickness="0"
+                                                           Height="30" Width="35" Margin="10 0 0 0">
+                                                        <Path Data="{StaticResource comment}"
+                                                              Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
+                                                    </Label>
+                                                    <TextBlock Text="1000" Margin="-5 0 0 0"
+                                                               Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                                </StackPanel>
+                                                <TextBlock Grid.Row="0"
+                                                           Foreground="{DynamicResource DefaultFontColor}" FontSize="15"
+                                                           HorizontalAlignment="Right"
+                                                           Margin="0 5 5 0"
+                                                           Grid.Column="1" Text="{Binding CreateTimeText}"></TextBlock>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource DefaultHoverColor}"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </ScrollViewer>
         </hc:Card>
-        <hc:Card BorderThickness="0" Margin="0 2 5 2"
+        
+        <hc:Card BorderThickness="0" Margin="0 10 5 2"
                  Effect="{StaticResource EffectShadow2}"
                  Background="{DynamicResource DefaultCardBackgroundColor}" 
                  Grid.Row="2"
                  Foreground="{DynamicResource DefaultFontColor}">
-            <ListBox ItemsSource="{Binding Posts,UpdateSourceTrigger=PropertyChanged}"
-                     UseLayoutRounding="True"
-                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                     TextOptions.TextFormattingMode="Display"
-                     BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical"></StackPanel>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
+            <ScrollViewer>
+                <ListBox ItemsSource="{Binding Posts,UpdateSourceTrigger=PropertyChanged}"
+                         UseLayoutRounding="True"
+                         ScrollViewer.CanContentScroll="False"
+                         ScrollViewer.IsDeferredScrollingEnabled="True"
+                         PreviewMouseWheel="ListView_PreviewMouseWheel"
+                         TextOptions.TextFormattingMode="Display"
+                         BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
 
-                <ListBox.ItemContainerStyle>
-                    <Style TargetType="{x:Type ListBoxItem}">
-                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="Foreground" Value="Black" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border Cursor="Hand" BorderThickness="0 0 0 0.6" BorderBrush="{DynamicResource DefaultBorderColor}">
-                                        <Grid Margin="5 5 5 5">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="35"></RowDefinition>
-                                                <RowDefinition Height="40"></RowDefinition>
-                                                <RowDefinition Height="*"></RowDefinition>
-                                                <RowDefinition Height="20"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Grid.Row="0" Text="{Binding Title}" 
-                                                       Margin="8 5 0 0"
-                                                       Foreground="{DynamicResource DefaultFontColor}" FontSize="18"/>
-                                            <TextBox IsReadOnly="True" Background="Transparent" 
-                                                     BorderThickness="0" VerticalContentAlignment="Top"
-                                                     AcceptsReturn="True"
-                                                     TextWrapping="Wrap"
-                                                     Grid.Row="1" Text="{Binding Content}" Foreground="{DynamicResource DefaultFontColor}" FontSize="15"/>
-                                            <TextBlock Text="{Binding UserName}" Foreground="{DynamicResource DefaultFontColor}" 
-                                                       HorizontalAlignment="Right"
-                                                       FontSize="15" Grid.Column="1" Margin="0 5 10 0"></TextBlock>
-                                            <UniformGrid Grid.Row="3" 
-                                                         Height="50"
-                                                         Visibility="{Binding HasImages,Converter={StaticResource Boolean2VisibilityConverter}}">
-                                                
-                                            </UniformGrid>
-                                            
-                                        </Grid>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter Property="Foreground" Value="Black"></Setter>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListBox.ItemContainerStyle>
-            </ListBox>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border BorderThickness="0 0 0 1" 
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{DynamicResource DefaultBorderColor}">
+                                            <Grid Margin="5 5 5 5">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="35"></RowDefinition>
+                                                    <RowDefinition Height="50"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="25"></RowDefinition>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Row="0" Text="{Binding Title}" 
+                                                           Margin="8 5 0 0"
+                                                           Cursor="Hand"
+                                                           Foreground="{DynamicResource DefaultFontColor}" FontSize="18"/>
+                                                <TextBox IsReadOnly="True" Background="Transparent" 
+                                                         BorderThickness="0" VerticalContentAlignment="Top"
+                                                         TextWrapping="Wrap"
+                                                         AcceptsReturn="True"
+                                                         Grid.ColumnSpan="2"
+                                                         Grid.Row="1" Text="{Binding Content}" 
+                                                         Foreground="{DynamicResource DefaultFontColor}" FontSize="15"/>
+                                                <TextBlock Text="{Binding UserName}" Foreground="{DynamicResource DefaultFontColor}" 
+                                                           HorizontalAlignment="Right" Grid.Row="3"
+                                                           FontSize="15" Grid.Column="1" Margin="0 5 5 0"></TextBlock>
+                                                <StackPanel Grid.Row="2" 
+                                                            Height="85" Margin="0 0 0 5"
+                                                            Grid.ColumnSpan="2"
+                                                            Orientation="Horizontal"
+                                                            Visibility="{Binding HasImages,Converter={StaticResource Boolean2VisibilityConverter}}">
+                                                    <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand"/>
+                                                    <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand"/>
+                                                    <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand"/>
+                                                </StackPanel>
+
+                                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" >
+                                                    <hc:Tag ShowCloseButton="False" HorizontalAlignment="Left"
+                                                            Margin="10 4 0 2"
+                                                            Content="{Binding PostCategoryText}">
+                                                    </hc:Tag>
+                                                    <Label Background="Transparent" BorderThickness="0"
+                                                           Height="30" Width="35" Margin="10 0 0 0" Cursor="Hand">
+                                                        <Path Data="{StaticResource good}"
+                                                              Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
+                                                    </Label>
+                                                    <TextBlock Text="0" Margin="-5 0 0 0"
+                                                               Width="30"
+                                                               Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                                    
+                                                    <Label Background="Transparent" BorderThickness="0"
+                                                           Height="30" Width="35" Margin="10 0 0 0">
+                                                        <Path Data="{StaticResource comment}"
+                                                              Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
+                                                    </Label>
+                                                    <TextBlock Text="1000" Margin="-5 0 0 0"
+                                                               Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
+                                                </StackPanel>
+                                                <TextBlock Grid.Row="0"
+                                                           Foreground="{DynamicResource DefaultFontColor}" FontSize="15"
+                                                           HorizontalAlignment="Right"
+                                                           Margin="0 5 5 0"
+                                                           Grid.Column="1" Text="{Binding CreateTimeText}"></TextBlock>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource DefaultHoverColor}"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </ScrollViewer>
         </hc:Card>
+
+        <hc:Pagination Grid.Row="4" PageIndex="1" MaxPageCount="5" HorizontalAlignment="Right" Margin="0 10 10 0"></hc:Pagination>
     </Grid>
 </Page>

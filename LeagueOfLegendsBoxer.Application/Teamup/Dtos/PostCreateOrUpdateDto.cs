@@ -2,7 +2,7 @@
 {
     public class PostCreateOrUpdateDto
     {
-        public long Id { get; set; }
+        public long? Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime CreateTime { get; set; }

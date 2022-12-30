@@ -4,6 +4,7 @@ using HandyControl.Controls;
 using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.Teamup;
 using LeagueOfLegendsBoxer.Application.Teamup.Dtos;
+using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -61,12 +62,14 @@ namespace LeagueOfLegendsBoxer.ViewModels
         public AsyncRelayCommand PostCommandAsync { get; set; }
         public RelayCommand CancelCommand { get; set; }
 
-        public PostViewModel(ITeamupService teamupService, ILogger<PostViewModel> logger)
+        public PostViewModel(ITeamupService teamupService,
+                             EnumHelper enumHelper,
+                             ILogger<PostViewModel> logger)
         {
             _logger = logger;
             _teamupService = teamupService;
             ImageSelectors = new List<ImageSelector>();
-            PostCategories = GetEnumItemValueDesc(typeof(PostCategory));
+            PostCategories = enumHelper.GetEnumItemValueDesc(typeof(PostCategory));
             PostCategory = PostCategories.FirstOrDefault();
             PostCommandAsync = new AsyncRelayCommand(PostAsync);
             CancelCommand = new RelayCommand(Cancel);
@@ -193,34 +196,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _imageUri1 = null;
             _imageUri2 = null;
             _imageUri3 = null;
-        }
-
-        public Dictionary<string, string> GetEnumItemValueDesc(Type enumType)
-        {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            Type typeDescription = typeof(DescriptionAttribute);
-            FieldInfo[] fields = enumType.GetFields();
-            string strText = string.Empty;
-            string strValue = string.Empty;
-            foreach (FieldInfo field in fields)
-            {
-                if (field.FieldType.IsEnum)
-                {
-                    strValue = ((int)enumType.InvokeMember(field.Name, BindingFlags.GetField, null, null, null)).ToString();
-                    object[] arr = field.GetCustomAttributes(typeDescription, true);
-                    if (arr.Length > 0)
-                    {
-                        DescriptionAttribute aa = (DescriptionAttribute)arr[0];
-                        strText = aa.Description;
-                    }
-                    else
-                    {
-                        strText = field.Name;
-                    }
-                    dic.Add(strValue, strText);
-                }
-            }
-            return dic;
         }
     }
 }
