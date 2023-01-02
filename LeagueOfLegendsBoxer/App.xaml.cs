@@ -150,6 +150,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<Pay>();
                 services.AddSingleton<Post>();
                 services.AddSingleton<PostViewModel>();
+                services.AddSingleton<PostDetailWindow>();
+                services.AddSingleton<PostDetailWindowViewModel>();
                 //pages
                 services.AddSingleton<MainPage>();
                 services.AddSingleton<MainViewModel>();

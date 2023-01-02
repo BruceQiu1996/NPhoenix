@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <SolidColorBrush x:Key="DefaultFontColor">black</SolidColorBrush>
+    <SolidColorBrush x:Key="DefaultHoverFontColor">#333333</SolidColorBrush>
     <SolidColorBrush x:Key="DefaultBackgroundColor">white</SolidColorBrush>
     <SolidColorBrush x:Key="DefaultCardBackgroundColor">#f9f9f9</SolidColorBrush>
 

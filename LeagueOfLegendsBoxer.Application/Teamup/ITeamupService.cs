@@ -14,5 +14,9 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
         Task<(int, IEnumerable<PostResponseDto>)> GetPostsAsync(string key, PostCategory? postCategory, int page, int pageSize = 10);
         Task<bool> CreateOrUpdatePostAsync(PostCreateOrUpdateDto dto);
         Task<string> UploadImageAsync(UploadPostImageDto dto);
+        Task<(bool, int)> GoodAsync(long postId);
+        Task<PostDetailResponseDto> GetPostDetailAsync(long postId);
+        Task<bool> CreatePostCommentAsync(CreatePostCommentDto dto);
+        Task<PostCommentsResponsePageDto> GetPostCommentsByPage(long postId, int page);
     }
 }

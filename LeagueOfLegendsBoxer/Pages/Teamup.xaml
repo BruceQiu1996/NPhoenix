@@ -9,7 +9,7 @@
       xmlns:model="clr-namespace:LeagueOfLegendsBoxer.Models"
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
-      FontFamily="Arial"
+      FontFamily="微软雅黑"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Teamup">
     <behaviors:Interaction.Triggers>
@@ -72,7 +72,14 @@
                                                 <TextBlock Grid.Row="0" Text="{Binding Title}" 
                                                            Margin="8 5 0 0"
                                                            Cursor="Hand"
-                                                           Foreground="{DynamicResource DefaultFontColor}" FontSize="18"/>
+                                                           Foreground="{DynamicResource DefaultFontColor}" FontSize="18">
+                                                    <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.OpenPostDetailCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                    </behaviors:Interaction.Triggers>
+                                                </TextBlock>
                                                 <TextBox IsReadOnly="True" Background="Transparent" 
                                                          BorderThickness="0" VerticalContentAlignment="Top"
                                                          TextWrapping="Wrap"
@@ -88,22 +95,61 @@
                                                             Grid.ColumnSpan="2"
                                                             Orientation="Horizontal"
                                                             Visibility="{Binding HasImages,Converter={StaticResource Boolean2VisibilityConverter}}">
-                                                    <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand"/>
-                                                    <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand"/>
-                                                    <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand"/>
+                                                    <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding Image_1_loc}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                    </Image>
+                                                    <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding Image_2_loc}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                    </Image>
+                                                    <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding Image_3_loc}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                    </Image>
                                                 </StackPanel>
 
                                                 <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" >
                                                     <hc:Tag ShowCloseButton="False" HorizontalAlignment="Left"
-                                                            Margin="10 4 0 2"
+                                                            Margin="5 4 0 2"
                                                             Content="{Binding PostCategoryText}">
                                                     </hc:Tag>
-                                                    <Label Background="Transparent" BorderThickness="0"
-                                                           Height="30" Width="35" Margin="10 0 0 0" Cursor="Hand">
+                                                    <Label Background="Transparent" BorderThickness="0" Name="goodparent"
+                                                           Height="30" Width="35" Margin="10 0 0 0" Cursor="Hand" ToolTip="点赞">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.GoodCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
                                                         <Path Data="{StaticResource good}"
-                                                              Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
+                                                              Fill="{Binding ElementName= goodparent,UpdateSourceTrigger=PropertyChanged,Path=Foreground}" Stretch="Fill"></Path>
+                                                        <Label.Style>
+                                                            <Style TargetType="Label" BasedOn="{StaticResource LabelBaseStyle}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding HadGood}"  Value="True">
+                                                                        <Setter Property="Foreground" Value="{DynamicResource DefaultHoverFontColor}"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding HadGood}"  Value="False">
+                                                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Label.Style>
                                                     </Label>
-                                                    <TextBlock Text="0" Margin="-5 0 0 0"
+                                                    <TextBlock Text="{Binding GoodCount,UpdateSourceTrigger=PropertyChanged}" Margin="-5 0 0 0"
                                                                Width="30"
                                                                Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
 
@@ -112,7 +158,7 @@
                                                         <Path Data="{StaticResource comment}"
                                                               Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
                                                     </Label>
-                                                    <TextBlock Text="1000" Margin="-5 0 0 0"
+                                                    <TextBlock Text="{Binding CommmentsCount}" Margin="-5 0 0 0"
                                                                Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                                                 </StackPanel>
                                                 <TextBlock Grid.Row="0"
@@ -180,7 +226,14 @@
                                                 <TextBlock Grid.Row="0" Text="{Binding Title}" 
                                                            Margin="8 5 0 0"
                                                            Cursor="Hand"
-                                                           Foreground="{DynamicResource DefaultFontColor}" FontSize="18"/>
+                                                           Foreground="{DynamicResource DefaultFontColor}" FontSize="18">
+                                                    <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.OpenPostDetailCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                    </behaviors:Interaction.Triggers>
+                                                </TextBlock>
                                                 <TextBox IsReadOnly="True" Background="Transparent" 
                                                          BorderThickness="0" VerticalContentAlignment="Top"
                                                          TextWrapping="Wrap"
@@ -196,22 +249,61 @@
                                                             Grid.ColumnSpan="2"
                                                             Orientation="Horizontal"
                                                             Visibility="{Binding HasImages,Converter={StaticResource Boolean2VisibilityConverter}}">
-                                                    <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand"/>
-                                                    <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand"/>
-                                                    <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand"/>
+                                                    <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding Image_1_loc}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                    </Image>
+                                                    <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding Image_2_loc}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                    </Image>
+                                                    <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding Image_2_loc}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                    </Image>
                                                 </StackPanel>
 
                                                 <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" >
                                                     <hc:Tag ShowCloseButton="False" HorizontalAlignment="Left"
-                                                            Margin="10 4 0 2"
+                                                            Margin="5 4 0 2"
                                                             Content="{Binding PostCategoryText}">
                                                     </hc:Tag>
-                                                    <Label Background="Transparent" BorderThickness="0"
-                                                           Height="30" Width="35" Margin="10 0 0 0" Cursor="Hand">
+                                                    <Label Background="Transparent" BorderThickness="0" Name="goodparent"
+                                                           Height="30" Width="35" Margin="10 0 0 0" Cursor="Hand" ToolTip="点赞">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.GoodCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
                                                         <Path Data="{StaticResource good}"
-                                                              Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
+                                                              Fill="{Binding ElementName= goodparent,UpdateSourceTrigger=PropertyChanged,Path=Foreground}" Stretch="Fill"></Path>
+                                                        <Label.Style>
+                                                            <Style TargetType="Label" BasedOn="{StaticResource LabelBaseStyle}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding HadGood}"  Value="True">
+                                                                        <Setter Property="Foreground" Value="{DynamicResource DefaultHoverFontColor}"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding HadGood}"  Value="False">
+                                                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Label.Style>
                                                     </Label>
-                                                    <TextBlock Text="0" Margin="-5 0 0 0"
+                                                    <TextBlock Text="{Binding GoodCount,UpdateSourceTrigger=PropertyChanged}" Margin="-5 0 0 0"
                                                                Width="30"
                                                                Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                                                     
@@ -220,7 +312,7 @@
                                                         <Path Data="{StaticResource comment}"
                                                               Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
                                                     </Label>
-                                                    <TextBlock Text="1000" Margin="-5 0 0 0"
+                                                    <TextBlock Text="{Binding CommmentsCount}" Margin="-5 0 0 0"
                                                                Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
                                                 </StackPanel>
                                                 <TextBlock Grid.Row="0"
@@ -244,6 +336,7 @@
             </ScrollViewer>
         </hc:Card>
 
-        <hc:Pagination Grid.Row="4" PageIndex="1" MaxPageCount="5" HorizontalAlignment="Right" Margin="0 10 10 0"></hc:Pagination>
+        <hc:Pagination Grid.Row="4" PageIndex="{Binding Page,UpdateSourceTrigger=PropertyChanged}" 
+                       MaxPageCount="{Binding AllPages,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Margin="0 5 5 0"></hc:Pagination>
     </Grid>
 </Page>

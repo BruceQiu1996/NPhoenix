@@ -12,12 +12,16 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
         private readonly string _posts = "/Posts";
         private readonly string _topPosts = "/Posts/top";
         private readonly string _uploadImage = "/Posts/upload-image";
+        private readonly string _good = "/Posts/good/{0}";
+        private readonly string _postDetail = "/Posts/detail/{0}";
+        private readonly string _postComment = "/Posts/comment";
+        private readonly string _getPostComment = "/Posts/comments/{0}/{1}";
 
         private HttpClient _httpClient;
 
         public TeamupService()
         {
-            
+
         }
 
         public async Task<string> GetRankDataAsync()
@@ -26,7 +30,7 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
             {
                 return await _httpClient.GetStringAsync(_record);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return null;
             }
@@ -48,7 +52,7 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
             StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
             content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             var resp = await _httpClient.PostAsync(_user, content);
-            if (resp.StatusCode == System.Net.HttpStatusCode.OK) 
+            if (resp.StatusCode == System.Net.HttpStatusCode.OK)
             {
                 var result = await resp.Content.ReadAsStringAsync();
 
@@ -84,7 +88,7 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
         public async Task<IEnumerable<PostResponseDto>> GetTopPostsAsync()
         {
             var resp = await _httpClient.GetAsync(_topPosts);
-            if (resp.IsSuccessStatusCode) 
+            if (resp.IsSuccessStatusCode)
             {
                 return JsonConvert.DeserializeObject<IEnumerable<PostResponseDto>>(await resp.Content.ReadAsStringAsync());
             }
@@ -104,7 +108,7 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
             var resp = await _httpClient.GetAsync(sb.ToString());
             if (resp.IsSuccessStatusCode)
             {
-                var obj =  JsonConvert.DeserializeObject<PostResponsePageDto>(await resp.Content.ReadAsStringAsync());
+                var obj = JsonConvert.DeserializeObject<PostResponsePageDto>(await resp.Content.ReadAsStringAsync());
                 return (obj.Count, obj.Data);
             }
 
@@ -132,6 +136,58 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
             }
 
             return null;
+        }
+
+        public async Task<(bool, int)> GoodAsync(long postId)
+        {
+            var resp = await _httpClient.GetAsync(string.Format(_good, postId));
+            if (resp.IsSuccessStatusCode)
+            {
+                var result = JsonConvert.DeserializeObject<dynamic>(await resp.Content.ReadAsStringAsync());
+
+                return (result.isGood, result.count);
+            }
+
+            throw new Exception("faild to good or nogood");
+        }
+
+        public async Task<PostDetailResponseDto> GetPostDetailAsync(long postId)
+        {
+            var resp = await _httpClient.GetAsync(string.Format(_postDetail, postId));
+            if (resp.IsSuccessStatusCode)
+            {
+                var result = JsonConvert.DeserializeObject<PostDetailResponseDto>(await resp.Content.ReadAsStringAsync());
+
+                return result;
+            }
+
+            throw new Exception();
+        }
+
+        public async Task<bool> CreatePostCommentAsync(CreatePostCommentDto dto)
+        {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(dto));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var resp = await _httpClient.PostAsync(_postComment, content);
+            if (resp.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<PostCommentsResponsePageDto> GetPostCommentsByPage(long postId, int page)
+        {
+            var resp = await _httpClient.GetAsync(string.Format(_getPostComment, postId,page));
+            if (resp.IsSuccessStatusCode)
+            {
+                var result = JsonConvert.DeserializeObject<PostCommentsResponsePageDto>(await resp.Content.ReadAsStringAsync());
+
+                return result;
+            }
+
+            throw new Exception();
         }
     }
 }
