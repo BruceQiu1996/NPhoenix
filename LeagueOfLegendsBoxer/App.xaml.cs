@@ -176,10 +176,6 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<TeamupViewModel>();
 
                 services.Configure<List<Models.ServerArea>>(ctx.Configuration.GetSection("ServerAreas"));
-                HubConnection = new HubConnectionBuilder().WithUrl("http://47.101.171.149:20001/chathub", option =>
-                {
-                    option.CloseTimeout = TimeSpan.FromSeconds(60);
-                }).WithAutomaticReconnect().Build();
             });
 
             return hostBuilder;

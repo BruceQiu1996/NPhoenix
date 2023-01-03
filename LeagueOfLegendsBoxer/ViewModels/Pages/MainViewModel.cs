@@ -10,6 +10,7 @@ using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -95,7 +96,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         Rank_SOLO_5x5 = $"{Account.Rank.RANKED_SOLO_5x5.CnTier}{Account.Rank.RANKED_SOLO_5x5.Division}",
                         Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion
                     });
-
+                    
                     if (resp == null)
                     {
                         Growl.WarningGlobal(new GrowlInfo()
@@ -104,6 +105,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             Message = "连接服务器出现问题,部分功能不能使用",
                             ShowDateTime = false
                         });
+
                         Constant.ConnectTeamupSuccessful = false;
                     }
                     else if (resp.IsDeleted)
@@ -121,6 +123,21 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     else
                     {
                         _teamupService.SetToken(resp.Token);
+                        App.HubConnection = new HubConnectionBuilder().WithUrl("http://127.0.0.1:5000/teamupChatHub", option =>
+                        {
+                            option.CloseTimeout = TimeSpan.FromSeconds(60);
+                            option.AccessTokenProvider = () => Task.FromResult(resp.Token);
+                        }).WithAutomaticReconnect().Build();
+                        await App.HubConnection.StartAsync();
+                        App.HubConnection.On<ChatMessage>("ReceiveMessage", msg =>
+                        {
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                msg.IsAdministrator = msg.Role.Contains("Administrator");
+                                msg.IsSender = msg.UserId == Constant.Account.SummonerId;
+                                App.ServiceProvider.GetRequiredService<TeamupViewModel>()?.ChatMessages.Add(msg);
+                            });
+                        });
                         Constant.Account.ServerArea = resp.ServerArea;
                         var ranks = await _softwareHelper.GetRanksAsync();
                         Account.MvpRank = ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";

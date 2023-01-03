@@ -18,58 +18,59 @@
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="auto"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="30"></RowDefinition>
-        </Grid.RowDefinitions>
-
-        <Button Content="发布动态" HorizontalAlignment="Right" Margin="0 0 5 2" FontSize="14" Cursor="Hand"
+        <Grid Visibility="{Binding IsChatPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button Content="发布动态" HorizontalAlignment="Right" Margin="0 0 90 2" FontSize="14" Cursor="Hand"
                 Style="{StaticResource ButtonPrimary}" Command="{Binding SendNewPostCommand}"></Button>
-
-        <hc:Card BorderThickness="0" Margin="0 2 5 2"
+            <Button Content="世界频道" HorizontalAlignment="Right" Margin="0 0 5 2" FontSize="14" Cursor="Hand"
+                Style="{StaticResource ButtonWarning}" Command="{Binding OpenChatCommand}"></Button>
+            <hc:Card BorderThickness="0" Margin="0 2 5 2"
                  Grid.Row="1"
                  Effect="{StaticResource EffectShadow2}"
                  Background="{DynamicResource DefaultCardBackgroundColor}" 
                  Foreground="{DynamicResource DefaultFontColor}">
-            <ScrollViewer>
-                <ListBox ItemsSource="{Binding TopPosts,UpdateSourceTrigger=PropertyChanged}"
+                <ScrollViewer>
+                    <ListBox ItemsSource="{Binding TopPosts,UpdateSourceTrigger=PropertyChanged}"
                          UseLayoutRounding="True"
                          ScrollViewer.CanContentScroll="False"
                          ScrollViewer.IsDeferredScrollingEnabled="True"
                          PreviewMouseWheel="ListView_PreviewMouseWheel"
                          TextOptions.TextFormattingMode="Display"
                          BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"></StackPanel>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"></StackPanel>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
 
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="OverridesDefaultStyle" Value="True" />
-                            <Setter Property="SnapsToDevicePixels" Value="True" />
-                            <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <Border BorderThickness="0 0 0 1" 
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="OverridesDefaultStyle" Value="True" />
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <Border BorderThickness="0 0 0 1" 
                                                 Background="{TemplateBinding Background}"
                                                 BorderBrush="{DynamicResource DefaultBorderColor}">
-                                            <Grid Margin="5 5 5 5">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="35"></RowDefinition>
-                                                    <RowDefinition Height="50"></RowDefinition>
-                                                    <RowDefinition Height="*"></RowDefinition>
-                                                    <RowDefinition Height="25"></RowDefinition>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Row="0" Text="{Binding Title}" 
+                                                <Grid Margin="5 5 5 5">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="35"></RowDefinition>
+                                                        <RowDefinition Height="50"></RowDefinition>
+                                                        <RowDefinition Height="*"></RowDefinition>
+                                                        <RowDefinition Height="25"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Row="0" Text="{Binding Title}" 
                                                            Margin="8 5 0 0"
                                                            Cursor="Hand"
                                                            Foreground="{DynamicResource DefaultFontColor}" FontSize="18">
@@ -79,151 +80,151 @@
                                                                                                CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
                                                             </behaviors:EventTrigger>
                                                     </behaviors:Interaction.Triggers>
-                                                </TextBlock>
-                                                <TextBox IsReadOnly="True" Background="Transparent" 
+                                                    </TextBlock>
+                                                    <TextBox IsReadOnly="True" Background="Transparent" 
                                                          BorderThickness="0" VerticalContentAlignment="Top"
                                                          TextWrapping="Wrap"
                                                          AcceptsReturn="True"
                                                          Grid.ColumnSpan="2"
                                                          Grid.Row="1" Text="{Binding Content}" 
                                                          Foreground="{DynamicResource DefaultFontColor}" FontSize="15"/>
-                                                <TextBlock Text="{Binding UserName}" Foreground="{DynamicResource DefaultFontColor}" 
+                                                    <TextBlock Text="{Binding UserName}" Foreground="{DynamicResource DefaultFontColor}" 
                                                            HorizontalAlignment="Right" Grid.Row="3"
                                                            FontSize="15" Grid.Column="1" Margin="0 5 5 0"></TextBlock>
-                                                <StackPanel Grid.Row="2" 
+                                                    <StackPanel Grid.Row="2" 
                                                             Height="85" Margin="0 0 0 5"
                                                             Grid.ColumnSpan="2"
                                                             Orientation="Horizontal"
                                                             Visibility="{Binding HasImages,Converter={StaticResource Boolean2VisibilityConverter}}">
-                                                    <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                        <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand">
+                                                            <behaviors:Interaction.Triggers>
+                                                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                    <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                CommandParameter="{Binding Image_1_loc}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                    </Image>
-                                                    <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                </behaviors:EventTrigger>
+                                                            </behaviors:Interaction.Triggers>
+                                                        </Image>
+                                                        <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand">
+                                                            <behaviors:Interaction.Triggers>
+                                                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                    <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                CommandParameter="{Binding Image_2_loc}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                    </Image>
-                                                    <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                </behaviors:EventTrigger>
+                                                            </behaviors:Interaction.Triggers>
+                                                        </Image>
+                                                        <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand">
+                                                            <behaviors:Interaction.Triggers>
+                                                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                    <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                CommandParameter="{Binding Image_3_loc}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                    </Image>
-                                                </StackPanel>
+                                                                </behaviors:EventTrigger>
+                                                            </behaviors:Interaction.Triggers>
+                                                        </Image>
+                                                    </StackPanel>
 
-                                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" >
-                                                    <hc:Tag ShowCloseButton="False" HorizontalAlignment="Left"
+                                                    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" >
+                                                        <hc:Tag ShowCloseButton="False" HorizontalAlignment="Left"
                                                             Margin="5 4 0 2"
                                                             Content="{Binding PostCategoryText}">
-                                                    </hc:Tag>
-                                                    <Label Background="Transparent" BorderThickness="0" Name="goodparent"
+                                                        </hc:Tag>
+                                                        <Label Background="Transparent" BorderThickness="0" Name="goodparent"
                                                            Height="30" Width="35" Margin="10 0 0 0" Cursor="Hand" ToolTip="点赞">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.GoodCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                            <behaviors:Interaction.Triggers>
+                                                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                    <behaviors:InvokeCommandAction Command="{Binding DataContext.GoodCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                        <Path Data="{StaticResource good}"
+                                                                </behaviors:EventTrigger>
+                                                            </behaviors:Interaction.Triggers>
+                                                            <Path Data="{StaticResource good}"
                                                               Fill="{Binding ElementName= goodparent,UpdateSourceTrigger=PropertyChanged,Path=Foreground}" Stretch="Fill"></Path>
-                                                        <Label.Style>
-                                                            <Style TargetType="Label" BasedOn="{StaticResource LabelBaseStyle}">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding HadGood}"  Value="True">
-                                                                        <Setter Property="Foreground" Value="{DynamicResource DefaultHoverFontColor}"></Setter>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding HadGood}"  Value="False">
-                                                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                    <TextBlock Text="{Binding GoodCount,UpdateSourceTrigger=PropertyChanged}" Margin="-5 0 0 0"
+                                                            <Label.Style>
+                                                                <Style TargetType="Label" BasedOn="{StaticResource LabelBaseStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding HadGood}"  Value="True">
+                                                                            <Setter Property="Foreground" Value="{DynamicResource DefaultHoverFontColor}"></Setter>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding HadGood}"  Value="False">
+                                                                            <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Label.Style>
+                                                        </Label>
+                                                        <TextBlock Text="{Binding GoodCount,UpdateSourceTrigger=PropertyChanged}" Margin="-5 0 0 0"
                                                                Width="30"
                                                                Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
 
-                                                    <Label Background="Transparent" BorderThickness="0"
+                                                        <Label Background="Transparent" BorderThickness="0"
                                                            Height="30" Width="35" Margin="10 0 0 0">
-                                                        <Path Data="{StaticResource comment}"
+                                                            <Path Data="{StaticResource comment}"
                                                               Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
-                                                    </Label>
-                                                    <TextBlock Text="{Binding CommmentsCount}" Margin="-5 0 0 0"
+                                                        </Label>
+                                                        <TextBlock Text="{Binding CommmentsCount}" Margin="-5 0 0 0"
                                                                Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
-                                                </StackPanel>
-                                                <TextBlock Grid.Row="0"
+                                                    </StackPanel>
+                                                    <TextBlock Grid.Row="0"
                                                            Foreground="{DynamicResource DefaultFontColor}" FontSize="15"
                                                            HorizontalAlignment="Right"
                                                            Margin="0 5 5 0"
                                                            Grid.Column="1" Text="{Binding CreateTimeText}"></TextBlock>
-                                            </Grid>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource DefaultHoverColor}"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
-            </ScrollViewer>
-        </hc:Card>
-        
-        <hc:Card BorderThickness="0" Margin="0 10 5 2"
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultHoverColor}"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </ScrollViewer>
+            </hc:Card>
+
+            <hc:Card BorderThickness="0" Margin="0 10 5 2"
                  Effect="{StaticResource EffectShadow2}"
                  Background="{DynamicResource DefaultCardBackgroundColor}" 
                  Grid.Row="2"
                  Foreground="{DynamicResource DefaultFontColor}">
-            <ScrollViewer>
-                <ListBox ItemsSource="{Binding Posts,UpdateSourceTrigger=PropertyChanged}"
+                <ScrollViewer>
+                    <ListBox ItemsSource="{Binding Posts,UpdateSourceTrigger=PropertyChanged}"
                          UseLayoutRounding="True"
                          ScrollViewer.CanContentScroll="False"
                          ScrollViewer.IsDeferredScrollingEnabled="True"
                          PreviewMouseWheel="ListView_PreviewMouseWheel"
                          TextOptions.TextFormattingMode="Display"
                          BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
-                    <ListBox.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"></StackPanel>
-                        </ItemsPanelTemplate>
-                    </ListBox.ItemsPanel>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"></StackPanel>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
 
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListBoxItem}">
-                            <Setter Property="OverridesDefaultStyle" Value="True" />
-                            <Setter Property="SnapsToDevicePixels" Value="True" />
-                            <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <Border BorderThickness="0 0 0 1" 
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="{x:Type ListBoxItem}">
+                                <Setter Property="OverridesDefaultStyle" Value="True" />
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="Foreground" Value="Black" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <Border BorderThickness="0 0 0 1" 
                                                 Background="{TemplateBinding Background}"
                                                 BorderBrush="{DynamicResource DefaultBorderColor}">
-                                            <Grid Margin="5 5 5 5">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="35"></RowDefinition>
-                                                    <RowDefinition Height="50"></RowDefinition>
-                                                    <RowDefinition Height="*"></RowDefinition>
-                                                    <RowDefinition Height="25"></RowDefinition>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Row="0" Text="{Binding Title}" 
+                                                <Grid Margin="5 5 5 5">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="35"></RowDefinition>
+                                                        <RowDefinition Height="50"></RowDefinition>
+                                                        <RowDefinition Height="*"></RowDefinition>
+                                                        <RowDefinition Height="25"></RowDefinition>
+                                                    </Grid.RowDefinitions>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                                        <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock Grid.Row="0" Text="{Binding Title}" 
                                                            Margin="8 5 0 0"
                                                            Cursor="Hand"
                                                            Foreground="{DynamicResource DefaultFontColor}" FontSize="18">
@@ -233,110 +234,201 @@
                                                                                                CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
                                                             </behaviors:EventTrigger>
                                                     </behaviors:Interaction.Triggers>
-                                                </TextBlock>
-                                                <TextBox IsReadOnly="True" Background="Transparent" 
+                                                    </TextBlock>
+                                                    <TextBox IsReadOnly="True" Background="Transparent" 
                                                          BorderThickness="0" VerticalContentAlignment="Top"
                                                          TextWrapping="Wrap"
                                                          AcceptsReturn="True"
                                                          Grid.ColumnSpan="2"
                                                          Grid.Row="1" Text="{Binding Content}" 
                                                          Foreground="{DynamicResource DefaultFontColor}" FontSize="15"/>
-                                                <TextBlock Text="{Binding UserName}" Foreground="{DynamicResource DefaultFontColor}" 
+                                                    <TextBlock Text="{Binding UserName}" Foreground="{DynamicResource DefaultFontColor}" 
                                                            HorizontalAlignment="Right" Grid.Row="3"
                                                            FontSize="15" Grid.Column="1" Margin="0 5 5 0"></TextBlock>
-                                                <StackPanel Grid.Row="2" 
+                                                    <StackPanel Grid.Row="2" 
                                                             Height="85" Margin="0 0 0 5"
                                                             Grid.ColumnSpan="2"
                                                             Orientation="Horizontal"
                                                             Visibility="{Binding HasImages,Converter={StaticResource Boolean2VisibilityConverter}}">
-                                                    <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                        <Image Source="{Binding Image_1_loc}" Margin="10 0 0 0" Cursor="Hand">
+                                                            <behaviors:Interaction.Triggers>
+                                                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                    <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                CommandParameter="{Binding Image_1_loc}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                    </Image>
-                                                    <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                </behaviors:EventTrigger>
+                                                            </behaviors:Interaction.Triggers>
+                                                        </Image>
+                                                        <Image Source="{Binding Image_2_loc}" Margin="15 0 0 0" Cursor="Hand">
+                                                            <behaviors:Interaction.Triggers>
+                                                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                    <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                CommandParameter="{Binding Image_2_loc}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                    </Image>
-                                                    <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                </behaviors:EventTrigger>
+                                                            </behaviors:Interaction.Triggers>
+                                                        </Image>
+                                                        <Image Source="{Binding Image_3_loc}" Margin="15 0 0 0" Cursor="Hand">
+                                                            <behaviors:Interaction.Triggers>
+                                                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                    <behaviors:InvokeCommandAction Command="{Binding DataContext.ViewImageCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                CommandParameter="{Binding Image_2_loc}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                    </Image>
-                                                </StackPanel>
+                                                                </behaviors:EventTrigger>
+                                                            </behaviors:Interaction.Triggers>
+                                                        </Image>
+                                                    </StackPanel>
 
-                                                <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" >
-                                                    <hc:Tag ShowCloseButton="False" HorizontalAlignment="Left"
+                                                    <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" >
+                                                        <hc:Tag ShowCloseButton="False" HorizontalAlignment="Left"
                                                             Margin="5 4 0 2"
                                                             Content="{Binding PostCategoryText}">
-                                                    </hc:Tag>
-                                                    <Label Background="Transparent" BorderThickness="0" Name="goodparent"
+                                                        </hc:Tag>
+                                                        <Label Background="Transparent" BorderThickness="0" Name="goodparent"
                                                            Height="30" Width="35" Margin="10 0 0 0" Cursor="Hand" ToolTip="点赞">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.GoodCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                            <behaviors:Interaction.Triggers>
+                                                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                    <behaviors:InvokeCommandAction Command="{Binding DataContext.GoodCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                        <Path Data="{StaticResource good}"
+                                                                </behaviors:EventTrigger>
+                                                            </behaviors:Interaction.Triggers>
+                                                            <Path Data="{StaticResource good}"
                                                               Fill="{Binding ElementName= goodparent,UpdateSourceTrigger=PropertyChanged,Path=Foreground}" Stretch="Fill"></Path>
-                                                        <Label.Style>
-                                                            <Style TargetType="Label" BasedOn="{StaticResource LabelBaseStyle}">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding HadGood}"  Value="True">
-                                                                        <Setter Property="Foreground" Value="{DynamicResource DefaultHoverFontColor}"></Setter>
-                                                                    </DataTrigger>
-                                                                    <DataTrigger Binding="{Binding HadGood}"  Value="False">
-                                                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </Label.Style>
-                                                    </Label>
-                                                    <TextBlock Text="{Binding GoodCount,UpdateSourceTrigger=PropertyChanged}" Margin="-5 0 0 0"
+                                                            <Label.Style>
+                                                                <Style TargetType="Label" BasedOn="{StaticResource LabelBaseStyle}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding HadGood}"  Value="True">
+                                                                            <Setter Property="Foreground" Value="{DynamicResource DefaultHoverFontColor}"></Setter>
+                                                                        </DataTrigger>
+                                                                        <DataTrigger Binding="{Binding HadGood}"  Value="False">
+                                                                            <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Label.Style>
+                                                        </Label>
+                                                        <TextBlock Text="{Binding GoodCount,UpdateSourceTrigger=PropertyChanged}" Margin="-5 0 0 0"
                                                                Width="30"
                                                                Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
-                                                    
-                                                    <Label Background="Transparent" BorderThickness="0"
+
+                                                        <Label Background="Transparent" BorderThickness="0"
                                                            Height="30" Width="35" Margin="10 0 0 0">
-                                                        <Path Data="{StaticResource comment}"
+                                                            <Path Data="{StaticResource comment}"
                                                               Fill="{DynamicResource DefaultFontColor}" Stretch="Fill"></Path>
-                                                    </Label>
-                                                    <TextBlock Text="{Binding CommmentsCount}" Margin="-5 0 0 0"
+                                                        </Label>
+                                                        <TextBlock Text="{Binding CommmentsCount}" Margin="-5 0 0 0"
                                                                Foreground="{DynamicResource DefaultFontColor}"></TextBlock>
-                                                </StackPanel>
-                                                <TextBlock Grid.Row="0"
+                                                    </StackPanel>
+                                                    <TextBlock Grid.Row="0"
                                                            Foreground="{DynamicResource DefaultFontColor}" FontSize="15"
                                                            HorizontalAlignment="Right"
                                                            Margin="0 5 5 0"
                                                            Grid.Column="1" Text="{Binding CreateTimeText}"></TextBlock>
-                                            </Grid>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource DefaultHoverColor}"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
-                </ListBox>
-            </ScrollViewer>
-        </hc:Card>
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource DefaultHoverColor}"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </ScrollViewer>
+            </hc:Card>
 
-        <hc:Pagination Grid.Row="4" PageIndex="{Binding Page,UpdateSourceTrigger=PropertyChanged}" 
+            <hc:Pagination Grid.Row="4" PageIndex="{Binding Page,UpdateSourceTrigger=PropertyChanged}" 
                        MaxPageCount="{Binding AllPages,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Margin="0 5 5 0"></hc:Pagination>
+        </Grid>
+        <Grid Visibility="{Binding IsChatPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="50"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="150"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <hc:Card BorderThickness="0" Margin="0 5 5 2"
+                     Grid.Row="1"
+                     Grid.ColumnSpan="2"
+                     Effect="{StaticResource EffectShadow2}"
+                     Background="{DynamicResource DefaultCardBackgroundColor}" 
+                     Foreground="{DynamicResource DefaultFontColor}">
+                <ScrollViewer>
+                    <ListBox ItemsSource="{Binding ChatMessages,UpdateSourceTrigger=PropertyChanged}"
+                             UseLayoutRounding="True"
+                             ScrollViewer.CanContentScroll="False"
+                             ScrollViewer.IsDeferredScrollingEnabled="True"
+                             PreviewMouseWheel="ListView_PreviewMouseWheel"
+                             TextOptions.TextFormattingMode="Display"
+                             BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical"></StackPanel>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource ClockListBoxItemStyle}">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{DynamicResource DefaultBorderColor}">
+                                                <Grid>
+                                                    <hc:ChatBubble Content="{Binding Message,UpdateSourceTrigger=PropertyChanged}"
+                                                                   FontSize="15">
+                                                        <hc:ChatBubble.Resources>
+                                                            <Style TargetType="hc:ChatBubble" BasedOn="{StaticResource ChatBubbleBaseStyle}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger  Value="True" Binding="{Binding IsSender}">
+                                                                        <Setter Property="HorizontalAlignment" Value="Right" />
+                                                                        <Setter Property="Role" Value="Sender" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger  Value="False" Binding="{Binding IsSender}">
+                                                                        <Setter Property="HorizontalAlignment" Value="Left" />
+                                                                        <Setter Property="Role" Value="Receiver" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </hc:ChatBubble.Resources>
+                                                        <hc:ChatBubble.ContextMenu>
+                                                            <ContextMenu>
+                                                                <MenuItem Header="复制" Command="{Binding OpenFileLocation}"></MenuItem>
+                                                            </ContextMenu>
+                                                        </hc:ChatBubble.ContextMenu>
+                                                    </hc:ChatBubble>
+                                                </Grid>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="Transparent"></Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Background" Value="Transparent"></Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </ScrollViewer>
+            </hc:Card>
+
+            <TextBox Text="{Binding ChatMessage,UpdateSourceTrigger=PropertyChanged}" 
+                     Style="{StaticResource TextBoxExtend}"
+                     hc:InfoElement.Placeholder="输入发送消息，最多50字"
+                     Height="35" Grid.Row="2" Grid.Column="0"></TextBox>
+            <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
+                <Button Content="开黑喊话" Style="{StaticResource ButtonWarning}" Margin="5 0 0 0"></Button>
+                <Button Content="发送" Command="{Binding SendMessageCommandAsync}" Style="{StaticResource ButtonPrimary}" Width="65" Margin="5 0 0 0"></Button>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </Page>

@@ -7,6 +7,7 @@ using LeagueOfLegendsBoxer.Application.Teamup.Dtos;
 using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Windows;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -39,6 +40,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _posts, value);
         }
 
+        private ObservableCollection<ChatMessage> _chatMessages;
+        public ObservableCollection<ChatMessage> ChatMessages
+        {
+            get => _chatMessages;
+            set => SetProperty(ref _chatMessages, value);
+        }
+
         public Dictionary<string, string> PostCategories { get; set; }
 
         private int _page;
@@ -55,11 +63,27 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _allPages, value);
         }
 
+        private bool _isChatPage;
+        public bool IsChatPage
+        {
+            get => _isChatPage;
+            set => SetProperty(ref _isChatPage, value);
+        }
+
+        private string _chatMessage;
+        public string ChatMessage
+        {
+            get => _chatMessage;
+            set => SetProperty(ref _chatMessage, value);
+        }
+
         public RelayCommand SendNewPostCommand { get; set; }
+        public RelayCommand OpenChatCommand { get; set; }
         public AsyncRelayCommand<PostBrief> OpenPostDetailCommandAsync { get; set; }
         public AsyncRelayCommand LoadedCommandAsync { get; set; }
         public AsyncRelayCommand<PostBrief> GoodCommandAsync { get; set; }
         public RelayCommand<string> ViewImageCommand { get; set; }
+        public AsyncRelayCommand SendMessageCommandAsync { get; set; }
 
         public TeamupViewModel(Post post,
                                EnumHelper enumHelper,
@@ -76,11 +100,31 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             LoadedCommandAsync = new AsyncRelayCommand(LoadedAsync);
             GoodCommandAsync = new AsyncRelayCommand<PostBrief>(GoodAsync);
             ViewImageCommand = new RelayCommand<string>(ViewImage);
+            OpenChatCommand = new RelayCommand(OpenChat);
+            SendMessageCommandAsync = new AsyncRelayCommand(SendMessageAsync);
+            ChatMessages = new ObservableCollection<ChatMessage>();
         }
 
         private void SendNewPost()
         {
             _post.ShowDialog();
+        }
+
+        private void OpenChat()
+        {
+            if (App.HubConnection == null || App.HubConnection.State != HubConnectionState.Connected)
+            {
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "未连接上世界聊天频道!请稍后再试或重启软件",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
+
+            IsChatPage = true;
         }
 
         private void ViewImage(string imageLoc) 
@@ -192,6 +236,17 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             var detail = App.ServiceProvider.GetRequiredService<PostDetailWindow>();
             await (detail.DataContext as PostDetailWindowViewModel).LoadPostDetailAsync(postDetail.Id);
             detail.Show();
+        }
+
+        private async Task SendMessageAsync() 
+        {
+            if (string.IsNullOrEmpty(ChatMessage) || ChatMessage.Length > 50) 
+            {
+                return;
+            }
+
+            await App.HubConnection.SendAsync("SendMessage", ChatMessage);
+            ChatMessage = null;
         }
     }
 }
