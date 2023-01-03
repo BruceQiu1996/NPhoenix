@@ -6,6 +6,7 @@ using LeagueOfLegendsBoxer.ViewModels;
 using LeagueOfLegendsBoxer.ViewModels.Pages;
 using LeagueOfLegendsBoxer.Windows;
 using LeagueOfLegendsBoxerApplication.Extensions;
+using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -21,7 +22,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using WindowsInput.Native;
 
 namespace LeagueOfLegendsBoxer
 {
@@ -34,6 +34,8 @@ namespace LeagueOfLegendsBoxer
         private const int SW_SHOWNOMAL = 1;
         public static Theme CURRENT_THEME;
         public static IServiceProvider ServiceProvider;
+        public static HubConnection HubConnection;
+
         protected async override void OnStartup(StartupEventArgs e)
         {
             string mutexName = "32283F61-EC4D-43B1-9C44-40280D5854DD";
@@ -174,8 +176,12 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<TeamupViewModel>();
 
                 services.Configure<List<Models.ServerArea>>(ctx.Configuration.GetSection("ServerAreas"));
+                HubConnection = new HubConnectionBuilder().WithUrl("http://47.101.171.149:20001/chathub", option =>
+                {
+                    option.CloseTimeout = TimeSpan.FromSeconds(60);
+                }).WithAutomaticReconnect().Build();
             });
-            
+
             return hostBuilder;
         }
 
@@ -185,11 +191,11 @@ namespace LeagueOfLegendsBoxer
             try
             {
                 e.Handled = true; //把 Handled 属性设为true，表示此异常已处理，程序可以继续运行，不会强制退出      
-                File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"error.txt"), e.Exception.ToString());
+                File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.txt"), e.Exception.ToString());
             }
             catch (Exception ex)
             {
-                File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.txt"),ex.ToString());
+                File.WriteAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "error.txt"), ex.ToString());
             }
 
         }
