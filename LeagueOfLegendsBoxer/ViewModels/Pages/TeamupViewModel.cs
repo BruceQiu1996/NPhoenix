@@ -6,6 +6,7 @@ using LeagueOfLegendsBoxer.Application.Teamup;
 using LeagueOfLegendsBoxer.Application.Teamup.Dtos;
 using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Models;
+using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
@@ -84,7 +85,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand<PostBrief> GoodCommandAsync { get; set; }
         public RelayCommand<string> ViewImageCommand { get; set; }
         public AsyncRelayCommand SendMessageCommandAsync { get; set; }
-
+        public RelayCommand GroupMessageCommand { get; set; }
         public TeamupViewModel(Post post,
                                EnumHelper enumHelper,
                                IConfiguration configuration,
@@ -102,12 +103,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ViewImageCommand = new RelayCommand<string>(ViewImage);
             OpenChatCommand = new RelayCommand(OpenChat);
             SendMessageCommandAsync = new AsyncRelayCommand(SendMessageAsync);
+            GroupMessageCommand = new RelayCommand(GroupMessage);
             ChatMessages = new ObservableCollection<ChatMessage>();
         }
 
         private void SendNewPost()
         {
             _post.ShowDialog();
+        }
+
+        private void GroupMessage() 
+        {
+            ChatMessage = $"来自{Constant.Account.ServerArea}的{Constant.Account.DisplayName}请求一起打游戏";
         }
 
         private void OpenChat()

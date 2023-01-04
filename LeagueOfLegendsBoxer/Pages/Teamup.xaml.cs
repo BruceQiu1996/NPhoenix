@@ -28,5 +28,10 @@ namespace LeagueOfLegendsBoxer.Pages
                 parent.RaiseEvent(eventArg);
             }
         }
+
+        private void ScrollViewer_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace LeagueOfLegendsBoxer.Models
+﻿using System;
+
+namespace LeagueOfLegendsBoxer.Models
 {
     public class ChatMessage
     {
@@ -12,5 +14,26 @@
         public bool IsSender { get; set; }
         public bool IsAdministrator { get; set; }
         public string Role { get; set; }
+        public DateTime CreateTime { get; set; }
+        public string CreateTimeText => ConvertDateTimeToText(CreateTime);
+
+        //TODO 统一方法
+        public string ConvertDateTimeToText(DateTime dateTime)
+        {
+            if (dateTime.Year == DateTime.Now.Year && dateTime.DayOfYear == DateTime.Now.DayOfYear)
+            {
+                //今天
+                return dateTime.ToString("t");
+            }
+            else if (dateTime.Year == DateTime.Now.Year)
+            {
+                //今年
+                return dateTime.ToString("MM-dd HH:mm");
+            }
+            else
+            {
+                return dateTime.ToString("yyyy/MM/dd HH:mm");
+            }
+        }
     }
 }

@@ -9,9 +9,94 @@
       xmlns:model="clr-namespace:LeagueOfLegendsBoxer.Models"
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
-      FontFamily="微软雅黑"
+      xmlns:resources ="clr-namespace:LeagueOfLegendsBoxer.Resources"
+      xmlns:converts ="clr-namespace:LeagueOfLegendsBoxer.Converts"
+      FontFamily="微软雅黑" Name="container"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Teamup">
+    <Page.Resources>
+        <converts:ValueHalfConverter x:Key="ValueHalfConverter"></converts:ValueHalfConverter>
+        <resources:MessageDataTemplateSelector x:Key="messageselector"></resources:MessageDataTemplateSelector>
+        <DataTemplate x:Key="chatSender">
+            <Grid Name="ctx">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
+                    <TextBox Text="{Binding Message,UpdateSourceTrigger=PropertyChanged}"
+                             Background="{DynamicResource DefaultHoverColor}"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             MaxWidth="{Binding ElementName=ctx,Path=ActualWidth,Converter={StaticResource ValueHalfConverter},UpdateSourceTrigger=PropertyChanged}"
+                             BorderThickness="0"
+                             Foreground="{DynamicResource DefaultFontColor}"
+                             HorizontalAlignment="Right"
+                             FontSize="15">
+                    </TextBox>
+                    <TextBlock VerticalAlignment="Center" Margin="10 0 0 0" 
+                               Cursor="Hand"
+                               Background="Transparent"
+                               Text="{Binding UserName}" Name="name" HorizontalAlignment="Right" Foreground="{DynamicResource DefaultFontColor}" >
+                        <Popup Focusable="False"
+                               IsOpen="{Binding ElementName=name,Path=IsMouseOver,Mode=OneWay}"
+                               PlacementTarget="{Binding ElementName=name}" 
+                               Placement="Right" AllowsTransparency="True"
+                               Effect="{StaticResource EffectShadow2}">
+                               <StackPanel Orientation="Vertical" Background="{DynamicResource DefaultHoverColor}">
+                                    <TextBlock Text="{Binding UserName}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding ServerArea}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Rank_SOLO_5x5,StringFormat={}单双排 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Rank_FLEX_SR,StringFormat={}灵活组排 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Desc,StringFormat={}标签 : {0}}" Margin="10 5"/>
+                               </StackPanel>
+                        </Popup>
+                    </TextBlock>
+                </StackPanel>
+                <TextBlock Text="{Binding CreateTimeText}" HorizontalAlignment="Right" Grid.Row="1" Foreground="#aaaaaa"></TextBlock>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="chatReceiver">
+            <Grid Name="ctx1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="20"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
+                    <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" 
+                               Cursor="Hand"
+                               Text="{Binding UserName}" Name="name" HorizontalAlignment="Left" Foreground="{DynamicResource DefaultFontColor}" >
+                         <Popup Focusable="False"
+                               IsOpen="{Binding ElementName=name,Path=IsMouseOver,Mode=OneWay}"
+                               PlacementTarget="{Binding ElementName=name}" 
+                               Placement="Right" AllowsTransparency="True"
+                               Effect="{StaticResource EffectShadow2}">
+                               <StackPanel Orientation="Vertical" Background="{DynamicResource DefaultHoverColor}">
+                                    <TextBlock Text="{Binding UserName}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding ServerArea}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Rank_SOLO_5x5,StringFormat={}单双排 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Rank_FLEX_SR,StringFormat={}灵活组排 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Desc,StringFormat={}标签 : {0}}" Margin="10 5"/>
+                               </StackPanel>
+                        </Popup>
+                    </TextBlock>
+                    <TextBox Text="{Binding Message,UpdateSourceTrigger=PropertyChanged}"
+                             Background="{DynamicResource DefaultHoverColor}"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             MaxWidth="{Binding ElementName=ctx1,Path=ActualWidth,Converter={StaticResource ValueHalfConverter},UpdateSourceTrigger=PropertyChanged}"
+                             BorderThickness="0"
+                             Foreground="{DynamicResource DefaultFontColor}"
+                             HorizontalAlignment="Left"
+                             FontSize="15">
+                    </TextBox>
+                </StackPanel>
+                <TextBlock Text="{Binding CreateTimeText}" HorizontalAlignment="Left" Grid.Row="1" Foreground="#aaaaaa"></TextBlock>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
     <behaviors:Interaction.Triggers>
         <behaviors:EventTrigger EventName="Loaded">
             <behaviors:InvokeCommandAction Command="{Binding LoadedCommandAsync}"></behaviors:InvokeCommandAction>
@@ -356,12 +441,14 @@
                      Effect="{StaticResource EffectShadow2}"
                      Background="{DynamicResource DefaultCardBackgroundColor}" 
                      Foreground="{DynamicResource DefaultFontColor}">
-                <ScrollViewer>
+                <ScrollViewer resources:ScrollViewerHelper.AlwaysScrollToEnd="True" 
+                              RequestBringIntoView="ScrollViewer_RequestBringIntoView">
                     <ListBox ItemsSource="{Binding ChatMessages,UpdateSourceTrigger=PropertyChanged}"
                              UseLayoutRounding="True"
                              ScrollViewer.CanContentScroll="False"
                              ScrollViewer.IsDeferredScrollingEnabled="True"
                              PreviewMouseWheel="ListView_PreviewMouseWheel"
+                             ItemTemplateSelector="{StaticResource messageselector}"
                              TextOptions.TextFormattingMode="Display"
                              BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
                         <ListBox.ItemsPanel>
@@ -372,39 +459,7 @@
 
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ClockListBoxItemStyle}">
-                                <Setter Property="Template">
-                                    <Setter.Value>
-                                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                            <Border Background="{TemplateBinding Background}"
-                                                    BorderBrush="{DynamicResource DefaultBorderColor}">
-                                                <Grid>
-                                                    <hc:ChatBubble Content="{Binding Message,UpdateSourceTrigger=PropertyChanged}"
-                                                                   FontSize="15">
-                                                        <hc:ChatBubble.Resources>
-                                                            <Style TargetType="hc:ChatBubble" BasedOn="{StaticResource ChatBubbleBaseStyle}">
-                                                                <Style.Triggers>
-                                                                    <DataTrigger  Value="True" Binding="{Binding IsSender}">
-                                                                        <Setter Property="HorizontalAlignment" Value="Right" />
-                                                                        <Setter Property="Role" Value="Sender" />
-                                                                    </DataTrigger>
-                                                                    <DataTrigger  Value="False" Binding="{Binding IsSender}">
-                                                                        <Setter Property="HorizontalAlignment" Value="Left" />
-                                                                        <Setter Property="Role" Value="Receiver" />
-                                                                    </DataTrigger>
-                                                                </Style.Triggers>
-                                                            </Style>
-                                                        </hc:ChatBubble.Resources>
-                                                        <hc:ChatBubble.ContextMenu>
-                                                            <ContextMenu>
-                                                                <MenuItem Header="复制" Command="{Binding OpenFileLocation}"></MenuItem>
-                                                            </ContextMenu>
-                                                        </hc:ChatBubble.ContextMenu>
-                                                    </hc:ChatBubble>
-                                                </Grid>
-                                            </Border>
-                                        </ControlTemplate>
-                                    </Setter.Value>
-                                </Setter>
+                                <Setter Property="Margin" Value="0 5"></Setter>
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
@@ -425,8 +480,8 @@
                      hc:InfoElement.Placeholder="输入发送消息，最多50字"
                      Height="35" Grid.Row="2" Grid.Column="0"></TextBox>
             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
-                <Button Content="开黑喊话" Style="{StaticResource ButtonWarning}" Margin="5 0 0 0"></Button>
-                <Button Content="发送" Command="{Binding SendMessageCommandAsync}" Style="{StaticResource ButtonPrimary}" Width="65" Margin="5 0 0 0"></Button>
+                <Button Content="开黑喊话" Command="{Binding GroupMessageCommand}" Style="{StaticResource ButtonWarning}" Margin="5 0 0 0"></Button>
+                <Button Content="发送" Command="{Binding SendMessageCommandAsync}" Style="{StaticResource ButtonPrimary}" IsDefault="True" Width="65" Margin="5 0 0 0"></Button>
             </StackPanel>
 
         </Grid>
