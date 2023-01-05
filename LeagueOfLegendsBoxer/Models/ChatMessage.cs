@@ -4,6 +4,7 @@ namespace LeagueOfLegendsBoxer.Models
 {
     public class ChatMessage
     {
+        public bool IsLoadData { get; set; }
         public long UserId { get; set; }
         public string UserName { get; set; }
         public string Desc { get; set; }
@@ -13,6 +14,7 @@ namespace LeagueOfLegendsBoxer.Models
         public string Message { get; set; }
         public bool IsSender { get; set; }
         public bool IsAdministrator { get; set; }
+        public bool CurrentIsAdministrator { get; set; }
         public string Role { get; set; }
         public DateTime CreateTime { get; set; }
         public string CreateTimeText => ConvertDateTimeToText(CreateTime);

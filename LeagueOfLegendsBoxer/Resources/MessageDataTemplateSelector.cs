@@ -13,7 +13,9 @@ namespace LeagueOfLegendsBoxer.Resources
             DataTemplate dt = null;
             if (obj != null && fe != null)
             {
-                if (obj.IsSender)
+                if(obj.IsLoadData)
+                    dt = fe.FindResource("loadData") as DataTemplate;
+                else if (obj.IsSender)
                     dt = fe.FindResource("chatSender") as DataTemplate;
                 else
                     dt = fe.FindResource("chatReceiver") as DataTemplate;

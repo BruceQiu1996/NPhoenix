@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Windows.Interop;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
@@ -26,6 +28,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private readonly Post _post;
         private readonly IConfiguration _configuration;
         private readonly ITeamupService _teamupService;
+        public System.Windows.Controls.ScrollViewer ChatScrollViewer { get; set; }
 
         private ObservableCollection<PostBrief> _topPosts;
         public ObservableCollection<PostBrief> TopPosts
@@ -46,6 +49,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get => _chatMessages;
             set => SetProperty(ref _chatMessages, value);
+        }
+
+        private ObservableCollection<ChatMessage> _allchatMessages;
+        public ObservableCollection<ChatMessage> AllChatMessages
+        {
+            get => _allchatMessages;
+            set => SetProperty(ref _allchatMessages, value);
         }
 
         public Dictionary<string, string> PostCategories { get; set; }
@@ -81,11 +91,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand SendNewPostCommand { get; set; }
         public RelayCommand OpenChatCommand { get; set; }
         public AsyncRelayCommand<PostBrief> OpenPostDetailCommandAsync { get; set; }
-        public AsyncRelayCommand LoadedCommandAsync { get; set; }
+        //public AsyncRelayCommand LoadedCommandAsync { get; set; }
         public AsyncRelayCommand<PostBrief> GoodCommandAsync { get; set; }
         public RelayCommand<string> ViewImageCommand { get; set; }
         public AsyncRelayCommand SendMessageCommandAsync { get; set; }
         public RelayCommand GroupMessageCommand { get; set; }
+        public RelayCommand LoadHistoryMessageCommmand { get; set; }
+        public RelayCommand<ChatMessage> CopyCurrentUserNameCommand { get; set; }
+        public AsyncRelayCommand<ChatMessage> DenySendMessageCommandAsync { get; set; }
         public TeamupViewModel(Post post,
                                EnumHelper enumHelper,
                                IConfiguration configuration,
@@ -98,13 +111,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             PostCategories = enumHelper.GetEnumItemValueDesc(typeof(PostCategory));
             OpenPostDetailCommandAsync = new AsyncRelayCommand<PostBrief>(OpenPostDetail);
             SendNewPostCommand = new RelayCommand(SendNewPost);
-            LoadedCommandAsync = new AsyncRelayCommand(LoadedAsync);
+            //LoadedCommandAsync = new AsyncRelayCommand(LoadedAsync);
             GoodCommandAsync = new AsyncRelayCommand<PostBrief>(GoodAsync);
             ViewImageCommand = new RelayCommand<string>(ViewImage);
             OpenChatCommand = new RelayCommand(OpenChat);
             SendMessageCommandAsync = new AsyncRelayCommand(SendMessageAsync);
             GroupMessageCommand = new RelayCommand(GroupMessage);
+            LoadHistoryMessageCommmand = new RelayCommand(LoadHistoryMessage);
+            CopyCurrentUserNameCommand = new RelayCommand<ChatMessage>(CopyCurrentUserName);
+            DenySendMessageCommandAsync = new AsyncRelayCommand<ChatMessage>(DenySendMessageAsync);
             ChatMessages = new ObservableCollection<ChatMessage>();
+            ChatMessages.Add(new ChatMessage() { IsLoadData = true });
+            AllChatMessages = new ObservableCollection<ChatMessage>();
         }
 
         private void SendNewPost()
@@ -112,9 +130,76 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _post.ShowDialog();
         }
 
+        private void CopyCurrentUserName(ChatMessage chatMessage) 
+        {
+            Clipboard.SetText(chatMessage.UserName);
+        }
+
+        private async Task DenySendMessageAsync(ChatMessage chatMessage) 
+        {
+            Growl.AskGlobal($"确定禁言{chatMessage.UserName}?", result =>
+            {
+
+                return true;
+            });
+            var result = await _teamupService.DenyChatAsync(chatMessage.UserId);
+            if (result) 
+            {
+                
+            }
+        }
+
         private void GroupMessage() 
         {
             ChatMessage = $"来自{Constant.Account.ServerArea}的{Constant.Account.DisplayName}请求一起打游戏";
+        }
+
+        private void LoadHistoryMessage()
+        {
+            var msg = ChatMessages.Count() > 1 ? ChatMessages[1] : null;
+            if (msg == null)
+                return;
+
+            var index = AllChatMessages.IndexOf(msg);
+            if (index >= 20)
+            {
+                foreach (var tempIndex in Enumerable.Range(0, 20))
+                {
+                    ChatMessages.Insert(1, AllChatMessages[index - tempIndex - 1]);
+                }
+            }
+            else if (index > 0 && index < 20)
+            {
+                for (var temp = index - 1; temp >= 0; temp--)
+                {
+                    ChatMessages.Insert(1, AllChatMessages[temp]);
+                }
+            }
+            else
+            {
+                Growl.InfoGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "没有更多历史聊天记录",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
+        }
+
+        public void AddNewMessage(ChatMessage msg)
+        {
+            msg.CurrentIsAdministrator = Constant.Account.IsAdministrator;
+            msg.IsAdministrator = msg.Role.Contains("Administrator");
+            msg.IsSender = msg.UserId == Constant.Account.SummonerId;
+            ChatMessages.Add(msg);
+            AllChatMessages.Add(msg);
+            double bottomOffset = ChatScrollViewer.ExtentHeight - ChatScrollViewer.VerticalOffset - ChatScrollViewer.ViewportHeight;
+            if (ChatScrollViewer.VerticalOffset > 0 && bottomOffset == 0 && ChatMessages.Count > 50)
+            {
+                ChatMessages.RemoveAt(1);
+            }
         }
 
         private void OpenChat()
@@ -142,6 +227,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             new ImageBrowser(new Uri(imageLoc)).Show();
         }
 
+        //TODO后期酌情上线
         private async Task LoadedAsync()
         {
             if (!_loaded)

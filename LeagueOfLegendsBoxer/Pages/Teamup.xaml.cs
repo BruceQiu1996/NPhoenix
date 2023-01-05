@@ -14,6 +14,7 @@ namespace LeagueOfLegendsBoxer.Pages
         {
             InitializeComponent();
             DataContext = viewModel;
+            viewModel.ChatScrollViewer = chatScrollViewer;
         }
 
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)

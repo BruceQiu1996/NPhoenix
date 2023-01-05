@@ -16,6 +16,7 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
         private readonly string _postDetail = "/Posts/detail/{0}";
         private readonly string _postComment = "/Posts/comment";
         private readonly string _getPostComment = "/Posts/comments/{0}/{1}";
+        private readonly string _denyChat = "/Manage/mushin";
 
         private HttpClient _httpClient;
 
@@ -188,6 +189,23 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
             }
 
             throw new Exception();
+        }
+
+        public async Task<bool> DenyChatAsync(long userId)
+        {
+            StringContent content = new StringContent(JsonConvert.SerializeObject(new 
+            {
+                UserId = userId,
+                Type = 2
+            }));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var resp = await _httpClient.PutAsync(_denyChat, content);
+            if (resp.IsSuccessStatusCode)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

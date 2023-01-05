@@ -7,4 +7,6 @@
 
     <SolidColorBrush x:Key="DefaultHoverColor">#eeeeee</SolidColorBrush>
     <SolidColorBrush x:Key="DefaultBorderColor">#eeeeee</SolidColorBrush>
+
+    <SolidColorBrush x:Key="LoadColor">Blue</SolidColorBrush>
 </ResourceDictionary>

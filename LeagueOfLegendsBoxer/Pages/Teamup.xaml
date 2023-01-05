@@ -15,6 +15,12 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Teamup">
     <Page.Resources>
+        <ContextMenu x:Key="menu">
+            <MenuItem Header="复制昵称" Command="{Binding DataContext.CopyCurrentUserNameCommand}"
+                                       CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.DataContext}"></MenuItem>
+            <MenuItem Header="禁言"  Command="{Binding DataContext.DenySendMessageCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                     CommandParameter="{Binding}" Visibility="{Binding CurrentIsAdministrator,Converter={StaticResource Boolean2VisibilityConverter}}"></MenuItem>
+        </ContextMenu>
         <converts:ValueHalfConverter x:Key="ValueHalfConverter"></converts:ValueHalfConverter>
         <resources:MessageDataTemplateSelector x:Key="messageselector"></resources:MessageDataTemplateSelector>
         <DataTemplate x:Key="chatSender">
@@ -37,8 +43,20 @@
                     </TextBox>
                     <TextBlock VerticalAlignment="Center" Margin="10 0 0 0" 
                                Cursor="Hand"
-                               Background="Transparent"
-                               Text="{Binding UserName}" Name="name" HorizontalAlignment="Right" Foreground="{DynamicResource DefaultFontColor}" >
+                               Background="Transparent" ContextMenu="{StaticResource menu}"
+                               Text="{Binding UserName}" Name="name" HorizontalAlignment="Right">
+                        <TextBlock.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsAdministrator}" Value="True">
+                                        <Setter Property="Foreground" Value="Salmon"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsAdministrator}" Value="False">
+                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Resources>
                         <Popup Focusable="False"
                                IsOpen="{Binding ElementName=name,Path=IsMouseOver,Mode=OneWay}"
                                PlacementTarget="{Binding ElementName=name}" 
@@ -57,6 +75,16 @@
                 <TextBlock Text="{Binding CreateTimeText}" HorizontalAlignment="Right" Grid.Row="1" Foreground="#aaaaaa"></TextBlock>
             </Grid>
         </DataTemplate>
+        <DataTemplate x:Key="loadData">
+            <TextBlock Text="加载历史聊天记录" HorizontalAlignment="Center" FontSize="13" Foreground="{DynamicResource LoadColor}" Cursor="Hand" TextDecorations="Underline">
+                <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                    <behaviors:InvokeCommandAction Command="{Binding DataContext.LoadHistoryMessageCommmand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                   ></behaviors:InvokeCommandAction>
+                        </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+            </TextBlock>
+        </DataTemplate>
         <DataTemplate x:Key="chatReceiver">
             <Grid Name="ctx1">
                 <Grid.RowDefinitions>
@@ -67,7 +95,19 @@
                 <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
                     <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" 
                                Cursor="Hand"
-                               Text="{Binding UserName}" Name="name" HorizontalAlignment="Left" Foreground="{DynamicResource DefaultFontColor}" >
+                               Text="{Binding UserName}" Name="name" HorizontalAlignment="Left">
+                        <TextBlock.Resources>
+                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsAdministrator}" Value="True">
+                                        <Setter Property="Foreground" Value="Salmon"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsAdministrator}" Value="False">
+                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Resources>
                          <Popup Focusable="False"
                                IsOpen="{Binding ElementName=name,Path=IsMouseOver,Mode=OneWay}"
                                PlacementTarget="{Binding ElementName=name}" 
@@ -103,7 +143,7 @@
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
     <Grid>
-        <Grid Visibility="{Binding IsChatPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}">
+        <!--<Grid Visibility="{Binding IsChatPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"></RowDefinition>
                 <RowDefinition Height="auto"></RowDefinition>
@@ -424,10 +464,10 @@
 
             <hc:Pagination Grid.Row="4" PageIndex="{Binding Page,UpdateSourceTrigger=PropertyChanged}" 
                        MaxPageCount="{Binding AllPages,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Right" Margin="0 5 5 0"></hc:Pagination>
-        </Grid>
-        <Grid Visibility="{Binding IsChatPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}">
+        </Grid>-->
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="0"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
             </Grid.RowDefinitions>
@@ -442,7 +482,9 @@
                      Background="{DynamicResource DefaultCardBackgroundColor}" 
                      Foreground="{DynamicResource DefaultFontColor}">
                 <ScrollViewer resources:ScrollViewerHelper.AlwaysScrollToEnd="True" 
-                              RequestBringIntoView="ScrollViewer_RequestBringIntoView">
+                              Name="chatScrollViewer"
+                              RequestBringIntoView="ScrollViewer_RequestBringIntoView"
+                              >
                     <ListBox ItemsSource="{Binding ChatMessages,UpdateSourceTrigger=PropertyChanged}"
                              UseLayoutRounding="True"
                              ScrollViewer.CanContentScroll="False"

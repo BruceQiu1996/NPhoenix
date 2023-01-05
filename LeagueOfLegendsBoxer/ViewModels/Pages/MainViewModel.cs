@@ -96,7 +96,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         Rank_SOLO_5x5 = $"{Account.Rank.RANKED_SOLO_5x5.CnTier}{Account.Rank.RANKED_SOLO_5x5.Division}",
                         Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion
                     });
-                    
+
                     if (resp == null)
                     {
                         Growl.WarningGlobal(new GrowlInfo()
@@ -128,17 +128,35 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             option.CloseTimeout = TimeSpan.FromSeconds(60);
                             option.AccessTokenProvider = () => Task.FromResult(resp.Token);
                         }).WithAutomaticReconnect().Build();
-                        await App.HubConnection.StartAsync();
                         App.HubConnection.On<ChatMessage>("ReceiveMessage", msg =>
                         {
                             System.Windows.Application.Current.Dispatcher.Invoke(() =>
                             {
-                                msg.IsAdministrator = msg.Role.Contains("Administrator");
-                                msg.IsSender = msg.UserId == Constant.Account.SummonerId;
-                                App.ServiceProvider.GetRequiredService<TeamupViewModel>()?.ChatMessages.Add(msg);
+                                App.ServiceProvider.GetRequiredService<TeamupViewModel>().AddNewMessage(msg);
                             });
                         });
+                        App.HubConnection.On<IEnumerable<ChatMessage>>("FetchMessages", msgs =>
+                        {
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                foreach (var msg in msgs)
+                                {
+                                    App.ServiceProvider.GetRequiredService<TeamupViewModel>().AddNewMessage(msg);
+                                }
+                            });
+                        });
+                        App.HubConnection.On("DenyChat", () =>
+                        {
+                            Growl.WarningGlobal(new GrowlInfo()
+                            {
+                                WaitTime = 2,
+                                Message = "你已被禁言，联系管理员解禁",
+                                ShowDateTime = false
+                            });
+                        });
+                        await App.HubConnection.StartAsync();
                         Constant.Account.ServerArea = resp.ServerArea;
+                        Constant.Account.IsAdministrator = string.IsNullOrEmpty(resp.RoleName) ? false : resp.RoleName.Contains("Administrator");
                         var ranks = await _softwareHelper.GetRanksAsync();
                         Account.MvpRank = ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";
                         Account.XiaguKill = ranks?.Xiagu.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Xiagu.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";

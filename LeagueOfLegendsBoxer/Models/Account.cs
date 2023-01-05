@@ -264,6 +264,8 @@ namespace LeagueOfLegendsBoxer.Models
             set { SetProperty(ref _spell2Image, value); }
         }
 
+        public bool IsAdministrator { get; set; }
+
         public Account ShallowCopy()
         {
             return this.MemberwiseClone() as Account;

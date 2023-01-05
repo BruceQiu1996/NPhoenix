@@ -8,4 +8,6 @@
 
     <SolidColorBrush x:Key="DefaultHoverColor">#222222</SolidColorBrush>
     <SolidColorBrush x:Key="DefaultBorderColor">#444444</SolidColorBrush>
+
+    <SolidColorBrush x:Key="LoadColor">lightBlue</SolidColorBrush>
 </ResourceDictionary>

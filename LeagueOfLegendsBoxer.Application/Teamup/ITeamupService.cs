@@ -18,5 +18,6 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
         Task<PostDetailResponseDto> GetPostDetailAsync(long postId);
         Task<bool> CreatePostCommentAsync(CreatePostCommentDto dto);
         Task<PostCommentsResponsePageDto> GetPostCommentsByPage(long postId, int page);
+        Task<bool> DenyChatAsync(long userId);
     }
 }
