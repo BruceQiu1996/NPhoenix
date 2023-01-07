@@ -74,6 +74,8 @@ namespace LeagueOfLegendsBoxer
         protected async override void OnExit(ExitEventArgs e)
         {
             await ServiceProvider.GetRequiredService<IEventService>().DisconnectAsync();
+            await HubConnection?.StopAsync();
+            await HubConnection?.DisposeAsync().AsTask();
         }
 
         private void CheckForStartGame()
@@ -154,6 +156,7 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<PostViewModel>();
                 services.AddSingleton<PostDetailWindow>();
                 services.AddSingleton<PostDetailWindowViewModel>();
+                services.AddSingleton<ChatWindow>();
                 //pages
                 services.AddSingleton<MainPage>();
                 services.AddSingleton<MainViewModel>();

@@ -1,4 +1,11 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using HandyControl.Controls;
+using HandyControl.Data;
+using LeagueOfLegendsBoxer.Application.Teamup;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Windows;
+using MessageBox = System.Windows.MessageBox;
 
 namespace LeagueOfLegendsBoxer.Models
 {
@@ -18,6 +25,39 @@ namespace LeagueOfLegendsBoxer.Models
         public string Role { get; set; }
         public DateTime CreateTime { get; set; }
         public string CreateTimeText => ConvertDateTimeToText(CreateTime);
+        public RelayCommand CopyCurrentUserNameCommand { get; set; }
+        public AsyncRelayCommand DenySendMessageCommandAsync { get; set; }
+
+        public ChatMessage()
+        {
+            CopyCurrentUserNameCommand = new RelayCommand(() =>
+            {
+                Clipboard.SetText(UserName);
+            });
+
+            DenySendMessageCommandAsync = new AsyncRelayCommand(async () =>
+            {
+                var data = await App.ServiceProvider.GetRequiredService<ITeamupService>().DenyChatAsync(UserId);
+                if (data)
+                {
+                    Growl.InfoGlobal(new GrowlInfo()
+                    {
+                        WaitTime = 2,
+                        Message = "禁言成功",
+                        ShowDateTime = false
+                    });
+                }
+                else
+                {
+                    Growl.WarningGlobal(new GrowlInfo()
+                    {
+                        WaitTime = 2,
+                        Message = "服务器错误",
+                        ShowDateTime = false
+                    });
+                }
+            });
+        }
 
         //TODO 统一方法
         public string ConvertDateTimeToText(DateTime dateTime)

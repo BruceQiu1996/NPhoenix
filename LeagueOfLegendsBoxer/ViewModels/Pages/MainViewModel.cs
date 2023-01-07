@@ -11,6 +11,7 @@ using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.Windows;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -18,6 +19,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -48,10 +50,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private readonly ILogger<MainViewModel> _logger;
         private readonly SoftwareHelper _softwareHelper;
         private readonly ITeamupService _teamupService;
+        private readonly ChatWindow _chatWindow;
+        private readonly IConfiguration _configuration;
 
         public MainViewModel(IAccountService accountService,
                              ILogger<MainViewModel> logger,
                              IGameService gameService,
+                             ChatWindow chatWindow,
+                             IConfiguration configuration,
                              SoftwareHelper softwareHelper,
                              ITeamupService teamupService)
         {
@@ -59,6 +65,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _gameService = gameService;
             _teamupService = teamupService;
             _logger = logger;
+            _chatWindow = chatWindow;
+            _configuration = configuration;
             _softwareHelper = softwareHelper;
             CurrentUserInfoCommand = new RelayCommand(CurrentUserInfo);
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
@@ -123,7 +131,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     else
                     {
                         _teamupService.SetToken(resp.Token);
-                        App.HubConnection = new HubConnectionBuilder().WithUrl("http://127.0.0.1:5000/teamupChatHub", option =>
+                        App.HubConnection = new HubConnectionBuilder().WithUrl(_configuration.GetSection("TeamupChatHub").Value, option =>
                         {
                             option.CloseTimeout = TimeSpan.FromSeconds(60);
                             option.AccessTokenProvider = () => Task.FromResult(resp.Token);
@@ -145,6 +153,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                                 }
                             });
                         });
+                        App.HubConnection.On<int>("OnlineMembers", count =>
+                        {
+                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            {
+                                App.ServiceProvider.GetRequiredService<TeamupViewModel>().SetOnlineCount(count);
+                            });
+                        });
                         App.HubConnection.On("DenyChat", () =>
                         {
                             Growl.WarningGlobal(new GrowlInfo()
@@ -155,6 +170,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             });
                         });
                         await App.HubConnection.StartAsync();
+                        _chatWindow.Show();
                         Constant.Account.ServerArea = resp.ServerArea;
                         Constant.Account.IsAdministrator = string.IsNullOrEmpty(resp.RoleName) ? false : resp.RoleName.Contains("Administrator");
                         var ranks = await _softwareHelper.GetRanksAsync();

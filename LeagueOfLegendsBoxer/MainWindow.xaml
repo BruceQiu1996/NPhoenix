@@ -263,23 +263,38 @@
                                 </Style.Triggers>
                             </Style>
                         </ListBoxItem.Style>
-                        <Label BorderThickness="0"
-                               Cursor="Hand"
-                               ToolTip="人才市场"
-                               Background="Transparent"
-                               VerticalContentAlignment="Center"
-                               Grid.Column="1">
-                            <behaviors:Interaction.Triggers>
-                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                    <behaviors:InvokeCommandAction Command="{Binding ShiftTeamupPageCommand}"></behaviors:InvokeCommandAction>
-                                </behaviors:EventTrigger>
-                            </behaviors:Interaction.Triggers>
-                            <Path Data="{StaticResource team}" 
+                        <hc:Badge BadgeMargin="0 -8 0 0" BorderThickness="0"
+                                  Text="爆满">
+                            <hc:Badge.Resources>
+                                <Style BasedOn="{StaticResource BadgeDanger}" TargetType="hc:Badge">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsManyOnline,UpdateSourceTrigger=PropertyChanged}" Value="True">
+                                            <Setter Property="ShowBadge" Value="True"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsManyOnline,UpdateSourceTrigger=PropertyChanged}" Value="False">
+                                            <Setter Property="ShowBadge" Value="False"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </hc:Badge.Resources>
+                            <Label BorderThickness="0"
+                                   Cursor="Hand"
+                                   ToolTip="世界聊天"
+                                   Background="Transparent"
+                                   VerticalContentAlignment="Center"
+                                   Grid.Column="1">
+                                <behaviors:Interaction.Triggers>
+                                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                        <behaviors:InvokeCommandAction Command="{Binding ShiftTeamupPageCommand}"></behaviors:InvokeCommandAction>
+                                    </behaviors:EventTrigger>
+                                </behaviors:Interaction.Triggers>
+                                <Path Data="{StaticResource team}" 
                                   SnapsToDevicePixels="True"
                                   Height="25"
                                   Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
                                   Fill="{StaticResource PrimaryBrush}"/>
-                        </Label>
+                            </Label>
+                        </hc:Badge>
                     </ListBoxItem>
                 </ListBox>
             </hc:Card>

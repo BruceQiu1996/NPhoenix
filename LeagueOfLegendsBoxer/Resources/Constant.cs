@@ -42,6 +42,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string RankSetting = nameof(RankSetting);
         public const string CloseSendOtherWhenBegin = nameof(CloseSendOtherWhenBegin);
         public const string HorseTemplate = nameof(HorseTemplate);
+        public const string ChatMessageTemplate = nameof(ChatMessageTemplate);
         public const string ReadedNotice = nameof(ReadedNotice);
         public const string FuckWords = nameof(FuckWords);
         public const string GoodWords = nameof(GoodWords);

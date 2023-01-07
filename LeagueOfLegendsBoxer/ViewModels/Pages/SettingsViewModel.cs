@@ -571,6 +571,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _horseTemplate, value);
         }
 
+        private string _chatMessageTemplate;
+        public string ChatMessageTemplate
+        {
+            get => _chatMessageTemplate;
+            set => SetProperty(ref _chatMessageTemplate, value);
+        }
+        
         private string _above120ScoreTxt;
         public string Above120ScoreTxt
         {
@@ -697,6 +704,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand CheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
         public AsyncRelayCommand UnCheckedCloseSendOtherWhenBeginCommandAsync { get; set; }
         public AsyncRelayCommand SaveHorseTemplateCommandAsync { get; set; }
+        public AsyncRelayCommand SaveChatMessageTemplateCommandAsync { get; set; }
         public RelayCommand OpenBlackRecordCommand { get; set; }
         public AsyncRelayCommand AutoAcceptGameDelayChangedCommandAsync { get; set; }
         public AsyncRelayCommand CheckUseAltQOpenVsDetailCommandAsync { get; set; }
@@ -785,6 +793,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             CheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(CheckedCloseSendOtherWhenBeginAsync);
             UnCheckedCloseSendOtherWhenBeginCommandAsync = new AsyncRelayCommand(UnCheckedCloseSendOtherWhenBeginAsync);
             SaveHorseTemplateCommandAsync = new AsyncRelayCommand(SaveHorseTemplateAsync);
+            SaveChatMessageTemplateCommandAsync = new AsyncRelayCommand(SaveChatMessageTemplateAsync);
             OpenBlackRecordCommand = new RelayCommand(OpenBlackRecord);
             AutoAcceptGameDelayChangedCommandAsync = new AsyncRelayCommand(AutoAcceptGameDelayChangedAsync);
             CheckUseAltQOpenVsDetailCommandAsync = new AsyncRelayCommand(CheckUseAltQOpenVsDetailAsync);
@@ -918,6 +927,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             GameStartupLocation = _iniSettingsModel.GameExeLocation;
             CloseSendOtherWhenBegin = _iniSettingsModel.CloseSendOtherWhenBegin;
             HorseTemplate = _iniSettingsModel.HorseTemplate;
+            ChatMessageTemplate = _iniSettingsModel.ChatMessageTemplate;
             Version = Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
             AutoAcceptGameDelay = _iniSettingsModel.AutoAcceptGameDelay;
             AutoStartGame = _iniSettingsModel.AutoStartGame;
@@ -1067,6 +1077,31 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 await _iniSettingsModel.WriteAbove110ScoreTxtAsync(Above110ScoreTxt);
                 await _iniSettingsModel.WriteAbove100ScoreTxtAsync(Above100ScoreTxt);
                 await _iniSettingsModel.WriteBelow100ScoreTxtAsync(Below100ScoreTxt);
+
+                Growl.SuccessGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "设置成功",
+                    ShowDateTime = false
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.ToString());
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "设置异常",
+                    ShowDateTime = false
+                });
+            }
+        }
+
+        private async Task SaveChatMessageTemplateAsync() 
+        {
+            try
+            {
+                await _iniSettingsModel.WriteChatMessageTemplateAsync(ChatMessageTemplate);
 
                 Growl.SuccessGlobal(new GrowlInfo()
                 {

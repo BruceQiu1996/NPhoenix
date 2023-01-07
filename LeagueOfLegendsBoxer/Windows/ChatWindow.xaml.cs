@@ -1,22 +1,34 @@
 ﻿using LeagueOfLegendsBoxer.ViewModels.Pages;
-using LeagueOfLegendsBoxer.Windows;
-using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace LeagueOfLegendsBoxer.Pages
+namespace LeagueOfLegendsBoxer.Windows
 {
     /// <summary>
-    /// Interaction logic for Teamup.xaml
+    /// Interaction logic for ChatWindow.xaml
     /// </summary>
-    public partial class Teamup : Page
+    public partial class ChatWindow : Window
     {
-        public Teamup(TeamupViewModel viewModel)
+        public ChatWindow(TeamupViewModel viewModel)
         {
             InitializeComponent();
+            WindowStartupLocation = WindowStartupLocation.Manual;
             DataContext = viewModel;
-            viewModel.ChatScrollViewer = chatScrollViewer;
+            double screeWidth = SystemParameters.FullPrimaryScreenWidth;
+            Top = 20;
+            Left = screeWidth - 20 - Width;
+        }
+
+        private void Grid_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+                DragMove();
+        }
+
+        private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Hide();
         }
 
         private void ListView_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
@@ -35,11 +47,6 @@ namespace LeagueOfLegendsBoxer.Pages
         private void ScrollViewer_RequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             e.Handled = true;
-        }
-
-        private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            App.ServiceProvider.GetRequiredService<ChatWindow>()?.Show();
         }
     }
 }

@@ -51,6 +51,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public string RankSetting { get; set; }
         public bool CloseSendOtherWhenBegin { get; set; }
         public string HorseTemplate { get; set; }
+        public string ChatMessageTemplate { get; set; }
         public string Above120ScoreTxt { get; set; }
         public string Above110ScoreTxt { get; set; }
         public string Above100ScoreTxt { get; set; }
@@ -130,6 +131,7 @@ namespace LeagueOfLegendsBoxer.Resources
             CloseSendOtherWhenBegin = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.CloseSendOtherWhenBegin), out var tempCloseSendOtherWhenBegin) ? tempCloseSendOtherWhenBegin : false;
             IsAltQOpenVsDetail = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsAltQOpenVsDetail), out var tempIsAltQOpenVsDetail) ? tempIsAltQOpenVsDetail : true;
             HorseTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.HorseTemplate);
+            ChatMessageTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.ChatMessageTemplate);
             Above120ScoreTxt = await _settingsService.ReadAsync(Constant.Game, Constant.Above120ScoreTxt);
             Above120ScoreTxt = string.IsNullOrEmpty(Above120ScoreTxt) ? "上等马" : Above120ScoreTxt;
 
@@ -321,6 +323,11 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.HorseTemplate, horseTemplate);
             HorseTemplate = horseTemplate;
+        }
+        public async Task WriteChatMessageTemplateAsync(string chatMessageTemplate)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.ChatMessageTemplate, chatMessageTemplate);
+            ChatMessageTemplate = chatMessageTemplate;
         }
         public async Task WriteAbove120ScoreTxtAsync(string above120ScoreTxt)
         {

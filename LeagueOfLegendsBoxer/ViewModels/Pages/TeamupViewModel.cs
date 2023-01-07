@@ -11,13 +11,14 @@ using LeagueOfLegendsBoxer.Windows;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SharpVectors.Scripting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Windows.Interop;
+using System.Xml.Linq;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
@@ -27,7 +28,10 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private int _pageSize = 10;
         private readonly Post _post;
         private readonly IConfiguration _configuration;
+        private readonly IniSettingsModel _iniSettingsModel;
         private readonly ITeamupService _teamupService;
+        private DateTime? _lastSendTime;
+
         public System.Windows.Controls.ScrollViewer ChatScrollViewer { get; set; }
 
         private ObservableCollection<PostBrief> _topPosts;
@@ -88,6 +92,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _chatMessage, value);
         }
 
+        private int _onlineCount;
+        public int OnlineCount
+        {
+            get => _onlineCount;
+            set => SetProperty(ref _onlineCount, value);
+        }
+
         public RelayCommand SendNewPostCommand { get; set; }
         public RelayCommand OpenChatCommand { get; set; }
         public AsyncRelayCommand<PostBrief> OpenPostDetailCommandAsync { get; set; }
@@ -97,10 +108,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand SendMessageCommandAsync { get; set; }
         public RelayCommand GroupMessageCommand { get; set; }
         public RelayCommand LoadHistoryMessageCommmand { get; set; }
-        public RelayCommand<ChatMessage> CopyCurrentUserNameCommand { get; set; }
-        public AsyncRelayCommand<ChatMessage> DenySendMessageCommandAsync { get; set; }
         public TeamupViewModel(Post post,
                                EnumHelper enumHelper,
+                               IniSettingsModel iniSettingsModel,
                                IConfiguration configuration,
                                ITeamupService teamupService)
         {
@@ -108,6 +118,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _post = post;
             _teamupService = teamupService;
             _configuration = configuration;
+            _iniSettingsModel = iniSettingsModel;
             PostCategories = enumHelper.GetEnumItemValueDesc(typeof(PostCategory));
             OpenPostDetailCommandAsync = new AsyncRelayCommand<PostBrief>(OpenPostDetail);
             SendNewPostCommand = new RelayCommand(SendNewPost);
@@ -118,8 +129,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SendMessageCommandAsync = new AsyncRelayCommand(SendMessageAsync);
             GroupMessageCommand = new RelayCommand(GroupMessage);
             LoadHistoryMessageCommmand = new RelayCommand(LoadHistoryMessage);
-            CopyCurrentUserNameCommand = new RelayCommand<ChatMessage>(CopyCurrentUserName);
-            DenySendMessageCommandAsync = new AsyncRelayCommand<ChatMessage>(DenySendMessageAsync);
             ChatMessages = new ObservableCollection<ChatMessage>();
             ChatMessages.Add(new ChatMessage() { IsLoadData = true });
             AllChatMessages = new ObservableCollection<ChatMessage>();
@@ -130,35 +139,49 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _post.ShowDialog();
         }
 
-        private void CopyCurrentUserName(ChatMessage chatMessage) 
+        public void SetOnlineCount(int value) 
         {
-            Clipboard.SetText(chatMessage.UserName);
-        }
-
-        private async Task DenySendMessageAsync(ChatMessage chatMessage) 
-        {
-            Growl.AskGlobal($"确定禁言{chatMessage.UserName}?", result =>
+            OnlineCount = value;
+            if (value >= 100)
             {
-
-                return true;
-            });
-            var result = await _teamupService.DenyChatAsync(chatMessage.UserId);
-            if (result) 
+                App.ServiceProvider.GetRequiredService<MainWindowViewModel>().IsManyOnline = true;
+            }
+            else 
             {
-                
+                App.ServiceProvider.GetRequiredService<MainWindowViewModel>().IsManyOnline = false;
             }
         }
 
-        private void GroupMessage() 
+        private void GroupMessage()
         {
-            ChatMessage = $"来自{Constant.Account.ServerArea}的{Constant.Account.DisplayName}请求一起打游戏";
+            if (string.IsNullOrEmpty(_iniSettingsModel.ChatMessageTemplate))
+            {
+                ChatMessage = $"来自{Constant.Account.ServerArea}的{Constant.Account.DisplayName}请求一起打游戏";
+            }
+            else
+            {
+                var template = _iniSettingsModel.ChatMessageTemplate;
+                ChatMessage = template.Replace("{name}", Constant.Account.DisplayName)
+                        .Replace("{solorank}", $"{Constant.Account.Rank.RANKED_SOLO_5x5.CnTier} {Constant.Account.Rank.RANKED_SOLO_5x5.Division}")
+                        .Replace("{flexrank}", $"{Constant.Account.Rank.RANKED_FLEX_SR.CnTier} {Constant.Account.Rank.RANKED_FLEX_SR.Division}")
+                        .Replace("{serverarea}", Constant.Account.ServerArea);
+            }
         }
 
         private void LoadHistoryMessage()
         {
             var msg = ChatMessages.Count() > 1 ? ChatMessages[1] : null;
             if (msg == null)
+            {
+                Growl.InfoGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "没有更多历史聊天记录",
+                    ShowDateTime = false
+                });
+
                 return;
+            }
 
             var index = AllChatMessages.IndexOf(msg);
             if (index >= 20)
@@ -331,15 +354,27 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             detail.Show();
         }
 
-        private async Task SendMessageAsync() 
+        private async Task SendMessageAsync()
         {
-            if (string.IsNullOrEmpty(ChatMessage) || ChatMessage.Length > 50) 
+            if (_lastSendTime != null && DateTime.Now.AddSeconds(-3) <= _lastSendTime.Value)
+            {
+                Growl.InfoGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "发送消息过于频繁,过几秒再试!",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
+            if (string.IsNullOrEmpty(ChatMessage) || ChatMessage.Length > 50)
             {
                 return;
             }
 
             await App.HubConnection.SendAsync("SendMessage", ChatMessage);
             ChatMessage = null;
+            _lastSendTime = DateTime.Now;
         }
     }
 }
