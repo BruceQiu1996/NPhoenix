@@ -9,7 +9,7 @@
         Background="Transparent"
         AllowsTransparency="True"
         WindowStyle="None"
-        FontFamily="Arial"
+        FontFamily="微软雅黑"
         mc:Ignorable="d"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         Title="符文管理" Height="600" Width="1000">

@@ -30,38 +30,30 @@ namespace LeagueOfLegendsBoxer.ViewModels
             set => SetProperty(ref _currentPage, value);
         }
 
-        private Account _account;
-        public Account Account 
-        {
-            get => _account;
-            set => SetProperty(ref _account, value);
-        }
-
         private string _searchName;
         public string SearchName
         {
             get => _searchName;
             set => SetProperty(ref _searchName, value);
         }
-        
-        public RelayCommand LoadCommand { get; set; }
+
         public AsyncRelayCommand SearchRecordByNameAsyncCommand { get; set; }
 
         private readonly IAccountService _accountService;
         private readonly ILogger<SummonerAnalyseViewModel> _logger;
+
         public SummonerAnalyseViewModel(IAccountService accountService, ILogger<SummonerAnalyseViewModel> logger)
         {
-            LoadCommand = new RelayCommand(Load);
             SearchRecordByNameAsyncCommand = new AsyncRelayCommand(SearchRecordByNameAsync);
             _accountService = accountService;
             _logger = logger;
         }
 
-        public void Load() 
+        public void LoadPageByAccount(Account account) 
         {
             var summonerDetail = App.ServiceProvider.GetRequiredService<SummonerDetail>();
             var summonerDetailViewModel = App.ServiceProvider.GetRequiredService<SummonerDetailViewModel>();
-            summonerDetailViewModel.Account = Account;
+            summonerDetailViewModel.Account = account;
             summonerDetailViewModel.SummonerAnalyseViewModel = this;
             summonerDetail.DataContext = summonerDetailViewModel;
             CurrentPage = summonerDetail;

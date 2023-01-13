@@ -2,6 +2,9 @@
 using HandyControl.Controls;
 using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.Teamup;
+using LeagueOfLegendsBoxer.Resources;
+using LeagueOfLegendsBoxer.ViewModels;
+using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
@@ -27,6 +30,7 @@ namespace LeagueOfLegendsBoxer.Models
         public string CreateTimeText => ConvertDateTimeToText(CreateTime);
         public RelayCommand CopyCurrentUserNameCommand { get; set; }
         public AsyncRelayCommand DenySendMessageCommandAsync { get; set; }
+        public AsyncRelayCommand OpenRecordByIdCommandAsync { get; set; }
 
         public ChatMessage()
         {
@@ -56,6 +60,26 @@ namespace LeagueOfLegendsBoxer.Models
                         ShowDateTime = false
                     });
                 }
+            });
+
+            OpenRecordByIdCommandAsync = new AsyncRelayCommand(async () =>
+            {
+                if (string.IsNullOrEmpty(ServerArea) || string.IsNullOrEmpty(Constant.Account.ServerArea) || ServerArea != Constant.Account.ServerArea) 
+                {
+                    Growl.WarningGlobal(new GrowlInfo()
+                    {
+                        WaitTime = 2,
+                        Message = "不在同一个服务器无法查询战绩,或者你和查询对象有一人暂未设置所在大区,请到设置里进行服务器设置。",
+                        ShowDateTime = false
+                    });
+
+                    return;
+                }
+
+                var summonerAnalyse = App.ServiceProvider.GetRequiredService<SummonerAnalyse>();
+                var summonerAnalyseViewModel = App.ServiceProvider.GetRequiredService<SummonerAnalyseViewModel>();
+                await summonerAnalyseViewModel.LoadPageAsync(UserId);
+                summonerAnalyse.Show();
             });
         }
 

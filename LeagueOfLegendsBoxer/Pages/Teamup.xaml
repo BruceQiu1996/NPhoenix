@@ -35,7 +35,7 @@
                              FontSize="15">
                     </TextBox>
                     <TextBlock VerticalAlignment="Center" Margin="10 0 0 0" 
-                               Cursor="Hand"
+                               Cursor="Hand" FontSize="14"
                                Background="Transparent"
                                Text="{Binding UserName}" Name="name" HorizontalAlignment="Right">
                         <TextBlock.Resources>
@@ -58,14 +58,14 @@
                                <StackPanel Orientation="Vertical" Background="{DynamicResource DefaultHoverColor}">
                                     <TextBlock Text="{Binding UserName}" Margin="10 5"/>
                                     <TextBlock Text="{Binding ServerArea}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding Rank_SOLO_5x5,StringFormat={}单双排 : {0}}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding Rank_FLEX_SR,StringFormat={}灵活组排 : {0}}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding Desc,StringFormat={}标签 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Rank_SOLO_5x5,StringFormat={}单双 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Rank_FLEX_SR,StringFormat={}灵活 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Desc,StringFormat={}标签 : {0}}" Margin="10 5" Visibility="{Binding Desc,Converter={StaticResource String2VisibilityConverter}}"/>
                                </StackPanel>
                         </Popup>
                     </TextBlock>
                 </StackPanel>
-                <TextBlock Text="{Binding CreateTimeText}" HorizontalAlignment="Right" Grid.Row="1" Foreground="#aaaaaa"></TextBlock>
+                <TextBlock Text="{Binding CreateTimeText}" Margin="0 -2 0 0" HorizontalAlignment="Right" Grid.Row="1" Foreground="#aaaaaa"></TextBlock>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="loadData">
@@ -82,13 +82,19 @@
             <Grid Name="ctx1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="20"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
                     <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" 
                                Cursor="Hand"
-                               Text="{Binding UserName}" Name="name" HorizontalAlignment="Left">
+                               Text="{Binding UserName}" Name="name" HorizontalAlignment="Left" FontSize="14">
+                        <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                    <behaviors:InvokeCommandAction Command="{Binding OpenRecordByIdCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
                         <TextBlock.Resources>
                             <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
                                 <Style.Triggers>
@@ -109,9 +115,9 @@
                                <StackPanel Orientation="Vertical" Background="{DynamicResource DefaultHoverColor}">
                                     <TextBlock Text="{Binding UserName}" Margin="10 5"/>
                                     <TextBlock Text="{Binding ServerArea}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding Rank_SOLO_5x5,StringFormat={}单双排 : {0}}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding Rank_FLEX_SR,StringFormat={}灵活组排 : {0}}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding Desc,StringFormat={}标签 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Rank_SOLO_5x5,StringFormat={}单双 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Rank_FLEX_SR,StringFormat={}灵活 : {0}}" Margin="10 5"/>
+                                    <TextBlock Text="{Binding Desc,StringFormat={}标签 : {0}}" Margin="10 5" Visibility="{Binding Desc,Converter={StaticResource String2VisibilityConverter}}"/>
                                     <Button Content="复制昵称" 
                                             Command="{Binding CopyCurrentUserNameCommand}"
                                             Margin="10 5"
@@ -139,7 +145,10 @@
                              FontSize="15">
                     </TextBox>
                 </StackPanel>
-                <TextBlock Text="{Binding CreateTimeText}" HorizontalAlignment="Left" Grid.Row="1" Foreground="#aaaaaa"></TextBlock>
+                <TextBlock Text="{Binding ServerArea}" Visibility="{Binding ServerArea,Converter={StaticResource String2VisibilityConverter}}" 
+                           Grid.Row="1" HorizontalAlignment="Left" Height="25" FontSize="11" Foreground="#aaaaaa"></TextBlock>
+                <TextBlock Text="{Binding CreateTimeText}" Margin="0 -5 0 0"
+                           HorizontalAlignment="Left" Grid.Row="2" Foreground="#aaaaaa"></TextBlock>
             </Grid>
         </DataTemplate>
     </Page.Resources>

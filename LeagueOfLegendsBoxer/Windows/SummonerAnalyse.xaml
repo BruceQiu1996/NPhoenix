@@ -34,7 +34,7 @@
 
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
@@ -42,13 +42,13 @@
                 <Label HorizontalAlignment="Right" 
                        Background="Transparent"
                        BorderThickness="0"
-                       Height="35" Width="35" Margin="0 3 5 0" ToolTip="关闭" Cursor="Hand" MouseLeftButtonDown="Label_MouseLeftButtonDown">
+                       Height="35" Width="35" Margin="0 8 5 0" ToolTip="关闭" Cursor="Hand" MouseLeftButtonDown="Label_MouseLeftButtonDown">
                     <Path Data="{StaticResource CloseGeometry}" Fill="{StaticResource PrimaryBrush}" Stretch="Uniform" Stroke="{StaticResource PrimaryBrush}">
                         
                     </Path>
                 </Label>
             </Border>
-            <hc:SearchBar Grid.Row="1" Width="450" HorizontalAlignment="Right" Margin="0 5 5 0" Height="35"
+            <hc:SearchBar Grid.Row="1" Width="450" HorizontalAlignment="Right" Margin="0 0 5 0" Height="35"
                           Text="{Binding SearchName,UpdateSourceTrigger=PropertyChanged}"
                           Command="{Binding SearchRecordByNameAsyncCommand}"
                           Style="{StaticResource SearchBarExtend}" FontSize="15" hc:InfoElement.Placeholder="召唤师名"></hc:SearchBar>

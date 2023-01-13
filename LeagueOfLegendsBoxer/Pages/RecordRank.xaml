@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        FontFamily="Arial"
+        FontFamily="微软雅黑"
         xmlns:usercontrol="clr-namespace:LeagueOfLegendsBoxer.UserControls"
         Background="Transparent"
         Title="排位详情">

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using LeagueOfLegendsBoxer.ViewModels;
+using System.Windows;
 using System.Windows.Input;
 
 namespace LeagueOfLegendsBoxer.Windows
@@ -8,9 +9,10 @@ namespace LeagueOfLegendsBoxer.Windows
     /// </summary>
     public partial class SummonerAnalyse : Window
     {
-        public SummonerAnalyse()
+        public SummonerAnalyse(SummonerAnalyseViewModel viewModel)
         {
             InitializeComponent();
+            DataContext = viewModel;
         }
 
         private void Border_MouseMove(object sender, MouseEventArgs e)
@@ -21,7 +23,7 @@ namespace LeagueOfLegendsBoxer.Windows
 
         private void Label_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Close();
+            Hide();
         }
     }
 }

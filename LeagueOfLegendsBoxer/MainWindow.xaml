@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         ResizeMode="CanResize"
         Background="Transparent"
-        FontFamily="Arial"
+        FontFamily="微软雅黑"
         AllowsTransparency="True"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         WindowStyle="None"
@@ -22,6 +22,8 @@
     <Window.Resources>
         <convert:ConnectedColorBrushConverter x:Key="ConnectedColorBrushConverter"></convert:ConnectedColorBrushConverter>
         <convert:ConnectedTextConverter x:Key="ConnectedTextConverter"></convert:ConnectedTextConverter>
+        <convert:OnlineCountColorConverter x:Key="OnlineCountColorConverter"></convert:OnlineCountColorConverter>
+        <convert:OnlineCountStatusConverter x:Key="OnlineCountStatusConverter"></convert:OnlineCountStatusConverter>
         <ContextMenu x:Key="iconMenu">
             <MenuItem Header="打开助手工具" Command="{Binding OpenChampionSelectToolCommand}"></MenuItem>
             <MenuItem Header="打开对局详情" Command="{Binding OpenTeamDetailCommand}"></MenuItem>
@@ -57,7 +59,7 @@
                            Foreground="{StaticResource PrimaryBrush}"
                            Grid.Column="0"
                            ToolTip="NPhoenix"
-                           Margin="10 15 0 0"
+                           Margin="10 12 0 0"
                            Cursor="Hand"
                            Width="130"
                            FontWeight="Bold"
@@ -109,7 +111,12 @@
                             <StackPanel Orientation="Vertical"></StackPanel>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
-                    <ListBoxItem Height="50" Width="65" Margin="0 10 0 0" IsSelected="True">
+                    <ListBoxItem Height="50" Width="65" Margin="-1 10 0 0" IsSelected="True">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                <behaviors:InvokeCommandAction Command="{Binding ShiftMainPageCommand}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -128,11 +135,6 @@
                                Background="Transparent"
                                VerticalContentAlignment="Center"
                                Grid.Column="1">
-                            <behaviors:Interaction.Triggers>
-                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                    <behaviors:InvokeCommandAction Command="{Binding ShiftMainPageCommand}"></behaviors:InvokeCommandAction>
-                                </behaviors:EventTrigger>
-                            </behaviors:Interaction.Triggers>
                             <Path Data="{StaticResource main}" 
                                   SnapsToDevicePixels="True"
                                   Height="25"
@@ -141,7 +143,12 @@
                         </Label>
                     </ListBoxItem>
 
-                    <ListBoxItem Height="50" Width="65" Margin="0 20 0 0">
+                    <ListBoxItem Height="50" Width="65" Margin="-1 20 0 0">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                <behaviors:InvokeCommandAction Command="{Binding ShiftSettingsPageCommand}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -160,11 +167,6 @@
                                Background="Transparent"
                                VerticalContentAlignment="Center"
                                Grid.Column="1">
-                            <behaviors:Interaction.Triggers>
-                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                    <behaviors:InvokeCommandAction Command="{Binding ShiftSettingsPageCommand}"></behaviors:InvokeCommandAction>
-                                </behaviors:EventTrigger>
-                            </behaviors:Interaction.Triggers>
                             <Path Data="{StaticResource setting}" 
                                   SnapsToDevicePixels="True"
                                   Height="25"
@@ -173,7 +175,12 @@
                         </Label>
                     </ListBoxItem>
 
-                    <ListBoxItem Margin="0 20 0 0" Width="65" Height="50">
+                    <ListBoxItem Margin="-1 20 0 0" Width="65" Height="50">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                <behaviors:InvokeCommandAction Command="{Binding ShiftNoticePageCommand}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -204,11 +211,6 @@
                                    Cursor="Hand"
                                    ToolTip="通知"
                                    Background="Transparent">
-                                <behaviors:Interaction.Triggers>
-                                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                        <behaviors:InvokeCommandAction Command="{Binding ShiftNoticePageCommand}"></behaviors:InvokeCommandAction>
-                                    </behaviors:EventTrigger>
-                                </behaviors:Interaction.Triggers>
                                 <Path Data="{StaticResource info}" 
                                       SnapsToDevicePixels="True"
                                       Height="25"
@@ -218,7 +220,12 @@
                         </hc:Badge>
                     </ListBoxItem>
 
-                    <ListBoxItem Height="50"  Width="65" Margin="0 20 0 0">
+                    <ListBoxItem Height="50"  Width="65" Margin="-1 20 0 0">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                <behaviors:InvokeCommandAction Command="{Binding ShiftRankPageCommand}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -237,11 +244,6 @@
                                Background="Transparent"
                                VerticalContentAlignment="Center"
                                Grid.Column="1">
-                            <behaviors:Interaction.Triggers>
-                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                    <behaviors:InvokeCommandAction Command="{Binding ShiftRankPageCommand}"></behaviors:InvokeCommandAction>
-                                </behaviors:EventTrigger>
-                            </behaviors:Interaction.Triggers>
                             <Path Data="{StaticResource rank}" 
                                   SnapsToDevicePixels="True"
                                   Height="25"
@@ -250,7 +252,12 @@
                         </Label>
                     </ListBoxItem>
 
-                    <ListBoxItem Height="50" Width="65" Margin="0 20 0 0">
+                    <ListBoxItem Height="50" Width="65" Margin="-1 20 0 0">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                                <behaviors:InvokeCommandAction Command="{Binding ShiftTeamupPageCommand}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
                         <ListBoxItem.Style>
                             <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
                                 <Style.Triggers>
@@ -264,7 +271,8 @@
                             </Style>
                         </ListBoxItem.Style>
                         <hc:Badge BadgeMargin="0 -8 0 0" BorderThickness="0"
-                                  Text="爆满">
+                                  Background="{Binding OnlineCounts,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource OnlineCountColorConverter}}"
+                                  Text="{Binding OnlineCounts,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource OnlineCountStatusConverter}}">
                             <hc:Badge.Resources>
                                 <Style BasedOn="{StaticResource BadgeDanger}" TargetType="hc:Badge">
                                     <Style.Triggers>
@@ -281,18 +289,12 @@
                                    Cursor="Hand"
                                    ToolTip="世界聊天"
                                    Background="Transparent"
-                                   VerticalContentAlignment="Center"
-                                   Grid.Column="1">
-                                <behaviors:Interaction.Triggers>
-                                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                        <behaviors:InvokeCommandAction Command="{Binding ShiftTeamupPageCommand}"></behaviors:InvokeCommandAction>
-                                    </behaviors:EventTrigger>
-                                </behaviors:Interaction.Triggers>
+                                   VerticalContentAlignment="Center">
                                 <Path Data="{StaticResource team}" 
-                                  SnapsToDevicePixels="True"
-                                  Height="25"
-                                  Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
-                                  Fill="{StaticResource PrimaryBrush}"/>
+                                      SnapsToDevicePixels="True"
+                                      Height="25"
+                                      Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
+                                      Fill="{StaticResource PrimaryBrush}"/>
                             </Label>
                         </hc:Badge>
                     </ListBoxItem>

@@ -27,16 +27,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _accounts, value);
         }
 
-        private Account _account;
-        public Account Account
-        {
-            get => _account;
-            set => SetProperty(ref _account, value);
-        }
-
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public AsyncRelayCommand SendTeamMateDataCommandAsync { get; set; }
-        public RelayCommand TeamMateChangedCommand { get; set; }
+        public RelayCommand<Account> TeamMateChangedCommand { get; set; }
 
         private readonly IGameService _gameService;
         private readonly IAccountService _accountService;
@@ -52,7 +45,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _logger = logger;
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             SendTeamMateDataCommandAsync = new AsyncRelayCommand(SendTeamMateDataAsync);
-            TeamMateChangedCommand = new RelayCommand(TeamMateChanged);
+            TeamMateChangedCommand = new RelayCommand<Account>(TeamMateChanged);
         }
 
         private async Task LoadAsync()
@@ -249,20 +242,19 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
-        private void TeamMateChanged()
+        private void TeamMateChanged(Account account)
         {
-            if (Account == null)
+            if (account == null)
                 return;
 
-            ShowRecord(Account);
+            ShowRecord(account);
         }
 
         public void ShowRecord(Account account)
         {
             var summonerAnalyse = App.ServiceProvider.GetRequiredService<SummonerAnalyse>();
             var summonerAnalyseViewModel = App.ServiceProvider.GetRequiredService<SummonerAnalyseViewModel>();
-            summonerAnalyseViewModel.Account = account;
-            summonerAnalyse.DataContext = summonerAnalyseViewModel;
+            summonerAnalyseViewModel.LoadPageByAccount(account);
             summonerAnalyse.Show();
         }
     }

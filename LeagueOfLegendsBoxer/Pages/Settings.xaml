@@ -6,7 +6,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:hc="https://handyorg.github.io/handycontrol"
       mc:Ignorable="d" 
-      FontFamily="Arial"
+      FontFamily="微软雅黑"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Settings">
 

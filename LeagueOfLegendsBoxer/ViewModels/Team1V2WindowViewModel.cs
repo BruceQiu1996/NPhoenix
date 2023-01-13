@@ -90,8 +90,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         {
             var summonerAnalyse = App.ServiceProvider.GetRequiredService<SummonerAnalyse>();
             var summonerAnalyseViewModel = App.ServiceProvider.GetRequiredService<SummonerAnalyseViewModel>();
-            summonerAnalyseViewModel.Account = account;
-            summonerAnalyse.DataContext = summonerAnalyseViewModel;
+            summonerAnalyseViewModel.LoadPageByAccount(account);
             summonerAnalyse.Topmost = true;
             summonerAnalyse.Show();
             await Task.Delay(500);

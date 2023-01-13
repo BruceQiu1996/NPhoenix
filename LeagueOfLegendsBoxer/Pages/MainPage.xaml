@@ -8,7 +8,7 @@
       xmlns:model="clr-namespace:LeagueOfLegendsBoxer.Models"
       xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
-      FontFamily="Arial"
+      FontFamily="微软雅黑"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainPage">
@@ -135,7 +135,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="单双排位" FontSize="18" Margin="10 0 0 0" Grid.Row="0"></TextBlock>
+                        <TextBlock Text="单双排位" FontSize="17" Margin="10 0 0 0" Grid.Row="0"></TextBlock>
                         <TextBlock Grid.Row="1"
                                            Margin="10 0 0 0"
                                            FontSize="16"
@@ -161,7 +161,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="灵活排位" FontSize="18" Margin="10 0 0 0"></TextBlock>
+                        <TextBlock Text="灵活排位" FontSize="17" Margin="10 0 0 0"></TextBlock>
                         <TextBlock Grid.Row="1"
                                            Margin="10 0 0 0"
                                            FontSize="16"
@@ -187,7 +187,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="云顶之弈" FontSize="18" Margin="10 0 0 0"></TextBlock>
+                        <TextBlock Text="云顶之弈" FontSize="17" Margin="10 0 0 0"></TextBlock>
                         <TextBlock Grid.Row="1"
                                            Margin="10 0 0 0"
                                            FontSize="16"
@@ -213,7 +213,7 @@
                             <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                        <TextBlock Text="排行数据" FontSize="18" Margin="10 0 0 0"></TextBlock>
+                        <TextBlock Text="排行数据" FontSize="17" Margin="10 0 0 0"></TextBlock>
                         <TextBlock Grid.Row="1"
                                            Margin="10 0 0 0"
                                            FontSize="16"

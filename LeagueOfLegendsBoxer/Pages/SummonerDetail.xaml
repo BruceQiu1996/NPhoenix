@@ -9,7 +9,7 @@
       xmlns:hc="https://handyorg.github.io/handycontrol"
       xmlns:usercontrol="clr-namespace:LeagueOfLegendsBoxer.UserControls"
       xmlns:convert="clr-namespace:LeagueOfLegendsBoxer.Converts"
-      FontFamily="Arial"
+      FontFamily="微软雅黑"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="对局详情">
     <behaviors:Interaction.Triggers>
@@ -257,7 +257,19 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <Border Background="Transparent">
+                                        <Border Background="Transparent" BorderBrush="{StaticResource PrimaryBrush}">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Item1.IsCurrentUser}" Value="True">
+                                                            <Setter Property="BorderThickness" Value="1"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Item1.IsCurrentUser}" Value="False">
+                                                            <Setter Property="BorderThickness" Value="0"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
                                             <Grid Margin="0 5 5 5">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="60"></ColumnDefinition>
@@ -677,7 +689,19 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                        <Border Background="Transparent">
+                                        <Border Background="Transparent" BorderBrush="{StaticResource PrimaryBrush}">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Item1.IsCurrentUser}" Value="True">
+                                                            <Setter Property="BorderThickness" Value="1"></Setter>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Item1.IsCurrentUser}" Value="False">
+                                                            <Setter Property="BorderThickness" Value="0"></Setter>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
                                             <Grid Margin="0 5 5 5">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"></ColumnDefinition>

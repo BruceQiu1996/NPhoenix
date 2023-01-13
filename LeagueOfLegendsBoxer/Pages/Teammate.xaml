@@ -32,14 +32,8 @@
             <ListBox Grid.Row="1" 
                      Margin="0 5 0 0"
                      Background="Transparent" BorderThickness="0" 
-                     SelectedItem="{Binding Account,UpdateSourceTrigger=PropertyChanged}"
                      ItemsSource="{Binding Accounts,UpdateSourceTrigger=PropertyChanged}" 
                      Grid.ColumnSpan="2">
-                <behaviors:Interaction.Triggers>
-                    <behaviors:EventTrigger EventName="SelectionChanged">
-                        <behaviors:InvokeCommandAction Command="{Binding TeamMateChangedCommand}"></behaviors:InvokeCommandAction>
-                    </behaviors:EventTrigger>
-                </behaviors:Interaction.Triggers>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical"></StackPanel>
@@ -91,7 +85,14 @@
                                                        VerticalAlignment="Top"
                                                        Grid.ColumnSpan="2"
                                                        Grid.Column="1"
-                                                       Text="{Binding DisplayName}"/>
+                                                       Text="{Binding DisplayName}">
+                                                <behaviors:Interaction.Triggers>
+                                                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                        <behaviors:InvokeCommandAction Command="{Binding DataContext.TeamMateChangedCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                       CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
+                                                    </behaviors:EventTrigger>
+                                                </behaviors:Interaction.Triggers>
+                                            </TextBlock>
 
                                             <TextBlock Grid.Row="1"
                                                        Grid.Column="2"

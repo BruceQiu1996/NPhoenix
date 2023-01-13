@@ -131,6 +131,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     else
                     {
                         _teamupService.SetToken(resp.Token);
+                        Constant.Account.ServerArea = resp.ServerArea;
+                        Constant.Account.IsAdministrator = string.IsNullOrEmpty(resp.RoleName) ? false : resp.RoleName.Contains("Administrator");
                         App.HubConnection = new HubConnectionBuilder().WithUrl(_configuration.GetSection("TeamupChatHub").Value, option =>
                         {
                             option.CloseTimeout = TimeSpan.FromSeconds(60);
@@ -171,8 +173,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         });
                         await App.HubConnection.StartAsync();
                         _chatWindow.Show();
-                        Constant.Account.ServerArea = resp.ServerArea;
-                        Constant.Account.IsAdministrator = string.IsNullOrEmpty(resp.RoleName) ? false : resp.RoleName.Contains("Administrator");
                         var ranks = await _softwareHelper.GetRanksAsync();
                         Account.MvpRank = ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";
                         Account.XiaguKill = ranks?.Xiagu.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Xiagu.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";
@@ -204,8 +204,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             var summonerAnalyse = App.ServiceProvider.GetRequiredService<SummonerAnalyse>();
             var summonerAnalyseViewModel = App.ServiceProvider.GetRequiredService<SummonerAnalyseViewModel>();
-            summonerAnalyseViewModel.Account = Account;
-            summonerAnalyse.DataContext = summonerAnalyseViewModel;
+            summonerAnalyseViewModel.LoadPageByAccount(Account);
             summonerAnalyse.Show();
         }
     }

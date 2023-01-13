@@ -65,6 +65,5 @@ namespace LeagueOfLegendsBoxer
                 p.Close();
             }
         }
-
     }
 }

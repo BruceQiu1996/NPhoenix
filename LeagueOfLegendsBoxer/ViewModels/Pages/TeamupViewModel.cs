@@ -108,6 +108,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand SendMessageCommandAsync { get; set; }
         public RelayCommand GroupMessageCommand { get; set; }
         public RelayCommand LoadHistoryMessageCommmand { get; set; }
+
         public TeamupViewModel(Post post,
                                EnumHelper enumHelper,
                                IniSettingsModel iniSettingsModel,
@@ -142,14 +143,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public void SetOnlineCount(int value) 
         {
             OnlineCount = value;
-            if (value >= 100)
-            {
-                App.ServiceProvider.GetRequiredService<MainWindowViewModel>().IsManyOnline = true;
-            }
-            else 
-            {
-                App.ServiceProvider.GetRequiredService<MainWindowViewModel>().IsManyOnline = false;
-            }
+            App.ServiceProvider.GetRequiredService<MainWindowViewModel>().OnlineCounts = OnlineCount;
         }
 
         private void GroupMessage()

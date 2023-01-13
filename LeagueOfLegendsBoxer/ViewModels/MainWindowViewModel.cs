@@ -88,11 +88,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
             set => SetProperty(ref unReadNotices, value);
         }
 
-        private bool _isManyOnline;
-        public bool IsManyOnline
+        private int _onlineCounts;
+        public int OnlineCounts
         {
-            get => _isManyOnline;
-            set => SetProperty(ref _isManyOnline, value);
+            get => _onlineCounts;
+            set => SetProperty(ref _onlineCounts, value);
         }
 
         
