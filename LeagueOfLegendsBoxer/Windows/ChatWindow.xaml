@@ -21,39 +21,37 @@
         <resources:MessageDataTemplateSelector x:Key="messageselector"></resources:MessageDataTemplateSelector>
         <DataTemplate x:Key="chatSender">
             <Grid Name="ctx">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="20"></RowDefinition>
-                </Grid.RowDefinitions>
-
-                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <TextBox Text="{Binding Message,UpdateSourceTrigger=PropertyChanged}"
                              Background="{DynamicResource DefaultHoverColor}"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
+                             VerticalAlignment="Top"
+                             VerticalContentAlignment="Top"
                              MaxWidth="{Binding ElementName=ctx,Path=ActualWidth,Converter={StaticResource ValueHalfConverter},UpdateSourceTrigger=PropertyChanged}"
                              BorderThickness="0"
                              Foreground="{DynamicResource DefaultFontColor}"
                              HorizontalAlignment="Right"
                              FontSize="15">
                     </TextBox>
-                    <TextBlock VerticalAlignment="Center" Margin="10 0 0 0" 
+                    <StackPanel Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Right">
+                        <TextBlock VerticalAlignment="Center" Margin="10 0 0 0" 
                                Cursor="Hand"
                                Background="Transparent"
                                FontSize="14"
                                Text="{Binding UserName}" Name="name" HorizontalAlignment="Right">
-                        <TextBlock.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsAdministrator}" Value="True">
-                                        <Setter Property="Foreground" Value="Salmon"></Setter>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsAdministrator}" Value="False">
-                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Resources>
+                            <TextBlock.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsAdministrator}" Value="True">
+                                            <Setter Property="Foreground" Value="Salmon"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsAdministrator}" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Resources>
                         <Popup Focusable="False"
                                IsOpen="{Binding ElementName=name,Path=IsMouseOver,Mode=OneWay}"
                                PlacementTarget="{Binding ElementName=name}" 
@@ -68,8 +66,9 @@
                                </StackPanel>
                         </Popup>
                     </TextBlock>
+                        <TextBlock Text="{Binding CreateTimeText}" HorizontalAlignment="Right" Margin="0 -2 0 0" Grid.Row="1" Foreground="#aaaaaa"></TextBlock>
+                    </StackPanel>
                 </StackPanel>
-                <TextBlock Text="{Binding CreateTimeText}" HorizontalAlignment="Right" Margin="0 -2 0 0" Grid.Row="1" Foreground="#aaaaaa"></TextBlock>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="loadData">
@@ -84,64 +83,65 @@
         </DataTemplate>
         <DataTemplate x:Key="chatReceiver">
             <Grid Name="ctx1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="auto"></RowDefinition>
-                </Grid.RowDefinitions>
-
-                <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
-                    <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" 
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Left">
+                        <TextBlock VerticalAlignment="Center" Margin="0 0 10 0" 
                                Cursor="Hand" FontSize="14"
                                Text="{Binding UserName}" Name="name" HorizontalAlignment="Left">
-                        <behaviors:Interaction.Triggers>
-                                <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                    <behaviors:InvokeCommandAction Command="{Binding OpenRecordByIdCommandAsync}"></behaviors:InvokeCommandAction>
-                                </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
-                        <TextBlock.Resources>
-                            <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding IsAdministrator}" Value="True">
-                                        <Setter Property="Foreground" Value="Salmon"></Setter>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding IsAdministrator}" Value="False">
-                                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Resources>
-                         <Popup Focusable="False"
-                                IsOpen="{Binding ElementName=name,Path=IsMouseOver,Mode=OneWay}"
-                                PlacementTarget="{Binding ElementName=name}" 
-                                Placement="Right" AllowsTransparency="True"
-                                Effect="{StaticResource EffectShadow2}">
-                               <StackPanel Orientation="Vertical" Background="{DynamicResource DefaultHoverColor}">
-                                    <TextBlock Text="{Binding UserName}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding ServerArea}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding Rank_SOLO_5x5,StringFormat={}单双 : {0}}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding Rank_FLEX_SR,StringFormat={}灵活 : {0}}" Margin="10 5"/>
-                                    <TextBlock Text="{Binding Desc,StringFormat={}标签 : {0}}" Margin="10 5" Visibility="{Binding Desc,Converter={StaticResource String2VisibilityConverter}}"/>
-                                    <Button Content="复制昵称" 
-                                            Command="{Binding CopyCurrentUserNameCommand}"
-                                            Margin="10 5"
-                                            Width="120"
-                                            Cursor="Hand"
-                                            Height="30" FontSize="12"
-                                            Style="{StaticResource ButtonDashedPrimary}"></Button>
-                                    <Button Content="禁言" 
-                                            Command="{Binding DenySendMessageCommandAsync}"
-                                            Margin="10 5" Width="120"
-                                            Cursor="Hand"
-                                            Height="30" FontSize="12" Style="{StaticResource ButtonDanger}"
-                                            Visibility="{Binding CurrentIsAdministrator,Converter={StaticResource Boolean2VisibilityConverter}}"></Button>
-                               </StackPanel>
-                        </Popup>
-                    </TextBlock>
+                            <behaviors:Interaction.Triggers>
+                                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                        <behaviors:InvokeCommandAction Command="{Binding OpenRecordByIdCommandAsync}"></behaviors:InvokeCommandAction>
+                                    </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                            <TextBlock.Resources>
+                                <Style TargetType="TextBlock" BasedOn="{StaticResource TextBlockBaseStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsAdministrator}" Value="True">
+                                            <Setter Property="Foreground" Value="Salmon"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsAdministrator}" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Resources>
+                             <Popup Focusable="False"
+                                    IsOpen="{Binding ElementName=name,Path=IsMouseOver,Mode=OneWay}"
+                                    PlacementTarget="{Binding ElementName=name}" 
+                                    Placement="Right" AllowsTransparency="True"
+                                    Effect="{StaticResource EffectShadow2}">
+                                   <StackPanel Orientation="Vertical" Background="{DynamicResource DefaultHoverColor}">
+                                        <TextBlock Text="{Binding UserName}" Margin="10 5"/>
+                                        <TextBlock Text="{Binding ServerArea}" Margin="10 5"/>
+                                        <TextBlock Text="{Binding Rank_SOLO_5x5,StringFormat={}单双 : {0}}" Margin="10 5"/>
+                                        <TextBlock Text="{Binding Rank_FLEX_SR,StringFormat={}灵活 : {0}}" Margin="10 5"/>
+                                        <TextBlock Text="{Binding Desc,StringFormat={}标签 : {0}}" Margin="10 5" Visibility="{Binding Desc,Converter={StaticResource String2VisibilityConverter}}"/>
+                                        <Button Content="复制昵称" 
+                                                Command="{Binding CopyCurrentUserNameCommand}"
+                                                Margin="10 5"
+                                                Width="120"
+                                                Cursor="Hand"
+                                                Height="30" FontSize="12"
+                                                Style="{StaticResource ButtonDashedPrimary}"></Button>
+                                        <Button Content="禁言" 
+                                                Command="{Binding DenySendMessageCommandAsync}"
+                                                Margin="10 5" Width="120"
+                                                Cursor="Hand"
+                                                Height="30" FontSize="12" Style="{StaticResource ButtonDanger}"
+                                                Visibility="{Binding CurrentIsAdministrator,Converter={StaticResource Boolean2VisibilityConverter}}"></Button>
+                                   </StackPanel>
+                            </Popup>
+                        </TextBlock>
+                        <TextBlock Text="{Binding CreateTimeText}" HorizontalAlignment="Left" Grid.Row="2" Foreground="#aaaaaa"></TextBlock>
+                        <TextBlock Text="{Binding ServerArea}" Visibility="{Binding ServerArea,Converter={StaticResource String2VisibilityConverter}}" 
+                           Grid.Row="1" HorizontalAlignment="Left" FontSize="11" Foreground="#aaaaaa"></TextBlock>
+                    </StackPanel>
                     <TextBox Text="{Binding Message,UpdateSourceTrigger=PropertyChanged}"
                              Background="{DynamicResource DefaultHoverColor}"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
+                             VerticalAlignment="Top"
+                             VerticalContentAlignment="Top"
                              MaxWidth="{Binding ElementName=ctx1,Path=ActualWidth,Converter={StaticResource ValueHalfConverter},UpdateSourceTrigger=PropertyChanged}"
                              BorderThickness="0"
                              Foreground="{DynamicResource DefaultFontColor}"
@@ -149,9 +149,6 @@
                              FontSize="15">
                     </TextBox>
                 </StackPanel>
-                <TextBlock Text="{Binding ServerArea}" Visibility="{Binding ServerArea,Converter={StaticResource String2VisibilityConverter}}" 
-                           Grid.Row="1" HorizontalAlignment="Left" Height="25" FontSize="11" Foreground="#aaaaaa"></TextBlock>
-                <TextBlock Text="{Binding CreateTimeText}" HorizontalAlignment="Left" Margin="0 -5 0 0" Grid.Row="2" Foreground="#aaaaaa"></TextBlock>
             </Grid>
         </DataTemplate>
     </Window.Resources>

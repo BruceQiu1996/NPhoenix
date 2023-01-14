@@ -1099,6 +1099,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
             await _gameService.AutoAcceptGameAsync();
         }
+
         private async Task ChampSelectAsync()
         {
             if (_isLoopChampionSelect)

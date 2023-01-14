@@ -101,7 +101,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get => _topLockHerosOpen1;
             set => SetProperty(ref _topLockHerosOpen1, value);
-
         }
 
         private bool _topLockHerosOpen2;
@@ -109,7 +108,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get => _topLockHerosOpen2;
             set => SetProperty(ref _topLockHerosOpen2, value);
-
         }
 
         private bool _jungleLockHerosOpen1;
@@ -117,7 +115,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get => _jungleLockHerosOpen1;
             set => SetProperty(ref _jungleLockHerosOpen1, value);
-
         }
 
         private bool _jungleLockHerosOpen2;
@@ -125,7 +122,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get => _jungleLockHerosOpen2;
             set => SetProperty(ref _jungleLockHerosOpen2, value);
-
         }
 
         private bool _middleLockHerosOpen1;
@@ -168,8 +164,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get => _utilityLockHerosOpen2;
             set => SetProperty(ref _utilityLockHerosOpen2, value);
-
         }
+
         private bool _autoLockHeroInAram;
         public bool AutoLockHeroInAram
         {
@@ -662,6 +658,40 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             get => _signature;
             set => SetProperty(ref _signature, value);
         }
+
+        private bool _autoUseRuneByUseCount;
+        public bool AutoUseRuneByUseCount
+        {
+            get => _autoUseRuneByUseCount;
+            set
+            {
+                SetProperty(ref _autoUseRuneByUseCount, value);
+                _iniSettingsModel.WriteAutoUseRunePolicy(value, !value).GetAwaiter().GetResult();
+            }
+        }
+
+        private bool _autoUseRuneByWinRate;
+        public bool AutoUseRuneByWinRate
+        {
+            get => _autoUseRuneByWinRate;
+            set
+            {
+                SetProperty(ref _autoUseRuneByWinRate, value);
+                _iniSettingsModel.WriteAutoUseRunePolicy(!value, value).GetAwaiter().GetResult();
+            }
+        }
+
+        private bool _autoUseRune;
+        public bool AutoUseRune
+        {
+            get => _autoUseRune;
+            set 
+            { 
+                SetProperty(ref _autoUseRune, value);
+                _iniSettingsModel.WriteAutoUseRune(value).GetAwaiter().GetResult();
+            }
+        }
+
         
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
@@ -719,7 +749,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand OpenFireModeCommand { get; set; }
         public RelayCommand ManageRuneCommand { get; set; }
         public AsyncRelayCommand SettingSignatureCommand { get; set; }
-
         public AsyncRelayCommand SaveTeamDetailKeyCommand { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
@@ -940,6 +969,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             IsDarkTheme = _iniSettingsModel.IsDarkTheme;
             FuckWords = _iniSettingsModel.FuckWords;
             GoodWords = _iniSettingsModel.GoodWords;
+            AutoUseRuneByUseCount = _iniSettingsModel.AutoUseRuneByUseCount;
+            AutoUseRuneByWinRate = _iniSettingsModel.AutoUseRuneByWinRate;
+            AutoUseRune = _iniSettingsModel.AutoUseRune;
 
             TeamDetailKeys = _iniSettingsModel.TeamDetailKeys;
         }

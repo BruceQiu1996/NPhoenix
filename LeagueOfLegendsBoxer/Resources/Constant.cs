@@ -54,6 +54,9 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string IsAltQOpenVsDetail = nameof(IsAltQOpenVsDetail);
         public const string IsDarkTheme = nameof(IsDarkTheme);
         public const string AutoStartWhenComputerRun = nameof(AutoStartWhenComputerRun);
+        public const string AutoUseRuneByUseCount = nameof(AutoUseRuneByUseCount);
+        public const string AutoUseRuneByWinRate = nameof(AutoUseRuneByWinRate);
+        public const string AutoUseRune = nameof(AutoUseRune);
         public static string _chatId = null;
 
         public const string TeamDetailKey = nameof(TeamDetailKey);

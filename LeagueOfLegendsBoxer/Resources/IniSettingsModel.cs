@@ -58,10 +58,11 @@ namespace LeagueOfLegendsBoxer.Resources
         public string Below100ScoreTxt { get; set; }
         public int AutoAcceptGameDelay { get; set; }
         public bool IsAltQOpenVsDetail { get; set; }
-
         public string TeamDetailKeys { get; set; }
         public bool AutoStartWhenComputerRun { get; set; }
-
+        public bool AutoUseRuneByUseCount { get; set; }
+        public bool AutoUseRuneByWinRate { get; set; }
+        public bool AutoUseRune { get; set; }
         public long TeamDetailHash { get; set; }
         public List<string> TeamDetailKeyList { get; set; } = new List<string>();
 
@@ -98,6 +99,12 @@ namespace LeagueOfLegendsBoxer.Resources
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoLockHeroInAram), out var tempAutoLockHeroInAram) ? tempAutoLockHeroInAram : false;
             AutoStartWhenComputerRun = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoStartWhenComputerRun), out var tempAutoStartWhenComputerRun) ? tempAutoStartWhenComputerRun : false;
+            AutoUseRuneByUseCount = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.AutoUseRuneByUseCount), out var tempAutoUseRuneByUseCount) ? tempAutoUseRuneByUseCount : false;
+            AutoUseRuneByWinRate = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.AutoUseRuneByWinRate), out var tempAutoUseRuneByWinRate) ? tempAutoUseRuneByWinRate : false;
+            AutoUseRune = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.AutoUseRune), out var tempAutoUseRune) ? tempAutoUseRune : false;
             var lockHerosInAramData = await _settingsService.ReadAsync(Constant.Game, Constant.LockHerosInAram);
             LockHerosInAram = string.IsNullOrEmpty(lockHerosInAramData) ? new List<int>() : JsonSerializer.Deserialize<List<int>>(lockHerosInAramData);
             AutoLockHeroChampId = int.TryParse(
@@ -397,6 +404,21 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.AutoStartWhenComputerRun, autoStartWhenComputerRun.ToString());
             AutoStartWhenComputerRun = autoStartWhenComputerRun;
+        }
+
+        public async Task WriteAutoUseRune(bool autoUseRune)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.AutoUseRune, autoUseRune.ToString());
+            AutoUseRune = autoUseRune;
+        }
+
+        public async Task WriteAutoUseRunePolicy(bool autoUseRuneByUseCount , bool autoUseRuneByWinRate)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.AutoUseRuneByUseCount, autoUseRuneByUseCount.ToString());
+            await _settingsService.WriteAsync(Constant.Game, Constant.AutoUseRuneByWinRate, autoUseRuneByWinRate.ToString());
+
+            AutoUseRuneByUseCount = autoUseRuneByUseCount;
+            AutoUseRuneByWinRate = autoUseRuneByWinRate;
         }
 
         public async Task WriteTeamDetailKeys(string teamDetailKeys)

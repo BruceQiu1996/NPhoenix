@@ -520,11 +520,29 @@
                             Margin="0 20 0 0"
                             Command="{Binding ManageRuneCommand}"
                             HorizontalAlignment="Right"></Button>
-                    
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="自动配置符文" FontSize="16"></TextBlock>
+                        <CheckBox Name="AutoUseRune" Margin="10 0 0 0" 
+                                  IsChecked="{Binding AutoUseRune,UpdateSourceTrigger=PropertyChanged}"></CheckBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 10 0 0" IsEnabled="{Binding ElementName=AutoUseRune,Path=IsChecked}">
+                        <RadioButton Content="使用率最高" 
+                                     FontSize="15"
+                                     IsChecked="{Binding AutoUseRuneByUseCount,UpdateSourceTrigger=PropertyChanged}"
+                                     GroupName="autorune"
+                                     Margin="0 0 0 0"
+                                     Foreground="{DynamicResource DefaultFontColor}"/>
+                        <RadioButton Content="胜率最高" 
+                                     GroupName="autorune"
+                                     FontSize="15"
+                                      IsChecked="{Binding AutoUseRuneByWinRate,UpdateSourceTrigger=PropertyChanged}"
+                                     Margin="60 0 0 0"
+                                     Foreground="{DynamicResource DefaultFontColor}"/>
+                    </StackPanel>
                     <Button Content="获取最新符文装备推荐" Width="290" FontSize="15" Height="35"
                             Cursor="Hand"
                             Style="{StaticResource ButtonWarning}"
-                            Margin="0 5 0 0"
+                            Margin="0 15 0 0"
                             Command="{Binding FetchRunesAndItemsCommandAsync}"
                             HorizontalAlignment="Center"></Button>
                 </StackPanel>

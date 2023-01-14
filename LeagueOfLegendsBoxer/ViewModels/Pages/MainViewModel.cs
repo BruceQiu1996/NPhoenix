@@ -84,12 +84,28 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 Account.XiaguKill = Constant.Account?.XiaguKill;
                 Account.AramKill = Constant.Account?.AramKill;
                 Constant.Account = Account;
-                var records = await _accountService.GetRecordInformationAsync(Account.SummonerId);
-                var recordsData = JToken.Parse(records);
-                Account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
-                var rankDataStr = await _accountService.GetUserRankInformationAsync();
-                var rankData = JToken.Parse(rankDataStr);
-                Account.Rank = rankData["queueMap"].ToObject<Rank>();
+                try
+                {
+                    var records = await _accountService.GetRecordInformationAsync(Account.SummonerId);
+                    var recordsData = JToken.Parse(records);
+                    Account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
+                }
+                catch
+                {
+                    Account.Records = new ObservableCollection<Record>();
+                }
+
+                try
+                {
+                    var rankDataStr = await _accountService.GetUserRankInformationAsync();
+                    var rankData = JToken.Parse(rankDataStr);
+                    Account.Rank = rankData["queueMap"].ToObject<Rank>();
+                }
+                catch 
+                {
+                    Account.Rank = new Rank();
+                }
+
                 var champData = await _gameService.QuerySummonerSuperChampDataAsync(Account.SummonerId);
                 Account.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
                 Account.Champs = new ObservableCollection<Champ>(Account.Champs?.Take(20));

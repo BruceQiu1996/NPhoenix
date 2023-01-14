@@ -182,12 +182,38 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             if (isAram && AramRunes.Any(x => x.IsAutoApply))
             {
                 var rune = AramRunes.FirstOrDefault(x => x.IsAutoApply);
-                await SetRuneAsyncMethod(rune,true);
+                await SetRuneAsyncMethod(rune, true);
             }
-            else if (!isAram && CommonRunes.Any(x => x.IsAutoApply)) 
+            else if (!isAram && CommonRunes.Any(x => x.IsAutoApply))
             {
                 var rune = CommonRunes.FirstOrDefault(x => x.IsAutoApply);
                 await SetRuneAsyncMethod(rune, true);
+            }
+            else if (_iniSettingsModel.AutoUseRune && _iniSettingsModel.AutoUseRuneByUseCount) 
+            {
+                if (isAram)
+                {
+                    var rune = AramRunes.OrderByDescending(x => x.Popular).FirstOrDefault();
+                    await SetRuneAsyncMethod(rune, true);
+                }
+                else 
+                {
+                    var rune = CommonRunes.OrderByDescending(x => x.Popular).FirstOrDefault();
+                    await SetRuneAsyncMethod(rune, true);
+                }
+            }
+            else if (_iniSettingsModel.AutoUseRune && _iniSettingsModel.AutoUseRuneByWinRate)
+            {
+                if (isAram)
+                {
+                    var rune = AramRunes.OrderByDescending(x => x.WinRate).FirstOrDefault();
+                    await SetRuneAsyncMethod(rune, true);
+                }
+                else
+                {
+                    var rune = CommonRunes.OrderByDescending(x => x.WinRate).FirstOrDefault();
+                    await SetRuneAsyncMethod(rune, true);
+                }
             }
             DisplayRunes = isAram ? AramRunes : CommonRunes;
             AramItems = module.Item.Aram;
