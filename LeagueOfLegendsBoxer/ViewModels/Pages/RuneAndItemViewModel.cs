@@ -152,6 +152,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             if (priviouschampId == currentchampId && needFilterSame)
                 return;
 
+            var data = await _gameService.GetRuneItemsFromOnlineAsync(champId);
             var module = await _runeHelper.GetRuneAsync(champId);
             var customerRunes = await _runeHelper.ReadCustomerRuneAsync(champId);
             _recommandModule = module;

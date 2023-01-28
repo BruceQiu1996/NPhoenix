@@ -49,7 +49,8 @@ namespace LeagueOfLegendsBoxer.Application.Account
 
         public async Task<string> GetSummonerRankInformationAsync(string puuid)
         {
-            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_summonerRank, puuid));
+            var data =  await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_summonerRank, puuid));
+            return data;
         }
 
         public async Task<string> GetRecordInformationAsync1(long summonerId)

@@ -68,6 +68,7 @@ namespace LeagueOfLegendsBoxer.Models
         public string WinRateTxt => $"{(WinRate * 100.0).ToString("0.0")}%";
         public bool IsAutoApply { get; set; }
     }
+
     public class ItemModule
     {
         public int ChampId { get; set; }

@@ -1,4 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.IO;
+using System.Text.Json.Serialization;
+using System.Windows;
 
 namespace LeagueOfLegendsBoxer.Models
 {
@@ -24,7 +27,7 @@ namespace LeagueOfLegendsBoxer.Models
         public int Wins { get; set; }
         [JsonPropertyName("tier")]
         public string Tier { get; set; }
-        public string CnTier => Tier switch
+        public string CnTier => Tier.ToUpper() switch
         {
             "CHALLENGER" => "王者",
             "GRANDMASTER" => "宗师",
@@ -37,6 +40,32 @@ namespace LeagueOfLegendsBoxer.Models
             "IRON" => "黑铁",
             _ => "未定"
         };
+
+        public string PreCnTier => PreviousSeasonEndTier.ToUpper() switch
+        {
+            "CHALLENGER" => "王者",
+            "GRANDMASTER" => "宗师",
+            "MASTER" => "大师",
+            "DIAMOND" => "钻石",
+            "PLATINUM" => "铂金",
+            "GOLD" => "黄金",
+            "SILVER" => "白银",
+            "BRONZE" => "青铜",
+            "IRON" => "黑铁",
+            _ => "未定"
+        };
+
+        public string TierIcon => string.IsNullOrEmpty(Tier) ? $"../Resources/RankLevels/none.png"
+                : $"../Resources/RankLevels/{Tier.ToLower()}.png";
+        public string PreTierIcon => string.IsNullOrEmpty(PreviousSeasonEndTier) ? $"../Resources/RankLevels/none.png"
+                : $"../Resources/RankLevels/{PreviousSeasonEndTier.ToLower()}.png";
+
+        [JsonPropertyName("previousSeasonEndDivision")]
+        public string PreviousSeasonEndDivision { get; set; }
+
+        [JsonPropertyName("previousSeasonEndTier")]
+        public string PreviousSeasonEndTier { get; set; }
+
 
         public string Desc => Wins + Losses <= 0 ? "暂无" : $"胜: {Wins}\t 负: {Losses}\t 胜率: {(Wins * 100.0 / (Wins + Losses)).ToString("0.00")}%";
         public string ShortDesc => Wins + Losses <= 0 ? "暂无" : $"胜: {Wins} 负: {Losses}";

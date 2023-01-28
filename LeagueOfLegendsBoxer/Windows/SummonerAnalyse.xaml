@@ -13,7 +13,7 @@
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
-        Title="队友详情分析" Height="700" Width="1200">
+        Title="队友详情分析" Height="800" Width="1350">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="2"/>
     </WindowChrome.WindowChrome>
@@ -35,7 +35,7 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="50"></RowDefinition>
+                <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
             <Border MouseMove="Border_MouseMove" Background="Transparent">
@@ -48,10 +48,10 @@
                     </Path>
                 </Label>
             </Border>
-            <hc:SearchBar Grid.Row="1" Width="450" HorizontalAlignment="Right" Margin="0 0 5 0" Height="35"
+            <hc:SearchBar Grid.Row="1" Width="450" HorizontalAlignment="Right" Margin="0 0 5 0" Height="25"
                           Text="{Binding SearchName,UpdateSourceTrigger=PropertyChanged}"
                           Command="{Binding SearchRecordByNameAsyncCommand}"
-                          Style="{StaticResource SearchBarExtend}" FontSize="15" hc:InfoElement.Placeholder="召唤师名"></hc:SearchBar>
+                          Style="{StaticResource SearchBarExtend}" FontSize="15" hc:InfoElement.Placeholder="同一个大区召唤师名"></hc:SearchBar>
             <Frame BorderThickness="0" Margin="2"
                    Grid.Row="2"
                    NavigationUIVisibility="Visible"

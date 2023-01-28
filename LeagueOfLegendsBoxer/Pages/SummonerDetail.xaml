@@ -22,6 +22,7 @@
         <convert:WinTextConverter x:Key="WinTextConverter"></convert:WinTextConverter>
         <convert:BoolColorBrushConverter x:Key="BoolColorBrushConverter"></convert:BoolColorBrushConverter>
         <convert:BoolColorBrushReConverter x:Key="BoolColorBrushReConverter"></convert:BoolColorBrushReConverter>
+        <convert:ValueConvertKiloConverter x:Key="ValueConvertKiloConverter"></convert:ValueConvertKiloConverter>
         <ContextMenu x:Key="menu" 
                      DataContext="{Binding PlacementTarget.Tag,RelativeSource={RelativeSource Self}}"
                      BorderThickness="0" 
@@ -55,18 +56,37 @@
             <ColumnDefinition Width="200"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <hc:Card Grid.Row="0" Margin="5" Grid.ColumnSpan="2" BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+        <hc:Card Grid.Row="0" Margin="5" Grid.ColumnSpan="2" BorderThickness="0" 
+                 Background="{DynamicResource DefaultCardBackgroundColor}" 
+                 Foreground="{DynamicResource DefaultFontColor}">
             <StackPanel Orientation="Horizontal">
                 <TextBox IsReadOnly="True" 
                          Background="Transparent"
                          Foreground="{DynamicResource DefaultFontColor}"
                          BorderThickness="0"
                          Height="50"
-                         Text="{Binding Account.DisplayName,StringFormat={}召唤师名:{0}}" FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBox>
-                <TextBlock Text="{Binding Account.Rank.RANKED_SOLO_5x5.CnTier,StringFormat={}单双段位:{0}}" FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
-                <TextBlock Text="{Binding Account.Rank.RANKED_SOLO_5x5.Division}" FontSize="16" Margin="2 0 0 0" VerticalAlignment="Center"></TextBlock>
-                <TextBlock Text="{Binding Account.Rank.RANKED_FLEX_SR.CnTier,StringFormat={}灵活段位:{0}}" FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
-                <TextBlock Text="{Binding Account.Rank.RANKED_FLEX_SR.Division}" FontSize="16" Margin="2 0 0 0" VerticalAlignment="Center"></TextBlock>
+                         Text="{Binding Account.DisplayName,StringFormat={}{0}}" FontSize="16" Margin="0 0 0 0" VerticalAlignment="Center">
+                </TextBox>
+                <TextBlock Text="单双 : " FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
+                <Image Source="{Binding Account.Rank.RANKED_SOLO_5x5.TierIcon}" 
+                       VerticalAlignment="Center" Width="45" Height="45" 
+                       ToolTip="{Binding Account.Rank.RANKED_SOLO_5x5.CnTier}">
+                </Image>
+                
+                <TextBlock Text="灵活 : " FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
+                <Image Source="{Binding Account.Rank.RANKED_FLEX_SR.TierIcon}" 
+                       VerticalAlignment="Center" Width="45" Height="45"
+                       ToolTip="{Binding Account.Rank.RANKED_FLEX_SR.CnTier}"></Image>
+                
+                <TextBlock Text="上赛季单双 : " FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
+                <Image Source="{Binding Account.Rank.RANKED_SOLO_5x5.PreTierIcon}" 
+                       VerticalAlignment="Center" Width="45" Height="45"
+                       ToolTip="{Binding Account.Rank.RANKED_SOLO_5x5.PreCnTier}"></Image>
+                
+                <TextBlock Text="上赛季灵活 : " FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
+                <Image Source="{Binding Account.Rank.RANKED_FLEX_SR.PreTierIcon}" 
+                       VerticalAlignment="Center" Width="45" Height="45"
+                       ToolTip="{Binding Account.Rank.RANKED_FLEX_SR.PreCnTier}"></Image>
             </StackPanel>
         </hc:Card>
         <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="0" Margin="5"
@@ -102,21 +122,25 @@
                                     <Setter Property="OverridesDefaultStyle" Value="True" />
                                     <Setter Property="SnapsToDevicePixels" Value="True" />
                                     <Setter Property="Foreground" Value="Black" />
-                                    <Setter Property="Height" Value="80" />
+                                    <Setter Property="Height" Value="60" />
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                                 <Border Background="Transparent" Cursor="Hand" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{StaticResource PrimaryBrush}">
-                                                    <Grid Margin="0 5 5 5">
+                                                    <Grid Margin="0 1 1 1">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="1.3*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="0.9*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="auto"></ColumnDefinition>
                                                         </Grid.ColumnDefinitions>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="*"></RowDefinition>
                                                             <RowDefinition Height="*"></RowDefinition>
                                                         </Grid.RowDefinitions>
+                                                        <Canvas Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2" Background="Red" Opacity="0.3"
+                                                                Visibility="{Binding Participants[0].Stats.Win,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}"></Canvas>
+                                                        <Canvas Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2" Background="Green" Opacity="0.3"
+                                                                Visibility="{Binding Participants[0].Stats.Win,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"></Canvas>
                                                         <hc:Gravatar Grid.RowSpan="2" Width="50" Height="50" 
                                                                  ToolTip="{Binding Participants[0].ChampionName}"
                                                                  Source="{Binding Participants[0].ChampionImage}" />
@@ -135,20 +159,15 @@
                                                             <usercontrol:MVP/>
                                                         </Canvas>
                                                         <TextBlock Text="{Binding GameCreationString}" VerticalAlignment="Center"
-                                                               FontSize="15" Grid.Column="2" Margin="0 5 0 0"></TextBlock>
+                                                                   FontSize="15" Grid.Column="2" Grid.RowSpan="2" Margin="0 0 3 0"></TextBlock>
 
-                                                        <hc:Tag Content="{Binding CnQueue}" ShowCloseButton="False" VerticalAlignment="Center"
-                                                            HorizontalAlignment="Left"
-                                                            FontSize="13" Grid.Column="1" Margin="0 5 0 0"></hc:Tag>
+                                                        <TextBlock Text="{Binding CnQueue}" VerticalAlignment="Center"
+                                                                   HorizontalAlignment="Left"
+                                                                   FontSize="15" Grid.Column="1" Margin="0 2 0 0"></TextBlock>
 
                                                         <TextBlock Text="{Binding Participants[0].Stats.KDA}" 
-                                                               VerticalAlignment="Center" FontSize="15" Grid.Row="1"
-                                                               Grid.Column="1" ></TextBlock>
-
-                                                        <TextBlock Text="{Binding Participants[0].Stats.Win,Converter={StaticResource WinTextConverter}}"
-                                                               Grid.Column="3" VerticalAlignment="Center" Grid.Row="1"
-                                                               FontSize="18" HorizontalAlignment="Left"
-                                                               Foreground="{Binding Participants[0].Stats.Win,Converter={StaticResource WinColorBrushConverter}}"></TextBlock>
+                                                                   VerticalAlignment="Center" FontSize="16" Grid.Row="1"
+                                                                   Grid.Column="1" Margin="0 0 0 0"></TextBlock>
                                                     </Grid>
                                                 </Border>
                                             </ControlTemplate>
@@ -156,8 +175,8 @@
                                     </Setter>
                                     <Style.Triggers>
                                         <Trigger Property="IsSelected" Value="True">
-                                            <Setter Property="Foreground" Value="{StaticResource PrimaryBrush}"></Setter>
-                                            <Setter Property="BorderThickness" Value="1"></Setter>
+                                            <Setter Property="BorderThickness" Value="2"></Setter>
+                                            <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
                                         </Trigger>
                                         <Trigger Property="IsSelected" Value="False">
                                             <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
@@ -168,7 +187,7 @@
                         </ListBox>
                     </ScrollViewer>
                     <hc:Pagination Foreground="{StaticResource PrimaryBrush}" 
-                                   MaxPageCount="20"
+                                   MaxPageCount="10"
                                    Grid.Row="1"
                                    PageIndex="{Binding PageIndex,UpdateSourceTrigger=PropertyChanged}" 
                                    HorizontalAlignment="Center" Margin="0,10,0,0" Height="30" VerticalAlignment="Top">
@@ -186,7 +205,11 @@
                  Foreground="{DynamicResource DefaultFontColor}" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="1" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="35"></RowDefinition>
+                    <RowDefinition Height="35"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="35"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -194,7 +217,7 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
 
-                <Grid Grid.Row="0" Grid.Column="0" Margin="0 30 30 30">
+                <Grid Grid.Row="0" Grid.Column="0" Margin="0 10 30 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
@@ -214,7 +237,7 @@
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Record.DetailRecord.GameCreationTimeString}" Grid.Column="2"  Grid.Row="1" FontSize="15" />
                 </Grid>
 
-                <Grid Grid.Row="0" Grid.Column="1" Margin="30 30 0 30">
+                <Grid Grid.Row="0" Grid.Column="1" Margin="30 10 0 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
@@ -229,19 +252,39 @@
                     <TextBlock Text="金钱" HorizontalAlignment="Center" Grid.Column="2" FontSize="15" Foreground="#aaaaaa"/>
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Row="1">
                         <TextBlock Text="{Binding Record.DetailRecord.Team1Kills}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource DangerBrush}"/>
-                        <TextBlock Text="/" HorizontalAlignment="Center" FontSize="15" Foreground="#aaaaaa"/>
+                        <TextBlock Text=" / " HorizontalAlignment="Center" FontSize="15" Foreground="#aaaaaa"/>
                         <TextBlock Text="{Binding Record.DetailRecord.Team2Kills}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource PrimaryBrush}"/>
                     </StackPanel>
 
                     <TextBlock HorizontalAlignment="Center" VerticalAlignment="Bottom" Text="{Binding Record.DetailRecord.GameMinutes,StringFormat={}{0}分钟}" Grid.Column="1" Grid.Row="1" FontSize="15" />
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Bottom" Orientation="Horizontal" Grid.Column="2"  Grid.Row="1">
                         <TextBlock Text="{Binding Record.DetailRecord.Team1GoldEarnedString}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource DangerBrush}"/>
-                        <TextBlock Text="/" HorizontalAlignment="Center" FontSize="15" Foreground="#aaaaaa"/>
+                        <TextBlock Text=" / " HorizontalAlignment="Center" FontSize="15" Foreground="#aaaaaa"/>
                         <TextBlock Text="{Binding Record.DetailRecord.Team2GoldEarnedString}" HorizontalAlignment="Center" FontSize="15" Foreground="{StaticResource PrimaryBrush}"/>
                     </StackPanel>
                 </Grid>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10 2 10 2" Grid.ColumnSpan="2" Background="{DynamicResource DefaultHoverColor}">
+                    <TextBlock Text="召唤师" FontSize="16"  Margin="5 0 0 0" Width="50" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="装备" FontSize="16" Margin="200 0 0 0" Width="200" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="KDA" FontSize="16" Margin="100 0 0 0" Width="100" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="输出" FontSize="16" VerticalAlignment="Center" Width="70"></TextBlock>
+                    <TextBlock Text="承受伤害" FontSize="16" VerticalAlignment="Center"  Width="95"></TextBlock>
+                    <TextBlock Text="伤转率" FontSize="16"  Width="60" VerticalAlignment="Center"></TextBlock>
+                </StackPanel>
+                <Label Content="胜方" Grid.Row="2" HorizontalAlignment="Left" Margin="10 0 0 0" Style="{StaticResource LabelPrimary}"
+                       Visibility="{Binding Record.IsLeftWin,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"/>
+                <Label Content="败方" Grid.Row="2" HorizontalAlignment="Left" Margin="10 2 0 0" Style="{StaticResource LabelDanger}"
+                       Visibility="{Binding Record.IsLeftWin,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}"/>
+                <Label Content="胜方" Grid.Row="4" HorizontalAlignment="Left" Margin="10 0 0 0" Style="{StaticResource LabelPrimary}"
+                       Visibility="{Binding Record.IsLeftWin,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}"/>
+                <Label Content="败方" Grid.Row="4" HorizontalAlignment="Left" Margin="10 2 0 0" Style="{StaticResource LabelDanger}"
+                       Visibility="{Binding Record.IsLeftWin,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"/>
+                <Canvas Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Background="Green" Opacity="0.1" Visibility="{Binding Record.IsLeftWin,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"></Canvas>
+                <Canvas Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Background="Red" Opacity="0.1" Visibility="{Binding Record.IsLeftWin,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}"></Canvas>
+                <Canvas Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Background="Green" Opacity="0.1" Visibility="{Binding Record.IsLeftWin,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}"></Canvas>
+                <Canvas Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Background="Red" Opacity="0.1" Visibility="{Binding Record.IsLeftWin,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"></Canvas>
                 <ListBox ItemsSource="{Binding Record.LeftParticipants,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
-                         Grid.Row="1" Grid.Column="0" Margin="10 0 0 0" Background="Transparent">
+                         Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10 0 0 0" Background="Transparent">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"></StackPanel>
@@ -253,41 +296,20 @@
                             <Setter Property="OverridesDefaultStyle" Value="True" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Height" Value="80" />
+                            <Setter Property="Height" Value="50" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                         <Border Background="Transparent" BorderBrush="{StaticResource PrimaryBrush}">
-                                            <Border.Style>
-                                                <Style TargetType="Border">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Item1.IsCurrentUser}" Value="True">
-                                                            <Setter Property="BorderThickness" Value="1"></Setter>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Item1.IsCurrentUser}" Value="False">
-                                                            <Setter Property="BorderThickness" Value="0"></Setter>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                            <Grid Margin="0 5 5 5">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="60"></ColumnDefinition>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="100"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="2*"></RowDefinition>
-                                                    <RowDefinition Height="*"></RowDefinition>
-                                                    <RowDefinition Height="0.5*"></RowDefinition>
-                                                </Grid.RowDefinitions>
+                                            <StackPanel Margin="0 3 5 2" Orientation="Horizontal">
                                                 <hc:Badge Grid.RowSpan="2" 
-                                                          Grid.Column="0" BadgeMargin="0 -5 -5 0"
+                                                          Grid.Column="0" BadgeMargin="0 0 -5 0"
                                                           BorderThickness="0"
+                                                          Width="50"
                                                           Grid.Row="0" Value="{Binding Item2.Stats.ChampLevel}" Style="{DynamicResource BadgeDanger}">
                                                     <Grid>
                                                         <hc:Gravatar Style="{StaticResource GravatarCircle}" Name="headimg"
-                                                                     Width="55" Height="55" Source="{Binding Item2.ChampionImage}" />
+                                                                     Width="35" Height="35" Source="{Binding Item2.ChampionImage}" />
                                                         <Canvas Margin="0 0 0 25" 
                                                                 Grid.RowSpan="2" 
                                                                 Width="55" Height="55" 
@@ -296,7 +318,7 @@
                                                         </Canvas>
                                                         <Canvas Margin="0 0 0 35" 
                                                                 Grid.RowSpan="2" 
-                                                                Width="75" Height="55" 
+                                                                Width="55" Height="55" 
                                                                 Visibility="{Binding Item1.IsMvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}">
                                                             <usercontrol:MVP/>
                                                         </Canvas>
@@ -421,7 +443,30 @@
                                                         </Popup>
                                                     </Grid>
                                                 </hc:Badge>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2">
+                                                <TextBlock Text="{Binding Item1.Player.SummonerName}" FontSize="15"
+                                                           Width="140"
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                           ContextMenu="{StaticResource menu}"
+                                                           VerticalAlignment="Center" Cursor="Hand" Margin="5 0 0 0">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.FetchPlayerDetailCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding Item1.Player.SummonerId}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                </TextBlock>
+                                                <StackPanel Width="60"  Orientation="Horizontal">
+                                                    <hc:Gravatar Grid.RowSpan="2" 
+                                                             Grid.Row="0"
+                                                             Style="{StaticResource GravatarCircle}"
+                                                             Width="25" Height="25" Grid.Column="0" Source="{Binding Item2.Spell1Image}" />
+                                                    <hc:Gravatar Grid.RowSpan="2" 
+                                                             Grid.Row="0" Margin="2 0 0 0"
+                                                             Style="{StaticResource GravatarCircle}"
+                                                             Width="25" Height="25" Grid.Column="0" Source="{Binding Item2.Spell2Image}" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Width="250">
                                                     <StackPanel.Resources>
                                                         <Style TargetType="Image">
                                                             <Setter Property="Width" Value="30"></Setter>
@@ -619,43 +664,31 @@
                                                         </Popup>
                                                     </Grid>
                                                 </StackPanel>
-                                                <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                                                    <hc:Gravatar Grid.RowSpan="2" 
-                                                             Grid.Row="0"
-                                                             Style="{StaticResource GravatarCircle}"
-                                                             Width="20" Height="20" Grid.Column="0" Source="{Binding Item2.Spell1Image}" />
-                                                    <hc:Gravatar Grid.RowSpan="2" 
-                                                             Grid.Row="0" Margin="2 0 0 0"
-                                                             Style="{StaticResource GravatarCircle}"
-                                                             Width="20" Height="20" Grid.Column="0" Source="{Binding Item2.Spell2Image}" />
-
-                                                    <TextBlock Text="{Binding Item1.Player.SummonerName}" FontSize="16"
-                                                               Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
-                                                               Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
-                                                               ContextMenu="{StaticResource menu}"
-                                                               VerticalAlignment="Center" Cursor="Hand" Margin="5 0 0 0">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.FetchPlayerDetailCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
-                                                                                               CommandParameter="{Binding Item1.Player.SummonerId}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                    </TextBlock>
-                                                </StackPanel>
 
                                                 <TextBlock Text="{Binding Item2.Stats.KDA}" 
-                                                           HorizontalAlignment="Left"
+                                                           HorizontalAlignment="Right"
+                                                           Width="120"
+                                                           Margin="10 0 0 0"
+                                                           TextAlignment="Center"
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
-                                                           VerticalAlignment="Center" FontSize="15" Grid.Row="1"
+                                                           VerticalAlignment="Center" FontSize="16" Grid.Row="1"
                                                            Grid.Column="2" ></TextBlock>
 
-                                                <Grid Style="{x:Null}" Grid.Row="2"
-                                                      HorizontalAlignment="Left"
-                                                      Width="{Binding Item2.Stats.BarWidth}"
-                                                      ToolTip="{Binding Item2.Stats.TotalDamageDealtToChampions}"
-                                                      Margin="0 2 0 0"
-                                                      Grid.ColumnSpan="3" Height="10" Background="{StaticResource DangerBrush}"/>
-                                            </Grid>
+                                                <TextBlock Text="{Binding Item2.Stats.TotalDamageDealtToChampions,Converter={StaticResource ValueConvertKiloConverter}}" 
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
+                                                           Width="80"></TextBlock>
+
+                                                <TextBlock Text="{Binding Item2.Stats.TotalDamageTaken,Converter={StaticResource ValueConvertKiloConverter}}" 
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
+                                                           Width="80"></TextBlock>
+
+                                                <TextBlock Text="{Binding Item2.Stats.DamageConvert}" 
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
+                                                           Width="100"></TextBlock>
+                                            </StackPanel>
                                         </Border>
                                     </ControlTemplate>
                                 </Setter.Value>
@@ -671,9 +704,8 @@
                         </Style>
                     </ListBox.ItemContainerStyle>
                 </ListBox>
-
                 <ListBox ItemsSource="{Binding Record.RightParticipants,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0"
-                         Grid.Row="1" Grid.Column="1" Margin="0 0 10 0" Background="Transparent">
+                         Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="10 0 0 0" Background="Transparent">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"></StackPanel>
@@ -685,40 +717,20 @@
                             <Setter Property="OverridesDefaultStyle" Value="True" />
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="Foreground" Value="Black" />
-                            <Setter Property="Height" Value="80" />
+                            <Setter Property="Height" Value="50" />
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                         <Border Background="Transparent" BorderBrush="{StaticResource PrimaryBrush}">
-                                            <Border.Style>
-                                                <Style TargetType="Border">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Item1.IsCurrentUser}" Value="True">
-                                                            <Setter Property="BorderThickness" Value="1"></Setter>
-                                                        </DataTrigger>
-                                                        <DataTrigger Binding="{Binding Item1.IsCurrentUser}" Value="False">
-                                                            <Setter Property="BorderThickness" Value="0"></Setter>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Border.Style>
-                                            <Grid Margin="0 5 5 5">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="*"></ColumnDefinition>
-                                                    <ColumnDefinition Width="80"></ColumnDefinition>
-                                                    <ColumnDefinition Width="60"></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition Height="2*"></RowDefinition>
-                                                    <RowDefinition Height="*"></RowDefinition>
-                                                    <RowDefinition Height="0.5*"></RowDefinition>
-                                                </Grid.RowDefinitions>
-                                                <hc:Badge Grid.RowSpan="2" BorderThickness="0"
-                                                          Grid.Column="2" BadgeMargin="0 -5 -5 0"
-                                                          Grid.Row="0" Value="{Binding Item2.Stats.ChampLevel}" Style="{DynamicResource BadgeSuccess}">
+                                            <StackPanel Margin="0 3 5 2" Orientation="Horizontal">
+                                                <hc:Badge Grid.RowSpan="2" 
+                                                          Grid.Column="0" BadgeMargin="0 0 -5 0"
+                                                          BorderThickness="0"
+                                                          Width="50"
+                                                          Grid.Row="0" Value="{Binding Item2.Stats.ChampLevel}" Style="{DynamicResource BadgeDanger}">
                                                     <Grid>
                                                         <hc:Gravatar Style="{StaticResource GravatarCircle}" Name="headimg"
-                                                                     Width="55" Height="55" Source="{Binding Item2.ChampionImage}" />
+                                                                     Width="35" Height="35" Source="{Binding Item2.ChampionImage}" />
                                                         <Canvas Margin="0 0 0 25" 
                                                                 Grid.RowSpan="2" 
                                                                 Width="55" Height="55" 
@@ -727,7 +739,7 @@
                                                         </Canvas>
                                                         <Canvas Margin="0 0 0 35" 
                                                                 Grid.RowSpan="2" 
-                                                                Width="75" Height="55" 
+                                                                Width="55" Height="55" 
                                                                 Visibility="{Binding Item1.IsMvp,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}">
                                                             <usercontrol:MVP/>
                                                         </Canvas>
@@ -852,7 +864,30 @@
                                                         </Popup>
                                                     </Grid>
                                                 </hc:Badge>
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                                                <TextBlock Text="{Binding Item1.Player.SummonerName}" FontSize="15"
+                                                           Width="140"
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                           ContextMenu="{StaticResource menu}"
+                                                           VerticalAlignment="Center" Cursor="Hand" Margin="5 0 0 0">
+                                                        <behaviors:Interaction.Triggers>
+                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.FetchPlayerDetailCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                               CommandParameter="{Binding Item1.Player.SummonerId}"></behaviors:InvokeCommandAction>
+                                                            </behaviors:EventTrigger>
+                                                        </behaviors:Interaction.Triggers>
+                                                </TextBlock>
+                                                <StackPanel Width="60"  Orientation="Horizontal">
+                                                    <hc:Gravatar Grid.RowSpan="2" 
+                                                             Grid.Row="0"
+                                                             Style="{StaticResource GravatarCircle}"
+                                                             Width="25" Height="25" Grid.Column="0" Source="{Binding Item2.Spell1Image}" />
+                                                    <hc:Gravatar Grid.RowSpan="2" 
+                                                             Grid.Row="0" Margin="2 0 0 0"
+                                                             Style="{StaticResource GravatarCircle}"
+                                                             Width="25" Height="25" Grid.Column="0" Source="{Binding Item2.Spell2Image}" />
+                                                </StackPanel>
+                                                <StackPanel Orientation="Horizontal" Width="250">
                                                     <StackPanel.Resources>
                                                         <Style TargetType="Image">
                                                             <Setter Property="Width" Value="30"></Setter>
@@ -876,8 +911,8 @@
                                                                     <TextBlock VerticalAlignment="Center" Text="{Binding Item2.Stats.Item0Model.Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
                                                                     <TextBox Width="380" 
                                                                              IsReadOnly="True"
-                                                                             AcceptsReturn="True"
-                                                                             TextWrapping="Wrap"
+                                                                              AcceptsReturn="True"
+                                                                              TextWrapping="Wrap"
                                                                              Text="{Binding Item2.Stats.Item0Model.Description,UpdateSourceTrigger=PropertyChanged}"/>
                                                                     <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
                                                                         <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
@@ -1050,43 +1085,31 @@
                                                         </Popup>
                                                     </Grid>
                                                 </StackPanel>
-                                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal" Margin="30 0 0 0">
-                                                    <hc:Gravatar Grid.RowSpan="2" 
-                                                                 Grid.Row="0"
-                                                                 Style="{StaticResource GravatarCircle}"
-                                                                 Width="20" Height="20" Grid.Column="0" Source="{Binding Item2.Spell1Image}" />
-                                                    <hc:Gravatar Grid.RowSpan="2" 
-                                                             Grid.Row="0" Margin="2 0 0 0"
-                                                             Style="{StaticResource GravatarCircle}"
-                                                             Width="20" Height="20" Grid.Column="0" Source="{Binding Item2.Spell2Image}" />
-
-                                                    <TextBlock Text="{Binding Item1.Player.SummonerName}" FontSize="16"
-                                                               Tag="{Binding DataContext,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
-                                                               ContextMenu="{StaticResource menu}"
-                                                               Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
-                                                               VerticalAlignment="Center" Cursor="Hand" Margin="5 0 0 0">
-                                                        <behaviors:Interaction.Triggers>
-                                                            <behaviors:EventTrigger EventName="MouseLeftButtonDown">
-                                                                <behaviors:InvokeCommandAction Command="{Binding DataContext.FetchPlayerDetailCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
-                                                                                               CommandParameter="{Binding Item1.Player.SummonerId}"></behaviors:InvokeCommandAction>
-                                                            </behaviors:EventTrigger>
-                                                        </behaviors:Interaction.Triggers>
-                                                    </TextBlock>
-                                                </StackPanel>
 
                                                 <TextBlock Text="{Binding Item2.Stats.KDA}" 
                                                            HorizontalAlignment="Right"
+                                                           Width="120"
+                                                           Margin="10 0 0 0"
+                                                           TextAlignment="Center"
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
-                                                           VerticalAlignment="Center" FontSize="15" Grid.Row="1"
-                                                           Grid.Column="1" ></TextBlock>
+                                                           VerticalAlignment="Center" FontSize="16" Grid.Row="1"
+                                                           Grid.Column="2" ></TextBlock>
 
-                                                <Grid Style="{x:Null}" Grid.Row="2"
-                                                      HorizontalAlignment="Right"
-                                                      ToolTip="{Binding Item2.Stats.TotalDamageDealtToChampions}"
-                                                      Width="{Binding Item2.Stats.BarWidth}"
-                                                      Margin="0 2 0 0"
-                                                      Grid.ColumnSpan="3" Height="10" Background="{StaticResource PrimaryBrush}"/>
-                                            </Grid>
+                                                <TextBlock Text="{Binding Item2.Stats.TotalDamageDealtToChampions,Converter={StaticResource ValueConvertKiloConverter}}" 
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
+                                                           Width="80"></TextBlock>
+
+                                                <TextBlock Text="{Binding Item2.Stats.TotalDamageTaken,Converter={StaticResource ValueConvertKiloConverter}}" 
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
+                                                           Width="80"></TextBlock>
+
+                                                <TextBlock Text="{Binding Item2.Stats.DamageConvert}" 
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
+                                                           Width="100"></TextBlock>
+                                            </StackPanel>
                                         </Border>
                                     </ControlTemplate>
                                 </Setter.Value>

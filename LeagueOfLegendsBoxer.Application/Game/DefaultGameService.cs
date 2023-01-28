@@ -29,6 +29,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
         private const string _setSkinBackground = "lol-summoner/v1/current-summoner/summoner-profile";
         private const string _setIcon = "lol-summoner/v1/current-summoner/icon";
         private const string _getRecordsByPage = "lol-match-history/v1/products/lol/{0}/matches";
+        private const string _getRuneItemsOnline = "https://www.wegame.com.cn/lol/resources/js/champion/recommend/{0}.js ";
         private readonly IRequestService _requestService;
 
         public DefaultGameService(IRequestService requestService)
@@ -204,6 +205,11 @@ namespace LeagueOfLegendsBoxer.Application.Game
         public async Task<string> test(long id)
         {
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_test, id));
+        }
+
+        public async Task<string> GetRuneItemsFromOnlineAsync(int champId)
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_getRuneItemsOnline, champId));
         }
     }
 }

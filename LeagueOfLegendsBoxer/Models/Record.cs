@@ -132,6 +132,13 @@ namespace LeagueOfLegendsBoxer.Models
             get => _isSvp;
             set => SetProperty(ref _isSvp, value);
         }
+
+        private bool _isLeftWin;
+        public bool IsLeftWin
+        {
+            get => _isLeftWin;
+            set => SetProperty(ref _isLeftWin, value);
+        }
     }
 
     public class ParticipantIdentity : ObservableObject

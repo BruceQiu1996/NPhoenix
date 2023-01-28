@@ -220,10 +220,10 @@
                                            Foreground="{DynamicResource DefaultFontColor}"
                                            HorizontalAlignment="Left"
                                            VerticalAlignment="Center"
-                                           Text="{Binding Account.MvpRank,UpdateSourceTrigger=PropertyChanged,StringFormat={}MVP: {0}}">
+                                           Text="{Binding Account.MvpRank,UpdateSourceTrigger=PropertyChanged,StringFormat={}MVP : {0}}">
                         </TextBlock>
-                        <TextBlock Grid.Row="2" Text="{Binding Account.XiaguKill,UpdateSourceTrigger=PropertyChanged,StringFormat={}峡谷击杀: {0}}" FontSize="16" Margin="10 5 0 0"></TextBlock>
-                        <TextBlock Text="{Binding Account.AramKill,StringFormat={}乱斗击杀: {0}}" Grid.Row="3" Margin="10 5 0 0" FontSize="16"></TextBlock>
+                        <TextBlock Grid.Row="2" Text="{Binding Account.XiaguKill,UpdateSourceTrigger=PropertyChanged,StringFormat={}峡谷击杀 : {0}}" FontSize="16" Margin="10 5 0 0"></TextBlock>
+                        <TextBlock Text="{Binding Account.AramKill,StringFormat={}乱斗击杀 : {0}}" Grid.Row="3" Margin="10 5 0 0" FontSize="16"></TextBlock>
                     </Grid>
                 </Border>
             </StackPanel>
@@ -302,8 +302,14 @@
                  Background="{DynamicResource DefaultCardBackgroundColor}" 
                  Foreground="{DynamicResource DefaultFontColor}"
                  Grid.Column="1" Grid.RowSpan="3">
-            <GroupBox Header="最近20场对局" BorderThickness="0" FontSize="18" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}" Style="{StaticResource GroupBoxOriginal}">
-                <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
+            <GroupBox Header="最近20场对局" Cursor="Hand" BorderThickness="0" FontSize="16" Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}" Style="{StaticResource GroupBoxOriginal}">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="MouseLeftButtonDown">
+                        <behaviors:InvokeCommandAction Command="{Binding CurrentUserInfoCommand}"></behaviors:InvokeCommandAction>
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
+                <ListBox ItemsSource="{Binding Account.Records,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" 
+                         Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"></StackPanel>
@@ -320,21 +326,25 @@
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                         <Border>
-                                            <Grid Margin="0 5 5 5">
+                                            <Grid Margin="0 1 2 1">
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="70"></ColumnDefinition>
-                                                    <ColumnDefinition Width="90"></ColumnDefinition>
+                                                    <ColumnDefinition Width="45"></ColumnDefinition>
                                                     <ColumnDefinition Width="*"></ColumnDefinition>
+                                                    <ColumnDefinition Width="auto"></ColumnDefinition>
                                                 </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*"></RowDefinition>
                                                     <RowDefinition Height="*"></RowDefinition>
                                                 </Grid.RowDefinitions>
-                                                <hc:Gravatar Height="50" Width="50" Grid.RowSpan="2" Source="{Binding Participants[0].ChampionImage}" />
+                                                <Canvas Grid.ColumnSpan="3" Grid.RowSpan="2" Background="Red" Opacity="0.2"
+                                                        Visibility="{Binding Participants[0].Stats.Win,Converter={StaticResource Boolean2VisibilityReConverter}}"></Canvas>
+                                                <Canvas Grid.ColumnSpan="3" Grid.RowSpan="2" Background="Green" Opacity="0.2"
+                                                        Visibility="{Binding Participants[0].Stats.Win,Converter={StaticResource Boolean2VisibilityConverter}}"></Canvas>
+                                                <hc:Gravatar Height="45" Width="45" Margin="2 0 0 0" Grid.RowSpan="2" Source="{Binding Participants[0].ChampionImage}" />
                                                 <TextBlock Text="{Binding Participants[0].ChampionName}" 
-                                                           FontSize="16" Grid.Column="1" Margin="0 0 0 1"></TextBlock>
+                                                           FontSize="16" Grid.Column="1" Margin="7 4 0 1"></TextBlock>
                                                 <StackPanel HorizontalAlignment="Left" Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                                                    <TextBlock Margin="2 4 0 0"
+                                                    <TextBlock Margin="7 4 0 0"
                                                                FontSize="13"
                                                                HorizontalAlignment="Left"
                                                                Text="{Binding CnQueue}"/>
@@ -345,7 +355,7 @@
                                                            VerticalAlignment="Center" FontSize="17"
                                                            Grid.Column="2" ></TextBlock>-->
                                                 <TextBlock Text="{Binding GameCreationString}" 
-                                                           Foreground="{Binding Participants[0].Stats.Win,Converter={StaticResource WinColorBrushConverter}}"
+                                                           Margin="0 0 2 0"
                                                            VerticalAlignment="Center" FontSize="16" Grid.Row="0" Grid.RowSpan="2"
                                                            Grid.Column="2" ></TextBlock>
                                             </Grid>

@@ -28,6 +28,16 @@
 		<None Remove="Resources\Positions\t3.svg" />
 		<None Remove="Resources\Positions\t4.svg" />
 		<None Remove="Resources\Positions\top.svg" />
+		<None Remove="Resources\RankLevels\bronze.png" />
+		<None Remove="Resources\RankLevels\challenger.png" />
+		<None Remove="Resources\RankLevels\diamond.png" />
+		<None Remove="Resources\RankLevels\gold.png" />
+		<None Remove="Resources\RankLevels\grandmaster.png" />
+		<None Remove="Resources\RankLevels\iron.png" />
+		<None Remove="Resources\RankLevels\master.png" />
+		<None Remove="Resources\RankLevels\none.png" />
+		<None Remove="Resources\RankLevels\platinum.png" />
+		<None Remove="Resources\RankLevels\silver.png" />
 		<None Remove="Resources\settings.ini" />
 		<None Remove="Resources\wx.jpg" />
 		<None Remove="Resources\zfb.jpg" />
@@ -88,6 +98,16 @@
 		<Resource Include="Resources\Positions\t3.svg" />
 		<Resource Include="Resources\Positions\t4.svg" />
 		<Resource Include="Resources\Positions\top.svg" />
+		<Resource Include="Resources\RankLevels\bronze.png" />
+		<Resource Include="Resources\RankLevels\challenger.png" />
+		<Resource Include="Resources\RankLevels\diamond.png" />
+		<Resource Include="Resources\RankLevels\gold.png" />
+		<Resource Include="Resources\RankLevels\grandmaster.png" />
+		<Resource Include="Resources\RankLevels\iron.png" />
+		<Resource Include="Resources\RankLevels\master.png" />
+		<Resource Include="Resources\RankLevels\none.png" />
+		<Resource Include="Resources\RankLevels\platinum.png" />
+		<Resource Include="Resources\RankLevels\silver.png" />
 		<Resource Include="Resources\wx.jpg" />
 		<Resource Include="Resources\zfb.jpg" />
 	</ItemGroup>

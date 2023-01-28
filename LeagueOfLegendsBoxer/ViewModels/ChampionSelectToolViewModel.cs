@@ -42,11 +42,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _runePage = runePage;
             Menus = new ObservableCollection<Menu>()
             {
-                new Menu()
-                {
-                    Name = "英雄数据",
-                    Action = ()=>CurrentPage = heroData
-                },
+                //new Menu()
+                //{
+                //    Name = "英雄数据",
+                //    Action = ()=>CurrentPage = heroData
+                //},
                 new Menu()
                 {
                     Name = "队友信息",
@@ -58,6 +58,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     Action = ()=>CurrentPage = runePage
                 }
             };
+
             CurrentMenu = Menus.FirstOrDefault();
         }
 

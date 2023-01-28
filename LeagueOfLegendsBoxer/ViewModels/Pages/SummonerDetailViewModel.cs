@@ -78,7 +78,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         private async Task SelectPageAsync(FunctionEventArgs<int> e)
         {
-            var records = await _gameService.GetRecordsByPage((e.Info - 1) * 5, e.Info * 5, Account.Puuid);
+            var records = await _gameService.GetRecordsByPage((e.Info - 1) * 10, e.Info * 10, Account.Puuid);
             var recordsData = JToken.Parse(records);
             var recordObjs = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<ObservableCollection<Record>>().Reverse());
             Records = recordObjs;
@@ -98,7 +98,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     champ.Rank = ++rank;
                 }
                 Champs = list;
-                Records = Account.Records.Count() >= 5 ? new ObservableCollection<Record>(Account.Records.Take(5)) : Account.Records;
+                Records = Account.Records.Count() >= 10 ? new ObservableCollection<Record>(Account.Records.Take(10)) : Account.Records;
                 await LoadRecordDetailDataGroup(Records);
                 PageIndex = 1;
                 _loaded = true;
@@ -143,12 +143,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
                 foreach (var item in record.LeftParticipants)
                 {
-                    if (team1TotalDamage == 0)item.Item2.Stats.DamageConvert = "NaN%";
+                    if (team1TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
                     else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team1TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team1GoldEarned) * 100).ToString("0.00") + "%";
                 }
                 foreach (var item in record.RightParticipants)
                 {
-                    if (team2TotalDamage == 0)item.Item2.Stats.DamageConvert = "NaN%";
+                    if (team2TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
                     else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team2GoldEarned) * 100).ToString("0.00") + "%";
                 }
                 var maxdmg = record.LeftParticipants.Concat(record.RightParticipants).Max(x => x.Item2.Stats.TotalDamageDealtToChampions);
@@ -173,6 +173,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         mvp.Item1.IsMvp = true;
                         svp = other.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
                         svp.Item1.IsSvp = true;
+                        record.IsLeftWin = my == record.LeftParticipants ? true : false;
                     }
                     else
                     {
@@ -180,6 +181,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         mvp.Item1.IsMvp = true;
                         svp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
                         svp.Item1.IsSvp = true;
+                        record.IsLeftWin = my == record.LeftParticipants ? false : true;
                     }
 
                     if (mvp.Item1.Player.SummonerId == Account.SummonerId)
