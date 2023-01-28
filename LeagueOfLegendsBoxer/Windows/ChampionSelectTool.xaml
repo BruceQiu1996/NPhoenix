@@ -12,7 +12,7 @@
         WindowStyle="None"
         mc:Ignorable="d"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
-        Title="选人助手" Height="620" Width="320">
+        Title="选人助手" Height="700" Width="350">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="10"/>
     </WindowChrome.WindowChrome>

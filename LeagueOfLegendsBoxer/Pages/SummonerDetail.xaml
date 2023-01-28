@@ -69,24 +69,71 @@
                 </TextBox>
                 <TextBlock Text="单双 : " FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
                 <Image Source="{Binding Account.Rank.RANKED_SOLO_5x5.TierIcon}" 
-                       VerticalAlignment="Center" Width="45" Height="45" 
-                       ToolTip="{Binding Account.Rank.RANKED_SOLO_5x5.CnTier}">
+                       VerticalAlignment="Center" Width="45" Height="45" >
+                    <Image.ToolTip>
+                        <ToolTip>
+                            <TextBlock DataContext="{Binding}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Account.Rank.RANKED_SOLO_5x5.CnTier" />
+                                        <Binding Path="Account.Rank.RANKED_SOLO_5x5.Division" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </ToolTip>
+                    </Image.ToolTip>
                 </Image>
                 
                 <TextBlock Text="灵活 : " FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
                 <Image Source="{Binding Account.Rank.RANKED_FLEX_SR.TierIcon}" 
-                       VerticalAlignment="Center" Width="45" Height="45"
-                       ToolTip="{Binding Account.Rank.RANKED_FLEX_SR.CnTier}"></Image>
+                       VerticalAlignment="Center" Width="45" Height="45">
+                    <Image.ToolTip>
+                        <ToolTip>
+                            <TextBlock DataContext="{Binding}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Account.Rank.RANKED_FLEX_SR.CnTier" />
+                                        <Binding Path="Account.Rank.RANKED_FLEX_SR.Division" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </ToolTip>
+                    </Image.ToolTip>
+                </Image>
                 
                 <TextBlock Text="上赛季单双 : " FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
                 <Image Source="{Binding Account.Rank.RANKED_SOLO_5x5.PreTierIcon}" 
-                       VerticalAlignment="Center" Width="45" Height="45"
-                       ToolTip="{Binding Account.Rank.RANKED_SOLO_5x5.PreCnTier}"></Image>
+                       VerticalAlignment="Center" Width="45" Height="45">
+                    <Image.ToolTip>
+                        <ToolTip>
+                            <TextBlock DataContext="{Binding}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Account.Rank.RANKED_SOLO_5x5.PreCnTier" />
+                                        <Binding Path="Account.Rank.RANKED_SOLO_5x5.PreviousSeasonEndDivision" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </ToolTip>
+                    </Image.ToolTip>
+                </Image>
                 
                 <TextBlock Text="上赛季灵活 : " FontSize="16" Margin="10 0 0 0" VerticalAlignment="Center"></TextBlock>
                 <Image Source="{Binding Account.Rank.RANKED_FLEX_SR.PreTierIcon}" 
-                       VerticalAlignment="Center" Width="45" Height="45"
-                       ToolTip="{Binding Account.Rank.RANKED_FLEX_SR.PreCnTier}"></Image>
+                       VerticalAlignment="Center" Width="45" Height="45">
+                    <Image.ToolTip>
+                        <ToolTip>
+                            <TextBlock DataContext="{Binding}">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                        <Binding Path="Account.Rank.RANKED_FLEX_SR.PreCnTier" />
+                                        <Binding Path="Account.Rank.RANKED_FLEX_SR.PreviousSeasonEndDivision" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </ToolTip>
+                    </Image.ToolTip>
+                </Image>
             </StackPanel>
         </hc:Card>
         <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Grid.Row="1" Grid.Column="0" Margin="5"

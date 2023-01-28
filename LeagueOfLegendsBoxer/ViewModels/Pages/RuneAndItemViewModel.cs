@@ -28,7 +28,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private int priviouschampId;
         private int currentchampId;
         private HeroRecommandModule _recommandModule;
-        private RuneModule _customerRuneModule;
+        //private IEnumerable<RuneModule> _customerRuneModules;
 
         private Hero _hero;
         public Hero Hero
@@ -38,47 +38,47 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         }
 
-        private ObservableCollection<RuneDetail> _aramRunes;
-        public ObservableCollection<RuneDetail> AramRunes
+        private ObservableCollection<RuneModule> _aramRunes;
+        public ObservableCollection<RuneModule> AramRunes
         {
             get { return _aramRunes; }
             set { SetProperty(ref _aramRunes, value); }
 
         }
 
-        private ObservableCollection<RuneDetail> _commonRunes;
-        public ObservableCollection<RuneDetail> CommonRunes
+        private ObservableCollection<RuneModule> _commonRunes;
+        public ObservableCollection<RuneModule> CommonRunes
         {
             get { return _commonRunes; }
             set { SetProperty(ref _commonRunes, value); }
 
         }
 
-        private ObservableCollection<RuneDetail> _displayRunes;
-        public ObservableCollection<RuneDetail> DisplayRunes
+        private ObservableCollection<RuneModule> _displayRunes;
+        public ObservableCollection<RuneModule> DisplayRunes
         {
             get { return _displayRunes; }
             set { SetProperty(ref _displayRunes, value); }
         }
 
-        private ItemsDetail _aramItems;
-        public ItemsDetail AramItems
+        private ObservableCollection<ItemModule> _aramItems;
+        public ObservableCollection<ItemModule> AramItems
         {
             get { return _aramItems; }
             set { SetProperty(ref _aramItems, value); }
 
         }
 
-        private ItemsDetail _commonItems;
-        public ItemsDetail CommonItems
+        private ObservableCollection<ItemModule> _commonItems;
+        public ObservableCollection<ItemModule> CommonItems
         {
             get { return _commonItems; }
             set { SetProperty(ref _commonItems, value); }
 
         }
 
-        private ItemsDetail _displayItems;
-        public ItemsDetail DisplayItems
+        private ObservableCollection<ItemModule> _displayItems;
+        public ObservableCollection<ItemModule> DisplayItems
         {
             get { return _displayItems; }
             set { SetProperty(ref _displayItems, value); }
@@ -96,10 +96,10 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand SwitchRuneToAramCommand { get; set; }
         public RelayCommand SwitchItemPageCommand { get; set; }
         public RelayCommand SwitchRunePageCommand { get; set; }
-        public AsyncRelayCommand<RuneDetail> SetRuneCommandAsync { get; set; }
-        public AsyncRelayCommand ApplyItemCommandAsync { get; set; }
-        public AsyncRelayCommand<RuneDetail> AutoApplyRuneCommandAsync { get; set; }
-        public AsyncRelayCommand UnAutoApplyRuneCommandAsync { get; set; }
+        public AsyncRelayCommand<RuneModule> SetRuneCommandAsync { get; set; }
+        public AsyncRelayCommand<ItemModule> ApplyItemCommandAsync { get; set; }
+        public AsyncRelayCommand<RuneModule> AutoApplyRuneCommandAsync { get; set; }
+        public AsyncRelayCommand<RuneModule> UnAutoApplyRuneCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoLockHeroInAramCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoLockHeroInAramCommandAsync { get; set; }
 
@@ -115,9 +115,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _gameService = gameService;
             SwitchRuneToCommonCommand = new RelayCommand(SwitchRuneToCommon);
             SwitchRuneToAramCommand = new RelayCommand(SwitchRuneToAram);
-            SetRuneCommandAsync = new AsyncRelayCommand<RuneDetail>(SetRuneAsync);
-            AutoApplyRuneCommandAsync = new AsyncRelayCommand<RuneDetail>(AutoApplyRuneAsync);
-            UnAutoApplyRuneCommandAsync = new AsyncRelayCommand(UnAutoApplyRuneAsync);
+            SetRuneCommandAsync = new AsyncRelayCommand<RuneModule>(SetRuneAsync);
+            AutoApplyRuneCommandAsync = new AsyncRelayCommand<RuneModule>(AutoApplyRuneAsync);
+            UnAutoApplyRuneCommandAsync = new AsyncRelayCommand<RuneModule>(UnAutoApplyRuneAsync);
             CheckedAutoLockHeroInAramCommandAsync = new AsyncRelayCommand(CheckedAutoLockHeroInAramAsync);
             UncheckedAutoLockHeroInAramCommandAsync = new AsyncRelayCommand(UncheckedAutoLockHeroInAramAsync);
             SwitchItemPageCommand = new RelayCommand(() => IsRunePage = false);
@@ -125,7 +125,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _iniSettingsModel = iniSettingsModel;
             _logger = logger;
             _applicationService = applicationService;
-            ApplyItemCommandAsync = new AsyncRelayCommand(ApplyItemAsync);
+            ApplyItemCommandAsync = new AsyncRelayCommand<ItemModule>(ApplyItemAsync);
         }
 
         private bool _isAramPage;
@@ -153,30 +153,43 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 return;
 
             var data = await _gameService.GetRuneItemsFromOnlineAsync(champId);
-            var module = await _runeHelper.GetRuneAsync(champId);
+            if (data == null) return;
+            var module = JsonConvert.DeserializeObject<HeroRecommandModule>(data);
             var customerRunes = await _runeHelper.ReadCustomerRuneAsync(champId);
             _recommandModule = module;
-            _customerRuneModule = customerRunes;
-            if (_customerRuneModule == null)
-            {
-                _customerRuneModule = new RuneModule()
-                {
-                    ChampId = champId
-                };
-            }
+            //_customerRuneModules = customerRunes;
+            //if (_customerRuneModules == null)
+            //{
+            //    _customerRuneModules = new List<RuneModule>();
+            //}
             Hero = Constant.Heroes?.FirstOrDefault(x => x.ChampId == champId);
-            AramRunes = new ObservableCollection<RuneDetail>(module.Rune.Aram);
-            CommonRunes = new ObservableCollection<RuneDetail>(module.Rune.Common);
-            foreach (var rune in _customerRuneModule.Aram.Reverse())
+            AramRunes = new ObservableCollection<RuneModule>(module.Perk.Where(x => x.GameType == 2).OrderByDescending(x => x.Showrate));
+            CommonRunes = new ObservableCollection<RuneModule>(module.Perk.Where(x => x.GameType == 1)
+                .OrderBy(x => x.Lane).ThenByDescending(x => x.Showrate));
+            //foreach (var rune in _customerRuneModules.Where(x => x.GameType == 2).Reverse())
+            //{
+            //    rune.IsCustomer = true;
+            //    AramRunes.Insert(0, rune);
+            //}
+
+            //foreach (var rune in _customerRuneModules.Where(x => x.GameType == 1).Reverse())
+            //{
+            //    rune.IsCustomer = true;
+            //    CommonRunes.Insert(0, rune);
+            //}
+
+            var aramAutoRuneId = await _iniSettingsModel.ReadAutoAramRuneItem(champId);
+            RuneModule tempAram = null;
+            if (aramAutoRuneId != null && (tempAram = AramRunes.FirstOrDefault(x => x.Id == aramAutoRuneId)) != null)
             {
-                rune.IsCustomer = true;
-                AramRunes.Insert(0, rune);
+                tempAram.IsAutoApply = true;
             }
 
-            foreach (var rune in _customerRuneModule.Common.Reverse())
+            var commonAutoRuneId = await _iniSettingsModel.ReadAutoCommonRuneItem(champId);
+            RuneModule tempCommon = null;
+            if (commonAutoRuneId != null && (tempCommon = CommonRunes.FirstOrDefault(x => x.Id == commonAutoRuneId)) != null)
             {
-                rune.IsCustomer = true;
-                CommonRunes.Insert(0, rune);
+                tempCommon.IsAutoApply = true;
             }
 
             //判断是否存在自动应用符文
@@ -190,16 +203,16 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 var rune = CommonRunes.FirstOrDefault(x => x.IsAutoApply);
                 await SetRuneAsyncMethod(rune, true);
             }
-            else if (_iniSettingsModel.AutoUseRune && _iniSettingsModel.AutoUseRuneByUseCount) 
+            else if (_iniSettingsModel.AutoUseRune && _iniSettingsModel.AutoUseRuneByUseCount)
             {
                 if (isAram)
                 {
-                    var rune = AramRunes.OrderByDescending(x => x.Popular).FirstOrDefault();
+                    var rune = AramRunes.OrderByDescending(x => x.Showrate).FirstOrDefault();
                     await SetRuneAsyncMethod(rune, true);
                 }
-                else 
+                else
                 {
-                    var rune = CommonRunes.OrderByDescending(x => x.Popular).FirstOrDefault();
+                    var rune = CommonRunes.OrderByDescending(x => x.Showrate).FirstOrDefault();
                     await SetRuneAsyncMethod(rune, true);
                 }
             }
@@ -207,18 +220,19 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             {
                 if (isAram)
                 {
-                    var rune = AramRunes.OrderByDescending(x => x.WinRate).FirstOrDefault();
+                    var rune = AramRunes.OrderByDescending(x => x.Winrate).FirstOrDefault();
                     await SetRuneAsyncMethod(rune, true);
                 }
                 else
                 {
-                    var rune = CommonRunes.OrderByDescending(x => x.WinRate).FirstOrDefault();
+                    var rune = CommonRunes.OrderByDescending(x => x.Winrate).FirstOrDefault();
                     await SetRuneAsyncMethod(rune, true);
                 }
             }
+
             DisplayRunes = isAram ? AramRunes : CommonRunes;
-            AramItems = module.Item.Aram;
-            CommonItems = module.Item.Common;
+            AramItems = new ObservableCollection<ItemModule>(module.Equip.Where(x => x.Map_id == 12).OrderByDescending(x => x.Showrate));
+            CommonItems = new ObservableCollection<ItemModule>(module.Equip.Where(x => x.Map_id == 11).OrderByDescending(x => x.Showrate));
             DisplayItems = isAram ? AramItems : CommonItems;
             IsAramPage = isAram;
             IsRunePage = true;
@@ -226,12 +240,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             (App.ServiceProvider.GetRequiredService<ChampionSelectTool>().DataContext as ChampionSelectToolViewModel).ShowRunePage();
         }
 
-        private async Task SetRuneAsync(RuneDetail runeDetail)
+        private async Task SetRuneAsync(RuneModule RuneModule)
         {
-            await SetRuneAsyncMethod(runeDetail);
+            await SetRuneAsyncMethod(RuneModule);
         }
 
-        private async Task SetRuneAsyncMethod(RuneDetail runeDetail,bool isAuto = false) 
+        private async Task SetRuneAsyncMethod(RuneModule RuneModule, bool isAuto = false)
         {
             var result = await _gameService.GetAllRunePages();
             var array = JsonConvert.DeserializeObject<IEnumerable<RuneModel>>(result);
@@ -240,11 +254,11 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             var mode = IsAramPage ? "大乱斗" : "峡谷5v5";
             var creation = new CreateRuneModel()
             {
-                primaryStyleId = runeDetail.Main,
-                subStyleId = runeDetail.Dputy,
+                primaryStyleId = RuneModule.PrimaryStyleId,
+                subStyleId = RuneModule.SubStyleId,
                 name = $"{Hero.Name} - {mode}符文",
                 current = true,
-                selectedPerkIds = new[] { runeDetail.Main1, runeDetail.Main2, runeDetail.Main3, runeDetail.Main4, runeDetail.Dputy1, runeDetail.Dputy2, runeDetail.Extra1, runeDetail.Extra2, runeDetail.Extra3 }
+                selectedPerkIds = RuneModule.SelectedPerkIds
             };
             await _gameService.AddRunePage(creation);
             if (isAuto)
@@ -267,64 +281,42 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
-        private async Task AutoApplyRuneAsync(RuneDetail runeDetail)
+        private async Task AutoApplyRuneAsync(RuneModule runeModule)
         {
             if (IsAramPage)
             {
-                _customerRuneModule.Aram.Where(x => x != runeDetail).ToList().ForEach(x => x.IsAutoApply = false);
-                _recommandModule.Rune.Aram.Where(x => x != runeDetail).ToList().ForEach(x => x.IsAutoApply = false);
+                await _iniSettingsModel.WriteAutoAramRuneItem(runeModule.Champion_id, runeModule.Id.ToString());
             }
             else
             {
-                _customerRuneModule.Common.Where(x => x != runeDetail).ToList().ForEach(x => x.IsAutoApply = false);
-                _recommandModule.Rune.Common.Where(x => x != runeDetail).ToList().ForEach(x => x.IsAutoApply = false);
+                await _iniSettingsModel.WriteAutoCommonRuneItem(runeModule.Champion_id, runeModule.Id.ToString());
             }
-
-            await _runeHelper.WriteCustomerRuneAsync(currentchampId, _customerRuneModule);
-            await _runeHelper.WriteSystemRuneAsync(currentchampId, _recommandModule);
 
             await LoadChampInfoAsync(currentchampId, IsAramPage, false);
         }
 
-        private async Task UnAutoApplyRuneAsync()
+        private async Task UnAutoApplyRuneAsync(RuneModule runeModule)
         {
             if (IsAramPage)
             {
-                _recommandModule.Rune.Aram.ToList().ForEach(x => x.IsAutoApply = false);
-                _customerRuneModule.Aram.ToList().ForEach(x => x.IsAutoApply = false);
+                await _iniSettingsModel.WriteAutoAramRuneItem(runeModule.Champion_id, null);
             }
             else
             {
-                _customerRuneModule.Common.ToList().ForEach(x => x.IsAutoApply = false);
-                _recommandModule.Rune.Common.ToList().ForEach(x => x.IsAutoApply = false);
+                await _iniSettingsModel.WriteAutoCommonRuneItem(runeModule.Champion_id, null);
             }
-
-            await _runeHelper.WriteCustomerRuneAsync(currentchampId, _customerRuneModule);
-            await _runeHelper.WriteSystemRuneAsync(currentchampId, _recommandModule);
 
             await LoadChampInfoAsync(currentchampId, IsAramPage, false);
         }
 
-        public void Clear() 
+        public void Clear()
         {
             priviouschampId = 0;
             currentchampId = 0;
         }
 
-        private async Task ApplyItemAsync()
+        private async Task ApplyItemAsync(ItemModule itemModule)
         {
-            if (DisplayItems.CoreItem == null && DisplayItems.StartItem == null && DisplayItems.ShoeItem == null)
-            {
-                Growl.WarningGlobal(new GrowlInfo()
-                {
-                    WaitTime = 2,
-                    Message = "没有设置任何装备",
-                    ShowDateTime = false
-                });
-
-                return;
-            }
-
             var location = (await _applicationService.GetInstallLocation())?.Replace("\"", string.Empty);
             if (string.IsNullOrEmpty(location))
             {
@@ -359,43 +351,43 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 recommandItem.champion = Hero.Alias;
                 var map = IsAramPage ? 12 : 11;
                 recommandItem.associatedMaps = new int[] { map };
-                if (DisplayItems.StartItem != null)
+                if (itemModule.Item1s != null && itemModule.Item1s.Count() >0)
                 {
                     var block = new Block();
                     block.type = "起始装备";
-                    foreach (var item in DisplayItems.StartItem.ItemIds)
+                    foreach (var item in itemModule.Item1s)
                     {
                         block.items.Add(new RItem()
                         {
-                            id = item.ToString()
+                            id = item.Id.ToString()
                         });
                     }
 
                     recommandItem.blocks.Add(block);
                 }
-                if (DisplayItems.CoreItem != null)
+                if (itemModule.Item2s != null && itemModule.Item2s.Count() > 0)
                 {
                     var block = new Block();
                     block.type = "核心装备";
-                    foreach (var item in DisplayItems.CoreItem.ItemIds)
+                    foreach (var item in itemModule.Item2s)
                     {
                         block.items.Add(new RItem()
                         {
-                            id = item.ToString()
+                            id = item.Id.ToString()
                         });
                     }
 
                     recommandItem.blocks.Add(block);
                 }
-                if (DisplayItems.ShoeItem != null)
+                if (itemModule.Item3s != null && itemModule.Item3s.Count() > 0)
                 {
                     var block = new Block();
-                    block.type = "鞋子";
-                    foreach (var item in DisplayItems.ShoeItem.ItemIds)
+                    block.type = "神装";
+                    foreach (var item in itemModule.Item3s)
                     {
                         block.items.Add(new RItem()
                         {
-                            id = item.ToString()
+                            id = item.Id.ToString()
                         });
                     }
 
@@ -426,8 +418,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     Message = "推荐装备设置成功",
                     ShowDateTime = false
                 });
-
-                DisplayItems.CoreItem = null; DisplayItems.StartItem = null; DisplayItems.ShoeItem = null;
             }
             catch (Exception ex)
             {

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -428,6 +429,34 @@ namespace LeagueOfLegendsBoxer.Resources
             TeamDetailKeyList.Clear();
             TeamDetailKeyList.AddRange(teamDetailKeys.Split('+'));
             TeamDetailKeys = teamDetailKeys;
+        }
+
+        public async Task WriteAutoAramRuneItem(int champId, string runeId)
+        {
+            await _settingsService.WriteAsync(Constant.Game, $"{Constant.AutoAramRunePrefix}_{champId}", runeId);
+        }
+
+        public async Task<long?> ReadAutoAramRuneItem(int champId)
+        {
+            var id = await _settingsService.ReadAsync(Constant.Game, $"{Constant.AutoAramRunePrefix}_{champId}");
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            return long.TryParse(id, out var temp) ? temp : null;
+        }
+
+        public async Task WriteAutoCommonRuneItem(int champId, string runeId)
+        {
+            await _settingsService.WriteAsync(Constant.Game, $"{Constant.AutoCommonRunePrefix}_{champId}", runeId);
+        }
+
+        public async Task<long?> ReadAutoCommonRuneItem(int champId)
+        {
+            var id = await _settingsService.ReadAsync(Constant.Game, $"{Constant.AutoCommonRunePrefix}_{champId}");
+            if (string.IsNullOrEmpty(id))
+                return null;
+
+            return long.TryParse(id, out var temp) ? temp : null;
         }
 
         public async Task RemoveBlackAccountAsync(long id)

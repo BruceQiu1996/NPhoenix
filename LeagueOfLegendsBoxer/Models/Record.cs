@@ -384,6 +384,7 @@ namespace LeagueOfLegendsBoxer.Models
             "MIDDLE" => "中单",
             "JUNGLE" => "打野",
             "BOTTOM" => "下路",
+            "SUPPORT" => "辅助",
             "TOP" => "上路",
             _ => "未知"
         };

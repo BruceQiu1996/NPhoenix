@@ -14,6 +14,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public static IEnumerable<Item> Items = new List<Item>();
         public static IEnumerable<SpellModel> Spells = new List<SpellModel>();
         public static IEnumerable<ServerArea> ServerAreas = new List<ServerArea>();
+        public static IEnumerable<AramBuff> AramBuffs = new List<AramBuff>();
         public static Account Account = null;
         //ini settings sections
         public const string GameName = "LeagueClient";
@@ -60,6 +61,8 @@ namespace LeagueOfLegendsBoxer.Resources
         public static string _chatId = null;
 
         public const string TeamDetailKey = nameof(TeamDetailKey);
+        public const string AutoAramRunePrefix = nameof(AutoAramRunePrefix);
+        public const string AutoCommonRunePrefix = nameof(AutoCommonRunePrefix);
         //event uri
         public const string GameFlow = @"/lol-gameflow/v1/gameflow-phase";
         public const string DataStore = @"/data-store/v1/install-settings/gameflow-patcher-lock";

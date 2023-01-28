@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Gma.System.MouseKeyHook;
+using HandyControl.Controls;
+using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Application.Client;
 using LeagueOfLegendsBoxer.Application.Event;
@@ -186,7 +188,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _team1V2Window = team1V2Window;
             _keyboardMouseEvent = Hook.GlobalEvents();
             _keyboardMouseEvent.KeyDown += OnKeyDown;
-            _keyboardMouseEvent.KeyUp += OnKeyUp;
+            //_keyboardMouseEvent.KeyUp += OnKeyUp;
             WeakReferenceMessenger.Default.Register<MainWindowViewModel, IEnumerable<Notice>>(this, (x, y) =>
             {
                 UnReadNotices = y.FirstOrDefault(x => x.IsMust) != null ? "必读" + y.Where(x => x.IsMust).Count() : y.Count().ToString();
@@ -425,31 +427,31 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
         }
 
-        private void OnKeyUp(object sender, KeyEventArgs e)
-        {
-            if (_settingsViewModel.IsOpenModifyHotkeys)
-            {
-                return;
-            }
-            var key = ParseKey(e.KeyCode.ToString());
-            if (selectKey.Contains(key))
-            {
-                for (int i = 0; i < selectKey.Count; i++)
-                {
-                    if (selectKey[i] == key)
-                    {
-                        selectKey.Remove(selectKey[i]);
-                    }
-                }
-            }
+        //private void OnKeyUp(object sender, KeyEventArgs e)
+        //{
+        //    if (_settingsViewModel.IsOpenModifyHotkeys)
+        //    {
+        //        return;
+        //    }
+        //    var key = ParseKey(e.KeyCode.ToString());
+        //    if (selectKey.Contains(key))
+        //    {
+        //        for (int i = 0; i < selectKey.Count; i++)
+        //        {
+        //            if (selectKey[i] == key)
+        //            {
+        //                selectKey.Remove(selectKey[i]);
+        //            }
+        //        }
+        //    }
 
-            if (_iniSettingsModel.TeamDetailKeyList.Contains(e.KeyCode.ToString()))
-            {
-                _team1V2Window.Topmost = false;
-                _team1V2Window.Hide();
-                //e.Handled = true;
-            }
-        }
+        //    if (_iniSettingsModel.TeamDetailKeyList.Contains(e.KeyCode.ToString()))
+        //    {
+        //        _team1V2Window.Topmost = false;
+        //        _team1V2Window.Hide();
+        //        //e.Handled = true;
+        //    }
+        //}
 
         #endregion 
         private async Task LoadAsync()
@@ -480,6 +482,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
             CurrentPage = _mainPage;
             GameStatus = "获取状态中";
+            //获取大乱斗buff数据
+            await LoadAramBuffAsync();
             LoopLiveGameEventAsync();
             //LoopGameStatus();
             //LoopChampSelect();
@@ -524,6 +528,47 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         _logger.LogError(ex, "下载自动更新程序失败:");
                     }
                 });
+            }
+        }
+
+        private async Task LoadAramBuffAsync() 
+        {
+            var notice = _configuration.GetSection("AramBuffLocation").Value;
+            if (string.IsNullOrEmpty(notice))
+            {
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "未能拉取大乱斗buff数据",
+                    ShowDateTime = false
+                });
+
+                return;
+            }
+
+            using (var client = new HttpClient())
+            {
+                client.Timeout = TimeSpan.FromSeconds(10);
+                try
+                {
+                    var data = await client.GetByteArrayAsync(notice);
+                    if (data == null || data.Count() <= 0)
+                    {
+                        return;
+                    }
+                    var dataStr = Encoding.UTF8.GetString(data);
+                    Constant.AramBuffs = JsonConvert.DeserializeObject<IEnumerable<AramBuff>>(dataStr);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex.ToString());
+                    Growl.WarningGlobal(new GrowlInfo()
+                    {
+                        WaitTime = 2,
+                        Message = "拉取大乱斗buff数据错误",
+                        ShowDateTime = false
+                    });
+                }
             }
         }
 
@@ -604,7 +649,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     Team1Accounts.Clear();
                     Team2Accounts.Clear();
                     _team1V2Window.Hide();
-                    _team1V2Window.Topmost = false;
+                    //_team1V2Window.Topmost = false; //TODO open
                 });
             }
             //if (data != "ChampSelect")

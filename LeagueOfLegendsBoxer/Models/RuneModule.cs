@@ -1,116 +1,92 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using LeagueOfLegendsBoxer.Resources;
+﻿using LeagueOfLegendsBoxer.Resources;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace LeagueOfLegendsBoxer.Models
 {
-    public class HeroRecommandModule 
+    public class HeroRecommandModule
     {
-        public RuneModule Rune { get; set; }
-        public ItemModule Item { get; set; }
+        public IEnumerable<RuneModule> Perk { get; set; }
+        public IEnumerable<ItemModule> Equip { get; set; }
     }
 
     public class RuneModule
     {
-        public int ChampId { get; set; }
-        public IList<RuneDetail> Common { get; set; }
-        public IList<RuneDetail> Aram { get; set; }
-        public RuneModule()
+        public long Id { get; set; }
+        public int Champion_id { get; set; }
+        public string Title { get; set; }
+        public string Lane { get; set; }
+        public string CnLane => Lane.ToUpper() switch
         {
-            Common = new List<RuneDetail>();
-            Aram = new List<RuneDetail>();
-        }
-    }
+            "MID" => "中单",
+            "JUNGLE" => "打野",
+            "BOTTOM" => "下路",
+            "SUPPORT" => "辅助",
+            "TOP" => "上路",
+            _ => "未知"
+        };
+        public int GameType { get; set; } //1.5v5 2.大乱斗
+        public int PrimaryStyleId { get; set; }
+        public int SubStyleId { get; set; }
+        public int[] SelectedPerkIds { get; set; }
+        public int Showrate { get; set; }
+        public int Winrate { get; set; }
+        [JsonIgnore]
+        public Rune MainRune => Constant.Runes.FirstOrDefault(x => x.Id == PrimaryStyleId);
+        [JsonIgnore]
+        public Rune DputyRune => Constant.Runes.FirstOrDefault(x => x.Id == SubStyleId);
+        [JsonIgnore]
+        public Rune Main1Rune => Constant.Runes.FirstOrDefault(x => x.Id == SelectedPerkIds[0]);
+        [JsonIgnore]
+        public Rune Main2Rune => Constant.Runes.FirstOrDefault(x => x.Id == SelectedPerkIds[1]);
+        [JsonIgnore]
+        public Rune Main3Rune => Constant.Runes.FirstOrDefault(x => x.Id == SelectedPerkIds[2]);
+        [JsonIgnore]
+        public Rune Main4Rune => Constant.Runes.FirstOrDefault(x => x.Id == SelectedPerkIds[3]);
+        [JsonIgnore]
+        public Rune Dputy1Rune => Constant.Runes.FirstOrDefault(x => x.Id == SelectedPerkIds[4]);
+        [JsonIgnore]
+        public Rune Dputy2Rune => Constant.Runes.FirstOrDefault(x => x.Id == SelectedPerkIds[5]);
+        [JsonIgnore]
+        public Rune Extra1Rune => Constant.Runes.FirstOrDefault(x => x.Id == SelectedPerkIds[6]);
+        [JsonIgnore]
+        public Rune Extra2Rune => Constant.Runes.FirstOrDefault(x => x.Id == SelectedPerkIds[7]);
+        [JsonIgnore]
+        public Rune Extra3Rune => Constant.Runes.FirstOrDefault(x => x.Id == SelectedPerkIds[8]);
+        [JsonIgnore]
 
-    public class RuneDetail
-    {
-        public int Main { get; set; }
-        public int Dputy { get; set; }
-        public string Name { get; set; }
-        public int Main1 { get; set; }
-        public int Main2 { get; set; }
-        public int Main3 { get; set; }
-        public int Main4 { get; set; }
-        public int Dputy1 { get; set; }
-        public int Dputy2 { get; set; }
-        public int Extra1 { get; set; }
-        public int Extra2 { get; set; }
-        public int Extra3 { get; set; }
-        [JsonIgnore]
-        public Rune MainRune => Constant.Runes.FirstOrDefault(x => x.Id == Main);
-        [JsonIgnore]
-        public Rune DputyRune => Constant.Runes.FirstOrDefault(x => x.Id == Dputy);
-        [JsonIgnore]
-        public Rune Main1Rune => Constant.Runes.FirstOrDefault(x => x.Id == Main1);
-        [JsonIgnore]
-        public Rune Main2Rune => Constant.Runes.FirstOrDefault(x => x.Id == Main2);
-        [JsonIgnore]
-        public Rune Main3Rune => Constant.Runes.FirstOrDefault(x => x.Id == Main3);
-        [JsonIgnore]
-        public Rune Main4Rune => Constant.Runes.FirstOrDefault(x => x.Id == Main4);
-        [JsonIgnore]
-        public Rune Dputy1Rune => Constant.Runes.FirstOrDefault(x => x.Id == Dputy1);
-        [JsonIgnore]
-        public Rune Dputy2Rune => Constant.Runes.FirstOrDefault(x => x.Id == Dputy2);
-        [JsonIgnore]
-        public Rune Extra1Rune => Constant.Runes.FirstOrDefault(x => x.Id == Extra1);
-        [JsonIgnore]
-        public Rune Extra2Rune => Constant.Runes.FirstOrDefault(x => x.Id == Extra2);
-        [JsonIgnore]
-        public Rune Extra3Rune => Constant.Runes.FirstOrDefault(x => x.Id == Extra3);
-        [JsonIgnore]
-        public bool IsCustomer { get; set; }
-        public double Popular { get; set; }
-        public double WinRate { get; set; }
-        public string PopularTxt => $"{(Popular * 100.0).ToString("0.0")}%";
-        public string WinRateTxt => $"{(WinRate * 100.0).ToString("0.0")}%";
-        public bool IsAutoApply { get; set; }
+        public bool IsCustomer { get; set; } //是否是自定义的符文
+        public bool IsAutoApply { get; set; }//是否自动应用符文
+        public string PopularTxt => $"{(Showrate / 100.0).ToString("0.0")}%";
+        public string WinRateTxt => $"{(Winrate / 100.0).ToString("0.0")}%";
     }
 
     public class ItemModule
     {
-        public int ChampId { get; set; }
-        public ItemsDetail Common { get; set; }
-        public ItemsDetail Aram { get; set; }
-    }
-
-    public class ItemsDetail : ObservableObject
-    {
-        public List<ItemDetail> StartItems { get; set; } = new List<ItemDetail>();
-        public List<ItemDetail> CoreItems { get; set; } = new List<ItemDetail>();
-        public List<ItemDetail> ShoeItems { get; set; } = new List<ItemDetail>();
-
-        private ItemDetail _startItem;
-        public ItemDetail StartItem 
+        public long Id { get; set; }
+        public string Lane { get; set; }
+        public string CnLane => Lane.ToUpper() switch
         {
-            get => _startItem;
-            set => SetProperty(ref _startItem, value);
-        }
-
-        private ItemDetail _coreItem;
-        public ItemDetail CoreItem
-        {
-            get => _coreItem;
-            set => SetProperty(ref _coreItem, value);
-        }
-
-        private ItemDetail _shoeItem;
-        public ItemDetail ShoeItem
-        {
-            get => _shoeItem;
-            set => SetProperty(ref _shoeItem, value);
-        }
-    }
-
-    public class ItemDetail
-    {
-        public List<int> ItemIds { get; set; } = new List<int>();
-        public double Popular { get; set; }
-        public double WinRate { get; set; }
-        public string PopularTxt => $"{(Popular * 100.0).ToString("0.0")}%";
-        public string WinRateTxt => $"{(WinRate * 100.0).ToString("0.0")}%";
-        public IEnumerable<Item> Items => Constant.Items.Where(x => ItemIds.Contains(x.Id));
+            "MID" => "中单",
+            "JUNGLE" => "打野",
+            "BOTTOM" => "下路",
+            "SUPPORT" => "辅助",
+            "TOP" => "上路",
+            _ => "未知"
+        };
+        public int Champion_id { get; set; }
+        public int Map_id { get; set; }
+        public string Title { get; set; }
+        public string Item1 { get; set; }
+        public string Item2 { get; set; }
+        public string Item3 { get; set; }
+        public int Showrate { get; set; }
+        public int Winrate { get; set; }
+        public string PopularTxt => $"{(Showrate / 100.0).ToString("0.0")}%";
+        public string WinRateTxt => $"{(Winrate / 100.0).ToString("0.0")}%";
+        public IEnumerable<Item> Item1s => string.IsNullOrEmpty(Item1) ? null : Constant.Items.Where(x => Item1.Split(";").Contains(x.Id.ToString()));
+        public IEnumerable<Item> Item2s => string.IsNullOrEmpty(Item1) ? null : Constant.Items.Where(x => Item2.Split(";").Contains(x.Id.ToString()));
+        public IEnumerable<Item> Item3s => string.IsNullOrEmpty(Item1) ? null : Constant.Items.Where(x => Item3.Split(";").Contains(x.Id.ToString()));
     }
 }

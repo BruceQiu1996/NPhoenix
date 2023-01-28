@@ -14,11 +14,6 @@
         <convert:HorseColorConverter x:Key="HorseColorConverter"></convert:HorseColorConverter>
         <convert:WinTextConverter x:Key="WinTextConverter"></convert:WinTextConverter>
     </Page.Resources>
-    <behaviors:Interaction.Triggers>
-        <behaviors:EventTrigger EventName="Loaded">
-            <behaviors:InvokeCommandAction Command="{Binding LoadCommandAsync}"></behaviors:InvokeCommandAction>
-        </behaviors:EventTrigger>
-    </behaviors:Interaction.Triggers>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
@@ -43,12 +38,13 @@
                     <Style TargetType="{x:Type ListBoxItem}">
                         <Setter Property="OverridesDefaultStyle" Value="True" />
                         <Setter Property="SnapsToDevicePixels" Value="True" />
-                        <Setter Property="Height" Value="80" />
+                        <Setter Property="Height" Value="100" />
                         <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}" />
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                    <Border Margin="3" BorderThickness="0 0 0 0.4" 
+                                    <Border Margin="2" BorderThickness="0 0 0 0.4" 
                                             BorderBrush="{DynamicResource DefaultBorderColor}"
                                             Cursor="Hand"
                                             Background="{TemplateBinding Background}">
@@ -57,17 +53,18 @@
                                                 <RowDefinition Height="5"></RowDefinition>
                                                 <RowDefinition Height="*"></RowDefinition>
                                                 <RowDefinition Height="*"></RowDefinition>
+                                                <RowDefinition Height="*"></RowDefinition>
                                                 <RowDefinition Height="20"></RowDefinition>
                                                 <RowDefinition Height="5"></RowDefinition>
                                             </Grid.RowDefinitions>
 
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="0.9*"></ColumnDefinition>
+                                                <ColumnDefinition Width="80"></ColumnDefinition>
                                                 <ColumnDefinition Width="1.2*"></ColumnDefinition>
                                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                             </Grid.ColumnDefinitions>
-                                            <hc:Badge Grid.Row="1" Grid.RowSpan="3"
-                                                      BadgeMargin="0 -8 -20 0"
+                                            <hc:Badge Grid.Row="1" Grid.RowSpan="4"
+                                                      BadgeMargin="0 0 -20 0"
                                                       Name="head"
                                                       Style="{DynamicResource BadgeDanger}" BorderThickness="0"
                                                       HorizontalAlignment="Left" Text="{Binding Horse}"
@@ -80,7 +77,7 @@
                                                 </hc:Gravatar>
                                             </hc:Badge>
                                             <TextBlock TextWrapping="Wrap"
-                                                       FontSize="14"
+                                                       FontSize="15"
                                                        Grid.Row="1"
                                                        VerticalAlignment="Top"
                                                        Grid.ColumnSpan="2"
@@ -102,40 +99,84 @@
                                                        Text="{Binding SummonerLevel,StringFormat={}等级 : {0}}"/>
 
                                             <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
-                                                <TextBlock Text="单双" VerticalAlignment="Center"></TextBlock>
-                                                <TextBlock Grid.Row="1"
-                                                           Grid.Column="2"
-                                                           Margin="5 0 0 0"
-                                                           HorizontalAlignment="Left"
-                                                           VerticalAlignment="Center">
-                                                    <TextBlock.Text>
-                                                        <MultiBinding StringFormat="{}{0} - {1}">
-                                                            <Binding Path="Rank.RANKED_SOLO_5x5.CnTier" />
-                                                            <Binding Path="Rank.RANKED_SOLO_5x5.Division" />
-                                                        </MultiBinding>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                                <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0"></TextBlock>
-                                                <TextBlock Grid.Row="1"
-                                                           Grid.Column="2"
-                                                           Margin="5 0 0 0"
-                                                           HorizontalAlignment="Left"
-                                                           VerticalAlignment="Center">
-                                                    <TextBlock.Text>
-                                                        <MultiBinding StringFormat="{}{0} - {1}">
-                                                            <Binding Path="Rank.RANKED_FLEX_SR.CnTier" />
-                                                            <Binding Path="Rank.RANKED_FLEX_SR.Division" />
-                                                        </MultiBinding>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
+                                                <TextBlock Text="当前单双 : " VerticalAlignment="Center"></TextBlock>
+                                                <Image Source="{Binding Rank.RANKED_SOLO_5x5.TierIcon,UpdateSourceTrigger=PropertyChanged}"
+                                                       VerticalAlignment="Center"
+                                                       Width="35" Height="35">
+                                                    <Image.ToolTip>
+                                                        <ToolTip>
+                                                            <TextBlock DataContext="{Binding}">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                                                        <Binding Path="Rank.RANKED_SOLO_5x5.CnTier" />
+                                                                        <Binding Path="Rank.RANKED_SOLO_5x5.Division" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </ToolTip>
+                                                    </Image.ToolTip>
+                                                </Image>
+                                                <TextBlock Text="当前灵活 : " VerticalAlignment="Center" Margin="16 0 0 0"></TextBlock>
+                                                <Image Source="{Binding Rank.RANKED_FLEX_SR.TierIcon,UpdateSourceTrigger=PropertyChanged}"
+                                                       VerticalAlignment="Center"
+                                                       Width="35" Height="35">
+                                                    <Image.ToolTip>
+                                                        <ToolTip>
+                                                            <TextBlock DataContext="{Binding}">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                                                        <Binding Path="Rank.RANKED_FLEX_SR.CnTier" />
+                                                                        <Binding Path="Rank.RANKED_FLEX_SR.Division" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </ToolTip>
+                                                    </Image.ToolTip>
+                                                </Image>
                                             </StackPanel>
 
-                                            <TextBlock Grid.Row="3" 
+                                            <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2">
+                                                <TextBlock Text="历史单双 : " VerticalAlignment="Center"></TextBlock>
+                                                <Image Source="{Binding Rank.RANKED_SOLO_5x5.PreTierIcon,UpdateSourceTrigger=PropertyChanged}"
+                                                       VerticalAlignment="Center"
+                                                       Width="35" Height="35">
+                                                    <Image.ToolTip>
+                                                        <ToolTip>
+                                                            <TextBlock DataContext="{Binding}">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                                                        <Binding Path="Rank.RANKED_SOLO_5x5.PreCnTier" />
+                                                                        <Binding Path="Rank.RANKED_SOLO_5x5.PreviousSeasonEndDivision" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </ToolTip>
+                                                    </Image.ToolTip>
+                                                </Image>
+                                                <TextBlock Text="历史灵活 : " VerticalAlignment="Center" Margin="16 0 0 0"></TextBlock>
+                                                <Image Source="{Binding Rank.RANKED_FLEX_SR.PreTierIcon,UpdateSourceTrigger=PropertyChanged}"
+                                                       VerticalAlignment="Center"
+                                                       Width="35" Height="35">
+                                                    <Image.ToolTip>
+                                                        <ToolTip>
+                                                            <TextBlock DataContext="{Binding}">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding StringFormat="{}{0} - {1}">
+                                                                        <Binding Path="Rank.RANKED_FLEX_SR.PreCnTier" />
+                                                                        <Binding Path="Rank.RANKED_FLEX_SR.PreviousSeasonEndDivision" />
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </ToolTip>
+                                                    </Image.ToolTip>
+                                                </Image>
+                                            </StackPanel>
+                                            <TextBlock Grid.Row="4" 
                                                        FontSize="13"
                                                        Grid.Column="1"
                                                        Grid.ColumnSpan="4"
                                                        HorizontalAlignment="Left"
-                                                       Text="{Binding WinRate,UpdateSourceTrigger=PropertyChanged,StringFormat={}胜率: {0}}"></TextBlock>
+                                                       Text="{Binding WinRate,UpdateSourceTrigger=PropertyChanged,StringFormat={}胜率 : {0}}"></TextBlock>
                                             <Popup Focusable="False"
                                                    IsOpen="{Binding ElementName=head,Path=IsMouseOver,Mode=OneWay}"
                                                    PlacementTarget="{Binding ElementName=Dputy2Rune}" 
@@ -224,10 +265,7 @@
                         </Setter>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"></Setter>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="False">
-                                <Setter Property="Foreground" Value="{DynamicResource DefaultFontColor}"></Setter>
+                                <Setter Property="Background" Value="{DynamicResource DefaultHoverColor}"></Setter>
                             </Trigger>
                         </Style.Triggers>
                     </Style>

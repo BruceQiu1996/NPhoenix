@@ -43,14 +43,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _accountService = accountService;
             _iniSettingsModel = iniSettingsModel;
             _logger = logger;
-            //LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
+            LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             SendTeamMateDataCommandAsync = new AsyncRelayCommand(SendTeamMateDataAsync);
             TeamMateChangedCommand = new RelayCommand<Account>(TeamMateChanged);
         }
 
         public async Task LoadAsync()
         {
-            await Task.Delay(200);
+            await Task.Delay(500);
             Accounts = new ObservableCollection<Account>();
             var conversations = await _gameService.GetChatConversation();
             var token = JArray.Parse(conversations).FirstOrDefault(x => x.Value<string>("type") == "championSelect");

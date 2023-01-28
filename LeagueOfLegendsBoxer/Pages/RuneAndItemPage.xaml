@@ -43,7 +43,7 @@
                              Source="{Binding Hero.Avatar,UpdateSourceTrigger=PropertyChanged}"/>
 
                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding Hero.Name}" Foreground="{DynamicResource DefaultFontColor}" FontSize="15" Margin="20 0 0 0" VerticalAlignment="Center" 
+                    <TextBlock Text="{Binding Hero.Name}" Foreground="{DynamicResource DefaultFontColor}" FontSize="15" Margin="35 0 0 0" VerticalAlignment="Center" 
                                Grid.Column="1">
                     </TextBlock>
                     <Button Content="切换到装备推荐" 
@@ -77,7 +77,7 @@
                        Grid.Row="0" 
                        Grid.Column="0" 
                        BorderThickness="0" 
-                       FontSize="15" 
+                       FontSize="16" 
                        Cursor="Hand"
                        Background="{DynamicResource DefaultCardBackgroundColor}"
                        Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushReConverter}}"
@@ -93,7 +93,7 @@
                        Grid.Column="1" 
                        BorderThickness="0" 
                        Background="{DynamicResource DefaultCardBackgroundColor}"
-                       FontSize="15"
+                       FontSize="16"
                        Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                        Cursor="Hand" 
                        Width="150">
@@ -136,24 +136,45 @@
                                 <Style TargetType="{x:Type ListBoxItem}">
                                     <Setter Property="OverridesDefaultStyle" Value="True" />
                                     <Setter Property="SnapsToDevicePixels" Value="True" />
-                                    <Setter Property="Height" Value="160" />
+                                    <Setter Property="Height" Value="120" />
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                <Border BorderThickness="0 0.4 0 0" 
+                                                <Border BorderThickness="0 0.8 0 0" 
                                                         BorderBrush="{DynamicResource DefaultBorderColor}"
                                                         Margin="1"
                                                         Background="{TemplateBinding Background}">
                                                     <Grid Background="Transparent">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
-                                                        </Grid.ColumnDefinitions>
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition Height="*"></RowDefinition>
+                                                            <RowDefinition Height="*"></RowDefinition>
+                                                            <RowDefinition Height="*"></RowDefinition>
                                                         </Grid.RowDefinitions>
-                                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center">
-                                                            <StackPanel Orientation="Vertical">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="55"></ColumnDefinition>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="60"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                            <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                         Grid.Row="0" Grid.Column="0"
+                                                                         Height="45" Width="45"
+                                                                         Margin="5 5 5 10"
+                                                                         Name="PriRune"
+                                                                         ToolTip="{Binding MainRune.Name}"
+                                                                         Source="{Binding MainRune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                            </hc:Gravatar>
+                                                            <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                         Grid.Row="0" Grid.Column="0"
+                                                                         Height="45" Width="45"
+                                                                         Margin="5 10 5 5"
+                                                                         Name="SubRune"
+                                                                         ToolTip="{Binding DputyRune.Name}"
+                                                                         Source="{Binding DputyRune.Icon,UpdateSourceTrigger=PropertyChanged}">
+                                                            </hc:Gravatar>
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="5 0 0 0" Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left">
+                                                            <StackPanel Orientation="Horizontal">
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                      Grid.Row="0" Grid.Column="0"
                                                                      Height="30" Width="30"
@@ -267,7 +288,7 @@
                                                                 </hc:Gravatar>
 
                                                             </StackPanel>
-                                                            <StackPanel Orientation="Vertical">
+                                                            <StackPanel Orientation="Horizontal">
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                              Grid.Row="0" Grid.Column="0"
                                                                              Height="30" Width="30"
@@ -325,9 +346,8 @@
                                                                 </hc:Gravatar>
 
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
-                                                                             Grid.Row="0" Grid.Column="0"
                                                                              Height="20" Width="20"
-                                                                             Margin="5 5 5 0"
+                                                                             Margin="5 10 5 0"
                                                                              Name="Extra1Rune"
                                                                              Source="{Binding Extra1Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
                                                                     <Popup Focusable="False"
@@ -355,7 +375,7 @@
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                              Grid.Row="0" Grid.Column="0"
                                                                              Height="20" Width="20"
-                                                                             Margin="5 5 5 0"
+                                                                             Margin="5 10 5 0"
                                                                              Name="Extra2Rune"
                                                                              Source="{Binding Extra2Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
                                                                     <Popup Focusable="False"
@@ -383,7 +403,7 @@
                                                                 <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                              Grid.Row="0" Grid.Column="0"
                                                                              Height="20" Width="20"
-                                                                             Margin="5 5 5 0"
+                                                                             Margin="5 10 5 0"
                                                                              Name="Extra3Rune"
                                                                              Source="{Binding Extra3Rune.Icon,UpdateSourceTrigger=PropertyChanged}">
                                                                     <Popup Focusable="False"
@@ -410,46 +430,49 @@
                                                             </StackPanel>
                                                         </StackPanel>
 
-                                                        <Grid Grid.Column="1">
+                                                        <StackPanel Grid.Row="2" Orientation="Horizontal" Grid.Column="1" Margin="10 0 0 0">
                                                             <hc:Shield Subject="声望" Status="{Binding PopularTxt}" HorizontalAlignment="Center" 
-                                                                       FontSize="15" Margin="0 30 0 0"
+                                                                       FontSize="15" Margin="0 10 0 0"
                                                                        Visibility="{Binding IsCustomer,Converter={StaticResource Boolean2VisibilityReConverter}}"
                                                                        VerticalAlignment="Top" Color="{StaticResource PrimaryBrush}"/>
                                                             <hc:Shield Subject="胜率" 
                                                                        FontSize="15"
                                                                        Visibility="{Binding IsCustomer,Converter={StaticResource Boolean2VisibilityReConverter}}"
-                                                                       Status="{Binding WinRateTxt}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 60 0 0" Color="{StaticResource DangerBrush}"/>
-                                                            <hc:Badge Text="自定义" 
-                                                                      FontSize="13"
-                                                                      Style="{StaticResource BadgeSuccess}"
-                                                                      BadgeMargin="0 -25 10 0"
-                                                                      Margin="0 35 0 0" BorderThickness="0"
-                                                                      Visibility="{Binding IsCustomer,Converter={StaticResource Boolean2VisibilityConverter}}">
-                                                                <TextBlock Text="{Binding Name}" FontSize="14" Foreground="{DynamicResource DefaultFontColor}" 
-                                                                           TextWrapping="Wrap"></TextBlock>
-                                                            </hc:Badge>
+                                                                       Status="{Binding WinRateTxt}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="5 10 0 0" Color="{StaticResource DangerBrush}"/>
+                                                        </StackPanel>
+                                                        <Label FontSize="13"
+                                                               Grid.Row="0" Grid.Column="2"
+                                                               Style="{StaticResource LabelSuccess}"
+                                                               Margin="0 5 10 0"
+                                                               BorderThickness="0"
+                                                               Visibility="{Binding DataContext.IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter},RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                               Content="{Binding CnLane}">
+                                                        </Label>
+                                                        <StackPanel Grid.Row="1" Grid.RowSpan="3" Orientation="Vertical" Grid.Column="2">
                                                             <Button Content="应用" Cursor="Hand"
                                                                     Command="{Binding DataContext.SetRuneCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
-                                                                    CommandParameter="{Binding}"
-                                                                    Width="90" FontSize="14" Margin="0 0 0 40" VerticalAlignment="Bottom"></Button>
+                                                                    CommandParameter="{Binding}" HorizontalAlignment="Left" Margin="0 15 0 0"
+                                                                    Width="55" FontSize="13" Height="28" Opacity="0.8" BorderThickness="0" VerticalAlignment="Bottom"></Button>
                                                             <CheckBox IsChecked="{Binding IsAutoApply,UpdateSourceTrigger=PropertyChanged}" 
                                                                       Foreground="{DynamicResource DefaultFontColor}" 
-                                                                      FontSize="13"
-                                                                      HorizontalAlignment="Right"
-                                                                      Margin="0 120 25 0"
+                                                                      FontSize="14"
+                                                                      VerticalAlignment="Bottom"
+                                                                      HorizontalAlignment="Left"
+                                                                      Margin="0 8 0 0"
                                                                       ToolTip="下次自动应用"
-                                                                      Content="自动应用">
+                                                                      Content="自动">
                                                                 <behaviors:Interaction.Triggers>
                                                                     <behaviors:EventTrigger EventName="Checked">
                                                                         <behaviors:InvokeCommandAction Command="{Binding DataContext.AutoApplyRuneCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
                                                                                                        CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
                                                                     </behaviors:EventTrigger>
                                                                     <behaviors:EventTrigger EventName="Unchecked">
-                                                                        <behaviors:InvokeCommandAction Command="{Binding DataContext.UnAutoApplyRuneCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"></behaviors:InvokeCommandAction>
+                                                                        <behaviors:InvokeCommandAction Command="{Binding DataContext.UnAutoApplyRuneCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                                                       CommandParameter="{Binding}"></behaviors:InvokeCommandAction>
                                                                     </behaviors:EventTrigger>
                                                                 </behaviors:Interaction.Triggers>
                                                             </CheckBox>
-                                                        </Grid>
+                                                        </StackPanel>
                                                     </Grid>
                                                 </Border>
                                             </ControlTemplate>
@@ -481,14 +504,14 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="40"></RowDefinition>
+                    <RowDefinition Height="10"></RowDefinition>
                 </Grid.RowDefinitions>
 
                 <Label Content="峡谷5V5" 
                        Grid.Row="0" 
                        Grid.Column="0" 
                        BorderThickness="0" 
-                       FontSize="15" 
+                       FontSize="16" 
                        Cursor="Hand"
                        Background="{DynamicResource DefaultCardBackgroundColor}"
                        Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushReConverter}}"
@@ -503,7 +526,7 @@
                        Grid.Row="0" 
                        Grid.Column="1" 
                        BorderThickness="0" 
-                       FontSize="15"
+                       FontSize="16"
                        Background="{DynamicResource DefaultCardBackgroundColor}"
                        Foreground="{Binding IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                        Cursor="Hand" 
@@ -517,35 +540,95 @@
 
                 <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
                     <StackPanel>
-                        <GroupBox Header="起始装备" FontSize="16" Margin="5" 
-                                  Foreground="{DynamicResource DefaultFontColor}"
-                                  Background="{DynamicResource DefaultCardBackgroundColor}" 
-                                  Style="{StaticResource GroupBoxOriginal}">
-                            <ListBox ItemsSource="{Binding DisplayItems.StartItems,UpdateSourceTrigger=PropertyChanged}" 
-                                     SelectedItem="{Binding DisplayItems.StartItem,UpdateSourceTrigger=PropertyChanged}" 
-                                     ScrollViewer.CanContentScroll="True"
-                                     ScrollViewer.IsDeferredScrollingEnabled="True"
-                                     PreviewMouseWheel="ListView_PreviewMouseWheel"
-                                     BorderThickness="0" Background="Transparent">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical"></StackPanel>
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                                        <Setter Property="Height" Value="42" />
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                    <Border BorderThickness="{TemplateBinding BorderThickness}" 
-                                                            Margin="1"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            Background="{TemplateBinding Background}">
-                                                        <Grid>
-                                                            <ListBox ItemsSource="{Binding Items}" BorderThickness="0" Background="Transparent">
+                        <ListBox ItemsSource="{Binding DisplayItems,UpdateSourceTrigger=PropertyChanged}" 
+                                 ScrollViewer.CanContentScroll="True"
+                                 BorderThickness="0"
+                                 ScrollViewer.IsDeferredScrollingEnabled="True"
+                                 PreviewMouseWheel="ListView_PreviewMouseWheel"
+                                 Background="Transparent">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical"></StackPanel>
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                    <Setter Property="Height" Value="140" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                <Border Margin="0 0 0 0"
+                                                        BorderThickness="0 0 0 0.5" 
+                                                        BorderBrush="{DynamicResource DefaultBorderColor}"
+                                                        Background="{TemplateBinding Background}">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="100"></ColumnDefinition>
+                                                        </Grid.ColumnDefinitions>
+                                                        <StackPanel Orientation="Vertical" Grid.Column="0" VerticalAlignment="Center">
+                                                            <ListBox ItemsSource="{Binding Item1s}" BorderThickness="0" Background="Transparent">
+                                                                <ListBox.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <StackPanel Orientation="Horizontal"></StackPanel>
+                                                                    </ItemsPanelTemplate>
+                                                                </ListBox.ItemsPanel>
+
+                                                                <ListBox.ItemContainerStyle>
+                                                                    <Style TargetType="{x:Type ListBoxItem}">
+                                                                        <Setter Property="OverridesDefaultStyle" Value="True" />
+                                                                        <Setter Property="SnapsToDevicePixels" Value="True" />
+                                                                        <Setter Property="Height" Value="36" />
+                                                                        <Setter Property="Template">
+                                                                            <Setter.Value>
+                                                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                                                    <Border BorderThickness="0" 
+                                                                                        BorderBrush="#eeeeee"
+                                                                                        Background="{DynamicResource Background}">
+                                                                                        <Grid>
+                                                                                            <hc:Gravatar Style="{StaticResource GravatarCircle}" 
+                                                                                                     Grid.Row="0" Grid.Column="0"
+                                                                                                     Name="itemimage"
+                                                                                                     Height="30" Width="30"
+                                                                                                     ToolTip="{Binding Main1Rune.Name}"
+                                                                                                     Margin="3 0 3 0"
+                                                                                                     Source="{Binding ItemImage,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                                            <Popup Focusable="False"
+                                                                                                   Name="pop"
+                                                                                                   IsOpen="{Binding ElementName=itemimage,Path=IsMouseOver,Mode=OneWay}"
+                                                                                                   PlacementTarget="{Binding ElementName=runeitem}" 
+                                                                                                   Placement="Top" AllowsTransparency="True">
+                                                                                                <Grid>
+                                                                                                    <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
+                                                                                                        <Rectangle.Effect>
+                                                                                                            <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
+                                                                                                        </Rectangle.Effect>
+                                                                                                    </Rectangle>
+                                                                                                    <StackPanel Margin="5" Orientation="Vertical">
+                                                                                                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
+                                                                                                        <TextBox Width="380" 
+                                                                                                                 IsReadOnly="True"
+                                                                                                                 AcceptsReturn="True"
+                                                                                                                 TextWrapping="Wrap"
+                                                                                                                 Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
+                                                                                                        <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
+                                                                                                            <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
+                                                                                                            <TextBlock Text="{Binding PriceTotal}" Margin="5 0 0 0" FontWeight="Bold"/>
+                                                                                                        </StackPanel>
+                                                                                                    </StackPanel>
+                                                                                                </Grid>
+                                                                                            </Popup>
+                                                                                        </Grid>
+                                                                                    </Border>
+                                                                                </ControlTemplate>
+                                                                            </Setter.Value>
+                                                                        </Setter>
+                                                                    </Style>
+                                                                </ListBox.ItemContainerStyle>
+                                                            </ListBox>
+                                                            <ListBox ItemsSource="{Binding Item2s}" BorderThickness="0" Background="Transparent">
                                                                 <ListBox.ItemsPanel>
                                                                     <ItemsPanelTemplate>
                                                                         <StackPanel Orientation="Horizontal"></StackPanel>
@@ -569,7 +652,7 @@
                                                                                                      Name="itemimage"
                                                                                                      Height="30" Width="30"
                                                                                                      ToolTip="{Binding Main1Rune.Name}"
-                                                                                                     Margin="5 0 5 0"
+                                                                                                     Margin="3 0 3 0"
                                                                                                      Source="{Binding ItemImage,UpdateSourceTrigger=PropertyChanged}"/>
                                                                                             <Popup Focusable="False"
                                                                                                    Name="pop"
@@ -604,50 +687,7 @@
                                                                     </Style>
                                                                 </ListBox.ItemContainerStyle>
                                                             </ListBox>
-                                                            <Label Content="{Binding WinRateTxt}" ToolTip="胜率" HorizontalAlignment="Right"/>
-                                                        </Grid>
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"></Setter>
-                                                <Setter Property="BorderThickness" Value="2"></Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                            </ListBox>
-                        </GroupBox>
-                        <GroupBox Header="核心装备" FontSize="15" Margin="5" Foreground="{DynamicResource DefaultFontColor}"
-                                  Background="{DynamicResource DefaultCardBackgroundColor}" 
-                                  Style="{StaticResource GroupBoxOriginal}">
-                            <ListBox ItemsSource="{Binding DisplayItems.CoreItems,UpdateSourceTrigger=PropertyChanged}" 
-                                     SelectedItem="{Binding DisplayItems.CoreItem,UpdateSourceTrigger=PropertyChanged}"
-                                     ScrollViewer.CanContentScroll="True"
-                                     ScrollViewer.IsDeferredScrollingEnabled="True"
-                                     PreviewMouseWheel="ListView_PreviewMouseWheel"
-                                     BorderThickness="0" Background="Transparent">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical"></StackPanel>
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                                        <Setter Property="Height" Value="42" />
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                    <Border BorderThickness="{TemplateBinding BorderThickness}" 
-                                                            Margin="1"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            Background="{TemplateBinding Background}">
-                                                        <Grid>
-                                                            <ListBox ItemsSource="{Binding Items}" BorderThickness="0" Background="Transparent">
+                                                            <ListBox ItemsSource="{Binding Item3s}" BorderThickness="0" Background="Transparent">
                                                                 <ListBox.ItemsPanel>
                                                                     <ItemsPanelTemplate>
                                                                         <StackPanel Orientation="Horizontal"></StackPanel>
@@ -663,117 +703,15 @@
                                                                             <Setter.Value>
                                                                                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
                                                                                     <Border BorderThickness="0" 
-                                                                                        BorderBrush="#eeeeee"
-                                                                                        Background="{TemplateBinding Background}">
+                                                                                            BorderBrush="#eeeeee"
+                                                                                            Background="{DynamicResource Background}">
                                                                                         <Grid>
                                                                                             <hc:Gravatar Style="{StaticResource GravatarCircle}" 
                                                                                                      Grid.Row="0" Grid.Column="0"
                                                                                                      Name="itemimage"
                                                                                                      Height="30" Width="30"
                                                                                                      ToolTip="{Binding Main1Rune.Name}"
-                                                                                                     Margin="5 0 5 0"
-                                                                                                     Source="{Binding ItemImage,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                                            <Popup Focusable="False"
-                                                                                                   Name="pop"
-                                                                                                   IsOpen="{Binding ElementName=itemimage,Path=IsMouseOver,Mode=OneWay}"
-                                                                                                   PlacementTarget="{Binding ElementName=runeitem}" 
-                                                                                                   Placement="Top" AllowsTransparency="True">
-                                                                                                <Grid>
-                                                                                                    <Rectangle Fill="White" Margin="2" Opacity="0.8" RadiusY="2" RadiusX="2">
-                                                                                                        <Rectangle.Effect>
-                                                                                                            <DropShadowEffect Color="#eeeeee" Direction="0" BlurRadius="15" RenderingBias="Quality" ShadowDepth="1"></DropShadowEffect>
-                                                                                                        </Rectangle.Effect>
-                                                                                                    </Rectangle>
-                                                                                                    <StackPanel Margin="5" Orientation="Vertical">
-                                                                                                        <TextBlock VerticalAlignment="Center" Text="{Binding Name}" FontWeight="Bold" FontSize="16" Margin="0 0 0 5"></TextBlock>
-                                                                                                        <TextBox IsReadOnly="True" 
-                                                                                                                 AcceptsReturn="True"
-                                                                                                                 Width="380" 
-                                                                                                                 TextWrapping="Wrap"
-                                                                                                                 Text="{Binding Description,UpdateSourceTrigger=PropertyChanged}"/>
-                                                                                                        <StackPanel Orientation="Horizontal" Margin="0 2 0 0">
-                                                                                                            <Path Data="{StaticResource money}" Fill="DarkGoldenrod" Stretch="Uniform" Height="20"/>
-                                                                                                            <TextBlock Text="{Binding PriceTotal}" Margin="5 0 0 0" FontWeight="Bold"/>
-                                                                                                        </StackPanel>
-                                                                                                    </StackPanel>
-                                                                                                </Grid>
-                                                                                            </Popup>
-                                                                                        </Grid>
-                                                                                    </Border>
-                                                                                </ControlTemplate>
-                                                                            </Setter.Value>
-                                                                        </Setter>
-                                                                    </Style>
-                                                                </ListBox.ItemContainerStyle>
-                                                            </ListBox>
-                                                            <Label Content="{Binding WinRateTxt}" ToolTip="胜率" HorizontalAlignment="Right"/>
-                                                        </Grid>
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"></Setter>
-                                                <Setter Property="BorderThickness" Value="2"></Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                            </ListBox>
-                        </GroupBox>
-                        <GroupBox Header="鞋子" FontSize="15" Margin="5" Foreground="{DynamicResource DefaultFontColor}"
-                                  Background="{DynamicResource DefaultCardBackgroundColor}" 
-                                  Style="{StaticResource GroupBoxOriginal}">
-                            <ListBox ItemsSource="{Binding DisplayItems.ShoeItems,UpdateSourceTrigger=PropertyChanged}" 
-                                     SelectedItem="{Binding DisplayItems.ShoeItem,UpdateSourceTrigger=PropertyChanged}" 
-                                     ScrollViewer.CanContentScroll="True"
-                                     ScrollViewer.IsDeferredScrollingEnabled="True"
-                                     PreviewMouseWheel="ListView_PreviewMouseWheel"
-                                     BorderThickness="0" Background="Transparent">
-                                <ListBox.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical"></StackPanel>
-                                    </ItemsPanelTemplate>
-                                </ListBox.ItemsPanel>
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="{x:Type ListBoxItem}">
-                                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                                        <Setter Property="Height" Value="42" />
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                    <Border BorderThickness="{TemplateBinding BorderThickness}" 
-                                                            Margin="1"
-                                                            BorderBrush="{TemplateBinding BorderBrush}"
-                                                            Background="{TemplateBinding Background}">
-                                                        <Grid>
-                                                            <ListBox ItemsSource="{Binding Items}" BorderThickness="0" Background="Transparent">
-                                                                <ListBox.ItemsPanel>
-                                                                    <ItemsPanelTemplate>
-                                                                        <StackPanel Orientation="Horizontal"></StackPanel>
-                                                                    </ItemsPanelTemplate>
-                                                                </ListBox.ItemsPanel>
-
-                                                                <ListBox.ItemContainerStyle>
-                                                                    <Style TargetType="{x:Type ListBoxItem}">
-                                                                        <Setter Property="OverridesDefaultStyle" Value="True" />
-                                                                        <Setter Property="SnapsToDevicePixels" Value="True" />
-                                                                        <Setter Property="Height" Value="36" />
-                                                                        <Setter Property="Template">
-                                                                            <Setter.Value>
-                                                                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                                                    <Border BorderThickness="0" 
-                                                                                        BorderBrush="#eeeeee"
-                                                                                        Background="{TemplateBinding Background}">
-                                                                                        <Grid>
-                                                                                            <hc:Gravatar Style="{StaticResource GravatarCircle}" 
-                                                                                                     Grid.Row="0" Grid.Column="0"
-                                                                                                     Name="itemimage"
-                                                                                                     Height="30" Width="30"
-                                                                                                     ToolTip="{Binding Main1Rune.Name}"
-                                                                                                     Margin="5 0 5 0"
+                                                                                                     Margin="3 0 3 0"
                                                                                                      Source="{Binding ItemImage,UpdateSourceTrigger=PropertyChanged}"/>
                                                                                             <Popup Focusable="False"
                                                                                                    Name="pop"
@@ -808,26 +746,46 @@
                                                                     </Style>
                                                                 </ListBox.ItemContainerStyle>
                                                             </ListBox>
-                                                            <Label Content="{Binding WinRateTxt}" ToolTip="胜率" HorizontalAlignment="Right"/>
-                                                        </Grid>
-                                                    </Border>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Style.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter Property="BorderBrush" Value="{StaticResource PrimaryBrush}"></Setter>
-                                                <Setter Property="BorderThickness" Value="2"></Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                            </ListBox>
-                        </GroupBox>
+                                                        </StackPanel>
+                                                        <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                                            <Label FontSize="12"
+                                                                   Grid.Row="0" Grid.Column="2"
+                                                                   Style="{StaticResource LabelSuccess}"
+                                                                   Margin="0 0 0 0" Height="28"
+                                                                   BorderThickness="0"
+                                                                   HorizontalAlignment="Right"
+                                                                   Visibility="{Binding DataContext.IsAramPage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter},RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
+                                                                   Content="{Binding CnLane}">
+                                                            </Label>
+                                                            <hc:Shield Subject="声望" Status="{Binding PopularTxt}" HorizontalAlignment="Center" 
+                                                                       FontSize="15" Margin="0 10 0 0"
+                                                                       Visibility="{Binding IsCustomer,Converter={StaticResource Boolean2VisibilityReConverter}}"
+                                                                       VerticalAlignment="Top" Color="{StaticResource PrimaryBrush}"/>
+                                                            <hc:Shield Subject="胜率" 
+                                                                       FontSize="15"
+                                                                       Visibility="{Binding IsCustomer,Converter={StaticResource Boolean2VisibilityReConverter}}"
+                                                                       Status="{Binding WinRateTxt}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 10 0 0" Color="{StaticResource DangerBrush}"/>
+
+                                                            <Button Content="应用" Grid.Row="2" HorizontalAlignment="Right"
+                                                                    Command="{Binding DataContext.ApplyItemCommandAsync,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}" Margin="0 10 0 0"
+                                                                    CommandParameter="{Binding}"
+                                                                    Grid.ColumnSpan="2" Width="60" Cursor="Hand"></Button>
+                                                        </StackPanel>
+                                                    </Grid>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="{DynamicResource DefaultHoverColor}"></Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
                     </StackPanel>
                 </ScrollViewer>
-
-                <Button Content="应用" Grid.Row="2" Command="{Binding ApplyItemCommandAsync}" HorizontalAlignment="Center" Grid.ColumnSpan="2" Width="150" Cursor="Hand"></Button>
             </Grid>
         </hc:Card>
     </Grid>
