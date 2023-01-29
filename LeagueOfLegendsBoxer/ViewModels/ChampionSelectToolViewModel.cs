@@ -37,7 +37,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         private readonly RuneAndItemPage _runePage;
 
-        public ChampionSelectToolViewModel(HeroData heroData, Teammate teammate, RuneAndItemPage runePage)
+        public ChampionSelectToolViewModel(HeroData heroData, Teammate teammate, RuneAndItemPage runePage, AramAnalyse aramAnalyse)
         {
             _runePage = runePage;
             Menus = new ObservableCollection<Menu>()
@@ -56,6 +56,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 {
                     Name = "符文配置",
                     Action = ()=>CurrentPage = runePage
+                },
+                new Menu()
+                {
+                    Name = "乱斗分析",
+                    Action = ()=>CurrentPage = aramAnalyse
                 }
             };
 
@@ -64,7 +69,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
         public void ShowRunePage()
         {
-            CurrentMenu = Menus.LastOrDefault();
+            CurrentMenu = Menus.FirstOrDefault(x => x.Name == "符文配置");
         }
     }
 }

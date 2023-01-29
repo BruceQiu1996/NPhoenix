@@ -193,7 +193,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 UnReadNotices = y.FirstOrDefault(x => x.IsMust) != null ? "必读" + y.Where(x => x.IsMust).Count() : y.Count().ToString();
             });
-
         }
 
         /// <summary>
@@ -649,16 +648,16 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     Team1Accounts.Clear();
                     Team2Accounts.Clear();
                     _team1V2Window.Hide();
-                    //_team1V2Window.Topmost = false; //TODO open
+                    _team1V2Window.Topmost = false;
                 });
             }
-            //if (data != "ChampSelect")
-            //{
-            //    System.Windows.Application.Current.Dispatcher.Invoke(() =>
-            //    {
-            //        _championSelectTool.Hide();
-            //    });
-            //}
+            if (data != "ChampSelect")
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _championSelectTool.Hide();
+                });
+            }
             switch (data)
             {
                 case "ReadyCheck":
@@ -746,8 +745,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     if (_iniSettingsModel.AutoLockHeroInAram) //秒抢大乱斗英雄
                     {
                         var session = await _gameService.GetGameSessionAsync();
-                        var token = JToken.Parse(session);
+                         var token = JToken.Parse(session);
                         BenchChampion[] champs = token["benchChampions"]?.ToObject<BenchChampion[]>();
+                        BenchChampion[] chooseChamps = token["myTeam"]?.ToObject<BenchChampion[]>();
+                        WeakReferenceMessenger.Default.Send(new AramChooseHeroModel(chooseChamps.Select(x => x.ChampionId).ToList(), champs.Select(x => x.ChampionId).ToList()));
                         var loc = _iniSettingsModel.LockHerosInAram.IndexOf(me.ChampionId);
                         loc = loc == -1 ? _iniSettingsModel.LockHerosInAram.Count : loc;
                         if (loc != 0)

@@ -177,6 +177,8 @@ namespace LeagueOfLegendsBoxer
                 services.AddTransient<SelectKey>();
                 services.AddSingleton<Teamup>();
                 services.AddSingleton<TeamupViewModel>();
+                services.AddSingleton<AramAnalyse>();
+                services.AddSingleton<AramAnalyseViewModel>();
 
                 services.Configure<List<Models.ServerArea>>(ctx.Configuration.GetSection("ServerAreas"));
             });

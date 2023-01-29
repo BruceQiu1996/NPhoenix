@@ -26,6 +26,7 @@ namespace LeagueOfLegendsBoxer.Application.LiveGame
             _httpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
             _httpClient.Timeout = TimeSpan.FromSeconds(10);
         }
+
         public async Task<string> GetGameEventAsync()
         {
             try
