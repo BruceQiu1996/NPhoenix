@@ -93,12 +93,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
             foreach (var item in _leftParticipants)
             {
                 if (team1TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
-                else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team1TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / team1GoldEarned) * 100).ToString("0.00") + "%";
+                else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team1TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / team1GoldEarned) * 100).ToString("0.") + "%";
             }
             foreach (var item in _rightParticipants)
             {
                 if (team2TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
-                else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / team2GoldEarned) * 100).ToString("0.00") + "%";
+                else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / team2GoldEarned) * 100).ToString("0.") + "%";
             }
             if (record.QueueId == 420 || record.QueueId == 430 || record.QueueId == 440 || record.QueueId == 450)
             {

@@ -29,10 +29,10 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             BenchChamps = new ObservableCollection<AramChampDescModel>();
             WeakReferenceMessenger.Default.Register<AramAnalyseViewModel, AramChooseHeroModel>(this, (x, y) =>
             {
-                ChooseChamps.Clear();
-                BenchChamps.Clear();
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
+                    ChooseChamps.Clear();
+                    BenchChamps.Clear();
                     foreach (var item in y.ChampIds)
                     {
                         ChooseChamps.Add(new AramChampDescModel()

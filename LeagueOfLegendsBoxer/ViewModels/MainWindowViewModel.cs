@@ -188,7 +188,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _team1V2Window = team1V2Window;
             _keyboardMouseEvent = Hook.GlobalEvents();
             _keyboardMouseEvent.KeyDown += OnKeyDown;
-            //_keyboardMouseEvent.KeyUp += OnKeyUp;
+            _keyboardMouseEvent.KeyUp += OnKeyUp;
             WeakReferenceMessenger.Default.Register<MainWindowViewModel, IEnumerable<Notice>>(this, (x, y) =>
             {
                 UnReadNotices = y.FirstOrDefault(x => x.IsMust) != null ? "必读" + y.Where(x => x.IsMust).Count() : y.Count().ToString();
@@ -426,31 +426,24 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
         }
 
-        //private void OnKeyUp(object sender, KeyEventArgs e)
-        //{
-        //    if (_settingsViewModel.IsOpenModifyHotkeys)
-        //    {
-        //        return;
-        //    }
-        //    var key = ParseKey(e.KeyCode.ToString());
-        //    if (selectKey.Contains(key))
-        //    {
-        //        for (int i = 0; i < selectKey.Count; i++)
-        //        {
-        //            if (selectKey[i] == key)
-        //            {
-        //                selectKey.Remove(selectKey[i]);
-        //            }
-        //        }
-        //    }
-
-        //    if (_iniSettingsModel.TeamDetailKeyList.Contains(e.KeyCode.ToString()))
-        //    {
-        //        _team1V2Window.Topmost = false;
-        //        _team1V2Window.Hide();
-        //        //e.Handled = true;
-        //    }
-        //}
+        private void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (_settingsViewModel.IsOpenModifyHotkeys)
+            {
+                return;
+            }
+            var key = ParseKey(e.KeyCode.ToString());
+            if (selectKey.Contains(key))
+            {
+                for (int i = 0; i < selectKey.Count; i++)
+                {
+                    if (selectKey[i] == key)
+                    {
+                        selectKey.Remove(selectKey[i]);
+                    }
+                }
+            }
+        }
 
         #endregion 
         private async Task LoadAsync()
@@ -745,10 +738,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     if (_iniSettingsModel.AutoLockHeroInAram) //秒抢大乱斗英雄
                     {
                         var session = await _gameService.GetGameSessionAsync();
-                         var token = JToken.Parse(session);
+                        var token = JToken.Parse(session);
                         BenchChampion[] champs = token["benchChampions"]?.ToObject<BenchChampion[]>();
-                        BenchChampion[] chooseChamps = token["myTeam"]?.ToObject<BenchChampion[]>();
-                        WeakReferenceMessenger.Default.Send(new AramChooseHeroModel(chooseChamps.Select(x => x.ChampionId).ToList(), champs.Select(x => x.ChampionId).ToList()));
                         var loc = _iniSettingsModel.LockHerosInAram.IndexOf(me.ChampionId);
                         loc = loc == -1 ? _iniSettingsModel.LockHerosInAram.Count : loc;
                         if (loc != 0)
@@ -768,6 +759,13 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                 await _gameService.BenchSwapChampionsAsync(swapHeros[index]);
                             }
                         }
+                    }
+                    {
+                        var session = await _gameService.GetGameSessionAsync();
+                        var token = JToken.Parse(session);
+                        BenchChampion[] champs = token["benchChampions"]?.ToObject<BenchChampion[]>();
+                        BenchChampion[] chooseChamps = token["myTeam"]?.ToObject<BenchChampion[]>();
+                        WeakReferenceMessenger.Default.Send(new AramChooseHeroModel(chooseChamps.Select(x => x.ChampionId).ToList(), champs.Select(x => x.ChampionId).ToList()));
                     }
                 }
                 else

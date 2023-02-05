@@ -4,6 +4,8 @@ using HandyControl.Controls;
 using HandyControl.Data;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
+using LeagueOfLegendsBoxer.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -69,6 +71,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     Message = "拉黑成功",
                     ShowDateTime = false
                 });
+
+                App.ServiceProvider.GetRequiredService<BlackTip>()?.Hide();
             }
             catch (Exception ex)
             {

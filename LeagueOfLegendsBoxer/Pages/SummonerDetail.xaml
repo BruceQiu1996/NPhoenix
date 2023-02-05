@@ -313,10 +313,11 @@
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10 2 10 2" Grid.ColumnSpan="2" Background="{DynamicResource DefaultHoverColor}">
                     <TextBlock Text="召唤师" FontSize="16"  Margin="5 0 0 0" Width="50" VerticalAlignment="Center"></TextBlock>
                     <TextBlock Text="装备" FontSize="16" Margin="200 0 0 0" Width="200" VerticalAlignment="Center"></TextBlock>
-                    <TextBlock Text="KDA" FontSize="16" Margin="100 0 0 0" Width="100" VerticalAlignment="Center"></TextBlock>
-                    <TextBlock Text="输出" FontSize="16" VerticalAlignment="Center" Width="70"></TextBlock>
-                    <TextBlock Text="承受伤害" FontSize="16" VerticalAlignment="Center"  Width="95"></TextBlock>
-                    <TextBlock Text="伤转率" FontSize="16"  Width="60" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="KDA" FontSize="16" Margin="90 0 0 0" Width="80" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="金钱" FontSize="16" Width="70" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="输出" FontSize="16" VerticalAlignment="Center" Width="60"></TextBlock>
+                    <TextBlock Text="承受伤害" FontSize="16" VerticalAlignment="Center"  Width="70"></TextBlock>
+                    <TextBlock Text="伤转率" FontSize="16"  Width="60" TextAlignment="Right" VerticalAlignment="Center"></TextBlock>
                 </StackPanel>
                 <Label Content="胜方" Grid.Row="2" HorizontalAlignment="Left" Margin="10 0 0 0" Style="{StaticResource LabelPrimary}"
                        Visibility="{Binding Record.IsLeftWin,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}"/>
@@ -714,27 +715,32 @@
 
                                                 <TextBlock Text="{Binding Item2.Stats.KDA}" 
                                                            HorizontalAlignment="Right"
-                                                           Width="120"
+                                                           Width="90"
                                                            Margin="10 0 0 0"
                                                            TextAlignment="Center"
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" FontSize="16" Grid.Row="1"
                                                            Grid.Column="2" ></TextBlock>
 
+                                                <TextBlock Text="{Binding Item2.Stats.GoldEarned,Converter={StaticResource ValueConvertKiloConverter}}" 
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
+                                                           Width="70"></TextBlock>
+                                                
                                                 <TextBlock Text="{Binding Item2.Stats.TotalDamageDealtToChampions,Converter={StaticResource ValueConvertKiloConverter}}" 
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
-                                                           Width="80"></TextBlock>
+                                                           Width="70"></TextBlock>
 
                                                 <TextBlock Text="{Binding Item2.Stats.TotalDamageTaken,Converter={StaticResource ValueConvertKiloConverter}}" 
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
-                                                           Width="80"></TextBlock>
+                                                           Width="70"></TextBlock>
 
                                                 <TextBlock Text="{Binding Item2.Stats.DamageConvert}" 
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
-                                                           Width="100"></TextBlock>
+                                                           Width="90"></TextBlock>
                                             </StackPanel>
                                         </Border>
                                     </ControlTemplate>
@@ -1135,27 +1141,32 @@
 
                                                 <TextBlock Text="{Binding Item2.Stats.KDA}" 
                                                            HorizontalAlignment="Right"
-                                                           Width="120"
+                                                           Width="90"
                                                            Margin="10 0 0 0"
                                                            TextAlignment="Center"
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" FontSize="16" Grid.Row="1"
                                                            Grid.Column="2" ></TextBlock>
 
+                                                <TextBlock Text="{Binding Item2.Stats.GoldEarned,Converter={StaticResource ValueConvertKiloConverter}}" 
+                                                           Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
+                                                           VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
+                                                           Width="70"></TextBlock>
+
                                                 <TextBlock Text="{Binding Item2.Stats.TotalDamageDealtToChampions,Converter={StaticResource ValueConvertKiloConverter}}" 
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
-                                                           Width="80"></TextBlock>
+                                                           Width="70"></TextBlock>
 
                                                 <TextBlock Text="{Binding Item2.Stats.TotalDamageTaken,Converter={StaticResource ValueConvertKiloConverter}}" 
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
-                                                           Width="80"></TextBlock>
+                                                           Width="70"></TextBlock>
 
                                                 <TextBlock Text="{Binding Item2.Stats.DamageConvert}" 
                                                            Foreground="{Binding Item1.IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
                                                            VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center" FontSize="16"
-                                                           Width="100"></TextBlock>
+                                                           Width="90"></TextBlock>
                                             </StackPanel>
                                         </Border>
                                     </ControlTemplate>

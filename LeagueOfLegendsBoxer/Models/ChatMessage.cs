@@ -8,7 +8,6 @@ using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Windows;
-using MessageBox = System.Windows.MessageBox;
 
 namespace LeagueOfLegendsBoxer.Models
 {

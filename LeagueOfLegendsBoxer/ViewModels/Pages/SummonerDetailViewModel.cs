@@ -144,12 +144,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 foreach (var item in record.LeftParticipants)
                 {
                     if (team1TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
-                    else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team1TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team1GoldEarned) * 100).ToString("0.00") + "%";
+                    else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team1TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team1GoldEarned) * 100).ToString("0.") + "%";
                 }
                 foreach (var item in record.RightParticipants)
                 {
                     if (team2TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
-                    else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team2GoldEarned) * 100).ToString("0.00") + "%";
+                    else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team2GoldEarned) * 100).ToString("0.") + "%";
                 }
                 var maxdmg = record.LeftParticipants.Concat(record.RightParticipants).Max(x => x.Item2.Stats.TotalDamageDealtToChampions);
                 foreach (var item in record.LeftParticipants.Concat(record.RightParticipants))

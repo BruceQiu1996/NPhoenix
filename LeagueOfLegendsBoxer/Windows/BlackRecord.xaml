@@ -39,12 +39,15 @@
                 <RowDefinition Height="40"></RowDefinition>
             </Grid.RowDefinitions>
             <Border MouseMove="Border_MouseMove" Background="Transparent" Grid.Row="0">
-                <Label HorizontalAlignment="Right" 
-                       Background="Transparent"
-                       BorderThickness="0"
-                       Height="35" Width="35" Margin="0 5 5 0" ToolTip="关闭" Cursor="Hand" MouseLeftButtonDown="Label_MouseLeftButtonDown">
-                    <Path Data="{StaticResource CloseGeometry}" Fill="{StaticResource PrimaryBrush}" Stretch="Uniform" Stroke="{StaticResource PrimaryBrush}"/>
-                </Label>
+                <Grid>
+                    <TextBlock Text="拉黑列表" Margin="10 10 5 0" FontSize="16" Foreground="{DynamicResource DefaultFontColor}"/>
+                    <Label HorizontalAlignment="Right" 
+                           Background="Transparent"
+                           BorderThickness="0"
+                           Height="35" Width="35" Margin="0 5 5 0" ToolTip="关闭" Cursor="Hand" MouseLeftButtonDown="Label_MouseLeftButtonDown">
+                        <Path Data="{StaticResource CloseGeometry}" Fill="{StaticResource PrimaryBrush}" Stretch="Uniform" Stroke="{StaticResource PrimaryBrush}"/>
+                    </Label>
+                </Grid>
             </Border>
             <hc:Card Grid.Row="1" Margin="5"  Opacity="0.9" Background="{DynamicResource DefaultCardBackgroundColor}" BorderThickness="0">
                 <ListBox ItemsSource="{Binding BlackAccounts,UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Background="Transparent">
