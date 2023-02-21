@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Net;
-using System.Net.Http.Headers;
 using System.Net.WebSockets;
 using System.Reactive.Linq;
 using Websocket.Client;
@@ -28,8 +27,7 @@ namespace LeagueOfLegendsBoxer.Application.Event
                     {
                         KeepAliveInterval = TimeSpan.FromSeconds(5),
                         Credentials = new NetworkCredential("riot", token),
-                        RemoteCertificateValidationCallback =
-                            (sender, cert, chain, sslPolicyErrors) => true,
+                        RemoteCertificateValidationCallback =(sender, cert, chain, sslPolicyErrors) => true,
                     }
                 };
                 socket.Options.AddSubProtocol("wamp");
@@ -95,13 +93,13 @@ namespace LeagueOfLegendsBoxer.Application.Event
                 await _webSocket?.SendInstant("[5, \"OnJsonApiEvent\"]");
                 SendMessage();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-            
+
             }
         }
 
-        private void SendMessage() 
+        private void SendMessage()
         {
             if (_loopAlive) return;
             _loopAlive = true;

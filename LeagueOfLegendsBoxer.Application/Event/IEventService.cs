@@ -10,7 +10,7 @@
 
         ValueTask<bool> DisconnectAsync();
 
-        Task Initialize(int port, string token);
+        Task Initialize(int port,string token);
 
         void Subscribe(string uri, EventHandler<EventArgument> eventHandler);
 
