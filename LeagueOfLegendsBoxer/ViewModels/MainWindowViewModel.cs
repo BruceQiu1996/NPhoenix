@@ -812,14 +812,14 @@ namespace LeagueOfLegendsBoxer.ViewModels
         #region !!!websocket恢复后再删除loop游戏流程代码
         private async Task LoopGameFlow(string phase)
         {
-            if (string.IsNullOrEmpty(phase) || _preStatus == phase)
+            if (string.IsNullOrEmpty(phase) || _preStatus == phase )
                 return;
 
             _preStatus = phase;
             if (phase == "ReadyCheck" ||
-            phase == "ChampSelect" ||
-            phase == "Lobby" ||
-            phase == "Matchmaking" ||
+                phase == "ChampSelect" ||
+                phase == "Lobby" ||
+                phase == "Matchmaking"|| 
                 phase == "None")
             {
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -909,17 +909,17 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         var status = await _gameService.GetCurrentGameInfoAsync();
                         if (status == null)
                         {
-                            System.Windows.Application.Current.Dispatcher.Invoke(() =>
-                            {
-                                _championSelectTool.Hide();
-                                _blackList.Hide();
-                                Team1Accounts.Clear();
-                                Team2Accounts.Clear();
-                                _team1V2Window.Hide();
-                                _team1V2Window.Topmost = false;
-                            });
+                            //System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                            //{
+                            //    _championSelectTool.Hide();
+                            //    _blackList.Hide();
+                            //    Team1Accounts.Clear();
+                            //    Team2Accounts.Clear();
+                            //    _team1V2Window.Hide();
+                            //    _team1V2Window.Topmost = false;
+                            //});
                             GameStatus = "大厅或者游戏主界面";
-                            await Task.Delay(500);
+                            await Task.Delay(2000);
                             continue;
                         }
 
@@ -929,11 +929,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
                             await LoopGameFlow(phase);
                         }
 
-                        await Task.Delay(500);
+                        await Task.Delay(1000);
                     }
                     catch
                     {
-                        await Task.Delay(500);
+                        await Task.Delay(1000);
                         continue;
                     }
                 }
