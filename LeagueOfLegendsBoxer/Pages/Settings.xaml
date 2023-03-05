@@ -838,6 +838,24 @@
                             </behaviors:Interaction.Triggers>
                         </RadioButton>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0 20 0 10">
+                        <RadioButton Content="国服模式" Foreground="{DynamicResource DefaultFontColor}" FontSize="16" Margin="20 0 0 0" 
+                                     IsChecked="{Binding IsHorseServer}" GroupName="server">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding ChooseHorseServerCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </RadioButton>
+                        <RadioButton Content="国际服模式" Foreground="{DynamicResource DefaultFontColor}" FontSize="16" Margin="80 0 0 0" 
+                                     IsChecked="{Binding IsHorseServer,Converter={StaticResource Boolean2BooleanReConverter}}" GroupName="server">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding DontChooseHorseServerCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </RadioButton>
+                    </StackPanel>
                     <Button Content="免费开源软件.点个赞" 
                             Cursor="Hand"
                             Click="Button_Click"

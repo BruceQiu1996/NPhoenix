@@ -721,6 +721,16 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
+        private bool _isHorseServer;
+        public bool IsHorseServer
+        {
+            get => _isHorseServer;
+            set
+            {
+                SetProperty(ref _isHorseServer, value);
+            }
+        }
+        
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoStartWhenComputerRunCommandAsync { get; set; }
@@ -779,6 +789,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand SettingSignatureCommand { get; set; }
         public AsyncRelayCommand SaveTeamDetailKeyCommand { get; set; }
         public AsyncRelayCommand CreateCurrentQueueCommandAsync { get; set; }
+        public AsyncRelayCommand ChooseHorseServerCommandAsync { get; set; }
+        public AsyncRelayCommand DontChooseHorseServerCommandAsync { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -867,6 +879,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             SaveTeamDetailKeyCommand = new AsyncRelayCommand(SaveTeamDetailKey);
             SettingSignatureCommand = new AsyncRelayCommand(SettingSignature);//设置个人签名
             CreateCurrentQueueCommandAsync = new AsyncRelayCommand(CreateCurrentQueueAsync);
+            ChooseHorseServerCommandAsync = new AsyncRelayCommand(ChooseHorseServerAsync);
+            DontChooseHorseServerCommandAsync = new AsyncRelayCommand(DontChooseHorseServerAsync);
         }
 
         private void PayMethod()
@@ -997,6 +1011,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             Below100ScoreTxt = _iniSettingsModel.Below100ScoreTxt;
             IsAltQOpenVsDetail = _iniSettingsModel.IsAltQOpenVsDetail;
             IsDarkTheme = _iniSettingsModel.IsDarkTheme;
+            IsHorseServer = _iniSettingsModel.IsHorseServer;
             FuckWords = _iniSettingsModel.FuckWords;
             GoodWords = _iniSettingsModel.GoodWords;
             AutoUseRuneByUseCount = _iniSettingsModel.AutoUseRuneByUseCount;
@@ -1597,6 +1612,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _iniSettingsModel.WriteIsDarkTheme(true);
             IsDarkTheme = true;
             App.ChangeTheme(App.Theme.Dark);
+        }
+
+        private async Task ChooseHorseServerAsync() 
+        {
+            await _iniSettingsModel.WriteIsHorseServer(true);
+            IsHorseServer = true;
+        }
+
+        private async Task DontChooseHorseServerAsync()
+        {
+            await _iniSettingsModel.WriteIsHorseServer(false);
+            IsHorseServer = false;
         }
 
         private async Task ManualUpdateAsync()

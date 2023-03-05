@@ -1,5 +1,6 @@
 ﻿using LeagueOfLegendsBoxer.Models;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace LeagueOfLegendsBoxer.Resources
 {
@@ -55,6 +56,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string AutoUseRuneByUseCount = nameof(AutoUseRuneByUseCount);
         public const string AutoUseRuneByWinRate = nameof(AutoUseRuneByWinRate);
         public const string AutoUseRune = nameof(AutoUseRune);
+        public const string IsHorseServer = nameof(IsHorseServer);
         public static string _chatId = null;
 
         public const string TeamDetailKey = nameof(TeamDetailKey);

@@ -64,6 +64,7 @@ namespace LeagueOfLegendsBoxer.Resources
         public bool AutoUseRuneByUseCount { get; set; }
         public bool AutoUseRuneByWinRate { get; set; }
         public bool AutoUseRune { get; set; }
+        public bool IsHorseServer { get; set; }
         public long TeamDetailHash { get; set; }
         public List<string> TeamDetailKeyList { get; set; } = new List<string>();
 
@@ -138,6 +139,7 @@ namespace LeagueOfLegendsBoxer.Resources
             RankSetting = await _settingsService.ReadAsync(Constant.Game, Constant.RankSetting);
             CloseSendOtherWhenBegin = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.CloseSendOtherWhenBegin), out var tempCloseSendOtherWhenBegin) ? tempCloseSendOtherWhenBegin : false;
             IsAltQOpenVsDetail = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsAltQOpenVsDetail), out var tempIsAltQOpenVsDetail) ? tempIsAltQOpenVsDetail : true;
+            IsHorseServer = bool.TryParse(await _settingsService.ReadAsync(Constant.Game, Constant.IsHorseServer), out var tempIsHorseServer) ? tempIsHorseServer : true;
             HorseTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.HorseTemplate);
             ChatMessageTemplate = await _settingsService.ReadAsync(Constant.Game, Constant.ChatMessageTemplate);
             Above120ScoreTxt = await _settingsService.ReadAsync(Constant.Game, Constant.Above120ScoreTxt);
@@ -385,6 +387,12 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.IsDarkTheme, isDarkTheme.ToString());
             IsDarkTheme = isDarkTheme;
+        }
+
+        public async Task WriteIsHorseServer(bool isHorseServer)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.IsHorseServer, isHorseServer.ToString());
+            IsHorseServer = isHorseServer;
         }
 
         public async Task WriteFuckWords(string fuckwords)
