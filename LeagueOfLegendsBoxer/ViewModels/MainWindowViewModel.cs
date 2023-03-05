@@ -17,13 +17,11 @@ using LeagueOfLegendsBoxer.Pages;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.ViewModels.Pages;
 using LeagueOfLegendsBoxer.Windows;
-using Microsoft.AspNetCore.Server.Kestrel.Core.Features;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using SharpVectors.Dom.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -52,6 +50,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
     public class MainWindowViewModel : ObservableObject
     {
         private readonly string _cmdPath = @"C:\Windows\System32\cmd.exe";
+        private readonly string _excuteShell = "wmic PROCESS WHERE name='LeagueClientUx.exe' GET commandline";
 
         public AsyncRelayCommand LoadCommandAsync { get; set; }
         public RelayCommand ShiftSettingsPageCommand { get; set; }
@@ -458,7 +457,15 @@ namespace LeagueOfLegendsBoxer.ViewModels
             //await CheckGameNotExistWhenStartAsync();
             await LoadConfig();
             await (_notice.DataContext as NoticeViewModel).LoadAsync();
-            await ConnnectAsync();
+            if (_iniSettingsModel.IsHorseServer)
+            {
+                await ConnnectAsync();
+            }
+            else 
+            {
+                await ConnnectAsync_commandline();
+            }
+            
             await Task.Delay(1000);
             Constant.Items = JsonConvert.DeserializeObject<IEnumerable<Item>>(await _gameService.GetItems());
             if (Constant.Items != null)
@@ -469,9 +476,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 }
             }
             Constant.Spells = JsonConvert.DeserializeObject<IEnumerable<SpellModel>>(await _gameService.GetSpells());
-            //等websocket恢复后在使用
-            _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
-            //_eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
             Connected = true;
             if (CurrentPage == _mainPage)
             {
@@ -482,8 +486,17 @@ namespace LeagueOfLegendsBoxer.ViewModels
             //获取大乱斗buff数据
             await LoadAramBuffAsync();
             LoopLiveGameEventAsync();
-            LoopGameStatus();
-            LoopChampSelect();
+            if (_iniSettingsModel.IsHorseServer)
+            {
+                LoopGameStatus();
+                LoopChampSelect();
+            }
+            else 
+            {
+                _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
+                _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
+            }
+
             await LoopforClientStatus();
         }
 
@@ -1382,6 +1395,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
         }
         #endregion
 
+        /// <summary>
+        /// 注入连接
+        /// </summary>
+        /// <returns></returns>
         private async Task ConnnectAsync()
         {
             while (true)
@@ -1427,6 +1444,67 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 {
                     await Task.Delay(2000);
                 }
+            }
+        }
+
+        /// <summary>
+        /// 命令行连接
+        /// </summary>
+        /// <returns></returns>
+        private async Task ConnnectAsync_commandline()
+        {
+            while (true)
+            {
+                try
+                {
+                    var authenticate = await GetAuthenticate();
+                    if (!string.IsNullOrEmpty(authenticate) && authenticate.Contains("--remoting-auth-token="))
+                    {
+                        var tokenResults = authenticate.Split("--remoting-auth-token=");
+                        var portResults = authenticate.Split("--app-port=");
+                        var PidResults = authenticate.Split("--app-pid=");
+                        var installLocations = authenticate.Split("--install-directory=");
+                        var token = tokenResults[1].Substring(0, tokenResults[1].IndexOf("\""));
+                        var port = int.TryParse(portResults[1].Substring(0, portResults[1].IndexOf("\"")), out var temp) ? temp : 0;
+                        if (string.IsNullOrEmpty(token) || port == 0)
+                            throw new InvalidOperationException("invalid data when try to crack.");
+
+                        var settingFileLocation = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, _configuration.GetSection("SettingsFileLocation").Value);
+                        await Task.WhenAll(_requestService.Initialize(port, token),
+                                           _teamupService.Initialize(_configuration.GetSection("TeamupApi").Value),
+                                           _eventService.Initialize(port, token));
+
+                        await _eventService.ConnectAsync();
+                        break;
+                    }
+                    else
+                        throw new InvalidOperationException("can't read right token and port");
+                }
+                catch (Exception ex)
+                {
+                    await Task.Delay(2000);
+                }
+            }
+        }
+
+        private async Task<string> GetAuthenticate()
+        {
+            using (Process p = new Process())
+            {
+                p.StartInfo.FileName = _cmdPath;
+                p.StartInfo.UseShellExecute = false; //是否使用操作系统shell启动
+                p.StartInfo.RedirectStandardInput = true; //接受来自调用程序的输入信息
+                p.StartInfo.RedirectStandardOutput = true; //由调用程序获取输出信息
+                p.StartInfo.RedirectStandardError = true; //重定向标准错误输出
+                p.StartInfo.CreateNoWindow = true; //不显示程序窗口
+                p.Start();
+                p.StandardInput.WriteLine(_excuteShell.TrimEnd('&') + "&exit");
+                p.StandardInput.AutoFlush = true;
+                string output = await p.StandardOutput.ReadToEndAsync();
+                p.WaitForExit();
+                p.Close();
+
+                return output;
             }
         }
 
