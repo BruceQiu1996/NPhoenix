@@ -7,7 +7,10 @@ namespace LeagueOfLegendsBoxer.Application.ApplicationControl
         private readonly string _baseUrl = "process-control/v1/process/";
         private readonly string _installUrl = "data-store/v1/install-dir";
         private readonly string _setRankUrl = "lol-chat/v1/me";
+        private readonly string _createQueue = "lol-lobby/v2/lobby";
+        private readonly string _getAvailabilityQueue = "lol-game-queues/v1/queues";
         private readonly IRequestService _requestService;
+
         public DefaultApplicationService(IRequestService requestService)
         {
             _requestService = requestService;
@@ -52,7 +55,7 @@ namespace LeagueOfLegendsBoxer.Application.ApplicationControl
 
         public async Task<string> SetRankAsync(dynamic body)
         {
-            return await _requestService.GetJsonResponseAsync(HttpMethod.Put, _setRankUrl,null, body);
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Put, _setRankUrl, null, body);
         }
 
         public async Task<string> SetSignatureAsync(dynamic body)
@@ -64,6 +67,19 @@ namespace LeagueOfLegendsBoxer.Application.ApplicationControl
         {
             queryParameters.Add($"delaySeconds={delaySeconds}");
             await _requestService.GetJsonResponseAsync(HttpMethod.Post, $"{_baseUrl}restart", queryParameters);
+        }
+
+        public async Task CreateQueueAsync(int queue)
+        {
+            await _requestService.PostAsync(_createQueue, null, new
+            {
+                queueId = queue
+            });
+        }
+
+        public async Task<string> GetQueuesAsync()
+        {
+            return await _requestService.GetStringAsync(_getAvailabilityQueue, null);
         }
     }
 }

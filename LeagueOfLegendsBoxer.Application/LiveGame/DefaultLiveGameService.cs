@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using LeagueOfLegendsBoxer.Application.Request;
+using System.Net.Http.Headers;
 
 namespace LeagueOfLegendsBoxer.Application.LiveGame
 {

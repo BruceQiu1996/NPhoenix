@@ -1,4 +1,6 @@
-﻿namespace LeagueOfLegendsBoxer.Application.ApplicationControl
+﻿using System.Threading.Tasks;
+
+namespace LeagueOfLegendsBoxer.Application.ApplicationControl
 {
     public interface IApplicationService
     {
@@ -10,5 +12,7 @@
         Task<string> GetInstallLocation();
         Task<string> SetRankAsync(dynamic body);
         Task<string> SetSignatureAsync(dynamic body);
+        Task CreateQueueAsync(int queue);
+        Task<string> GetQueuesAsync();
     }
 }

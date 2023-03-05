@@ -809,6 +809,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
         }
 
+        private bool _thisGameHadOpenDialog = false;
         #region !!!websocket恢复后再删除loop游戏流程代码
         private async Task LoopGameFlow(string phase)
         {
@@ -850,6 +851,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 case "ChampSelect":
                     GameStatus = "英雄选择中";
                     await ChampSelectAsync();
+                    _thisGameHadOpenDialog = false;
                     await System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
                     {
                         _runeViewModel.Clear();
@@ -1267,6 +1269,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 }
             });
         }
+
         private async Task ActionWhenGameBegin()
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() => _championSelectTool?.Hide());
@@ -1292,11 +1295,14 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     Team2Accounts = await TeamToAccountsAsync(t2);
                 }
 
+                if (_thisGameHadOpenDialog)
+                    return;
                 await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
                 {
                     await (_team1V2Window.DataContext as Team1V2WindowViewModel).LoadDataAsync(Team1Accounts, Team2Accounts);
                     _team1V2Window.Show();
                     _team1V2Window.Activate();
+                    _thisGameHadOpenDialog = true;
                 });
             }
             catch (Exception ex)

@@ -27,6 +27,17 @@
                     <Button Content="设置账号所在大区" 
                             FontSize="15" Height="35" HorizontalAlignment="Right" Margin="0 5 0 10" Cursor="Hand"
                             Command="{Binding ChooseServerAreaForCurrentAccountCommand}"></Button>
+                    <StackPanel Orientation="Horizontal" Margin="0 5">
+                        <ComboBox hc:InfoElement.Placeholder="房间号" 
+                                  Width="200"
+                                  FontSize="16"
+                                  Style="{StaticResource ComboBoxExtend}"
+                                  Height="35"
+                                  ItemsSource="{Binding QueueModes,UpdateSourceTrigger=PropertyChanged}"
+                                  SelectedItem="{Binding CurrentQueueMode,UpdateSourceTrigger=PropertyChanged}"
+                                  DisplayMemberPath="Name"/>
+                        <Button Content="创建房间" FontSize="14" Cursor="Hand" Margin="10 0 0 0" Height="35" Command="{Binding CreateCurrentQueueCommandAsync}"></Button>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Content="自动接受对局" FontSize="18" Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding AutoAcceptGame,UpdateSourceTrigger=PropertyChanged}">
                             <behaviors:Interaction.Triggers>
@@ -769,6 +780,7 @@
                         <TextBlock Text="游戏内一键吹捧："></TextBlock>
                         <TextBlock Text="~+F8" FontSize="18"></TextBlock>
                     </StackPanel>
+                    <TextBlock Text="---Tips: Bios设置不同，部分电脑需加上Fn，如Fn+F8" Margin="0 5 0 5" FontSize="14"></TextBlock>
                     <hc:TextBox IsReadOnly="True" 
                                 FontSize="16"
                                 Foreground="{DynamicResource DefaultFontColor}"

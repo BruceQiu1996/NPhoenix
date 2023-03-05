@@ -10,6 +10,7 @@ using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -649,6 +650,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _teamDetailKeys, value);
         }
 
+        private string _queueId;
+
+        public string QueueId
+        {
+            get => _queueId;
+            set => SetProperty(ref _queueId, value);
+        }
+
         public bool IsOpenModifyHotkeys { get; set; }
 
 
@@ -692,7 +701,26 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
-        
+        private ObservableCollection<QueueMode> queueModes;
+        public ObservableCollection<QueueMode> QueueModes
+        {
+            get => queueModes;
+            set
+            {
+                SetProperty(ref queueModes, value);
+            }
+        }
+
+        private QueueMode currentQueueMode;
+        public QueueMode CurrentQueueMode
+        {
+            get => currentQueueMode;
+            set
+            {
+                SetProperty(ref currentQueueMode, value);
+            }
+        }
+
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoStartWhenComputerRunCommandAsync { get; set; }
@@ -750,6 +778,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand ManageRuneCommand { get; set; }
         public AsyncRelayCommand SettingSignatureCommand { get; set; }
         public AsyncRelayCommand SaveTeamDetailKeyCommand { get; set; }
+        public AsyncRelayCommand CreateCurrentQueueCommandAsync { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -837,6 +866,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             SaveTeamDetailKeyCommand = new AsyncRelayCommand(SaveTeamDetailKey);
             SettingSignatureCommand = new AsyncRelayCommand(SettingSignature);//设置个人签名
+            CreateCurrentQueueCommandAsync = new AsyncRelayCommand(CreateCurrentQueueAsync);
         }
 
         private void PayMethod()
@@ -974,6 +1004,23 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             AutoUseRune = _iniSettingsModel.AutoUseRune;
 
             TeamDetailKeys = _iniSettingsModel.TeamDetailKeys;
+            try
+            {
+                var queues = await _applicationService.GetQueuesAsync();
+                var items = JsonConvert.DeserializeObject<IEnumerable<QueueMode>>(queues);
+                QueueModes = new ObservableCollection<QueueMode>(items.Where(x => x.QueueAvailability == "Available"));
+                CurrentQueueMode = QueueModes.FirstOrDefault();
+            }
+            catch (Exception ex) 
+            {
+                Growl.WarningGlobal(new GrowlInfo()
+                {
+                    WaitTime = 2,
+                    Message = "拉取游戏模式队列失败",
+                    ShowDateTime = false
+                });
+                _logger.LogError(ex.ToString());
+            }
         }
 
         #region checkbox
@@ -1611,6 +1658,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             {
                 statusMessage = Signature
             });
+        }
+
+        private async Task CreateCurrentQueueAsync() 
+        {
+            if (CurrentQueueMode == null)
+                return;
+
+            await _applicationService.CreateQueueAsync(CurrentQueueMode.Id);
         }
 
         private async Task SaveTeamDetailKey()
