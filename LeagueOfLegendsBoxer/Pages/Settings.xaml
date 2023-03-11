@@ -856,6 +856,7 @@
                             </behaviors:Interaction.Triggers>
                         </RadioButton>
                     </StackPanel>
+                    <TextBlock Text="Tips : 模式切换需要重启软件" FontSize="14" Margin="20 5 0 5"></TextBlock>
                     <Button Content="免费开源软件.点个赞" 
                             Cursor="Hand"
                             Click="Button_Click"

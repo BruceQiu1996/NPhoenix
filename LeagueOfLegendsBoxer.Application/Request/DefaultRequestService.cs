@@ -9,29 +9,37 @@ namespace LeagueOfLegendsBoxer.Application.Request
         public int Port { get; set; }
         public string Token { get; set; }
 
-        public Task Initialize(int port, string token = null)
+        public Task Initialize(int port)
         {
             Port = port;
-            if (!string.IsNullOrEmpty(token)) 
-            {
-                Token = token;
-                _httpClientHandler = new HttpClientHandler
-                {
-                    ClientCertificateOptions = ClientCertificateOption.Manual,
-                };
-                _httpClientHandler.ServerCertificateCustomValidationCallback = (response, cert, chain, errors) => true;
-                var authTokenBytes = Encoding.ASCII.GetBytes($"riot:{token}");
-                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authTokenBytes));
-            }
-
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri($"http://127.0.0.1:{port}/");
             _httpClient.DefaultRequestVersion = new Version(2, 0);
             _httpClient.Timeout = TimeSpan.FromSeconds(10);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "LeagueOfLegendsClient/12.7.433.4138 (CEF 91)");
             _httpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
-            
+
+            return Task.CompletedTask;
+        }
+
+        public Task Initialize(int port, string token)
+        {
+            Port = port;
+            Token = token;
+            _httpClientHandler = new HttpClientHandler
+            {
+                ClientCertificateOptions = ClientCertificateOption.Manual,
+            };
+            _httpClientHandler.ServerCertificateCustomValidationCallback = (response, cert, chain, errors) => true;
+
+            var authTokenBytes = Encoding.ASCII.GetBytes($"riot:{token}");
+            _httpClient = new HttpClient(_httpClientHandler);
+            _httpClient.BaseAddress = new Uri($"https://127.0.0.1:{port}/");
+            _httpClient.DefaultRequestVersion = new Version(2, 0);
+            _httpClient.Timeout = TimeSpan.FromSeconds(10);
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authTokenBytes));
 
             return Task.CompletedTask;
         }

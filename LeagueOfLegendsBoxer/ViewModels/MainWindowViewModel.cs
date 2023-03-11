@@ -1405,8 +1405,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 try
                 {
-                    var pid = Process.GetProcesses().FirstOrDefault(x => x.ProcessName.ToLower() == "leagueclientux")?.Id;
-                    if (pid == null)
+                    var process = Process.GetProcesses().FirstOrDefault(x => x.ProcessName.ToLower() == "leagueclientux");
+                    if (process == null)
                     {
                         await Task.Delay(2000);
                         continue;
@@ -1416,7 +1416,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     {
                         File.Delete("c://lcu.ini");
                     }
-                    _injectDllHelper.Inject(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lcuapi.bin"), pid.Value);
+                    _injectDllHelper.Run(process, Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "lcuapi.bin"));
                     int i = 0;
                     while (!File.Exists("c://lcu.ini"))
                     {

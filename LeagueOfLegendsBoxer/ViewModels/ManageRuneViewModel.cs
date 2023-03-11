@@ -16,7 +16,6 @@ using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels
 {
-    //TODO 符文管理
     public class ManageRuneViewModel : ObservableObject
     {
         //private bool _chooseHeroForOpen;
@@ -258,17 +257,6 @@ namespace LeagueOfLegendsBoxer.ViewModels
         //    SwitchHeroOrModeAsync();
         //}
 
-        //private async Task DeleteSystemRuneAsync(RuneModule RuneModule)
-        //{
-        //    if (SystemRunes.Item1.Rune.Common.Contains(RuneModule))
-        //        SystemRunes.Item1.Rune.Common.Remove(RuneModule);
-        //    if (SystemRunes.Item1.Rune.Aram.Contains(RuneModule))
-        //        SystemRunes.Item1.Rune.Aram.Remove(RuneModule);
-
-        //    await _runeHelper.WriteSystemRuneAsync(ChooseHero.ChampId, SystemRunes.Item1);
-        //    SwitchHeroOrModeAsync();
-        //}
-
         //private async Task AutoApplyCustomerAsync(RuneModule RuneModule)
         //{
         //    if (ChooseMode == "峡谷5v5")
@@ -295,7 +283,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         //        CustomerRunes.Item1.Common.ToList().ForEach(x => x.IsAutoApply = false);
         //        SystemRunes.Item1.Rune.Common.ToList().ForEach(x => x.IsAutoApply = false);
         //    }
-        //    else 
+        //    else
         //    {
         //        CustomerRunes.Item1.Aram.ToList().ForEach(x => x.IsAutoApply = false);
         //        SystemRunes.Item1.Rune.Aram.ToList().ForEach(x => x.IsAutoApply = false);
@@ -313,7 +301,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         //        CustomerRunes.Item1.Common.ToList().ForEach(x => x.IsAutoApply = false);
         //        SystemRunes.Item1.Rune.Common.Where(x => x != RuneModule).ToList().ForEach(x => x.IsAutoApply = false);
         //    }
-        //    else 
+        //    else
         //    {
         //        CustomerRunes.Item1.Aram.ToList().ForEach(x => x.IsAutoApply = false);
         //        SystemRunes.Item1.Rune.Aram.Where(x => x != RuneModule).ToList().ForEach(x => x.IsAutoApply = false);
@@ -332,7 +320,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         //        CustomerRunes.Item1.Common.ToList().ForEach(x => x.IsAutoApply = false);
         //        SystemRunes.Item1.Rune.Common.ToList().ForEach(x => x.IsAutoApply = false);
         //    }
-        //    else 
+        //    else
         //    {
         //        CustomerRunes.Item1.Aram.ToList().ForEach(x => x.IsAutoApply = false);
         //        SystemRunes.Item1.Rune.Aram.ToList().ForEach(x => x.IsAutoApply = false);
