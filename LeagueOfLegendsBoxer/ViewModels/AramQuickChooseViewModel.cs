@@ -76,7 +76,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             if (SubQuickChooseHeros.Count <= 0)
                 return;
 
-            if (SubQuickChooseHeros.Count + SelectedQuickChooseHeros.Count > 20)
+            if (SubQuickChooseHeros.Count + SelectedQuickChooseHeros.Count > 30)
             {
                 Growl.InfoGlobal(new GrowlInfo()
                 {

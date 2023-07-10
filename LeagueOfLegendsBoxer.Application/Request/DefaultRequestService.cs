@@ -22,11 +22,11 @@ namespace LeagueOfLegendsBoxer.Application.Request
             var authTokenBytes = Encoding.ASCII.GetBytes($"riot:{token}");
             _httpClient = new HttpClient(_httpClientHandler);
             _httpClient.BaseAddress = new Uri($"https://127.0.0.1:{port}/");
-            _httpClient.DefaultRequestVersion = new Version(2, 0);
-            _httpClient.Timeout = TimeSpan.FromSeconds(10);
+            //_httpClient.DefaultRequestVersion = new Version(2, 0);
+            _httpClient.Timeout = TimeSpan.FromSeconds(30);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "LeagueOfLegendsClient/12.7.433.4138 (CEF 91)");
-            _httpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
+            //_httpClient.DefaultRequestHeaders.Add("User-Agent", "LeagueOfLegendsClient/12.7.433.4138 (CEF 91)");
+            //_httpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(authTokenBytes));
 
             return Task.CompletedTask;
@@ -57,7 +57,7 @@ namespace LeagueOfLegendsBoxer.Application.Request
             try
             {
                 var url = queryParameters == null ? relativeUrl : relativeUrl + BuildQueryParameterString(queryParameters);
-                return await _httpClient.GetStringAsync(url);
+                return await (await _httpClient.GetAsync(url)).Content.ReadAsStringAsync();
             }
             catch(Exception ex)
             {

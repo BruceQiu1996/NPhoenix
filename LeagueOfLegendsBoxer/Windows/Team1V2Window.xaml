@@ -77,6 +77,7 @@
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="Foreground" Value="Black" />
                             <Setter Property="Width" Value="205" />
+                            <Setter Property="FontSize" Value="15" />
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -85,8 +86,13 @@
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="5"></RowDefinition>
-                                                    <RowDefinition Height="1.5*"></RowDefinition>
-                                                    <RowDefinition Height="1.2*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
                                                     <RowDefinition Height="*"></RowDefinition>
                                                     <RowDefinition Height="*"></RowDefinition>
                                                     <RowDefinition Height="5"></RowDefinition>
@@ -206,7 +212,7 @@
                                                         </ListBox>
                                                     </StackPanel>
                                                 </Popup>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock TextWrapping="Wrap"
                                                                FontSize="15"
                                                                Grid.Row="1"
@@ -266,7 +272,7 @@
                                                     </Popup>
                                                 </Grid>
                                                 
-                                                <StackPanel Margin="0 10 0 0" Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
+                                                <StackPanel Margin="0 0 0 0" Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock Text="单双" VerticalAlignment="Center"></TextBlock>
                                                     <TextBlock Grid.Row="1"
                                                                Grid.Column="2"
@@ -295,7 +301,36 @@
                                                     </TextBlock>
                                                 </StackPanel>
 
-                                                <ListBox ItemsSource="{Binding Runes,UpdateSourceTrigger=PropertyChanged}"
+                                                <StackPanel Margin="0 0 0 0" Orientation="Horizontal" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4">
+                                                    <TextBlock Text="单双" VerticalAlignment="Center"></TextBlock>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               Margin="5 0 0 0"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                                <Binding Path="Rank.RANKED_SOLO_5x5.PreCnTier" />
+                                                                <Binding Path="Rank.RANKED_SOLO_5x5.PreviousSeasonEndDivision" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0"></TextBlock>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               Margin="5 0 0 0"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                                <Binding Path="Rank.RANKED_FLEX_SR.PreCnTier" />
+                                                                <Binding Path="Rank.RANKED_FLEX_SR.PreviousSeasonEndDivision" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                </StackPanel>
+                                                
+                                                <!--<ListBox ItemsSource="{Binding Runes,UpdateSourceTrigger=PropertyChanged}"
                                                          BorderThickness="0"
                                                          Background="Transparent"
                                                          Grid.Row="3" Grid.ColumnSpan="4">
@@ -349,14 +384,16 @@
                                                             </Setter>
                                                         </Style>
                                                     </ListBox.ItemContainerStyle>
-                                                </ListBox>
+                                                </ListBox>-->
 
-                                                <TextBlock Text="{Binding WinRate,StringFormat={}胜率 : {0}}" Margin="5 5 0 0" FontSize="15" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
-
+                                                <TextBlock Text="{Binding WinRate,StringFormat={}胜率 : {0}}" Margin="5 5 0 0" FontSize="15.5" FontWeight="Bold" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
+                                                <TextBlock Text="{Binding KDA,StringFormat={}KDA : {0}}" ToolTip="(K+A)/D" Margin="5 5 0 0" FontSize="15" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
+                                                <TextBlock Text="{Binding SurRate,StringFormat={}投降率 : {0}}" Margin="5 5 0 0" FontSize="15" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
                                                 <Grid Width="40" Height="40"
-                                                      Grid.Row="4"
+                                                      Grid.Row="8"
+                                                      Grid.RowSpan="2"
                                                       Grid.Column="2"
-                                                      Margin="0 10 10 0"
+                                                      Margin="0 5 5 0"
                                                       Grid.ColumnSpan="4">
                                                     <behaviors:Interaction.Triggers>
                                                         <behaviors:EventTrigger EventName="MouseLeftButtonDown">
@@ -401,10 +438,11 @@
                                                 </Grid>
 
                                                 <Grid Width="40" Height="40"
-                                                      Grid.Row="4"
+                                                      Grid.Row="8"
+                                                      Grid.RowSpan="2"
                                                       HorizontalAlignment="Right"
                                                       Grid.Column="2"
-                                                      Margin="10 10 2 0"
+                                                      Margin="0 5 5 0"
                                                       Grid.ColumnSpan="4">
                                                     <behaviors:Interaction.Triggers>
                                                         <behaviors:EventTrigger EventName="MouseLeftButtonDown">
@@ -482,6 +520,7 @@
                             <Setter Property="SnapsToDevicePixels" Value="True" />
                             <Setter Property="Foreground" Value="Black" />
                             <Setter Property="Width" Value="205" />
+                            <Setter Property="FontSize" Value="15" />
                             <Setter Property="Background" Value="Transparent" />
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -490,8 +529,13 @@
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="5"></RowDefinition>
-                                                    <RowDefinition Height="1.5*"></RowDefinition>
-                                                    <RowDefinition Height="1.2*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
+                                                    <RowDefinition Height="*"></RowDefinition>
                                                     <RowDefinition Height="*"></RowDefinition>
                                                     <RowDefinition Height="*"></RowDefinition>
                                                     <RowDefinition Height="5"></RowDefinition>
@@ -611,7 +655,7 @@
                                                         </ListBox>
                                                     </StackPanel>
                                                 </Popup>
-                                                <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock TextWrapping="Wrap"
                                                                FontSize="15"
                                                                Grid.Row="1"
@@ -671,7 +715,7 @@
                                                     </Popup>
                                                 </Grid>
 
-                                                <StackPanel Margin="0 10 0 0" Orientation="Horizontal" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4">
+                                                <StackPanel Margin="0 0 0 0" Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4">
                                                     <TextBlock Text="单双" VerticalAlignment="Center"></TextBlock>
                                                     <TextBlock Grid.Row="1"
                                                                Grid.Column="2"
@@ -700,7 +744,36 @@
                                                     </TextBlock>
                                                 </StackPanel>
 
-                                                <ListBox ItemsSource="{Binding Runes,UpdateSourceTrigger=PropertyChanged}"
+                                                <StackPanel Margin="0 0 0 0" Orientation="Horizontal" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4">
+                                                    <TextBlock Text="单双" VerticalAlignment="Center"></TextBlock>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               Margin="5 0 0 0"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                                <Binding Path="Rank.RANKED_SOLO_5x5.PreCnTier" />
+                                                                <Binding Path="Rank.RANKED_SOLO_5x5.PreviousSeasonEndDivision" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                    <TextBlock Text="灵活" VerticalAlignment="Center" Margin="16 0 0 0"></TextBlock>
+                                                    <TextBlock Grid.Row="1"
+                                                               Grid.Column="2"
+                                                               Margin="5 0 0 0"
+                                                               HorizontalAlignment="Left"
+                                                               VerticalAlignment="Center">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} - {1}">
+                                                                <Binding Path="Rank.RANKED_FLEX_SR.PreCnTier" />
+                                                                <Binding Path="Rank.RANKED_FLEX_SR.PreviousSeasonEndDivision" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
+                                                </StackPanel>
+
+                                                <!--<ListBox ItemsSource="{Binding Runes,UpdateSourceTrigger=PropertyChanged}"
                                                          BorderThickness="0"
                                                          Background="Transparent"
                                                          Grid.Row="3" Grid.ColumnSpan="4">
@@ -741,10 +814,10 @@
                                                                                     </Rectangle>
                                                                                     <StackPanel Margin="5" Orientation="Vertical">
                                                                                         <TextBlock VerticalAlignment="Center" Text="{Binding Name}" FontSize="15" Margin="0 0 0 5"></TextBlock>
-                                                                                        <TextBox Text="{Binding Shortdesc,UpdateSourceTrigger=PropertyChanged}"
-                                                                                                 IsReadOnly="True"
+                                                                                        <TextBox IsReadOnly="True"
                                                                                                  AcceptsReturn="True"
-                                                                                                 TextWrapping="Wrap"/>
+                                                                                                 TextWrapping="Wrap"
+                                                                                                 Text="{Binding Shortdesc,UpdateSourceTrigger=PropertyChanged}"/>
                                                                                     </StackPanel>
                                                                                 </Grid>
                                                                             </Popup>
@@ -754,14 +827,16 @@
                                                             </Setter>
                                                         </Style>
                                                     </ListBox.ItemContainerStyle>
-                                                </ListBox>
+                                                </ListBox>-->
 
-                                                <TextBlock Text="{Binding WinRate,StringFormat={}胜率 : {0}}" Margin="5 5 0 0" FontSize="15" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
-
+                                                <TextBlock Text="{Binding WinRate,StringFormat={}胜率 : {0}}" Margin="5 5 0 0" FontSize="15.5" FontWeight="Bold" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
+                                                <TextBlock Text="{Binding KDA,StringFormat={}KDA : {0}}" ToolTip="(K+A)/D" Margin="5 5 0 0" FontSize="15" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
+                                                <TextBlock Text="{Binding SurRate,StringFormat={}投降率 : {0}}" Margin="5 5 0 0" FontSize="15" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="4"></TextBlock>
                                                 <Grid Width="40" Height="40"
-                                                      Grid.Row="4"
+                                                      Grid.Row="8"
+                                                      Grid.RowSpan="2"
                                                       Grid.Column="2"
-                                                      Margin="0 10 10 0"
+                                                      Margin="0 5 5 0"
                                                       Grid.ColumnSpan="4">
                                                     <behaviors:Interaction.Triggers>
                                                         <behaviors:EventTrigger EventName="MouseLeftButtonDown">
@@ -806,10 +881,11 @@
                                                 </Grid>
 
                                                 <Grid Width="40" Height="40"
-                                                      Grid.Row="4"
+                                                      Grid.Row="8"
+                                                      Grid.RowSpan="2"
                                                       HorizontalAlignment="Right"
                                                       Grid.Column="2"
-                                                      Margin="10 10 2 0"
+                                                      Margin="0 5 5 0"
                                                       Grid.ColumnSpan="4">
                                                     <behaviors:Interaction.Triggers>
                                                         <behaviors:EventTrigger EventName="MouseLeftButtonDown">

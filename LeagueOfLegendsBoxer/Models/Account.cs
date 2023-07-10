@@ -69,6 +69,8 @@ namespace LeagueOfLegendsBoxer.Models
             {
                 SetProperty(ref _currentModeRecord, value);
                 Horse = GetHorse();
+                KDA = GetKDA();
+                SurRate = GetSurrenderRate();
             }
         }
 
@@ -82,10 +84,24 @@ namespace LeagueOfLegendsBoxer.Models
         public int TeamID { get; set; }
 
         private string _horse;
-        public string Horse 
+        public string Horse
         {
             get => _horse;
             set => SetProperty(ref _horse, value);
+        }
+
+        private string _kda;
+        public string KDA
+        {
+            get => _kda;
+            set => SetProperty(ref _kda, value);
+        }
+
+        private string _surRate ;
+        public string SurRate
+        {
+            get => _surRate;
+            set => SetProperty(ref _surRate, value);
         }
 
         public string GetHorse()
@@ -112,6 +128,22 @@ namespace LeagueOfLegendsBoxer.Models
             }
 
             return "未知的马";
+        }
+
+        public string GetKDA()
+        {
+            if (CurrentModeRecord == null || CurrentModeRecord.Count <= 4)
+                return "未知";
+
+            return CurrentModeRecord.Where(x => x.GetKDA() != null).Average(x => x.GetKDA().Value).ToString("0.00");
+        }
+
+        public string GetSurrenderRate()
+        {
+            if (CurrentModeRecord == null || CurrentModeRecord.Count <= 4)
+                return "未知";
+
+            return $"{(CurrentModeRecord.Where(x => x.Participants.FirstOrDefault().Stats.GameEndedInSurrender && !x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / CurrentModeRecord.Count()).ToString("0.00")}%";
         }
 
         //live

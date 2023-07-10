@@ -71,7 +71,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     }
                     var gameInfo = await _gameService.GetCurrentGameInfoAsync();
                     var mode = JToken.Parse(gameInfo)["gameData"]["queue"]["gameMode"].ToString();
-
+                    var queue = JToken.Parse(gameInfo)["gameData"]["queue"]["id"].Value<int>();
                     foreach (var id in ids)
                     {
                         try
@@ -79,8 +79,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             var account = await GetAccountAsync(id);
                             if (account != null)
                             {
-                                var sameRecords = account.Records?.Where(x => x.GameMode == mode);
-                                account.CurrentModeRecord = new ObservableCollection<Record>(sameRecords?.Take(5));
+                                var sameRecords = account.Records?.Where(x => x.QueueId == queue);
+                                account.CurrentModeRecord = new ObservableCollection<Record>(sameRecords);
                                 var champData = await _gameService.QuerySummonerSuperChampDataAsync(account.SummonerId);
                                 account.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
                                 account.Champs = new ObservableCollection<Champ>(account.Champs.Take(5));
@@ -117,7 +117,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 {
                     sb.Append($"我方 {account.Horse} {account.DisplayName} 评分：{account.CurrentModeRecord?.Average(x => x.GetScore()).ToString("0.0")} " +
                         $"单双排：{account.Rank.RANKED_SOLO_5x5.CnTier}{account.Rank.RANKED_SOLO_5x5.Division} {account.Rank.RANKED_SOLO_5x5.ShortDesc}" +
-                        $"灵活组排：{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division} {account.Rank.RANKED_FLEX_SR.ShortDesc} 最近五场KDA:");
+                        $"灵活组排：{account.Rank.RANKED_FLEX_SR.CnTier}{account.Rank.RANKED_FLEX_SR.Division} {account.Rank.RANKED_FLEX_SR.ShortDesc} 最近五场战绩:");
 
                     int a = 0;
                     foreach (var record in account.Records)
@@ -222,25 +222,32 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
-        public async Task<Account> GetAccountAsync(long id)
+        public async Task<Account> GetAccountAsync(long uid)
         {
+            int maxTimes = 3;
+            int tryTimes = 0;
             Account account = null;
-            try
+            var infromation = await _accountService.GetSummonerInformationAsync(uid);
+            account = JsonConvert.DeserializeObject<Account>(infromation);
+            while (tryTimes < maxTimes)
             {
-                var infromation = await _accountService.GetSummonerInformationAsync(id);
-                account = JsonConvert.DeserializeObject<Account>(infromation);
-                var recordsData = JToken.Parse(await _accountService.GetRecordInformationAsync(account.SummonerId));
-                account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
-                var rankData = JToken.Parse(await _accountService.GetSummonerRankInformationAsync(account.Puuid));
-                account.Rank = rankData["queueMap"].ToObject<Rank>();
+                try
+                {
+                    var recordsData = JToken.Parse(await _gameService.GetRecordsByPage(id: account.Puuid));
+                    account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().OrderByDescending(x => x.GameCreation));
+                    var rankData = JToken.Parse(await _accountService.GetSummonerRankInformationAsync(account.Puuid));
+                    account.Rank = rankData["queueMap"].ToObject<Rank>();
 
-                return account;
+                    return account;
+                }
+                catch (Exception ex)
+                {
+                    tryTimes++;
+                    _logger.LogError($"{account?.DisplayName}{ex}");
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"{account?.DisplayName}{ex}");
-                return account;
-            }
+
+            return account;
         }
 
         private void TeamMateChanged(Account account)

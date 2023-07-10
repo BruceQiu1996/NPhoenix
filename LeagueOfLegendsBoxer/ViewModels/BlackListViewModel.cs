@@ -18,6 +18,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LeagueOfLegendsBoxer.Application.Teamup;
 using LeagueOfLegendsBoxer.Application.Teamup.Dtos;
+using LeagueOfLegendsBoxer.Application.Game;
 
 namespace LeagueOfLegendsBoxer.ViewModels
 {
@@ -52,12 +53,18 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly ILogger<BlackListViewModel> _logger;
         private readonly IAccountService _accountService;
+        private readonly IGameService _gameService;
         private readonly ITeamupService _teamupService;
 
-        public BlackListViewModel(IniSettingsModel iniSettingsModel, ILogger<BlackListViewModel> logger, IAccountService accountService, ITeamupService teamupService)
+        public BlackListViewModel(IniSettingsModel iniSettingsModel,
+                                  IGameService gameService,
+                                  ILogger<BlackListViewModel> logger, 
+                                  IAccountService accountService, 
+                                  ITeamupService teamupService)
         {
             _iniSettingsModel = iniSettingsModel;
             _logger = logger;
+            _gameService = gameService;
             _teamupService = teamupService;
             SubmitBlackListCommanmdAsync = new AsyncRelayCommand<Tuple<ParticipantIdentity, Participant>>(SubmitBlackListAsync);
             ToggleBlackInfoCommand = new RelayCommand<Tuple<ParticipantIdentity, Participant>>(ToggleBlackInfo);
@@ -185,8 +192,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
             var account = JsonConvert.DeserializeObject<Account>(infromation);
             var rankData = JToken.Parse(await _accountService.GetSummonerRankInformationAsync(account.Puuid));
             account.Rank = rankData["queueMap"].ToObject<Rank>();
-            var recordsData = JToken.Parse(await _accountService.GetRecordInformationAsync(account.SummonerId));
-            account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
+            var recordsData = JToken.Parse(await _gameService.GetRecordsByPage(id: account.Puuid));
+            account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().OrderByDescending(x => x.GameCreation));
             App.ServiceProvider.GetRequiredService<TeammateViewModel>().ShowRecord(account);
         }
 

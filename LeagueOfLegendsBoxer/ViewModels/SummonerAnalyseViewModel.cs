@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using HandyControl.Controls;
 using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.Account;
+using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Pages;
 using LeagueOfLegendsBoxer.ViewModels.Pages;
@@ -24,7 +25,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private List<Page> _pages = new List<Page>();
 
         private Page _currentPage;
-        public Page CurrentPage 
+        public Page CurrentPage
         {
             get => _currentPage;
             set => SetProperty(ref _currentPage, value);
@@ -40,16 +41,18 @@ namespace LeagueOfLegendsBoxer.ViewModels
         public AsyncRelayCommand SearchRecordByNameAsyncCommand { get; set; }
 
         private readonly IAccountService _accountService;
+        private readonly IGameService _gameService;
         private readonly ILogger<SummonerAnalyseViewModel> _logger;
 
-        public SummonerAnalyseViewModel(IAccountService accountService, ILogger<SummonerAnalyseViewModel> logger)
+        public SummonerAnalyseViewModel(IAccountService accountService, ILogger<SummonerAnalyseViewModel> logger, IGameService gameService)
         {
             SearchRecordByNameAsyncCommand = new AsyncRelayCommand(SearchRecordByNameAsync);
             _accountService = accountService;
+            _gameService = gameService;
             _logger = logger;
         }
 
-        public void LoadPageByAccount(Account account) 
+        public void LoadPageByAccount(Account account)
         {
             var summonerDetail = App.ServiceProvider.GetRequiredService<SummonerDetail>();
             var summonerDetailViewModel = App.ServiceProvider.GetRequiredService<SummonerDetailViewModel>();
@@ -60,14 +63,14 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _pages.Add(summonerDetail);
         }
 
-        public async Task LoadPageAsync(long summonerId) 
+        public async Task LoadPageAsync(long summonerId)
         {
             var infromation = await _accountService.GetSummonerInformationAsync(summonerId);
             var account = JsonConvert.DeserializeObject<Account>(infromation);
             var rankData = JToken.Parse(await _accountService.GetSummonerRankInformationAsync(account.Puuid));
             account.Rank = rankData["queueMap"].ToObject<Rank>();
-            var recordsData = JToken.Parse(await _accountService.GetRecordInformationAsync(account.SummonerId));
-            account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
+            var recordsData = JToken.Parse(await _gameService.GetRecordsByPage(id: account.Puuid));
+            account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().OrderByDescending(x => x.GameCreation));
 
             var summonerDetail = App.ServiceProvider.GetRequiredService<SummonerDetail>();
             var summonerDetailViewModel = App.ServiceProvider.GetRequiredService<SummonerDetailViewModel>();
@@ -78,7 +81,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _pages.Add(summonerDetail);
         }
 
-        private async Task SearchRecordByNameAsync() 
+        private async Task SearchRecordByNameAsync()
         {
             if (string.IsNullOrEmpty(SearchName.Trim()))
                 return;

@@ -7,6 +7,7 @@ using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -57,31 +58,52 @@ namespace LeagueOfLegendsBoxer.ViewModels
             Team2Accounts = new ObservableCollection<Account>(t2);
             var gameInfo = await _gameService.GetCurrentGameInfoAsync();
             var mode = JToken.Parse(gameInfo)["gameData"]["queue"]["gameMode"].ToString();
+            var queue = JToken.Parse(gameInfo)["gameData"]["queue"]["id"].Value<int>();
             foreach (Account item in Team1Accounts.Concat(Team2Accounts))
             {
-                if (mode == "ARAM")
+                try
                 {
-                    item._isAram = true;
-                }
-
-                var sameRecords = item.Records.Where(x => x.GameMode == mode);
-                item.CurrentModeRecord = new ObservableCollection<Record>(sameRecords?.Take(5));
-                var champData = await _gameService.QuerySummonerSuperChampDataAsync(item.SummonerId);
-                item.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
-                item.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00") + "%";
-                item.Horse = item.GetHorse();
-                item.IsInBlackList = _iniSettingsModel.BlackAccounts?.FirstOrDefault(x => x.Id == item.SummonerId) != null;
-                if (item.IsInBlackList)
-                {
-                    var sb = new StringBuilder();
-                    var records = _iniSettingsModel.BlackAccounts?.Where(x => x.Id == item.SummonerId);
-                    foreach (var record in records.OrderByDescending(x => x.CreateTime))
+                    if (mode == "ARAM")
                     {
-                        sb.Append(record.Reason + record.CreateTime.ToString("d"));
-                        sb.Append("\n");
+                        item._isAram = true;
                     }
 
-                    item.BlackInfo = sb.ToString();
+                    if (item.Records == null || item.Records.Count <= 0)
+                    {
+                        item.WinRate = "未知";
+                        item.Horse = "未知的马";
+                    }
+                    else
+                    {
+                        var sameRecords = item.Records?.Where(x => x.QueueId == queue);
+                        item.CurrentModeRecord = new ObservableCollection<Record>(sameRecords);
+                        item.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00") + "%";
+                        item.Horse = item.GetHorse();
+                        item.KDA = item.GetKDA();
+                        item.SurRate = item.GetSurrenderRate();
+                    }
+                    var champData = await _gameService.QuerySummonerSuperChampDataAsync(item.SummonerId);
+                    if (!string.IsNullOrEmpty(champData))
+                    {
+                        item.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
+                    }
+                    item.IsInBlackList = _iniSettingsModel.BlackAccounts?.FirstOrDefault(x => x.Id == item.SummonerId) != null;
+                    if (item.IsInBlackList)
+                    {
+                        var sb = new StringBuilder();
+                        var records = _iniSettingsModel.BlackAccounts?.Where(x => x.Id == item.SummonerId);
+                        foreach (var record in records.OrderByDescending(x => x.CreateTime))
+                        {
+                            sb.Append(record.Reason + record.CreateTime.ToString("d"));
+                            sb.Append("\n");
+                        }
+
+                        item.BlackInfo = sb.ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    continue;
                 }
             }
         }

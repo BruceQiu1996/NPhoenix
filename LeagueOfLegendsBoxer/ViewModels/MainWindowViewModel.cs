@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Gma.System.MouseKeyHook;
 using HandyControl.Controls;
 using HandyControl.Data;
+using LeagueOfLegendsBoxer.Application.Account;
 using LeagueOfLegendsBoxer.Application.ApplicationControl;
 using LeagueOfLegendsBoxer.Application.Client;
 using LeagueOfLegendsBoxer.Application.Event;
@@ -97,7 +98,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             set => SetProperty(ref _onlineCounts, value);
         }
 
-        
+
         private bool _isLoop = false;
         private bool _isLoopChampionSelect = false;
         private bool _isLoopLive = false;
@@ -109,6 +110,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly IGameService _gameService;
         private readonly ITeamupService _teamupService;
         private readonly IClientService _clientService;
+        private readonly IAccountService _accountService;
         private readonly IEventService _eventService;
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IConfiguration _configuration;
@@ -134,6 +136,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                    IEventService eventService,
                                    ITeamupService teamupService,
                                    IGameService gameService,
+                                   IAccountService accountService,
                                    IniSettingsModel iniSettingsModel,
                                    IConfiguration configuration,
                                    Settings settingsPage,
@@ -166,6 +169,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _requestService = requestService;
             _clientService = clientService;
             _teamupService = teamupService;
+            _accountService = accountService;
             _iniSettingsModel = iniSettingsModel;
             _configuration = configuration;
             _settingsPage = settingsPage;
@@ -416,7 +420,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 ListenerTeamBuildInfo_Triggered(null, null, null);
             }
-            else if(keyHash == ComputeHash(new string[] { "Oemtilde", "F7"}))
+            else if (keyHash == ComputeHash(new string[] { "Oemtilde", "F7" }))
             {
                 SendFuckWords();
             }
@@ -523,7 +527,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             }
         }
 
-        private async Task LoadAramBuffAsync() 
+        private async Task LoadAramBuffAsync()
         {
             var notice = _configuration.GetSection("AramBuffLocation").Value;
             if (string.IsNullOrEmpty(notice))
@@ -580,8 +584,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 try
                 {
-                    var data = await _clientService.GetZoomScaleAsync();
-                    await Task.Delay(1500);
+                    var data = await _accountService.GetLoginInfoAsync();
+                    if (data == null)
+                        throw new Exception("未知的登录信息");
+
+                    await Task.Delay(3000);
                 }
                 catch
                 {
@@ -592,7 +599,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     });
 
                     await LoadAsync();
-                    await Task.Delay(1500);
+                    await Task.Delay(3000);
                 }
             }
         }
@@ -614,7 +621,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         {
             CurrentPage = _recordRank;
         }
-        private void ShiftTeamupPage() 
+        private void ShiftTeamupPage()
         {
             CurrentPage = _teamup;
         }
@@ -1022,12 +1029,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
 
                 if (!t1.All(x => string.IsNullOrEmpty(x.Puuid?.Trim())))
                 {
-                    Team1Accounts = await TeamToAccountsAsync(t1);
+                    Team1Accounts = (await TeamToAccountsAsync(t1))?.OrderBy(x => x.TeamID)?.ToList();
                 }
 
                 if (!t2.All(x => string.IsNullOrEmpty(x.Puuid?.Trim())))
                 {
-                    Team2Accounts = await TeamToAccountsAsync(t2);
+                    Team2Accounts = (await TeamToAccountsAsync(t2))?.OrderBy(x => x.TeamID)?.ToList();
                 }
 
                 await System.Windows.Application.Current.Dispatcher.Invoke(async () =>

@@ -13,8 +13,8 @@ namespace LeagueOfLegendsBoxer.Models
         public long GameId { get; set; }
         [JsonPropertyName("gameCreation")]
         public long GameCreation { get; set; }
-        public string GameCreationString => TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).Year==DateTime.Now.Year?
-                                            TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("MM-dd"): TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("d");
+        public string GameCreationString => TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).Year == DateTime.Now.Year ?
+                                            TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("MM-dd") : TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("d");
         public string GameCreationTimeString => TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1)).AddMilliseconds(GameCreation).ToString("t");
         [JsonPropertyName("gameDuration")]
         public int GameDuration { get; set; }
@@ -30,7 +30,7 @@ namespace LeagueOfLegendsBoxer.Models
             440 => "灵活排位",
             450 => "大乱斗",
             _ => "其他"
-        };
+        } + $"{Participants.FirstOrDefault()?.GetDesc()}";
 
         [JsonPropertyName("participantIdentities")]
         public ParticipantIdentity[] ParticipantIdentities { get; set; }
@@ -98,12 +98,29 @@ namespace LeagueOfLegendsBoxer.Models
             return Participants.FirstOrDefault().GetScore();
         }
 
+        public double? GetKDA()
+        {
+            if (Participants == null || Participants.FirstOrDefault() == null || Participants.FirstOrDefault().Stats == null
+                || Participants.FirstOrDefault().Stats.Kills + Participants.FirstOrDefault().Stats.Deaths + Participants.FirstOrDefault().Stats.Assists == 0)
+                return null;
+
+            return Participants.FirstOrDefault().GetKDA();
+        }
+
+        public bool IsSurrender()
+        {
+            if (Participants == null || Participants.FirstOrDefault() == null || Participants.FirstOrDefault().Stats == null)
+                return false;
+
+            return Participants.FirstOrDefault().Stats.CausedEarlySurrender;
+        }
+
         private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _leftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
         public ObservableCollection<Tuple<ParticipantIdentity, Participant>> LeftParticipants
         {
             get => _leftParticipants;
             set => SetProperty(ref _leftParticipants, value);
-        } 
+        }
 
         private ObservableCollection<Tuple<ParticipantIdentity, Participant>> _rightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>();
         public ObservableCollection<Tuple<ParticipantIdentity, Participant>> RightParticipants
@@ -188,6 +205,7 @@ namespace LeagueOfLegendsBoxer.Models
 
     public class Participant
     {
+
         [JsonPropertyName("championId")]
         public int ChampionId { get; set; }
         public Hero Hero => Constant.Heroes.FirstOrDefault(x => x.ChampId == ChampionId);
@@ -232,6 +250,17 @@ namespace LeagueOfLegendsBoxer.Models
             _ => "https://game.gtimg.cn/images/lol/act/img/spell/SummonerMana.png"
         };
 
+        public string GetDesc()
+        {
+            if (Stats.GameEndedInSurrender && !Stats.Win)
+                return "(投降)";
+
+            if (Stats.GameEndedInEarlySurrender)
+                return "(重开)";
+
+            return string.Empty;
+        }
+
         public double GetScore()
         {
             var stats = Stats;
@@ -254,6 +283,18 @@ namespace LeagueOfLegendsBoxer.Models
             score += stats.Kills - stats.Deaths + (stats.Assists * 0.5);
             return score;
         }
+
+        /// <summary>
+        /// (k + A)/D
+        /// </summary>
+        /// <returns></returns>
+        public double GetKDA()
+        {
+            if (Stats.Deaths == 0)
+                return 5;
+
+            return (double)(Stats.Kills + Stats.Assists) / Stats.Deaths;
+        }
     }
 
     public class Stats
@@ -274,6 +315,10 @@ namespace LeagueOfLegendsBoxer.Models
         public bool FirstBloodAssist { get; set; }
         [JsonPropertyName("causedEarlySurrender")]
         public bool CausedEarlySurrender { get; set; }
+        [JsonPropertyName("gameEndedInEarlySurrender")]
+        public bool GameEndedInEarlySurrender { get; set; }
+        [JsonPropertyName("gameEndedInSurrender")]
+        public bool GameEndedInSurrender { get; set; }
         [JsonPropertyName("doubleKills")]
         public int DoubleKills { get; set; }
         [JsonPropertyName("tripleKills")]

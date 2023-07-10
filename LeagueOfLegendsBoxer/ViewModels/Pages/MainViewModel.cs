@@ -86,11 +86,11 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 Constant.Account = Account;
                 try
                 {
-                    var records = await _accountService.GetRecordInformationAsync(Account.SummonerId);
+                    var records = await _gameService.GetRecordsByPage(id: Account.Puuid);
                     var recordsData = JToken.Parse(records);
-                    Account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().Reverse());
+                    Account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().OrderByDescending(x => x.GameCreation));
                 }
-                catch
+                catch (Exception ex)
                 {
                     Account.Records = new ObservableCollection<Record>();
                 }
@@ -101,7 +101,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                     var rankData = JToken.Parse(rankDataStr);
                     Account.Rank = rankData["queueMap"].ToObject<Rank>();
                 }
-                catch 
+                catch
                 {
                     Account.Rank = new Rank();
                 }

@@ -31,7 +31,7 @@
         Task<string> GetItems();
         Task<string> GetIcons();
         Task<string> GetSpells();
-        Task<string> GetRecordsByPage(int pageStart, int pageEnd, string id);
+        Task<string> GetRecordsByPage(int pageStart = 0 , int pageEnd = 20, string id = null);
         Task<string> GetRuneItemsFromOnlineAsync(int champId);
     }
 }

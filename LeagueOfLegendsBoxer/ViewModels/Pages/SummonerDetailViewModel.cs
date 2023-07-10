@@ -78,9 +78,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         private async Task SelectPageAsync(FunctionEventArgs<int> e)
         {
-            var records = await _gameService.GetRecordsByPage((e.Info - 1) * 10, e.Info * 10, Account.Puuid);
+            var records = await _gameService.GetRecordsByPage((e.Info - 1) * 10 , e.Info * 10 , Account.Puuid);
             var recordsData = JToken.Parse(records);
-            var recordObjs = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<ObservableCollection<Record>>().Reverse());
+            var recordObjs = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<ObservableCollection<Record>>().OrderByDescending(x=>x.GameCreation));
             Records = recordObjs;
             await LoadRecordDetailDataGroup(Records);
         }
@@ -119,79 +119,86 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             Record = recordObjs.FirstOrDefault();
             foreach (var record in recordObjs)
             {
-                var details = await _gameService.QueryGameDetailAsync(record.GameId);
-                var detailRecordsData = JToken.Parse(details);
-                record.DetailRecord = detailRecordsData.ToObject<Record>();
-                IList<Tuple<ParticipantIdentity, Participant>> members = new List<Tuple<ParticipantIdentity, Participant>>();
-                foreach (var index in Enumerable.Range(0, record.DetailRecord.ParticipantIdentities.Count()))
+                try
                 {
-                    var lidentity = record.DetailRecord.ParticipantIdentities[index];
-                    lidentity.IsCurrentUser = Account.SummonerId == lidentity.Player.SummonerId;
-                    members.Add(new Tuple<ParticipantIdentity, Participant>(lidentity, record.DetailRecord.Participants[index]));
-                }
-
-                record.LeftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>(members.Where(x => x.Item2.TeamId == 100));
-                record.RightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>(members.Where(x => x.Item2.TeamId == 200));
-
-                record.DetailRecord.Team1GoldEarned = record.LeftParticipants.Sum(x => x.Item2.Stats.GoldEarned);
-                record.DetailRecord.Team2GoldEarned = record.RightParticipants.Sum(x => x.Item2.Stats.GoldEarned);
-                record.DetailRecord.Team1Kills = record.LeftParticipants.Sum(x => x.Item2.Stats.Kills);
-                record.DetailRecord.Team2Kills = record.RightParticipants.Sum(x => x.Item2.Stats.Kills);
-
-                var team1TotalDamage = record.LeftParticipants.Sum(x => x.Item2.Stats.TotalDamageDealtToChampions);
-                var team2TotalDamage = record.RightParticipants.Sum(x => x.Item2.Stats.TotalDamageDealtToChampions);
-
-                foreach (var item in record.LeftParticipants)
-                {
-                    if (team1TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
-                    else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team1TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team1GoldEarned) * 100).ToString("0.") + "%";
-                }
-                foreach (var item in record.RightParticipants)
-                {
-                    if (team2TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
-                    else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team2GoldEarned) * 100).ToString("0.") + "%";
-                }
-                var maxdmg = record.LeftParticipants.Concat(record.RightParticipants).Max(x => x.Item2.Stats.TotalDamageDealtToChampions);
-                foreach (var item in record.LeftParticipants.Concat(record.RightParticipants))
-                {
-                    item.Item2.Stats.BarWidth = 350 * (item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / maxdmg);
-                }
-
-                if (record.QueueId == 420 || record.QueueId == 430 || record.QueueId == 440 || record.QueueId == 450)
-                {
-                    var my = record.LeftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Account.SummonerId) != null
-                        ? record.LeftParticipants : record.RightParticipants;
-                    var other = record.LeftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Account.SummonerId) != null
-                        ? record.RightParticipants : record.LeftParticipants;
-
-                    bool myIsWin = record.Participants.FirstOrDefault().Stats.Win;
-                    Tuple<ParticipantIdentity, Participant> mvp = null;
-                    Tuple<ParticipantIdentity, Participant> svp = null;
-                    if (myIsWin)
+                    var details = await _gameService.QueryGameDetailAsync(record.GameId);
+                    var detailRecordsData = JToken.Parse(details);
+                    record.DetailRecord = detailRecordsData.ToObject<Record>();
+                    IList<Tuple<ParticipantIdentity, Participant>> members = new List<Tuple<ParticipantIdentity, Participant>>();
+                    foreach (var index in Enumerable.Range(0, record.DetailRecord.ParticipantIdentities.Count()))
                     {
-                        mvp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
-                        mvp.Item1.IsMvp = true;
-                        svp = other.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
-                        svp.Item1.IsSvp = true;
-                        record.IsLeftWin = my == record.LeftParticipants ? true : false;
-                    }
-                    else
-                    {
-                        mvp = other.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
-                        mvp.Item1.IsMvp = true;
-                        svp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
-                        svp.Item1.IsSvp = true;
-                        record.IsLeftWin = my == record.LeftParticipants ? false : true;
+                        var lidentity = record.DetailRecord.ParticipantIdentities[index];
+                        lidentity.IsCurrentUser = Account.SummonerId == lidentity.Player.SummonerId;
+                        members.Add(new Tuple<ParticipantIdentity, Participant>(lidentity, record.DetailRecord.Participants[index]));
                     }
 
-                    if (mvp.Item1.Player.SummonerId == Account.SummonerId)
+                    record.LeftParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>(members.Where(x => x.Item2.TeamId == 100));
+                    record.RightParticipants = new ObservableCollection<Tuple<ParticipantIdentity, Participant>>(members.Where(x => x.Item2.TeamId == 200));
+
+                    record.DetailRecord.Team1GoldEarned = record.LeftParticipants.Sum(x => x.Item2.Stats.GoldEarned);
+                    record.DetailRecord.Team2GoldEarned = record.RightParticipants.Sum(x => x.Item2.Stats.GoldEarned);
+                    record.DetailRecord.Team1Kills = record.LeftParticipants.Sum(x => x.Item2.Stats.Kills);
+                    record.DetailRecord.Team2Kills = record.RightParticipants.Sum(x => x.Item2.Stats.Kills);
+
+                    var team1TotalDamage = record.LeftParticipants.Sum(x => x.Item2.Stats.TotalDamageDealtToChampions);
+                    var team2TotalDamage = record.RightParticipants.Sum(x => x.Item2.Stats.TotalDamageDealtToChampions);
+
+                    foreach (var item in record.LeftParticipants)
                     {
-                        record.IsMvp = true;
+                        if (team1TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
+                        else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team1TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team1GoldEarned) * 100).ToString("0.") + "%";
                     }
-                    if (svp.Item1.Player.SummonerId == Account.SummonerId)
+                    foreach (var item in record.RightParticipants)
                     {
-                        record.IsSvp = true;
+                        if (team2TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
+                        else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team2GoldEarned) * 100).ToString("0.") + "%";
                     }
+                    var maxdmg = record.LeftParticipants.Concat(record.RightParticipants).Max(x => x.Item2.Stats.TotalDamageDealtToChampions);
+                    foreach (var item in record.LeftParticipants.Concat(record.RightParticipants))
+                    {
+                        item.Item2.Stats.BarWidth = 350 * (item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / maxdmg);
+                    }
+
+                    if (record.QueueId == 420 || record.QueueId == 430 || record.QueueId == 440 || record.QueueId == 450)
+                    {
+                        var my = record.LeftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Account.SummonerId) != null
+                            ? record.LeftParticipants : record.RightParticipants;
+                        var other = record.LeftParticipants.FirstOrDefault(x => x.Item1.Player.SummonerId == Account.SummonerId) != null
+                            ? record.RightParticipants : record.LeftParticipants;
+
+                        bool myIsWin = record.Participants.FirstOrDefault().Stats.Win;
+                        Tuple<ParticipantIdentity, Participant> mvp = null;
+                        Tuple<ParticipantIdentity, Participant> svp = null;
+                        if (myIsWin)
+                        {
+                            mvp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                            mvp.Item1.IsMvp = true;
+                            svp = other.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                            svp.Item1.IsSvp = true;
+                            record.IsLeftWin = my == record.LeftParticipants ? true : false;
+                        }
+                        else
+                        {
+                            mvp = other.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                            mvp.Item1.IsMvp = true;
+                            svp = my.OrderByDescending(x => x.Item2.GetScore()).FirstOrDefault();
+                            svp.Item1.IsSvp = true;
+                            record.IsLeftWin = my == record.LeftParticipants ? false : true;
+                        }
+
+                        if (mvp.Item1.Player.SummonerId == Account.SummonerId)
+                        {
+                            record.IsMvp = true;
+                        }
+                        if (svp.Item1.Player.SummonerId == Account.SummonerId)
+                        {
+                            record.IsSvp = true;
+                        }
+                    }
+                }
+                catch (Exception ex) 
+                {
+                    continue;
                 }
             }
         }

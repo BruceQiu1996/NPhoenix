@@ -147,7 +147,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _pickableChampion);
         }
 
-        public async Task<string> GetRecordsByPage(int pageStart, int pageEnd, string id)
+        public async Task<string> GetRecordsByPage(int pageStart = 0, int pageEnd = 20, string id = null)
         {
             return await _requestService.GetStringAsync(string.Format(_getRecordsByPage, id), new List<string>()
             {

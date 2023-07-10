@@ -177,7 +177,7 @@
                                                     <Grid Margin="0 1 1 1">
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="*"></ColumnDefinition>
-                                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                                            <ColumnDefinition Width="1.2*"></ColumnDefinition>
                                                             <ColumnDefinition Width="auto"></ColumnDefinition>
                                                         </Grid.ColumnDefinitions>
                                                         <Grid.RowDefinitions>
@@ -205,7 +205,7 @@
                                                                 Background="Transparent">
                                                             <usercontrol:MVP/>
                                                         </Canvas>
-                                                        <TextBlock Text="{Binding GameCreationString}" VerticalAlignment="Center"
+                                                        <TextBlock Text="{Binding GameCreationString}" VerticalAlignment="Center" 
                                                                    FontSize="15" Grid.Column="2" Grid.RowSpan="2" Margin="0 0 3 0"></TextBlock>
 
                                                         <TextBlock Text="{Binding CnQueue}" VerticalAlignment="Center"
