@@ -36,15 +36,15 @@
         </behaviors:EventTrigger>
     </behaviors:Interaction.Triggers>
 
-    <Grid>
-        <Border Margin="5" Background="{DynamicResource DefaultBackgroundColor}" CornerRadius="5">
+    <Grid x:Name="container">
+        <Border Margin="5" Background="{DynamicResource DefaultBackgroundColor}" CornerRadius="5" Name="render">
             <Border.Effect>
                 <DropShadowEffect Direction="0" ShadowDepth="0" BlurRadius="20" 
                                   Opacity="0.25" Color="#FF5B5B5B"></DropShadowEffect>
             </Border.Effect>
         </Border>
 
-        <Grid>
+        <Grid Opacity="0.85">
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -102,7 +102,7 @@
             <hc:Card Grid.Row="1" 
                      Grid.Column="0" 
                      Background="{DynamicResource DefaultCardBackgroundColor}" 
-                     Margin="10 5 0 6"
+                     Margin="7 5 0 5"
                      Effect="{DynamicResource EffectShadow2}"
                      BorderThickness="0">
                 <ListBox Background="{DynamicResource DefaultCardBackgroundColor}"  BorderThickness="0">

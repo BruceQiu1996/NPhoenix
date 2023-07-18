@@ -788,6 +788,19 @@
                             Height="35"
                             Command="{Binding ManualGetGameFolderCommandAsync}"></Button>
 
+                    <Button Content="设置软件背景图" HorizontalAlignment="Right" 
+                            Margin="0 5 1 0"
+                            Cursor="Hand"
+                            FontSize="15"
+                            Height="35"
+                            Command="{Binding SetBackgroundImageAsync}"></Button>
+                    <Button Content="移除背景图" HorizontalAlignment="Right" 
+                            Margin="0 5 1 0"
+                            Cursor="Hand"
+                            FontSize="15"
+                            Height="35"
+                            Command="{Binding RemoveBackgroundImageAsync}"></Button>
+                    
                     <Button Content="启动游戏" 
                             Cursor="Hand"
                             Style="{StaticResource ButtonPrimary}"
@@ -826,6 +839,20 @@
                             </behaviors:Interaction.Triggers>
                         </RadioButton>
                     </StackPanel>
+
+                    <CheckBox Content="兼容模式(闪退或不能使用时可以勾选)" FontSize="16"
+                              Margin="15 5 0 5"
+                              Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding AutoAcceptGame,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="Checked">
+                                <behaviors:InvokeCommandAction Command="{Binding CheckedComModeCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                            <behaviors:EventTrigger EventName="Unchecked">
+                                <behaviors:InvokeCommandAction Command="{Binding UnCheckedComModeCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </CheckBox>
+                    
                     <Button Content="免费开源软件.点个赞" 
                             Cursor="Hand"
                             Click="Button_Click"

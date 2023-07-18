@@ -65,8 +65,9 @@ namespace LeagueOfLegendsBoxer.Resources
         public bool AutoUseRuneByWinRate { get; set; }
         public bool AutoUseRune { get; set; }
         public long TeamDetailHash { get; set; }
+        public bool CompatibleMode { get; set; }
         public List<string> TeamDetailKeyList { get; set; } = new List<string>();
-
+        public string BackgroundImage { get; set; }
         public IniSettingsModel(ISettingsService settingsService,
                                 IApplicationService applicationService,
                                 IConfiguration configuration)
@@ -159,7 +160,9 @@ namespace LeagueOfLegendsBoxer.Resources
 
             TeamDetailKeys = await _settingsService.ReadAsync(Constant.Game, Constant.TeamDetailKey);
             TeamDetailKeys = string.IsNullOrWhiteSpace(TeamDetailKeys) ? "Alt+Q" : TeamDetailKeys;
-            
+            CompatibleMode = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.CompatibleMode), out var tempCompatibleMode) ? tempCompatibleMode : false;
+            BackgroundImage = await _settingsService.ReadAsync(Constant.Game, Constant.BackgroundImage);
             if (!File.Exists(_blackListLoc)) 
             {
                 File.Create(_blackListLoc).Close();
@@ -457,6 +460,18 @@ namespace LeagueOfLegendsBoxer.Resources
                 return null;
 
             return long.TryParse(id, out var temp) ? temp : null;
+        }
+
+        public async Task WriteCompatibleMode(bool mode)
+        {
+            await _settingsService.WriteAsync(Constant.Game,Constant.CompatibleMode, mode.ToString());
+            CompatibleMode = mode;
+        }
+
+        public async Task WriteBackgroundImage(string image)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.BackgroundImage, image);
+            BackgroundImage = image;
         }
 
         public async Task RemoveBlackAccountAsync(long id)

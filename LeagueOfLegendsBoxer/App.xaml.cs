@@ -139,6 +139,7 @@ namespace LeagueOfLegendsBoxer
                 services.AddSingleton<ImageManager>();
                 services.AddSingleton<RuneHelper>();
                 services.AddSingleton<HtmlHelper>();
+                services.AddSingleton<InjectDllHelper>();
                 services.AddSingleton<EnumHelper>();
                 services.AddSingleton<SoftwareHelper>();
                 services.AddSingleton<Team1V2Window>();

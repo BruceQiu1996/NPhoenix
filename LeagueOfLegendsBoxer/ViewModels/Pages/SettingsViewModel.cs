@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using HandyControl.Controls;
 using HandyControl.Data;
 using LeagueOfLegendsBoxer.Application.ApplicationControl;
@@ -20,6 +21,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using ServerArea = LeagueOfLegendsBoxer.Windows.ServerArea;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
@@ -573,7 +575,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             get => _chatMessageTemplate;
             set => SetProperty(ref _chatMessageTemplate, value);
         }
-        
+
         private string _above120ScoreTxt;
         public string Above120ScoreTxt
         {
@@ -685,14 +687,24 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public bool AutoUseRune
         {
             get => _autoUseRune;
-            set 
-            { 
+            set
+            {
                 SetProperty(ref _autoUseRune, value);
                 _iniSettingsModel.WriteAutoUseRune(value).GetAwaiter().GetResult();
             }
         }
 
-        
+        private bool _comMode;
+        public bool ComMode
+        {
+            get => _comMode;
+            set
+            {
+                SetProperty(ref _comMode, value);
+                _iniSettingsModel.WriteAutoUseRune(value).GetAwaiter().GetResult();
+            }
+        }
+
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoStartWhenComputerRunCommandAsync { get; set; }
@@ -750,6 +762,10 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public RelayCommand ManageRuneCommand { get; set; }
         public AsyncRelayCommand SettingSignatureCommand { get; set; }
         public AsyncRelayCommand SaveTeamDetailKeyCommand { get; set; }
+        public AsyncRelayCommand CheckedComModeCommandAsync { get; set; }
+        public AsyncRelayCommand UnCheckedComModeCommandAsync { get; set; }
+        public AsyncRelayCommand SetBackgroundImageAsync { get; set; }
+        public AsyncRelayCommand RemoveBackgroundImageAsync { get; set; }
 
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IApplicationService _applicationService;
@@ -834,9 +850,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ManualUpdateCommandAsync = new AsyncRelayCommand(ManualUpdateAsync);
             ChooseServerAreaForCurrentAccountCommand = new RelayCommand(ChooseServerAreaForCurrentAccount);
             ManageRuneCommand = new RelayCommand(ManageRune);//打开符文管理界面
-
+            CheckedComModeCommandAsync = new AsyncRelayCommand(CheckedComModeAsync);
+            UnCheckedComModeCommandAsync = new AsyncRelayCommand(UnCheckedComModeAsync);
             SaveTeamDetailKeyCommand = new AsyncRelayCommand(SaveTeamDetailKey);
             SettingSignatureCommand = new AsyncRelayCommand(SettingSignature);//设置个人签名
+            SetBackgroundImageAsync = new AsyncRelayCommand(SetBackgroundImage);
+            RemoveBackgroundImageAsync = new AsyncRelayCommand(RemoveBackgroundImage);
         }
 
         private void PayMethod()
@@ -974,6 +993,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             AutoUseRune = _iniSettingsModel.AutoUseRune;
 
             TeamDetailKeys = _iniSettingsModel.TeamDetailKeys;
+            ComMode = _iniSettingsModel.CompatibleMode;
         }
 
         #region checkbox
@@ -1129,7 +1149,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
-        private async Task SaveChatMessageTemplateAsync() 
+        private async Task SaveChatMessageTemplateAsync()
         {
             try
             {
@@ -1557,6 +1577,18 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             await _softwareHelper.Update();
         }
 
+        private async Task CheckedComModeAsync()
+        {
+            await _iniSettingsModel.WriteCompatibleMode(true);
+            ComMode = true;
+        }
+
+        private async Task UnCheckedComModeAsync()
+        {
+            await _iniSettingsModel.WriteCompatibleMode(false);
+            ComMode = false;
+        }
+
         private async Task SaveFuckWordsAsync()
         {
             try
@@ -1605,9 +1637,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             }
         }
 
-        private async Task SettingSignature() 
+        private async Task SettingSignature()
         {
-            await _applicationService.SetSignatureAsync(new 
+            await _applicationService.SetSignatureAsync(new
             {
                 statusMessage = Signature
             });
@@ -1629,6 +1661,27 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             {
                 IsOpenModifyHotkeys = false;
             }
+        }
+
+        private Task SetBackgroundImage()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.RestoreDirectory = true;
+            openFileDialog.Filter = "图片文件|*.jpg;*.png;*.jpeg";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                var file = openFileDialog.FileName;
+                WeakReferenceMessenger.Default.Send<string, string>(file, "back");
+            }
+
+            return Task.CompletedTask;
+        }
+
+        private Task RemoveBackgroundImage()
+        {
+            WeakReferenceMessenger.Default.Send<string, string>(string.Empty, "back");
+
+            return Task.CompletedTask;
         }
     }
 }

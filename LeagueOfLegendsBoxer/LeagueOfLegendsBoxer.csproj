@@ -4,7 +4,7 @@
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net6.0-windows</TargetFramework>
 		<Nullable>disable</Nullable>
-		<Version>2.7.9</Version>
+		<Version>2.8.1</Version>
 		<UseWPF>true</UseWPF>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<ApplicationIcon>Resources\logo.ico</ApplicationIcon>
@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<None Remove="appsettings.json" />
+		<None Remove="lcuapi.bin" />
 		<None Remove="Resources\12.10firemode.txt" />
 		<None Remove="Resources\blackList.json" />
 		<None Remove="Resources\good.png" />
@@ -41,11 +42,15 @@
 		<None Remove="Resources\settings.ini" />
 		<None Remove="Resources\wx.jpg" />
 		<None Remove="Resources\zfb.jpg" />
+		<None Remove="test.jpg" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Content Include="appsettings.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Include="lcuapi.bin">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Resources\blackList.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

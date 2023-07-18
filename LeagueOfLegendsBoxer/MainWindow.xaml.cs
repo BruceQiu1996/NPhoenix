@@ -1,19 +1,46 @@
-﻿using LeagueOfLegendsBoxer.ViewModels;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using LeagueOfLegendsBoxer.Resources;
+using LeagueOfLegendsBoxer.ViewModels;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace LeagueOfLegendsBoxer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : System.Windows.Window
+    public partial class MainWindow : Window
     {
-        public MainWindow(MainWindowViewModel mainWindowViewModel)
+        private readonly IniSettingsModel _iniSettingsModel;
+
+        public MainWindow(MainWindowViewModel mainWindowViewModel, IniSettingsModel iniSettingsModel)
         {
             InitializeComponent();
             DataContext = mainWindowViewModel;
+            _iniSettingsModel = iniSettingsModel;
+
+            WeakReferenceMessenger.Default.Register<MainWindow, string,string>(this, "back",async (x, y) =>
+            {
+                if (string.IsNullOrEmpty(y))
+                {
+                    this.render.Visibility = Visibility.Visible;
+                    this.Background = new SolidColorBrush(Color.FromArgb(0, 255, 255, 255));
+                    await _iniSettingsModel.WriteBackgroundImage(string.Empty);
+                }
+                else 
+                {
+                    this.render.Visibility = Visibility.Hidden;
+                    ImageBrush b = new ImageBrush();
+                    b.ImageSource = new BitmapImage(new Uri(y,UriKind.Absolute));
+                    b.Stretch = Stretch.Fill;
+                    Background = b;
+                    await _iniSettingsModel.WriteBackgroundImage(y);
+                }
+            });
         }
 
         private void Border_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)

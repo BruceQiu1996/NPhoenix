@@ -33,7 +33,7 @@
             <RowDefinition Height="140"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="2 5 0 0" 
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="0 5 0 0" 
                  Grid.Column="0" 
                  Grid.Row="0"
                  Background="{DynamicResource DefaultCardBackgroundColor}" Foreground="{DynamicResource DefaultFontColor}">
@@ -114,7 +114,7 @@
         </hc:Card>
 
         <hc:Card Grid.Row="1" Background="{DynamicResource DefaultCardBackgroundColor}" 
-                 BorderThickness="0" Margin="2 5 0 0"
+                 BorderThickness="0" Margin="0 2 0 0"
                  Effect="{StaticResource EffectShadow2}"
                  Foreground="{DynamicResource DefaultFontColor}">
             <StackPanel Orientation="Horizontal"
@@ -229,7 +229,7 @@
             </StackPanel>
         </hc:Card>
 
-        <hc:Card BorderThickness="0" Margin="2 5 0 0"
+        <hc:Card BorderThickness="0" Margin="0 2 0 0"
                  Effect="{StaticResource EffectShadow2}"
                  Background="{DynamicResource DefaultCardBackgroundColor}" 
                  Grid.Row="2"
@@ -298,7 +298,7 @@
             </GroupBox>
         </hc:Card>
 
-        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="2 5 10 0"
+        <hc:Card BorderThickness="0" Effect="{DynamicResource EffectShadow2}" Margin="2 5 2 0"
                  Background="{DynamicResource DefaultCardBackgroundColor}" 
                  Foreground="{DynamicResource DefaultFontColor}"
                  Grid.Column="1" Grid.RowSpan="3">

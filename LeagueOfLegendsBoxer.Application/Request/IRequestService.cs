@@ -4,6 +4,7 @@
     {
         int Port { get; set; }
         string Token { get; set; }
+        Task Initialize(int port);
         Task Initialize(int port, string token);
         Task<string> GetJsonResponseAsync(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters = null);
         Task<byte[]> GetByteArrayResponseAsync(HttpMethod httpMethod, string relativeUrl, IEnumerable<string> queryParameters = null);

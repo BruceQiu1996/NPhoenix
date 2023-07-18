@@ -9,6 +9,20 @@ namespace LeagueOfLegendsBoxer.Application.Request
         public int Port { get; set; }
         public string Token { get; set; }
 
+        public Task Initialize(int port)
+        {
+            Port = port;
+            _httpClient = new HttpClient();
+            _httpClient.BaseAddress = new Uri($"http://127.0.0.1:{port}/");
+            _httpClient.DefaultRequestVersion = new Version(2, 0);
+            _httpClient.Timeout = TimeSpan.FromSeconds(10);
+            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            _httpClient.DefaultRequestHeaders.Connection.Add("keep-alive");
+
+            return Task.CompletedTask;
+        }
+
+
         public Task Initialize(int port, string token)
         {
             Port = port;

@@ -58,6 +58,8 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string AutoUseRuneByUseCount = nameof(AutoUseRuneByUseCount);
         public const string AutoUseRuneByWinRate = nameof(AutoUseRuneByWinRate);
         public const string AutoUseRune = nameof(AutoUseRune);
+        public const string CompatibleMode = nameof(CompatibleMode);
+        public const string BackgroundImage = nameof(BackgroundImage);
         public static string _chatId = null;
 
         public const string TeamDetailKey = nameof(TeamDetailKey);
