@@ -60,6 +60,9 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string AutoUseRune = nameof(AutoUseRune);
         public const string CompatibleMode = nameof(CompatibleMode);
         public const string BackgroundImage = nameof(BackgroundImage);
+        public const string DisableRecordFunction = nameof(DisableRecordFunction);
+        public const string CloseTeamVsWindow  = nameof(CloseTeamVsWindow);
+        public const string AramWinTeamCheck = nameof(AramWinTeamCheck);
         public static string _chatId = null;
 
         public const string TeamDetailKey = nameof(TeamDetailKey);

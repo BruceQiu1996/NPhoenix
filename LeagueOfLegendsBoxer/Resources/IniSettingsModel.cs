@@ -66,6 +66,9 @@ namespace LeagueOfLegendsBoxer.Resources
         public bool AutoUseRune { get; set; }
         public long TeamDetailHash { get; set; }
         public bool CompatibleMode { get; set; }
+        public bool DisableRecordFunction { get; set; }//禁用游戏时战绩查询模块
+        public bool CloseTeamVsWindow { get; set; }//不打开对局详情
+        public bool AramWinTeamCheck { get; set; }//乱斗胜率队检测
         public List<string> TeamDetailKeyList { get; set; } = new List<string>();
         public string BackgroundImage { get; set; }
         public IniSettingsModel(ISettingsService settingsService,
@@ -162,6 +165,12 @@ namespace LeagueOfLegendsBoxer.Resources
             TeamDetailKeys = string.IsNullOrWhiteSpace(TeamDetailKeys) ? "Alt+Q" : TeamDetailKeys;
             CompatibleMode = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.CompatibleMode), out var tempCompatibleMode) ? tempCompatibleMode : false;
+            DisableRecordFunction = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.DisableRecordFunction), out var tempDisableRecordFunction) ? tempDisableRecordFunction : false;
+            CloseTeamVsWindow = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.CloseTeamVsWindow), out var tempCloseTeamVsWindow) ? tempCloseTeamVsWindow : false;
+            AramWinTeamCheck = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.AramWinTeamCheck), out var tempAramWinTeamCheck) ? tempAramWinTeamCheck : false;
             BackgroundImage = await _settingsService.ReadAsync(Constant.Game, Constant.BackgroundImage);
             if (!File.Exists(_blackListLoc)) 
             {
@@ -466,6 +475,24 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game,Constant.CompatibleMode, mode.ToString());
             CompatibleMode = mode;
+        }
+
+        public async Task WriteDisableRecordFunction(bool disable)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.DisableRecordFunction, disable.ToString());
+            DisableRecordFunction = disable;
+        }
+
+        public async Task WriteCloseTeamVsWindow(bool disable)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.CloseTeamVsWindow, disable.ToString());
+            CloseTeamVsWindow = disable;
+        }
+
+        public async Task WriteAramWinTeamCheck(bool disable)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.AramWinTeamCheck, disable.ToString());
+            AramWinTeamCheck = disable;
         }
 
         public async Task WriteBackgroundImage(string image)

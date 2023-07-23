@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
+using LeagueOfLegendsBoxer.Helpers;
 using LeagueOfLegendsBoxer.Resources;
 using LeagueOfLegendsBoxer.ViewModels;
 using System;
@@ -16,12 +17,14 @@ namespace LeagueOfLegendsBoxer
     public partial class MainWindow : Window
     {
         private readonly IniSettingsModel _iniSettingsModel;
+        private readonly SoftwareHelper _softwareHelper;
 
-        public MainWindow(MainWindowViewModel mainWindowViewModel, IniSettingsModel iniSettingsModel)
+        public MainWindow(MainWindowViewModel mainWindowViewModel, IniSettingsModel iniSettingsModel,SoftwareHelper software)
         {
             InitializeComponent();
             DataContext = mainWindowViewModel;
             _iniSettingsModel = iniSettingsModel;
+            _softwareHelper = software;
 
             WeakReferenceMessenger.Default.Register<MainWindow, string,string>(this, "back",async (x, y) =>
             {
@@ -91,6 +94,16 @@ namespace LeagueOfLegendsBoxer
                 p.WaitForExit();
                 p.Close();
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _softwareHelper.SetSize(this);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _softwareHelper.SaveSize(this);
         }
     }
 }

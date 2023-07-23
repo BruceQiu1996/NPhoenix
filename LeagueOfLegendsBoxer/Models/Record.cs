@@ -418,6 +418,13 @@ namespace LeagueOfLegendsBoxer.Models
         public Item Item5Model => Constant.Items.FirstOrDefault(x => x.Id == Item5);
         public Item Item6Model => Constant.Items.FirstOrDefault(x => x.Id == Item6);
         public double BarWidth { get; set; }
+        public bool AboveGod => LargestKillingSpree >= 8;
+        public bool Penta => PentaKills >= 1;
+        public bool Qua => QuadraKills >= 1;
+
+        public bool MaxMoney { get; set; }
+        public bool MaxDamage { get; set; }
+
     }
 
     public class Timeline

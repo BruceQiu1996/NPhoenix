@@ -167,7 +167,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             ShiftNoticePageCommand = new RelayCommand(OpenNoticePage);
             ShiftTeamupPageCommand = new RelayCommand(ShiftTeamupPage);
             ShiftRankPageCommand = new RelayCommand(OpenRankPage);
-            ExitCommand = new RelayCommand(() => { Environment.Exit(0); });
+            ExitCommand = new RelayCommand(() => { App.ServiceProvider.GetRequiredService<MainWindow>().Close(); Environment.Exit(0); });
             _applicationService = applicationService;
             _requestService = requestService;
             _clientService = clientService;
@@ -897,16 +897,20 @@ namespace LeagueOfLegendsBoxer.ViewModels
                             {
                                 Team1Accounts.Concat(Team2Accounts).ToList().ForEach(async x =>
                                 {
-                                    if (x != null)
+                                    try
                                     {
-                                        var spells = await _livegameservice.GetSpellByNameAsync(x.SummonerInternalName);
-                                        if (!string.IsNullOrEmpty(spells))
+                                        if (x != null)
                                         {
-                                            var spell = JObject.Parse(spells).ToObject<InternalSpell>();
-                                            x.Spell1Id = Constant.Spells.FirstOrDefault(x => x.Name == spell.SummonerSpellOne.DisplayName).Id;
-                                            x.Spell2Id = Constant.Spells.FirstOrDefault(x => x.Name == spell.SummonerSpellTwo.DisplayName).Id;
+                                            var spells = await _livegameservice.GetSpellByNameAsync(x.SummonerInternalName);
+                                            if (!string.IsNullOrEmpty(spells))
+                                            {
+                                                var spell = JObject.Parse(spells).ToObject<InternalSpell>();
+                                                x.Spell1Id = Constant.Spells.FirstOrDefault(x => x.Name == spell.SummonerSpellOne.DisplayName).Id;
+                                                x.Spell2Id = Constant.Spells.FirstOrDefault(x => x.Name == spell.SummonerSpellTwo.DisplayName).Id;
+                                            }
                                         }
                                     }
+                                    catch { }
                                 });
 
                                 await Task.Delay(5000);
@@ -1036,6 +1040,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 }
             });
         }
+
         private async Task ActionWhenGameBegin()
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() => _championSelectTool?.Hide());
@@ -1064,8 +1069,11 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 await System.Windows.Application.Current.Dispatcher.Invoke(async () =>
                 {
                     await (_team1V2Window.DataContext as Team1V2WindowViewModel).LoadDataAsync(Team1Accounts, Team2Accounts);
-                    _team1V2Window.Show();
-                    _team1V2Window.Activate();
+                    if (!_iniSettingsModel.CloseTeamVsWindow)
+                    {
+                        _team1V2Window.Show();
+                        _team1V2Window.Activate();
+                    }
                 });
             }
             catch (Exception ex)

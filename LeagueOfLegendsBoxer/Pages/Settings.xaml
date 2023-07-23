@@ -425,6 +425,18 @@
                                 Command="{Binding OpenAramChooseCommand}"
                                 FontSize="15" VerticalAlignment="Center" Margin="10 10 0 0"></Button>
                     </StackPanel>
+                    <CheckBox Content="乱斗胜率队检测" FontSize="18"
+                              Margin="0 5 0 5"
+                              Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding AramWinTeamCheck,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="Checked">
+                                <behaviors:InvokeCommandAction Command="{Binding CheckedAramWinTeamCheckCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                            <behaviors:EventTrigger EventName="Unchecked">
+                                <behaviors:InvokeCommandAction Command="{Binding UnCheckedAramWinTeamCheckCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </CheckBox>
                     <Button Content="黑名单" Width="140" Height="35"
                             HorizontalAlignment="Right"
                             Command="{Binding OpenBlackRecordCommand}"
@@ -707,7 +719,7 @@
             </GroupBox>
             <GroupBox Margin="10 0" Header="软件设置" FontSize="18" Padding="5"
                       Style="{StaticResource GroupBoxOriginal}" 
-                      Width="350"
+                      Width="450"
                       Foreground="{DynamicResource DefaultFontColor}"
                       Background="{DynamicResource DefaultCardBackgroundColor}">
                 <StackPanel Orientation="Vertical">
@@ -769,6 +781,18 @@
                         <TextBlock Text="游戏内一键吹捧："></TextBlock>
                         <TextBlock Text="~+F8" FontSize="18"></TextBlock>
                     </StackPanel>
+                    <CheckBox Content="游戏开始不显示对局详情界面" FontSize="18"
+                              Margin="0 10 0 5"
+                              Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding CloseTeamVsWindow,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="Checked">
+                                <behaviors:InvokeCommandAction Command="{Binding CheckedCloseTeamVsWindowCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                            <behaviors:EventTrigger EventName="Unchecked">
+                                <behaviors:InvokeCommandAction Command="{Binding UnCheckedCloseTeamVsWindowCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </CheckBox>
                     <hc:TextBox IsReadOnly="True" 
                                 FontSize="16"
                                 Foreground="{DynamicResource DefaultFontColor}"
@@ -840,9 +864,9 @@
                         </RadioButton>
                     </StackPanel>
 
-                    <CheckBox Content="兼容模式(闪退或不能使用时可以勾选)" FontSize="16"
+                    <CheckBox Content="兼容模式(闪退或不能使用时勾选,需要重启加载)" FontSize="16"
                               Margin="15 5 0 5"
-                              Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding AutoAcceptGame,UpdateSourceTrigger=PropertyChanged}">
+                              Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding ComMode,UpdateSourceTrigger=PropertyChanged}">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="Checked">
                                 <behaviors:InvokeCommandAction Command="{Binding CheckedComModeCommandAsync}"></behaviors:InvokeCommandAction>
@@ -852,7 +876,20 @@
                             </behaviors:EventTrigger>
                         </behaviors:Interaction.Triggers>
                     </CheckBox>
-                    
+
+                    <CheckBox Content="洁净模式(闪退或不能使用时勾选,无须重启,游戏时战绩失效)" FontSize="16"
+                              Margin="15 5 0 5"
+                              Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding DisableRecordFunction,UpdateSourceTrigger=PropertyChanged}">
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:EventTrigger EventName="Checked">
+                                <behaviors:InvokeCommandAction Command="{Binding CheckedDisableRecordFunctionCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                            <behaviors:EventTrigger EventName="Unchecked">
+                                <behaviors:InvokeCommandAction Command="{Binding UnCheckedDisableRecordFunctionCommandAsync}"></behaviors:InvokeCommandAction>
+                            </behaviors:EventTrigger>
+                        </behaviors:Interaction.Triggers>
+                    </CheckBox>
+
                     <Button Content="免费开源软件.点个赞" 
                             Cursor="Hand"
                             Click="Button_Click"

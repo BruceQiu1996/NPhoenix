@@ -188,7 +188,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             });
                         });
                         await App.HubConnection.StartAsync();
-                        _chatWindow.Show();
+                        //_chatWindow.Show();
                         var ranks = await _softwareHelper.GetRanksAsync();
                         Account.MvpRank = ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Mvp.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";
                         Account.XiaguKill = ranks?.Xiagu.FirstOrDefault(x => x.UserId == Account.SummonerId) == null ? "未上榜" : $"{ranks?.Xiagu.FirstOrDefault(x => x.UserId == Account.SummonerId).Rank}";

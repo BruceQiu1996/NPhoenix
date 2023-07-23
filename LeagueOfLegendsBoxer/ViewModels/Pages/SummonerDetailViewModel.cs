@@ -153,8 +153,10 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                         if (team2TotalDamage == 0) item.Item2.Stats.DamageConvert = "NaN%";
                         else item.Item2.Stats.DamageConvert = ((item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / team2TotalDamage) / (item.Item2.Stats.GoldEarned * 1.0 / record.DetailRecord.Team2GoldEarned) * 100).ToString("0.") + "%";
                     }
-                    var maxdmg = record.LeftParticipants.Concat(record.RightParticipants).Max(x => x.Item2.Stats.TotalDamageDealtToChampions);
-                    foreach (var item in record.LeftParticipants.Concat(record.RightParticipants))
+                    var allps = record.LeftParticipants.Concat(record.RightParticipants);
+
+                    var maxdmg = allps.Max(x => x.Item2.Stats.TotalDamageDealtToChampions);
+                    foreach (var item in allps)
                     {
                         item.Item2.Stats.BarWidth = 350 * (item.Item2.Stats.TotalDamageDealtToChampions * 1.0 / maxdmg);
                     }
@@ -195,6 +197,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             record.IsSvp = true;
                         }
                     }
+                    allps.OrderByDescending(x => x.Item2.Stats.TotalDamageDealtToChampions).FirstOrDefault().Item2.Stats.MaxDamage = true;
+                    allps.OrderByDescending(x => x.Item2.Stats.GoldEarned).FirstOrDefault().Item2.Stats.MaxMoney = true;
                 }
                 catch (Exception ex) 
                 {

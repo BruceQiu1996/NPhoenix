@@ -13,6 +13,8 @@
         AllowsTransparency="True"
         Icon="/LeagueOfLegendsBoxer;component/Resources/logo.ico"
         WindowStyle="None"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
         Title="NPhoenix" Height="720" Width="880">
 
     <WindowChrome.WindowChrome>
@@ -252,7 +254,7 @@
                         </Label>
                     </ListBoxItem>
 
-                    <ListBoxItem Height="50" Width="65" Margin="-1 20 0 0">
+                    <ListBoxItem Height="50" Width="65" Margin="-1 20 0 0" >
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
                                 <behaviors:InvokeCommandAction Command="{Binding ShiftTeamupPageCommand}"></behaviors:InvokeCommandAction>

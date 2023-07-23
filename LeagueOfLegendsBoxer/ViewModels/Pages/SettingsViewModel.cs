@@ -701,7 +701,40 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set
             {
                 SetProperty(ref _comMode, value);
-                _iniSettingsModel.WriteAutoUseRune(value).GetAwaiter().GetResult();
+                //_iniSettingsModel.WriteAutoUseRune(value).GetAwaiter().GetResult();
+            }
+        }
+
+        private bool _disableRecordFunction;
+        public bool DisableRecordFunction
+        {
+            get => _disableRecordFunction;
+            set
+            {
+                SetProperty(ref _disableRecordFunction, value);
+                //_iniSettingsModel.WriteAutoUseRune(value).GetAwaiter().GetResult();
+            }
+        }
+
+        private bool _closeTeamVsWindow;
+        public bool CloseTeamVsWindow
+        {
+            get => _closeTeamVsWindow;
+            set
+            {
+                SetProperty(ref _closeTeamVsWindow, value);
+                //_iniSettingsModel.WriteAutoUseRune(value).GetAwaiter().GetResult();
+            }
+        }
+
+        private bool _aramWinTeamCheck;
+        public bool AramWinTeamCheck
+        {
+            get => _aramWinTeamCheck;
+            set
+            {
+                SetProperty(ref _aramWinTeamCheck, value);
+                //_iniSettingsModel.WriteAutoUseRune(value).GetAwaiter().GetResult();
             }
         }
 
@@ -764,6 +797,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         public AsyncRelayCommand SaveTeamDetailKeyCommand { get; set; }
         public AsyncRelayCommand CheckedComModeCommandAsync { get; set; }
         public AsyncRelayCommand UnCheckedComModeCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedDisableRecordFunctionCommandAsync { get; set; }
+        public AsyncRelayCommand UnCheckedDisableRecordFunctionCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedCloseTeamVsWindowCommandAsync { get; set; }
+        public AsyncRelayCommand UnCheckedCloseTeamVsWindowCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedAramWinTeamCheckCommandAsync { get; set; }
+        public AsyncRelayCommand UnCheckedAramWinTeamCheckCommandAsync { get; set; }
         public AsyncRelayCommand SetBackgroundImageAsync { get; set; }
         public AsyncRelayCommand RemoveBackgroundImageAsync { get; set; }
 
@@ -852,6 +891,12 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ManageRuneCommand = new RelayCommand(ManageRune);//打开符文管理界面
             CheckedComModeCommandAsync = new AsyncRelayCommand(CheckedComModeAsync);
             UnCheckedComModeCommandAsync = new AsyncRelayCommand(UnCheckedComModeAsync);
+            CheckedDisableRecordFunctionCommandAsync = new AsyncRelayCommand(CheckedDisableRecordFunctionAsync);
+            UnCheckedDisableRecordFunctionCommandAsync = new AsyncRelayCommand(UnCheckedDisableRecordFunctionAsync);
+            CheckedCloseTeamVsWindowCommandAsync = new AsyncRelayCommand(CheckedCloseTeamVsWindowAsync);
+            UnCheckedCloseTeamVsWindowCommandAsync = new AsyncRelayCommand(UnCheckedCloseTeamVsWindowAsync);
+            CheckedAramWinTeamCheckCommandAsync = new AsyncRelayCommand(CheckedAramWinTeamCheckAsync);
+            UnCheckedAramWinTeamCheckCommandAsync = new AsyncRelayCommand(UnCheckedAramWinTeamCheckAsync);
             SaveTeamDetailKeyCommand = new AsyncRelayCommand(SaveTeamDetailKey);
             SettingSignatureCommand = new AsyncRelayCommand(SettingSignature);//设置个人签名
             SetBackgroundImageAsync = new AsyncRelayCommand(SetBackgroundImage);
@@ -994,6 +1039,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
             TeamDetailKeys = _iniSettingsModel.TeamDetailKeys;
             ComMode = _iniSettingsModel.CompatibleMode;
+            DisableRecordFunction = _iniSettingsModel.DisableRecordFunction;
+            CloseTeamVsWindow = _iniSettingsModel.CloseTeamVsWindow;
+            AramWinTeamCheck = _iniSettingsModel.AramWinTeamCheck;
         }
 
         #region checkbox
@@ -1587,6 +1635,42 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             await _iniSettingsModel.WriteCompatibleMode(false);
             ComMode = false;
+        }
+
+        private async Task CheckedDisableRecordFunctionAsync() 
+        {
+            await _iniSettingsModel.WriteDisableRecordFunction(true);
+            DisableRecordFunction = true;
+        }
+
+        private async Task UnCheckedDisableRecordFunctionAsync()
+        {
+            await _iniSettingsModel.WriteDisableRecordFunction(false);
+            DisableRecordFunction = false;
+        }
+
+        private async Task CheckedCloseTeamVsWindowAsync()
+        {
+            await _iniSettingsModel.WriteCloseTeamVsWindow(true);
+            CloseTeamVsWindow = true;
+        }
+
+        private async Task UnCheckedCloseTeamVsWindowAsync()
+        {
+            await _iniSettingsModel.WriteCloseTeamVsWindow(false);
+            CloseTeamVsWindow = false;
+        }
+
+        private async Task CheckedAramWinTeamCheckAsync()
+        {
+            await _iniSettingsModel.WriteAramWinTeamCheck(true);
+            AramWinTeamCheck = true;
+        }
+
+        private async Task UnCheckedAramWinTeamCheckAsync()
+        {
+            await _iniSettingsModel.WriteAramWinTeamCheck(false);
+            AramWinTeamCheck = false;
         }
 
         private async Task SaveFuckWordsAsync()

@@ -80,7 +80,14 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                             if (account != null)
                             {
                                 var sameRecords = account.Records?.Where(x => x.QueueId == queue);
-                                account.CurrentModeRecord = new ObservableCollection<Record>(sameRecords);
+                                if (sameRecords != null)
+                                {
+                                    account.CurrentModeRecord = new ObservableCollection<Record>(sameRecords);
+                                }
+                                else 
+                                {
+                                    account.CurrentModeRecord = new ObservableCollection<Record>();
+                                }
                                 var champData = await _gameService.QuerySummonerSuperChampDataAsync(account.SummonerId);
                                 account.Champs = JsonConvert.DeserializeObject<ObservableCollection<Champ>>(champData);
                                 account.Champs = new ObservableCollection<Champ>(account.Champs.Take(5));
@@ -224,27 +231,46 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         public async Task<Account> GetAccountAsync(long uid)
         {
-            int maxTimes = 3;
+            await Task.Delay(500);
+            int maxTimes = 2;
             int tryTimes = 0;
             Account account = null;
             var infromation = await _accountService.GetSummonerInformationAsync(uid);
             account = JsonConvert.DeserializeObject<Account>(infromation);
-            while (tryTimes < maxTimes)
-            {
-                try
-                {
-                    var recordsData = JToken.Parse(await _gameService.GetRecordsByPage(id: account.Puuid));
-                    account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().OrderByDescending(x => x.GameCreation));
-                    var rankData = JToken.Parse(await _accountService.GetSummonerRankInformationAsync(account.Puuid));
-                    account.Rank = rankData["queueMap"].ToObject<Rank>();
+            //while (tryTimes < maxTimes)
+            //{
+            //    try
+            //    {
+            //        var recordsData = JToken.Parse(await _gameService.GetRecordsByPage(pageEnd: 15, id: account.Puuid));
+            //        account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().OrderByDescending(x => x.GameCreation));
+            //        var rankData = JToken.Parse(await _accountService.GetSummonerRankInformationAsync(account.Puuid));
+            //        account.Rank = rankData["queueMap"].ToObject<Rank>();
 
-                    return account;
-                }
-                catch (Exception ex)
-                {
-                    tryTimes++;
-                    _logger.LogError($"{account?.DisplayName}{ex}");
-                }
+            //        return account;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        tryTimes++;
+            //        _logger.LogError($"{account?.DisplayName}{ex}");
+            //    }
+            //}
+
+            if (_iniSettingsModel.DisableRecordFunction)
+                return account;
+
+            try
+            {
+                //查询最近15场
+                var recordsData = JToken.Parse(await _gameService.GetRecordsByPage(pageEnd: 14, id: account.Puuid));
+                account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().OrderByDescending(x => x.GameCreation));
+                var rankData = JToken.Parse(await _accountService.GetSummonerRankInformationAsync(account.Puuid));
+                account.Rank = rankData["queueMap"].ToObject<Rank>();
+
+                return account;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"{account?.DisplayName}{ex}");
             }
 
             return account;

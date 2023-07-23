@@ -233,6 +233,9 @@ namespace LeagueOfLegendsBoxer.Models
             get { return _winRate; }
             set { SetProperty(ref _winRate, value); }
         }
+
+        public double WinRateValue;
+
         public string SummonerInternalName { get; set; }
 
         private double _spell1Id;

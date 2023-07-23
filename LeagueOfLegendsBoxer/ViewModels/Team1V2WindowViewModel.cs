@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HandyControl.Controls;
 using LeagueOfLegendsBoxer.Application.Game;
 using LeagueOfLegendsBoxer.Models;
 using LeagueOfLegendsBoxer.Resources;
@@ -11,9 +12,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace LeagueOfLegendsBoxer.ViewModels
 {
@@ -78,6 +79,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                         var sameRecords = item.Records?.Where(x => x.QueueId == queue);
                         item.CurrentModeRecord = new ObservableCollection<Record>(sameRecords);
                         item.WinRate = sameRecords == null || sameRecords.Count() <= 4 ? "未知" : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count()).ToString("0.00") + "%";
+                        item.WinRateValue = sameRecords == null || sameRecords.Count() <= 4 ? 0 : (sameRecords.Where(x => x.Participants.FirstOrDefault().Stats.Win).Count() * 100.0 / sameRecords.Count());
                         item.Horse = item.GetHorse();
                         item.KDA = item.GetKDA();
                         item.SurRate = item.GetSurrenderRate();
@@ -105,6 +107,28 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 {
                     continue;
                 }
+            }
+
+            if (_iniSettingsModel.AramWinTeamCheck && mode == "ARAM") 
+            {
+                CheckWinRateTeam(Team1Accounts, Team2Accounts);
+            }
+        }
+
+        private void CheckWinRateTeam(ObservableCollection<Account> a1, ObservableCollection<Account> a2)
+        {
+            var w1 = a1.GroupBy(x => x.TeamID).FirstOrDefault(x => x.Count() >= 3 && x.All(x => x.WinRateValue >= 85));
+            if (w1 != null && w1.Count() > 0)
+            {
+                var users = string.Join(",", w1.Select(x => x.DisplayName));
+                HandyControl.Controls.MessageBox.Show($"可能存在胜率队{users}", "检测", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            var w2 = a2.GroupBy(x => x.TeamID).FirstOrDefault(x => x.Count() >= 3 && x.All(x => x.WinRateValue >= 85));
+            if (w2 != null && w2.Count() > 0)
+            {
+                var users = string.Join(",", w2.Select(x => x.DisplayName));
+                HandyControl.Controls.MessageBox.Show($"可能存在胜率队{users}", "检测", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 

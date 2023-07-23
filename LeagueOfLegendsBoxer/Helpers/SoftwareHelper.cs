@@ -15,6 +15,7 @@ using System.Reflection;
 using System.Security.AccessControl;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using MessageBox = HandyControl.Controls.MessageBox;
 
 namespace LeagueOfLegendsBoxer.Helpers
@@ -164,6 +165,33 @@ namespace LeagueOfLegendsBoxer.Helpers
 
                 return null;
             }
+        }
+
+        private readonly string _regPath = "SOFTWARE\\NPHOENIX\\WindowBounds\\";
+        public void SaveSize(System.Windows.Window window) => Registry.CurrentUser.CreateSubKey(_regPath + window.Name).SetValue("Bounds", window.RestoreBounds.ToString());
+
+        public void SetSize(System.Windows.Window window)
+        {
+            try
+            {
+                if (window.SizeToContent != SizeToContent.Manual)
+                {
+                    return;
+                }
+
+                var bounds = Registry.CurrentUser.OpenSubKey(_regPath + window.Name);
+                if (bounds is null)
+                    return;
+
+                var value = bounds.GetValue("Bounds").ToString();
+                var rect = value.Split(",");
+
+                window.Top = double.Parse(rect[1]);
+                window.Left = double.Parse(rect[0]);
+                window.Width = double.Parse(rect[2]);
+                window.Height = double.Parse(rect[3]);
+            }
+            catch  { }
         }
     }
 }
