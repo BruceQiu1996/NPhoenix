@@ -1,34 +1,28 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using LeagueOfLegendsBoxer.Application.Teamup.Dtos;
+using Microsoft.Extensions.Primitives;
 using System;
-using System.Collections.ObjectModel;
+using System.Windows.Media;
 
-namespace LeagueOfLegendsBoxer.Models
+namespace LeagueOfLegendsBoxer.Models.V2
 {
-    public class PostDetail : ObservableObject
+    public class Post : ObservableObject
     {
         public long Id { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime CreateTime { get; set; }
         public PostCategory PostCategory { get; set; }
-        public string Image_1 { get; set; }
-        public string Image_2 { get; set; }
-        public string Image_3 { get; set; }
-        public string Test { get; set; }
-
+        public bool IsTop { get; set; }
+        public bool IsDeleted { get; set; }
+        public string PublisherName { get; set; }
+        public string Tag { get; set; }
+        public string CreateTimeText => ConvertDateTimeToText(CreateTime);
         private int _goodCount;
         public int GoodCount
         {
             get { return _goodCount; }
             set { SetProperty(ref _goodCount, value); }
-        }
-
-        private int _commentCount;
-        public int CommmentsCount 
-        {
-            get { return _commentCount; }
-            set { SetProperty(ref _commentCount, value); }
         }
 
         private bool _hadGood;
@@ -38,27 +32,8 @@ namespace LeagueOfLegendsBoxer.Models
             set { SetProperty(ref _hadGood, value); }
         }
 
-        //发布人信息
-        public long Publisher { get; set; }
-        public string UserName { get; set; }
-        public string ServerArea { get; set; }
-        public string Rank_SOLO_5x5 { get; set; }
-        public string Rank_FLEX_SR { get; set; }
-        public string Desc { get; set; }
-        public string CreateTimeText => ConvertDateTimeToText(CreateTime);
         public string PostCategoryText { get; set; }
-        public string Image_1_loc { get; set; }
-        public string Image_2_loc { get; set; }
-        public string Image_3_loc { get; set; }
-
-        //前十条评论
-        private ObservableCollection<PostComment> _postComments;
-        public ObservableCollection<PostComment> PostComments 
-        {
-            get => _postComments;
-            set => SetProperty(ref _postComments, value);
-        }
-
+        public SolidColorBrush PostCategoryColor { get; set; }
         public string ConvertDateTimeToText(DateTime dateTime)
         {
             if (dateTime.Year == DateTime.Now.Year && dateTime.DayOfYear == DateTime.Now.DayOfYear)

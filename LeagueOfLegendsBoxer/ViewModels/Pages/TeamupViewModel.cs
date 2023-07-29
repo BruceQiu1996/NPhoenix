@@ -24,8 +24,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
     public class TeamupViewModel : ObservableObject
     {
-        private bool _loaded = false;
-        private int _pageSize = 10;
         private readonly Post _post;
         private readonly IConfiguration _configuration;
         private readonly IniSettingsModel _iniSettingsModel;
@@ -244,73 +242,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             new ImageBrowser(new Uri(imageLoc)).Show();
         }
 
-        //TODO后期酌情上线
-        private async Task LoadedAsync()
-        {
-            if (!_loaded)
-            {
-                Posts = new ObservableCollection<PostBrief>();
-                TopPosts = new ObservableCollection<PostBrief>();
-                var prefix = _configuration.GetSection("PostImagesPrefix").Value;
-                var topPosts = await _teamupService.GetTopPostsAsync();
-                var posts = await _teamupService.GetPostsAsync(null, null, Page, _pageSize);
-                AllPages = posts.Item1 / _pageSize;
-                if (posts.Item1 % _pageSize != 0)
-                    AllPages++;
-
-                foreach (var post in posts.Item2)
-                {
-                    Posts.Add(new PostBrief()
-                    {
-                        Id = post.Id,
-                        Title = post.Title,
-                        Content = post.Content,
-                        CreateTime = post.CreateTime,
-                        PostCategory = post.PostCategory,
-                        Image_1 = post.Image_1,
-                        Image_2 = post.Image_2,
-                        Image_3 = post.Image_3,
-                        Publisher = post.Publisher,
-                        UserName = post.UserName,
-                        Desc = post.Desc,
-                        GoodCount = post.GoodCount,
-                        CommmentsCount = post.CommmentsCount,
-                        HadGood = post.HadGood,
-                        PostCategoryText = PostCategories[((int)post.PostCategory).ToString()],
-                        Image_1_loc = string.IsNullOrEmpty(post.Image_1) ? null : $"{prefix}{post.Image_1}",
-                        Image_2_loc = string.IsNullOrEmpty(post.Image_2) ? null : $"{prefix}{post.Image_2}",
-                        Image_3_loc = string.IsNullOrEmpty(post.Image_3) ? null : $"{prefix}{post.Image_3}",
-                    });
-                }
-
-                foreach (var post in topPosts)
-                {
-                    TopPosts.Add(new PostBrief()
-                    {
-                        Id = post.Id,
-                        Title = post.Title,
-                        Content = post.Content,
-                        CreateTime = post.CreateTime,
-                        PostCategory = post.PostCategory,
-                        Image_1 = post.Image_1,
-                        Image_2 = post.Image_2,
-                        Image_3 = post.Image_3,
-                        Publisher = post.Publisher,
-                        UserName = post.UserName,
-                        Desc = post.Desc,
-                        GoodCount = post.GoodCount,
-                        CommmentsCount = post.CommmentsCount,
-                        HadGood = post.HadGood,
-                        PostCategoryText = PostCategories[((int)post.PostCategory).ToString()],
-                        Image_1_loc = string.IsNullOrEmpty(post.Image_1) ? null : $"{prefix}{post.Image_1}",
-                        Image_2_loc = string.IsNullOrEmpty(post.Image_2) ? null : $"{prefix}{post.Image_2}",
-                        Image_3_loc = string.IsNullOrEmpty(post.Image_3) ? null : $"{prefix}{post.Image_3}",
-                    });
-                }
-                _loaded = true;
-            }
-        }
-
         private async Task GoodAsync(PostBrief postDetail) 
         {
             try
@@ -343,9 +274,9 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         private async Task OpenPostDetail(PostBrief postDetail) 
         {
-            var detail = App.ServiceProvider.GetRequiredService<PostDetailWindow>();
-            await (detail.DataContext as PostDetailWindowViewModel).LoadPostDetailAsync(postDetail.Id);
-            detail.Show();
+            //var detail = App.ServiceProvider.GetRequiredService<PostDetailWindow>();
+            //await (detail.DataContext as PostDetailWindowViewModel).LoadPostDetailAsync(postDetail.Id);
+            //detail.Show();
         }
 
         private async Task SendMessageAsync()

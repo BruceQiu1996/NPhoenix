@@ -57,6 +57,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         public RelayCommand ShiftSettingsPageCommand { get; set; }
         public RelayCommand ShiftMainPageCommand { get; set; }
         public RelayCommand ShiftNoticePageCommand { get; set; }
+        public RelayCommand ShiftNewsPageCommand { get; set; }
         public RelayCommand ShiftRankPageCommand { get; set; }
         public RelayCommand OpenChampionSelectToolCommand { get; set; }
         public RelayCommand ShiftTeamupPageCommand { get; set; }
@@ -117,6 +118,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private readonly IniSettingsModel _iniSettingsModel;
         private readonly IConfiguration _configuration;
         private readonly Settings _settingsPage;
+        private readonly News _news;
         private readonly Teamup _teamup;
         private readonly MainPage _mainPage;
         private readonly RecordRank _recordRank;
@@ -145,6 +147,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                                    MainPage mainPage,
                                    RecordRank recordRank,
                                    Teamup teamup,
+                                   News news,
                                    ImageManager imageManager,
                                    RuneAndItemViewModel runeViewModel,
                                    SettingsViewModel settingsViewModel,
@@ -161,6 +164,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             LoadCommandAsync = new AsyncRelayCommand(LoadAsync);
             ShiftSettingsPageCommand = new RelayCommand(OpenSettingsPage);
             ShiftMainPageCommand = new RelayCommand(OpenMainPage);
+            ShiftNewsPageCommand = new RelayCommand(OpenNewsPage);
             OpenChampionSelectToolCommand = new RelayCommand(OpenChampionSelectTool);
             OpenTeamDetailCommand = new RelayCommand(OpenTeamDetail);
             ResetCommandAsync = new AsyncRelayCommand(ResetAsync);
@@ -178,6 +182,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _settingsPage = settingsPage;
             _recordRank = recordRank;
             _teamup = teamup;
+            _news = news;
             _notice = notice;
             _championSelectTool = championSelectTool;
             _mainPage = mainPage;
@@ -488,11 +493,8 @@ namespace LeagueOfLegendsBoxer.ViewModels
             _eventService.Subscribe(Constant.ChampSelect, new EventHandler<EventArgument>(ChampSelect));
             _eventService.Subscribe(Constant.GameFlow, new EventHandler<EventArgument>(GameFlow));
             Connected = true;
-            if (CurrentPage == _mainPage)
-            {
-                await (_mainPage.DataContext as MainViewModel).LoadAsync();
-            }
-            CurrentPage = _mainPage;
+            await (_mainPage.DataContext as MainViewModel).LoadAsync();
+            CurrentPage = _news;
             GameStatus = "获取状态中";
             //获取大乱斗buff数据
             await LoadAramBuffAsync();
@@ -640,6 +642,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
         private void OpenNoticePage()
         {
             CurrentPage = _notice;
+        }
+        private void OpenNewsPage()
+        {
+            CurrentPage = _news;
         }
         private void OpenRankPage()
         {

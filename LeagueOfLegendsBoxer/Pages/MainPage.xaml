@@ -83,6 +83,8 @@
                                    Cursor="Hand"
                                    Text="{Binding Account.ServerArea,UpdateSourceTrigger=PropertyChanged}">
                         </TextBlock>
+
+                        <Button Content="战绩查询" Margin="20 0 0 5" Command="{Binding CurrentUserInfoCommand}" Cursor="Hand" Style="{StaticResource ButtonDanger}"></Button>
                         
                         <Label Height="45" Width="45" BorderThickness="0" Margin="20 5 0 5" ToolTip="刷新" Cursor="Hand" Background="{DynamicResource DefaultCardBackgroundColor}">
                             <behaviors:Interaction.Triggers>

@@ -41,7 +41,7 @@ namespace LeagueOfLegendsBoxer.Application.Teamup
         {
             _httpClient = new HttpClient();
             _httpClient.BaseAddress = new Uri(baseAddress);
-            _httpClient.Timeout = TimeSpan.FromSeconds(10);
+            _httpClient.Timeout = TimeSpan.FromSeconds(30);
             _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             return Task.CompletedTask;
