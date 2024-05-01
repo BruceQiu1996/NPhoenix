@@ -54,7 +54,25 @@
                             </behaviors:Interaction.Triggers>
                         </hc:NumericUpDown>-->
                     </StackPanel>
-                    
+
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Content="自动再来一局" Margin="0 10 0 0" FontSize="18" Foreground="{DynamicResource DefaultFontColor}" IsChecked="{Binding AutoNewGame,UpdateSourceTrigger=PropertyChanged}">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="Checked">
+                                    <behaviors:InvokeCommandAction Command="{Binding CheckedAutoNewCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                                <behaviors:EventTrigger EventName="Unchecked">
+                                    <behaviors:InvokeCommandAction Command="{Binding UncheckedAutoNewCommandAsync}"></behaviors:InvokeCommandAction>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </CheckBox>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Content="游戏开始加载英雄头像" Margin="0 10 0 0" FontSize="18" Foreground="{DynamicResource DefaultFontColor}" 
+                                  IsChecked="{Binding StartGameLoadingChampion,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}">
+                        </CheckBox>
+                    </StackPanel>
                     <!--<StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                         <CheckBox Content="游戏结束自动到结算页面" 
                                   FontSize="18" 

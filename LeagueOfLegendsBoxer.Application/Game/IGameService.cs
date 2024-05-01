@@ -3,6 +3,7 @@
     public interface IGameService
     {
         Task AutoAcceptGameAsync();
+        Task AutoNewGameAsync();
         Task<string> GetGameSessionAsync();
         Task AutoLockHeroAsync(int actionID, int champID, string type);
         Task AutoDisableHeroAsync();

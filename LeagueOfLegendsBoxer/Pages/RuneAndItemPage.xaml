@@ -59,6 +59,7 @@
 
         <ScrollViewer RequestBringIntoView="ScrollViewer_RequestBringIntoView" Grid.Row="1" BorderThickness="1"
                       BorderBrush="#aaa"
+                      MaxHeight="150"
                       Margin="15 2">
             <Grid>
                 <ListBox ScrollViewer.CanContentScroll="False"

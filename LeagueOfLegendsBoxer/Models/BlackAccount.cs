@@ -8,5 +8,6 @@ namespace LeagueOfLegendsBoxer.Models
         public DateTime CreateTime { get; set; }
         public string Reason { get; set; }
         public string AccountName { get; set; }
+        public string DisplayName => string.IsNullOrEmpty(AccountName) ? Id.ToString() : AccountName;
     }
 }

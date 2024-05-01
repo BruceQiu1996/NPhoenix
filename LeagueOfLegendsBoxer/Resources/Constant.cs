@@ -20,6 +20,8 @@ namespace LeagueOfLegendsBoxer.Resources
         public const string GameName = "LeagueClient";
         public const string Game = nameof(Game);
         public const string AutoAcceptGame = nameof(AutoAcceptGame);
+        public const string AutoNewGame = nameof(AutoNewGame);
+        public const string StartGameLoadingChampion = nameof(StartGameLoadingChampion);
         public const string AutoEndGame = nameof(AutoEndGame);
         public const string AutoLockHero = nameof(AutoLockHero);
         public const string AutoStartGame = nameof(AutoStartGame);

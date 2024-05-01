@@ -23,6 +23,8 @@ namespace LeagueOfLegendsBoxer.Resources
 
         public List<BlackAccount> BlackAccounts { get; set; }
         public bool AutoAcceptGame { get; set; }
+        public bool StartGameLoadingChampion { get; set; }
+        public bool AutoNewGame { get; set; }
         public bool AutoStartGame { get; set; }
         public bool AutoLockHero { get; set; }
         public bool RankAutoLockHero { get; set; }
@@ -88,6 +90,10 @@ namespace LeagueOfLegendsBoxer.Resources
             await _settingsService.Initialize(file);
             AutoAcceptGame = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoAcceptGame), out var tempAutoAcceptGame) ? tempAutoAcceptGame : false;
+            AutoNewGame = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.AutoNewGame), out var tempAutoNewGame) ? tempAutoNewGame : false;
+            StartGameLoadingChampion = bool.TryParse(
+                await _settingsService.ReadAsync(Constant.Game, Constant.StartGameLoadingChampion), out var tempStartGameLoadingChampion) ? tempStartGameLoadingChampion : false;
             AutoEndGame = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.AutoEndGame), out var tempAutoEndGame) ? tempAutoEndGame : false;
             AutoStartGame = bool.TryParse(
@@ -200,6 +206,18 @@ namespace LeagueOfLegendsBoxer.Resources
         {
             await _settingsService.WriteAsync(Constant.Game, Constant.AutoAcceptGame, value.ToString());
             AutoAcceptGame = value;
+        }
+
+        public async Task WriteAutoNewGameAsync(bool value)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.AutoNewGame, value.ToString());
+            AutoNewGame = value;
+        }
+
+        public async Task WriteStartGameLoadingChampionAsync(bool value)
+        {
+            await _settingsService.WriteAsync(Constant.Game, Constant.StartGameLoadingChampion, value.ToString());
+            StartGameLoadingChampion = value;
         }
 
         public async Task WriteAutoEndGameAsync(bool value)

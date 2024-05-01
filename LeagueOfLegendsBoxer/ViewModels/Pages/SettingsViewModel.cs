@@ -41,6 +41,13 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             set => SetProperty(ref _autoAcceptGame, value);
         }
 
+        private bool _autoNewGame;
+        public bool AutoNewGame
+        {
+            get => _autoNewGame;
+            set => SetProperty(ref _autoNewGame, value);
+        }
+
         private bool _autoEndGame;
         public bool AutoEndGame
         {
@@ -299,6 +306,17 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 SetProperty(ref _topLockHero2, value);
                 if (value != null)
                     _iniSettingsModel.WriteTopAutoLockHeroChampId2Async(value.ChampId).GetAwaiter().GetResult();
+            }
+        }
+
+        private bool _startGameLoadingChampion;
+        public bool StartGameLoadingChampion
+        {
+            get => _startGameLoadingChampion;
+            set
+            {
+                SetProperty(ref _startGameLoadingChampion, value);
+                _iniSettingsModel.WriteStartGameLoadingChampionAsync(value).GetAwaiter().GetResult();
             }
         }
 
@@ -739,6 +757,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         public AsyncRelayCommand CheckedAutoAcceptCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoAcceptCommandAsync { get; set; }
+        public AsyncRelayCommand CheckedAutoNewCommandAsync { get; set; }
+        public AsyncRelayCommand UncheckedAutoNewCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoStartWhenComputerRunCommandAsync { get; set; }
         public AsyncRelayCommand UncheckedAutoStartWhenComputerRunCommandAsync { get; set; }
         public AsyncRelayCommand CheckedAutoStartGameCommandAsync { get; set; }
@@ -834,6 +854,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             PayCommand = new RelayCommand(PayMethod);
             CheckedAutoAcceptCommandAsync = new AsyncRelayCommand(CheckedAutoAcceptAsync);
             UncheckedAutoAcceptCommandAsync = new AsyncRelayCommand(UncheckedAutoAcceptAsync);
+            CheckedAutoNewCommandAsync = new AsyncRelayCommand(CheckedAutoNewAsync);
+            UncheckedAutoNewCommandAsync = new AsyncRelayCommand(UncheckedAutoNewAsync);
             CheckedAutoStartWhenComputerRunCommandAsync = new AsyncRelayCommand(CheckedAutoStartWhenComputerRunAsync);
             UncheckedAutoStartWhenComputerRunCommandAsync = new AsyncRelayCommand(UncheckedAutoStartWhenComputerRunAsync);
             CheckedAutoStartGameCommandAsync = new AsyncRelayCommand(CheckedAutoStartGameAsync);
@@ -993,6 +1015,8 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             DisableHeros = new ObservableCollection<Hero>(Constant.Heroes);
             ChooseHeroForSkins = new ObservableCollection<Hero>(Constant.Heroes);
             AutoAcceptGame = _iniSettingsModel.AutoAcceptGame;
+            AutoNewGame = _iniSettingsModel.AutoNewGame;
+            StartGameLoadingChampion = _iniSettingsModel.StartGameLoadingChampion;
             AutoStartWhenComputerRun = _iniSettingsModel.AutoStartWhenComputerRun;
             AutoDisableHero = _iniSettingsModel.AutoDisableHero;
             RankAutoLockHero = _iniSettingsModel.RankAutoLockHero;
@@ -1047,6 +1071,17 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             await _iniSettingsModel.WriteAutoAcceptAsync(false);
             AutoAcceptGame = false;
+        }
+
+        private async Task CheckedAutoNewAsync()
+        {
+            await _iniSettingsModel.WriteAutoNewGameAsync(true);
+            AutoNewGame = true;
+        }
+        private async Task UncheckedAutoNewAsync()
+        {
+            await _iniSettingsModel.WriteAutoNewGameAsync(false);
+            AutoNewGame = false;
         }
 
         private async Task CheckedAutoStartWhenComputerRunAsync()

@@ -221,7 +221,7 @@
                                                                Grid.Column="1"
                                                                Cursor="Hand"
                                                                Foreground="{Binding IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
-                                                               Text="{Binding DisplayName}">
+                                                               Text="{Binding SummonerInternalName}">
                                                         <behaviors:Interaction.Triggers>
                                                             <behaviors:EventTrigger EventName="MouseLeftButtonDown">
                                                                 <behaviors:InvokeCommandAction Command="{Binding DataContext.SearchAccountRecordCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"
@@ -664,7 +664,7 @@
                                                                Grid.Column="1"
                                                                Cursor="Hand"
                                                                Foreground="{Binding IsCurrentUser,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource BoolColorBrushConverter}}"
-                                                               Text="{Binding DisplayName}">
+                                                               Text="{Binding SummonerInternalName}">
                                                         <behaviors:Interaction.Triggers>
                                                             <behaviors:EventTrigger EventName="MouseLeftButtonDown">
                                                                 <behaviors:InvokeCommandAction Command="{Binding DataContext.SearchAccountRecordCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ListBox}}"

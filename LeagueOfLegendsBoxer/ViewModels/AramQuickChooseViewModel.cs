@@ -76,12 +76,12 @@ namespace LeagueOfLegendsBoxer.ViewModels
             if (SubQuickChooseHeros.Count <= 0)
                 return;
 
-            if (SubQuickChooseHeros.Count + SelectedQuickChooseHeros.Count > 30)
+            if (SubQuickChooseHeros.Count + SelectedQuickChooseHeros.Count > 50)
             {
                 Growl.InfoGlobal(new GrowlInfo()
                 {
                     WaitTime = 2,
-                    Message = "乱斗模式秒选最多设置20位英雄",
+                    Message = "乱斗模式秒选最多设置50位英雄",
                     ShowDateTime = false
                 });
 

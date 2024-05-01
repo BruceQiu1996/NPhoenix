@@ -199,8 +199,11 @@ namespace LeagueOfLegendsBoxer.Models
     {
         [JsonPropertyName("summonerName")]
         public string SummonerName { get; set; }
+        [JsonPropertyName("gameName")]
+        public string GameName { get; set; }
         [JsonPropertyName("summonerId")]
         public long SummonerId { get; set; }
+        public string DisplayName => string.IsNullOrEmpty(GameName) ? SummonerName : GameName;
     }
 
     public class Participant

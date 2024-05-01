@@ -32,6 +32,7 @@ namespace LeagueOfLegendsBoxer.Application.Game
         private const string _getRuneItemsOnline = "https://www.wegame.com.cn/lol/resources/js/champion/recommend/{0}.js ";
         private const string _championColorSkins = "lol-champ-select/v1/skin-carousel-skins";
         private const string _useColorSkin = "/lol-champ-select/v1/session/my-selection";
+        private const string _newGame = "/lol-lobby/v2/play-again";
         private readonly IRequestService _requestService;
 
         public DefaultGameService(IRequestService requestService)
@@ -52,6 +53,11 @@ namespace LeagueOfLegendsBoxer.Application.Game
         public async Task AutoAcceptGameAsync()
         {
             await _requestService.PostAsync($"{_checkUrl}accept", null, null);
+        }
+
+        public async Task AutoNewGameAsync()
+        {
+            await _requestService.PostAsync(_newGame, null, null);
         }
 
         public Task AutoDisableHeroAsync()

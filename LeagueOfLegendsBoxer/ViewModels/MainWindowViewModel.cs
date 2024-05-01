@@ -263,12 +263,24 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 if (item.Count() >= 2)
                 {
-                    var sb = new StringBuilder();
-                    sb.Append("我方开黑:[");
-                    sb.Append(string.Join(",", item.Select(x => x.Champion?.Label)));
-                    sb.Append("]");
-                    await Task.Delay(300);
-                    await InGameSendMessage(sb.ToString());
+                    if (item.FirstOrDefault()?.Champion != null)
+                    {
+                        var sb = new StringBuilder();
+                        sb.Append("我方开黑:[");
+                        sb.Append(string.Join(",", item.Select(x => x.Champion?.Label)));
+                        sb.Append("]");
+                        await Task.Delay(300);
+                        await InGameSendMessage(sb.ToString());
+                    }
+                    else 
+                    {
+                        var sb = new StringBuilder();
+                        sb.Append("我方开黑:[");
+                        sb.Append(string.Join(",", item.Select(x => x.SummonerInternalName)));
+                        sb.Append("]");
+                        await Task.Delay(300);
+                        await InGameSendMessage(sb.ToString());
+                    }
                 }
             }
 
@@ -276,12 +288,24 @@ namespace LeagueOfLegendsBoxer.ViewModels
             {
                 if (item.Count() >= 2)
                 {
-                    var sb = new StringBuilder();
-                    sb.Append("敌方开黑:[");
-                    sb.Append(string.Join(",", item.Select(x => x.Champion?.Label)));
-                    sb.Append("]");
-                    await Task.Delay(300);
-                    await InGameSendMessage(sb.ToString());
+                    if (item.FirstOrDefault()?.Champion != null)
+                    {
+                        var sb = new StringBuilder();
+                        sb.Append("敌方开黑:[");
+                        sb.Append(string.Join(",", item.Select(x => x.Champion?.Label)));
+                        sb.Append("]");
+                        await Task.Delay(300);
+                        await InGameSendMessage(sb.ToString());
+                    }
+                    else
+                    {
+                        var sb = new StringBuilder();
+                        sb.Append("敌方开黑:[");
+                        sb.Append(string.Join(",", item.Select(x => x.SummonerInternalName)));
+                        sb.Append("]");
+                        await Task.Delay(300);
+                        await InGameSendMessage(sb.ToString());
+                    }
                 }
             }
         }
@@ -697,7 +721,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
                     break;
                 case "InProgress":
                     GameStatus = "游戏中";
-                    //LoopLiveGameEventAsync();
+                    if (_iniSettingsModel.StartGameLoadingChampion)
+                    {
+                        LoopLiveGameEventAsync();
+                    }
                     break;
                 case "GameStart":
                     GameStatus = "游戏开始了";
@@ -713,6 +740,10 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 case "EndOfGame":
                     GameStatus = "对局结束";
                     await ActionWhenGameEnd();
+                    if (_iniSettingsModel.AutoNewGame) 
+                    {
+                        await _gameService.AutoNewGameAsync();
+                    }
                     break;
                 default:
                     GameStatus = "未知状态" + data;

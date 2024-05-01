@@ -231,7 +231,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 return;
 
             var _window = App.ServiceProvider.GetRequiredService<BlackTip>();
-            (_window.DataContext as BlackTipViewModel).Load(tuple.Item1.Player.SummonerId, tuple.Item1.Player.SummonerName);
+            (_window.DataContext as BlackTipViewModel).Load(tuple.Item1.Player.SummonerId, tuple.Item1.Player.DisplayName);
             _window.ShowDialog();
         }
     }
