@@ -12,7 +12,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -889,10 +888,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             ManualUpdateCommandAsync = new AsyncRelayCommand(ManualUpdateAsync);
             ChooseServerAreaForCurrentAccountCommand = new RelayCommand(ChooseServerAreaForCurrentAccount);
             ManageRuneCommand = new RelayCommand(ManageRune);//打开符文管理界面
-            CheckedComModeCommandAsync = new AsyncRelayCommand(CheckedComModeAsync);
-            UnCheckedComModeCommandAsync = new AsyncRelayCommand(UnCheckedComModeAsync);
-            CheckedDisableRecordFunctionCommandAsync = new AsyncRelayCommand(CheckedDisableRecordFunctionAsync);
-            UnCheckedDisableRecordFunctionCommandAsync = new AsyncRelayCommand(UnCheckedDisableRecordFunctionAsync);
             CheckedCloseTeamVsWindowCommandAsync = new AsyncRelayCommand(CheckedCloseTeamVsWindowAsync);
             UnCheckedCloseTeamVsWindowCommandAsync = new AsyncRelayCommand(UnCheckedCloseTeamVsWindowAsync);
             CheckedAramWinTeamCheckCommandAsync = new AsyncRelayCommand(CheckedAramWinTeamCheckAsync);
@@ -1038,8 +1033,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             AutoUseRune = _iniSettingsModel.AutoUseRune;
 
             TeamDetailKeys = _iniSettingsModel.TeamDetailKeys;
-            ComMode = _iniSettingsModel.CompatibleMode;
-            DisableRecordFunction = _iniSettingsModel.DisableRecordFunction;
             CloseTeamVsWindow = _iniSettingsModel.CloseTeamVsWindow;
             AramWinTeamCheck = _iniSettingsModel.AramWinTeamCheck;
         }
@@ -1623,30 +1616,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         private async Task ManualUpdateAsync()
         {
             await _softwareHelper.Update();
-        }
-
-        private async Task CheckedComModeAsync()
-        {
-            await _iniSettingsModel.WriteCompatibleMode(true);
-            ComMode = true;
-        }
-
-        private async Task UnCheckedComModeAsync()
-        {
-            await _iniSettingsModel.WriteCompatibleMode(false);
-            ComMode = false;
-        }
-
-        private async Task CheckedDisableRecordFunctionAsync() 
-        {
-            await _iniSettingsModel.WriteDisableRecordFunction(true);
-            DisableRecordFunction = true;
-        }
-
-        private async Task UnCheckedDisableRecordFunctionAsync()
-        {
-            await _iniSettingsModel.WriteDisableRecordFunction(false);
-            DisableRecordFunction = false;
         }
 
         private async Task CheckedCloseTeamVsWindowAsync()

@@ -11,6 +11,7 @@ using LeagueOfLegendsBoxer.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,6 +36,17 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
         {
             get { return _hero; }
             set { SetProperty(ref _hero, value); }
+
+        }
+
+        /// <summary>
+        /// 炫彩皮肤
+        /// </summary>
+        private ObservableCollection<Skin> _colorSkins;
+        public ObservableCollection<Skin> ColorSkins
+        {
+            get { return _colorSkins; }
+            set { SetProperty(ref _colorSkins, value); }
 
         }
 
@@ -125,6 +137,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             _iniSettingsModel = iniSettingsModel;
             _logger = logger;
             _applicationService = applicationService;
+            ColorSkins = new ObservableCollection<Skin>();
             ApplyItemCommandAsync = new AsyncRelayCommand<ItemModule>(ApplyItemAsync);
         }
 
@@ -142,6 +155,77 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             get { return _isRunePage; }
             set { SetProperty(ref _isRunePage, value); }
 
+        }
+
+        public async Task GetCurrentChampionColorSkins()
+        {
+            System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            {
+                ColorSkins.Clear();
+            });
+            string resp = await _gameService.GetCurrentChampionColorSkinsAsync();
+            if (string.IsNullOrEmpty(resp))
+            {
+                return;
+            }
+
+            JArray jsonArray = JArray.Parse(resp);
+            if (jsonArray == null || jsonArray.Count <= 0)
+            {
+                return;
+            }
+
+            var championId = jsonArray[0].Value<int>("championId");
+            var skins = await LoadSkinsAsync(championId);
+            if (skins == null)
+            {
+                return;
+            }
+            foreach (var item in jsonArray)
+            {
+                var array = item["childSkins"].ToArray();
+                foreach (var item2 in array)
+                {
+                    var unlocked = item2["unlocked"].Value<bool>();
+                    if (unlocked)
+                    {
+                        foreach (var skin in skins)
+                        {
+                            if (skin.Chromas != null)
+                            {
+                                var innerSkin = skin.Chromas.FirstOrDefault(x => x.Id == item2["id"]?.Value<int>());
+                                if (innerSkin != null)
+                                {
+                                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        ColorSkins.Add(innerSkin);
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        public async Task<IEnumerable<Skin>> LoadSkinsAsync(int champId)
+        {
+            try
+            {
+                var result = await _gameService.GetSkinsByHeroId(champId);
+                if (!string.IsNullOrEmpty(result))
+                {
+                    var skins = JToken.Parse(result)["skins"].ToObject<IEnumerable<Skin>>();
+
+                    return skins;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
 
         public async Task LoadChampInfoAsync(int champId, bool isAram, bool needFilterSame = true)
@@ -351,7 +435,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
                 recommandItem.champion = Hero.Alias;
                 var map = IsAramPage ? 12 : 11;
                 recommandItem.associatedMaps = new int[] { map };
-                if (itemModule.Item1s != null && itemModule.Item1s.Count() >0)
+                if (itemModule.Item1s != null && itemModule.Item1s.Count() > 0)
                 {
                     var block = new Block();
                     block.type = "起始装备";

@@ -65,8 +65,6 @@ namespace LeagueOfLegendsBoxer.Resources
         public bool AutoUseRuneByWinRate { get; set; }
         public bool AutoUseRune { get; set; }
         public long TeamDetailHash { get; set; }
-        public bool CompatibleMode { get; set; }
-        public bool DisableRecordFunction { get; set; }//禁用游戏时战绩查询模块
         public bool CloseTeamVsWindow { get; set; }//不打开对局详情
         public bool AramWinTeamCheck { get; set; }//乱斗胜率队检测
         public List<string> TeamDetailKeyList { get; set; } = new List<string>();
@@ -163,10 +161,6 @@ namespace LeagueOfLegendsBoxer.Resources
 
             TeamDetailKeys = await _settingsService.ReadAsync(Constant.Game, Constant.TeamDetailKey);
             TeamDetailKeys = string.IsNullOrWhiteSpace(TeamDetailKeys) ? "Alt+Q" : TeamDetailKeys;
-            CompatibleMode = bool.TryParse(
-                await _settingsService.ReadAsync(Constant.Game, Constant.CompatibleMode), out var tempCompatibleMode) ? tempCompatibleMode : false;
-            DisableRecordFunction = bool.TryParse(
-                await _settingsService.ReadAsync(Constant.Game, Constant.DisableRecordFunction), out var tempDisableRecordFunction) ? tempDisableRecordFunction : false;
             CloseTeamVsWindow = bool.TryParse(
                 await _settingsService.ReadAsync(Constant.Game, Constant.CloseTeamVsWindow), out var tempCloseTeamVsWindow) ? tempCloseTeamVsWindow : false;
             AramWinTeamCheck = bool.TryParse(
@@ -469,18 +463,6 @@ namespace LeagueOfLegendsBoxer.Resources
                 return null;
 
             return long.TryParse(id, out var temp) ? temp : null;
-        }
-
-        public async Task WriteCompatibleMode(bool mode)
-        {
-            await _settingsService.WriteAsync(Constant.Game,Constant.CompatibleMode, mode.ToString());
-            CompatibleMode = mode;
-        }
-
-        public async Task WriteDisableRecordFunction(bool disable)
-        {
-            await _settingsService.WriteAsync(Constant.Game, Constant.DisableRecordFunction, disable.ToString());
-            DisableRecordFunction = disable;
         }
 
         public async Task WriteCloseTeamVsWindow(bool disable)

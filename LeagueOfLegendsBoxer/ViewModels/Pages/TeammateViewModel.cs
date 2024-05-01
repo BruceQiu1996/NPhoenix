@@ -18,6 +18,9 @@ using System.Threading.Tasks;
 
 namespace LeagueOfLegendsBoxer.ViewModels.Pages
 {
+    /// <summary>
+    /// 选人界面，队友界面
+    /// </summary>
     public class TeammateViewModel : ObservableObject
     {
         private ObservableCollection<Account> _accounts;
@@ -50,7 +53,6 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
 
         public async Task LoadAsync()
         {
-            await Task.Delay(500);
             Accounts = new ObservableCollection<Account>();
             var conversations = await _gameService.GetChatConversation();
             var token = JArray.Parse(conversations).FirstOrDefault(x => x.Value<string>("type") == "championSelect");
@@ -254,14 +256,10 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             //        _logger.LogError($"{account?.DisplayName}{ex}");
             //    }
             //}
-
-            if (_iniSettingsModel.DisableRecordFunction)
-                return account;
-
             try
             {
-                //查询最近15场
-                var recordsData = JToken.Parse(await _gameService.GetRecordsByPage(pageEnd: 14, id: account.Puuid));
+                //查询最近10场
+                var recordsData = JToken.Parse(await _gameService.GetRecordsByPage(pageEnd: 9, id: account.Puuid));
                 account.Records = new ObservableCollection<Record>(recordsData["games"]["games"].ToObject<IEnumerable<Record>>().OrderByDescending(x => x.GameCreation));
                 var rankData = JToken.Parse(await _accountService.GetSummonerRankInformationAsync(account.Puuid));
                 account.Rank = rankData["queueMap"].ToObject<Rank>();
@@ -271,6 +269,7 @@ namespace LeagueOfLegendsBoxer.ViewModels.Pages
             catch (Exception ex)
             {
                 _logger.LogError($"{account?.DisplayName}{ex}");
+                await Task.Delay(200);
             }
 
             return account;

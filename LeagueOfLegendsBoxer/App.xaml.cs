@@ -178,8 +178,6 @@ namespace LeagueOfLegendsBoxer
                 services.AddTransient<SelectKey>();
                 services.AddSingleton<Teamup>();
                 services.AddSingleton<TeamupViewModel>();
-                services.AddSingleton<News>();
-                services.AddSingleton<NewsViewModel>();
                 services.AddSingleton<AramAnalyse>();
                 services.AddSingleton<AramAnalyseViewModel>();
 

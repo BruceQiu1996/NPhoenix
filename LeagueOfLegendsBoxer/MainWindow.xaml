@@ -27,7 +27,7 @@
         <convert:OnlineCountColorConverter x:Key="OnlineCountColorConverter"></convert:OnlineCountColorConverter>
         <convert:OnlineCountStatusConverter x:Key="OnlineCountStatusConverter"></convert:OnlineCountStatusConverter>
         <ContextMenu x:Key="iconMenu">
-            <MenuItem Header="打开助手工具" Command="{Binding OpenChampionSelectToolCommand}"></MenuItem>
+            <MenuItem Header="打开英雄选择工具" Command="{Binding OpenChampionSelectToolCommand}"></MenuItem>
             <MenuItem Header="打开对局详情" Command="{Binding OpenTeamDetailCommand}"></MenuItem>
             <MenuItem Header="退出软件" Command="{Binding ExitCommand}"></MenuItem>
         </ContextMenu>
@@ -107,13 +107,13 @@
                      Margin="7 5 0 5"
                      Effect="{DynamicResource EffectShadow2}"
                      BorderThickness="0">
-                <ListBox Background="{DynamicResource DefaultCardBackgroundColor}"  BorderThickness="0">
+                <ListBox Background="{DynamicResource DefaultCardBackgroundColor}"  BorderThickness="0" >
                     <ListBox.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Vertical"></StackPanel>
                         </ItemsPanelTemplate>
                     </ListBox.ItemsPanel>
-                    <ListBoxItem Height="50" Width="65" Margin="-1 10 0 0">
+                    <ListBoxItem Height="50" Width="65" Margin="-1 10 0 0" IsSelected="True">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
                                 <behaviors:InvokeCommandAction Command="{Binding ShiftMainPageCommand}"></behaviors:InvokeCommandAction>
@@ -222,38 +222,6 @@
                         </hc:Badge>
                     </ListBoxItem>
 
-                    <ListBoxItem Height="50" Width="65" Margin="-1 20 0 0" IsSelected="True">
-                        <behaviors:Interaction.Triggers>
-                            <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                                <behaviors:InvokeCommandAction Command="{Binding ShiftNewsPageCommand}"></behaviors:InvokeCommandAction>
-                            </behaviors:EventTrigger>
-                        </behaviors:Interaction.Triggers>
-                        <ListBoxItem.Style>
-                            <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemBaseStyle}">
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource DefaultBackgroundColor}"/>
-                                    </Trigger>
-                                    <Trigger Property="IsSelected" Value="False">
-                                        <Setter Property="Background" Value="{DynamicResource DefaultCardBackgroundColor}"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ListBoxItem.Style>
-                        <Label BorderThickness="0"
-                               Cursor="Hand"
-                               ToolTip="资讯"
-                               Background="Transparent"
-                               VerticalContentAlignment="Center"
-                               Grid.Column="1">
-                            <Path Data="{StaticResource news}" 
-                                  SnapsToDevicePixels="True"
-                                  Height="25"
-                                  Stroke="{StaticResource PrimaryBrush}" Stretch="Uniform" 
-                                  Fill="{StaticResource PrimaryBrush}"/>
-                        </Label>
-                    </ListBoxItem>
-                    
                     <ListBoxItem Height="50"  Width="65" Margin="-1 20 0 0">
                         <behaviors:Interaction.Triggers>
                             <behaviors:EventTrigger EventName="PreviewMouseLeftButtonUp">

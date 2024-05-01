@@ -65,6 +65,7 @@ namespace LeagueOfLegendsBoxer.ViewModels
                 return (false, ex.Message);
             }
         }
+
         private async Task SetBackgroundImageAsync() 
         {
             if (Skin == null)

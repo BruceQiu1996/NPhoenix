@@ -25,6 +25,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <hc:Card BorderThickness="0" 
@@ -56,8 +57,62 @@
             </Grid>
         </hc:Card>
 
+        <ScrollViewer RequestBringIntoView="ScrollViewer_RequestBringIntoView" Grid.Row="1" BorderThickness="1"
+                      BorderBrush="#aaa"
+                      Margin="15 2">
+            <Grid>
+                <ListBox ScrollViewer.CanContentScroll="False"
+                         Padding="0"
+                         PreviewMouseWheel="ListView_PreviewMouseWheel"
+                         hc:BorderElement.CornerRadius="0"
+                         ScrollViewer.IsDeferredScrollingEnabled="True"
+                         ScrollViewer.VerticalScrollBarVisibility="Visible"
+                         ItemsSource="{Binding ColorSkins,UpdateSourceTrigger=PropertyChanged}"
+                         BorderThickness="1"
+                         BorderBrush="#aaa">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="Height" Value="30" />
+                            <Setter Property="Foreground" Value="Black" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border CornerRadius="2" 
+                                                AllowDrop="True"
+                                                Background="{TemplateBinding Background}">
+                                            <Grid>
+                                                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="15"></TextBlock>
+                                                <Button Content="使用" Cursor="Hand" Command="{Binding UseSkinCommandAsync}" HorizontalAlignment="Right"></Button>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#eee"></Setter>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="False">
+                                    <Setter Property="Background" Value="White"></Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                </ListBox>
+            </Grid>
+        </ScrollViewer>
+
         <hc:Card BorderThickness="0" 
-                 Grid.Row="1"
+                 Grid.Row="2"
                  Background="{DynamicResource DefaultCardBackgroundColor}"
                  Margin="15 5 15 15"
                  Visibility="{Binding IsRunePage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityConverter}}" 
@@ -492,7 +547,7 @@
         </hc:Card>
 
         <hc:Card BorderThickness="0" 
-                 Grid.Row="1"
+                 Grid.Row="2"
                  Margin="15 5 15 15"
                  Visibility="{Binding IsRunePage,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource Boolean2VisibilityReConverter}}" 
                  Background="{DynamicResource DefaultCardBackgroundColor}" Effect="{DynamicResource EffectShadow2}" >

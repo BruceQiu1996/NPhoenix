@@ -16,6 +16,7 @@
         Task<string> test(long id);
         Task<string> GetCurrentGameInfoAsync();
         Task<string> GetCurrentChampionInfoAsync();
+        Task<string> GetCurrentChampionColorSkinsAsync();
         Task<string> GetPickableChampionsAsync();
         Task BenchSwapChampionsAsync(int champID);
         //rune
@@ -33,5 +34,6 @@
         Task<string> GetSpells();
         Task<string> GetRecordsByPage(int pageStart = 0 , int pageEnd = 20, string id = null);
         Task<string> GetRuneItemsFromOnlineAsync(int champId);
+        Task UseColorSkinAsync(dynamic body);
     }
 }

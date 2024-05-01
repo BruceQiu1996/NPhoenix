@@ -299,8 +299,9 @@
 
         <Button Content="发送分析信息" FontSize="15" 
                 Command="{Binding SendTeamMateDataCommandAsync}"
-                Grid.Row="1" Margin="0 5 0 0" Cursor="Hand" VerticalAlignment="Top"></Button>
-        <Button Content="刷新" FontSize="15" HorizontalAlignment="Right"
+                HorizontalAlignment="Left"
+                Grid.Row="1" Margin="20 5 0 0" Cursor="Hand" VerticalAlignment="Top"></Button>
+        <Button Content="加载队友数据" FontSize="15" HorizontalAlignment="Right"
                 Command="{Binding LoadCommandAsync}" Style="{StaticResource ButtonPrimary}"
                 Grid.Row="1" Margin="0 5 20 0" Cursor="Hand" VerticalAlignment="Top"></Button>
     </Grid>

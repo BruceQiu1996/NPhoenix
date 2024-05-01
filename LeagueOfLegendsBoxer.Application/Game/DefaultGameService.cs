@@ -30,6 +30,8 @@ namespace LeagueOfLegendsBoxer.Application.Game
         private const string _setIcon = "lol-summoner/v1/current-summoner/icon";
         private const string _getRecordsByPage = "lol-match-history/v1/products/lol/{0}/matches";
         private const string _getRuneItemsOnline = "https://www.wegame.com.cn/lol/resources/js/champion/recommend/{0}.js ";
+        private const string _championColorSkins = "lol-champ-select/v1/skin-carousel-skins";
+        private const string _useColorSkin = "/lol-champ-select/v1/session/my-selection";
         private readonly IRequestService _requestService;
 
         public DefaultGameService(IRequestService requestService)
@@ -42,9 +44,9 @@ namespace LeagueOfLegendsBoxer.Application.Game
             var result = await _requestService.GetJsonResponseAsync(HttpMethod.Post, _rune, null, body);
         }
 
-        public async Task<string> GetCurrentRunePage() 
+        public async Task<string> GetCurrentRunePage()
         {
-            return await _requestService.GetStringAsync(_currentRune,null);
+            return await _requestService.GetStringAsync(_currentRune, null);
         }
 
         public async Task AutoAcceptGameAsync()
@@ -115,6 +117,11 @@ namespace LeagueOfLegendsBoxer.Application.Game
         public async Task<string> GetCurrentChampionInfoAsync()
         {
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _currentChampion);
+        }
+
+        public async Task<string> GetCurrentChampionColorSkinsAsync()
+        {
+            return await _requestService.GetJsonResponseAsync(HttpMethod.Get, _championColorSkins);
         }
 
         public async Task<string> GetCurrentGameInfoAsync()
@@ -210,6 +217,11 @@ namespace LeagueOfLegendsBoxer.Application.Game
         public async Task<string> GetRuneItemsFromOnlineAsync(int champId)
         {
             return await _requestService.GetJsonResponseAsync(HttpMethod.Get, string.Format(_getRuneItemsOnline, champId));
+        }
+
+        public async Task UseColorSkinAsync(dynamic body)
+        {
+            await _requestService.PatchAsync(_useColorSkin, null, body);
         }
     }
 }
